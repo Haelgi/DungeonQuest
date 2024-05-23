@@ -1,0 +1,28 @@
+@font-face {
+    font-family: 'Gabriela';
+    src: url('../font/Gabriela-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: 'Gabriela', sans-serif;
+    font-size: 20px;
+
+    /* outline: 2px solid green; */
+} 
+
+
+body {
+    background-image: url('../img/bg-wood.jpg');
+    background-size: cover; 
+    background-position: center center;
+    width: 100vw;
+}
+
+.shadow{
+    box-shadow: 0 4px 8px #000;
+}

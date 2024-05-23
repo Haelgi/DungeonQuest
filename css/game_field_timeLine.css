@@ -1,3 +1,20 @@
+.head-timer-container{
+    display: flex;
+    flex-direction: row;
+    width: 1300px;
+    height: 145px;
+}
+
+.token_sun{
+    background-image: url('../img/token_sun.jpg');
+    background-size: cover; 
+    background-position: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px #000;
+}
+
 .tile-day{
     position: relative;
     min-width: 40px;
