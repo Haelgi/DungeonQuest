@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Gabriela';
-    src: url('../font/Gabriela-Regular.ttf') format('truetype');
+    src: url('/font/Gabriela-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -17,7 +17,7 @@
 
 
 body {
-    background-image: url('../img/bg-wood.jpg');
+    background-image: url('/img/bg-wood.jpg');
     background-size: cover; 
     background-position: center center;
     width: 100vw;
@@ -37,7 +37,7 @@ body {
 }
 
 .token_sun{
-    background-image: url('../img/token_sun.jpg');
+    background-image: url('/img/token_sun.jpg');
     background-size: cover; 
     background-position: center;
     width: 40px;
@@ -49,7 +49,7 @@ body {
 
 /* Game field --------------------------------------------------*/
 .game-map{
-    background-image: url('../img/world-map.jpg');
+    background-image: url('/img/world-map.jpg');
     background-size: cover; 
     background-position: center;
     width: 1300px;
