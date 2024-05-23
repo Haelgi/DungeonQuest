@@ -1,0 +1,260 @@
+@font-face {
+    font-family: 'Gabriela';
+    src: url('/font/Gabriela-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: 'Gabriela', sans-serif;
+    font-size: 20px;
+
+    /* outline: 2px solid green; */
+} 
+
+
+body {
+    background-image: url('/img/bg-wood.jpg');
+    background-size: cover; 
+    background-position: center center;
+    width: 100vw;
+}
+
+.shadow{
+    box-shadow: 0 4px 8px #000;
+}
+
+/* Time Line --------------------------------------------------*/
+
+.head-timer-container{
+    display: flex;
+    flex-direction: row;
+    width: 1300px;
+    height: 145px;
+}
+
+.token_sun{
+    background-image: url('/img/token_sun.jpg');
+    background-size: cover; 
+    background-position: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px #000;
+}
+/* END Time Line --------------------------------------------------*/
+
+/* Game field --------------------------------------------------*/
+.game-map{
+    background-image: url('/img/world-map.jpg');
+    background-size: cover; 
+    background-position: center;
+    width: 1300px;
+    height: 1200px;
+    margin: 0 auto 0 auto;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px #000;
+}
+
+
+.playing-field{
+    margin: 0 auto 0 auto;
+    width: 1230px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.tile-field{
+    width: 82px;
+    height: 82px;
+
+}
+
+.hero_token_catacomb{
+    width: 60px;
+    height: 78px;
+    clip-path: polygon(
+        50% 0%, /* Top-left corner 1*/
+        50% 0%, /* Top-right corner 1*/
+        100% 50%, /* Right-top corner 1*/
+        100% 100%, /* Right-bottom corner */
+        100% 100%, /* Bottom-right corner */
+        0% 100%, /* Bottom-left corner */
+        0% 50%, /* Left-bottom corner */
+        0% 50%  /* Left-top corner */
+    );
+    border-radius: 0 0 30px 30px;
+}
+
+.room_token_catacomb{
+    width: 60px;
+    z-index: 1;
+    position: relative;
+    top: -80px;
+    left: 12px;
+}
+
+/* End Game field --------------------------------------------------*/
+
+/* Footer Container --------------------------------------------------*/
+.footer{
+    position: sticky;
+    bottom: 5px;
+    z-index: 10;
+    width: 100vw;
+    background: #00000075;
+}
+
+.footer-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.footer-collapse{
+    font-size: 30px;
+    color: #ffffff8f;
+    text-align: center;
+    padding: 2px;
+    text-shadow: 0px 0px 20px #ffffff ;
+
+}
+
+/* Abilitie Container ------*/
+
+.abilitie-container{
+    margin: 0px 0px 10px 10px;
+}
+
+.abilitie-card-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 500px;
+}
+
+.abilitie-card{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 380px;
+    cursor: pointer;
+    flex: 0.5;
+    -webkit-transition: all 200ms ease-in;
+    box-shadow: 0 4px 8px #000; 
+    filter: brightness(0.6);
+    border-radius: 10px;
+}
+
+.abilitie-card.select{
+    max-width: 290px;
+    flex: 10;
+    height: 400px;
+    filter: brightness(1);
+}
+
+/* End Abilitie Container ------*/
+
+/* Hero Container ------*/
+
+.hero-tiles{
+    background-size: contain; 
+    width: 567px;
+    height: 400px;
+    border-radius: 10px;
+}
+
+.hero-value{
+    font-size: 30px;
+    position: relative;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    -webkit-text-stroke: 1px #000000b4;
+}
+
+.resolve-value{
+    top: 35px;
+    left: 29px;
+    font-size: 35px;
+    color: #56b6ce;
+    
+}
+
+.strength-value{
+    top: 182px;
+    left: 29px;
+    color: #d42c2c;
+}
+
+.dexterity-value{
+    top: 195px;
+    left: 61px;
+    color: #1d8b2b;
+}
+
+.defense-value{
+    top: 190px;
+    left: 113px;
+    color: #1d498b;
+}
+
+.luck-value{
+    top: 172px;
+    left: 178px;
+    color: #8b891d;
+}
+
+.health-value{
+    top: -188px;
+    left: 505px;
+    font-size: 35px;
+    color: #c71c0f;
+}
+/* End Hero Container ------*/
+
+/*  Treasure Container -----*/
+
+
+
+.treasure-container{
+    margin: 0px 0px 10px 10px;
+}
+
+.treasure-card-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 400px;
+}
+
+.treasure-card{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 380px;
+    cursor: pointer;
+    flex: 0.5;
+    -webkit-transition: all 200ms ease-in;
+    box-shadow: 0 4px 8px #000; 
+    filter: brightness(0.6);
+    border-radius: 10px;
+}
+
+.treasure-card.select{
+    max-width: 290px;
+    flex: 10;
+    height: 400px;
+    filter: brightness(1);
+}
+
+/* End Treasure Container -----*/
+
+/* End Footer Container --------------------------------------------------*/

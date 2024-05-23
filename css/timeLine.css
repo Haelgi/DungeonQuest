@@ -1,0 +1,201 @@
+.tile-day{
+    position: relative;
+    min-width: 40px;
+    height: 40px;
+    border-radius: 19px;
+}
+
+.day-0{
+    top: 38px;
+    left: 0px;
+}
+
+.day-1{
+    top: 20px;
+    left: -2px;
+}
+
+.day-2{
+    top: 45px;
+    left: -7px;
+}
+
+.day-3{
+    top: 23px;
+    left: -10px;
+}
+
+.day-4{
+    top: 50px;
+    left: -15px;
+}
+
+.day-5{
+    top: 28px;
+    left: -19px;
+}
+
+.day-6{
+    top: 52px;
+    left: -20px;
+}
+
+.day-7{
+    top: 32px;
+    left: -20px;
+}
+
+.day-8{
+    top: 54px;
+    left: -23px;
+}
+
+.day-9{
+    top: 35px;
+    left: -22px;
+}
+
+.day-10{
+    top: 56px;
+    left: -20px;
+}
+
+.day-11{
+    top: 32px;
+    left: -25px;
+}
+
+.day-12{
+    top: 12px;
+    left: -22px;
+}
+
+.day-13{
+    top: 56px;
+    left: -65px;
+}
+
+.day-14{
+    top: 38px;
+    left: -65px;
+}
+
+.day-15{
+    top: 14px;
+    left: -64px;
+}
+
+.day-16{
+    top: 57px;
+    left: -105px;
+}
+
+.day-17{
+    top: 38px;
+    left: -105px;
+}
+
+.day-18{
+    top: 17px;
+    left: -108px;
+}
+
+.day-19{
+    top: 61px;
+    left: -148px;
+}
+
+.day-20{
+    top: 38px;
+    left: -150px;
+}
+
+.day-21{
+    top: 14px;
+    left: -153px;
+}
+
+.day-22{
+    top: 57px;
+    left: -192px;
+}
+
+.day-23{
+    top: 37px;
+    left: -194px;
+}
+
+.day-24{
+    top: 14px;
+    left: -195px;
+}
+
+.day-25{
+    top: 57px;
+    left: -234px;
+}
+
+.day-26{
+    top: 33px;
+    left: -236px;
+}
+
+.day-27{
+    top: 54px;
+    left: -239px;
+}
+
+.day-28{
+    top: 30px;
+    left: -244px;
+}
+
+.day-29{
+    top: 54px;
+    left: -241px;
+}
+
+.day-30{
+    top: 30px;
+    left: -242px;
+}
+
+.day-31{
+    top: 52px;
+    left: -244px;
+}
+
+.day-32{
+    top: 28px;
+    left: -248px;
+}
+
+.day-33{
+    top: 51px;
+    left: -251px;
+}
+
+.day-34{
+    top: 24px;
+    left: -257px;
+}
+
+.day-35{
+    top: 49px;
+    left: -261px;
+}
+
+.day-36{
+    top: 20px;
+    left: -269px;
+}
+
+.day-37{
+    top: 42px;
+    left: -271px;
+}
+
+.day-38{
+    top: 20px;
+    left: -274px;
+}
