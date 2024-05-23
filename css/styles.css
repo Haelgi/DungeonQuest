@@ -1,6 +1,9 @@
 @font-face {
     font-family: 'Gabriela';
-    src: url('/font/Gabriela-Regular.ttf') format('truetype');
+    src: url('font/Gabriela-Regular.ttf') format('truetype');
+    src: url('..font/Gabriela-Regular.ttf') format('truetype');
+    src: url('../font/Gabriela-Regular.ttf') format('truetype');
+    src: url('/../font/Gabriela-Regular.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
