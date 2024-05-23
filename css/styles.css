@@ -90,6 +90,14 @@ body {
     border-radius: 0 0 30px 30px;
 }
 
+.hero_mitl{
+    position: relative;
+    top: -80px;
+    left: 15px;
+    height: 78px; 
+    z-index: 10;
+}
+
 .room_token_catacomb{
     width: 60px;
     z-index: 1;
@@ -102,7 +110,7 @@ body {
 
 /* Footer Container --------------------------------------------------*/
 .footer{
-    position: sticky;
+    /* position: sticky; */
     bottom: 5px;
     z-index: 10;
     width: 100vw;
