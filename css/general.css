@@ -26,3 +26,7 @@ body {
 .shadow{
     box-shadow: 0 4px 8px #000;
 }
+
+.hidden{
+    display: none;
+}

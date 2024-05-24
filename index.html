@@ -8,13 +8,16 @@
     <link rel="stylesheet" href="css/game_field_timeLine.css">
     <link rel="stylesheet" href="css/game_field.css">
     <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/event.css">
     
     <title>Dungeon Quest Online</title>
 </head>
 
 <body>
-
     <!-- Authentication Container-->
+    <div class="authentication-container">
+
+    </div>
     <!-- End Authentication Container-->
 
     <!-- Character Selection Container-->
@@ -24,7 +27,8 @@
     <!-- End Waiting Container-->
 
     <!-- Game Container -->
-    <div class="game">
+
+    <div class="game-container ">
         <div class="game-map">
             <div class="head-timer-container">
                 <div class="tile-day day-0" data-x="0">
@@ -196,7 +200,7 @@
                 <div class="tile-field" data-x="7" data-y="1"></div> 
                 <div class="tile-field" data-x="7" data-y="2"></div> 
                 <div class="tile-field" data-x="7" data-y="3">
-                    <img class="hero_token_catacomb" src="img/hero_tiles/token_hunter.jpg" alt="" style="rotate: 90deg;">
+                    <img class="hero_token_catacomb" src="img/hero_tiles/token_hunter.png" alt="" style="rotate: 90deg;">
                 </div> 
                 <div class="tile-field" data-x="7" data-y="4"></div> 
                 <div class="tile-field" data-x="7" data-y="5"></div> 
@@ -293,14 +297,15 @@
             <div class="footer-collapse"><i class="fas fa-bars"></i></div>
 
             <div class="footer-container">
-                <div class="abilitie-container">
-                    <div class="abilitie-card-container">
-                        <div class="abilitie-card " style="background-image: url('img/abilitie_cards/abilitie_hunter_01_2.jpg')"></div>
-                        <div class="abilitie-card select" style="background-image: url('img/abilitie_cards/abilitie_hunter_01_2.jpg')"></div>
-                        <div class="abilitie-card " style="background-image: url('img/abilitie_cards/abilitie_hunter_02_1.jpg')"></div>
-                        <div class="abilitie-card " style="background-image: url('img/abilitie_cards/abilitie_hunter_03_1.jpg')"></div>
-                        <div class="abilitie-card " style="background-image: url('img/abilitie_cards/abilitie_hunter_04_1.jpg')"></div>
-                    </div>
+                <div class="card-deck-container effect-card-container">
+                    <div class="card-deck select" style="background-image: url('img/catacomb_cards/catacomb_10_1.jpg')"></div>
+                </div>
+                
+                <div class="card-deck-container treasure-card-container">
+                    <div class="card-deck " style="background-image: url('img/catacomb_cards/catacomb_29_1.jpg')"></div>
+                    <div class="card-deck select" style="background-image: url('img/treasure_cards/treasure_06_1.jpg')"></div>
+                    <div class="card-deck" style="background-image: url('img/treasure_cards/treasure_03_1.jpg')"></div>
+                    <div class="card-deck" style="background-image: url('img/treasure_cards/treasure_01_1.jpg')"></div>
                 </div>
 
                 <div class="character-card-container" >
@@ -314,16 +319,14 @@
                     </div>
                 </div>
 
-
-
-                <div class="treasure-container">
-                    <div class="treasure-card-container">
-                        <div class="treasure-card " style="background-image: url('img/catacomb_cards/catacomb_29_1.jpg')"></div>
-                        <div class="treasure-card select" style="background-image: url('img/treasure_cards/treasure_06_1.jpg')"></div>
-                        <div class="treasure-card" style="background-image: url('img/treasure_cards/treasure_03_1.jpg')"></div>
-                        <div class="treasure-card" style="background-image: url('img/treasure_cards/treasure_01_1.jpg')"></div>
-                    </div>
+                <div class="card-deck-container abilitie-card-container">
+                    <div class="card-deck " style="background-image: url('img/abilitie_cards/abilitie_hunter_01_2.jpg')"></div>
+                    <div class="card-deck select" style="background-image: url('img/abilitie_cards/abilitie_hunter_01_2.jpg')"></div>
+                    <div class="card-deck" style="background-image: url('img/abilitie_cards/abilitie_hunter_02_1.jpg')"></div>
+                    <div class="card-deck" style="background-image: url('img/abilitie_cards/abilitie_hunter_03_1.jpg')"></div>
+                    <div class="card-deck" style="background-image: url('img/abilitie_cards/abilitie_hunter_04_1.jpg')"></div>
                 </div>
+
             </div>
         </div>
 
@@ -331,9 +334,37 @@
         
     </div>
     <!-- End Game Container -->
+    
+    <!-- Event Container-->
+    <div class="event-container ">
+        <div class="event-main ">
+            <div class="event-title">
+                <h1>Lorem ipsum dolor sit amet.</h1>
+                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptates provident ducimus dolorum recusandae debitis commodi atque ipsum voluptatibus vero deserunt!</p>
+            </div>
 
-    <!-- End Game Container-->
-    <!-- End End Game Container-->
+            <div class="event-article">
+                <div class="event-section">
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Distinctio sequi veritatis ipsa eum praesentium, totam atque harum explicabo, quis, fuga dolor aperiam? Atque, alias laborum ducimus reprehenderit illo laboriosam ratione.</p>
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Distinctio sequi veritatis ipsa eum praesentium, totam atque harum explicabo, quis, fuga dolor aperiam? Atque, alias laborum ducimus reprehenderit illo laboriosam ratione.</p>
+                </div>
+
+                <div class="division-line"></div>
+
+                <div class="event-section">
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Distinctio sequi veritatis ipsa eum praesentium, totam atque harum explicabo, quis, fuga dolor aperiam? Atque, alias laborum ducimus reprehenderit illo laboriosam ratione.</p>
+                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Distinctio sequi veritatis ipsa eum praesentium, totam atque harum explicabo, quis, fuga dolor aperiam? Atque, alias laborum ducimus reprehenderit illo laboriosam ratione.</p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <!-- End  Event Container-->
+
+
+    <!-- EndGame Container-->
+    <!-- End EndGame Container-->
 
 </body>
 </html>

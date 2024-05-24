@@ -1,6 +1,9 @@
 /* Footer Container --------------------------------------------------*/
 .footer{
     /* position: sticky; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     bottom: 5px;
     z-index: 10;
     width: 100vw;
@@ -23,41 +26,37 @@
 
 }
 
-/* Abilitie Container ------*/
+/* Card Deck Container ------*/
 
-.abilitie-container{
-    margin: 0px 0px 10px 10px;
-}
-
-.abilitie-card-container{
+.card-deck-container{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     width: 500px;
+    margin: 0px 0px 10px 10px;
 }
 
-.abilitie-card{
+.card-deck{
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     height: 380px;
     cursor: pointer;
     flex: 0.5;
-    -webkit-transition: all 200ms ease-in;
     box-shadow: 0 4px 8px #000; 
     filter: brightness(0.6);
     border-radius: 10px;
 }
 
-.abilitie-card.select{
+.card-deck.select{
     max-width: 290px;
     flex: 10;
     height: 400px;
     filter: brightness(1);
 }
 
-/* End Abilitie Container ------*/
+/* End Card Deck  Container ------*/
 
 /* Hero Container ------*/
 
@@ -117,42 +116,5 @@
 }
 /* End Hero Container ------*/
 
-/*  Treasure Container -----*/
-
-
-
-.treasure-container{
-    margin: 0px 0px 10px 10px;
-}
-
-.treasure-card-container{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 400px;
-}
-
-.treasure-card{
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 380px;
-    cursor: pointer;
-    flex: 0.5;
-    -webkit-transition: all 200ms ease-in;
-    box-shadow: 0 4px 8px #000; 
-    filter: brightness(0.6);
-    border-radius: 10px;
-}
-
-.treasure-card.select{
-    max-width: 290px;
-    flex: 10;
-    height: 400px;
-    filter: brightness(1);
-}
-
-/* End Treasure Container -----*/
 
 /* End Footer Container --------------------------------------------------*/
