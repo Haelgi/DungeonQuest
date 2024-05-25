@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/general.css">
+    <link rel="stylesheet" href="css/authentication.css">
     <link rel="stylesheet" href="css/game_field_timeLine.css">
     <link rel="stylesheet" href="css/game_field.css">
     <link rel="stylesheet" href="css/footer.css">
@@ -16,7 +17,35 @@
 <body>
     <!-- Authentication Container-->
     <div class="authentication-container">
-
+        <div class="login-container">
+            <div class="login-box">
+                <h2>Login</h2>
+                <form>
+                  <div class="user-box">
+                    <input type="text" name="username" required />
+                    <label>User name</label>
+                  </div>
+                  <div class="user-box">
+                    <input type="password" name="password" required />
+                    <label>Password</label>
+                  </div>
+                  <a href="#">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    New Game
+                  </a>
+                  <a href="#">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    Connect
+                  </a>
+                </form>
+              </div>
+        </div>
     </div>
     <!-- End Authentication Container-->
 
@@ -28,7 +57,7 @@
 
     <!-- Game Container -->
 
-    <div class="game-container ">
+    <div class="game-container hidden">
         <div class="game-map">
             <div class="head-timer-container">
                 <div class="tile-day day-0" data-x="0">
@@ -293,7 +322,7 @@
             </div>      
         </div>
 
-        <div class="footer">
+        <div class="footer hidden">
             <div class="footer-collapse"><i class="fas fa-bars"></i></div>
 
             <div class="footer-container">
@@ -336,7 +365,7 @@
     <!-- End Game Container -->
     
     <!-- Event Container-->
-    <div class="event-container ">
+    <div class="event-container hidden">
         <div class="event-main ">
             <div class="event-title">
                 <h1>Lorem ipsum dolor sit amet.</h1>
