@@ -62,7 +62,8 @@ color: #fae100;
 font-size: 12px;
 }
 
-.login-box form a {
+.login-box form .btn {
+background: #00000000;
 position: relative;
 display: inline-block;
 padding: 10px 20px;
@@ -76,7 +77,7 @@ margin: 40px 9px 0px 9px;
 letter-spacing: 2px;
 }
 
-.login-box a:hover {
+.login-box .btn:hover {
 background: #fae100;
 color: #fff;
 border-radius: 5px;
