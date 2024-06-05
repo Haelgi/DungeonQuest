@@ -17,31 +17,6 @@
     box-shadow: 1px 1px 40px 25px #000000cb;
 }
 
-.event-title{
-    text-align: center;
-}
-
-.event-title h1{
-    color: #fae100;
-}
-
-.event-title h1:after,
-p:after {
-    content: '';
-    display: block;
-
-    height: 2px;
-    width: 100px;
-    border-radius: 1px;
-    background-color: #ffffff44;
-    margin: 10px auto;
-}
-
-p{
-    font-size: 14px;
-    color: #ffffff;
-}
-
 .event-article{
     display: flex;
     flex-direction: row;

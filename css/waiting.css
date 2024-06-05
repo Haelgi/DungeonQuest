@@ -1,0 +1,80 @@
+:root{
+    --color-dwarf: #8b4c23;
+    --color-enchantress: #b762c7;
+    --color-hunter: #70b7cb;
+    --color-knight: #c43b17;
+    --color-mage: #6e090d;
+    --color-robber: #454778;
+}
+
+
+
+/* Character Selection Container */
+.character-selection-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-end;
+}
+
+.character-selection-container img{
+    height: 200px;
+}
+
+.character-selection-container p{
+    text-align: center;
+}
+
+.character-selection-container .hero{
+    border-radius: 5px;
+}
+
+.character-selection-container .hero:hover{
+    transition: all 1s ease-out;
+    background: #fae1005d;
+}
+
+.hero.dwarf p{
+    color: var(--color-dwarf);
+}
+
+.hero.enchantress p{
+    color: var(--color-enchantress);
+}
+
+.hero.hunter p{
+    color: var(--color-hunter);
+}
+
+.hero.knight p{
+    color: var(--color-knight);
+}
+
+.hero.dwarf p{
+    color: var(--color-dwarf);
+}
+
+.hero.dwarf p{
+    color: var(--color-dwarf);
+}
+
+.player-list-container{
+    color: white;
+}
+
+/* End Character Selection Container          */
+
+/* Player List Container */
+.player-list{
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #9e9e9e70;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.player-list tr:nth-child(2n){
+    background-color: #ffffff73;
+}
+
+/* End Player List Container */

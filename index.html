@@ -4,55 +4,116 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="css/general.css">
-    <link rel="stylesheet" href="css/authentication.css">
-    <link rel="stylesheet" href="css/game_field_timeLine.css">
-    <link rel="stylesheet" href="css/game_field.css">
-    <link rel="stylesheet" href="css/footer.css">
-    <link rel="stylesheet" href="css/event.css">
+    <link rel="stylesheet" href="css/all.css">
+
     
     <title>Dungeon Quest Online</title>
 </head>
 
 <body>
     <!-- Authentication Container-->
-    <div class="authentication-container">
-        <div class="login-container">
-            <div class="login-box">
-                <h2>Login</h2>
-                <form>
-                  <div class="user-box">
-                    <input type="text" name="username" required />
-                    <label>User name</label>
-                  </div>
-                  <div class="user-box">
-                    <input type="password" name="password" required />
-                    <label>Password</label>
-                  </div>
-                  <a href="#">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    New Game
-                  </a>
-                  <a href="#">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    Connect
-                  </a>
-                </form>
-              </div>
+    <div class="start-game-container">
+        <div class="dialog-form-container login-box">
+            <h2>Login</h2>
+            <form>
+                <div class="user-box">
+                <input type="text" name="username" required />
+                <label>User name</label>
+                </div>
+                <div class="user-box">
+                <input type="password" name="password" required />
+                <label>Password</label>
+                </div>
+                <a href="#">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                New Game
+                </a>
+                <a href="#">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Connect
+                </a>
+            </form>
         </div>
     </div>
     <!-- End Authentication Container-->
 
-    <!-- Character Selection Container-->
-    <!-- End Character Selection Container-->
-
     <!-- Waiting Container-->
+    <!-- Character Selection Container-->
+    <div class="start-game-container ">
+        <div class="dialog-form-container ">
+            <div class="title">
+                <h1>Dungeon Quest Online</h1>
+                <p>Виберіть персонажа, та дочейкайтесь інших гравців</p>
+            </div>
+            <!-- Character Selection Container--> 
+            <div class="character-selection-container">
+                <div class="hero dwarf"><p>Halegi</p><img src="img/hero_tiles/avatar_dwarf.png" alt=""><p>Гном</p></div>
+                <div class="hero enchantress"><p>X-P</p><img src="img/hero_tiles/avatar_enchantress.png" alt=""><p>Чарівниця</p></div>
+                <div class="hero hunter"><img src="img/hero_tiles/avatar_hunter.png" alt=""><p>Мисливець</p></div>
+                <div class="hero knight"><img src="img/hero_tiles/avatar_knight.png" alt=""><p>Рицар</p></div>
+                <div class="hero mage"><img src="img/hero_tiles/avatar_mage.png" alt=""><p>Маг</p></div>
+                <div class="hero robber"><img src="img/hero_tiles/avatar_robber.png" alt=""><p>Крадій</p></div>
+            </div>         
+            <!-- End Character Selection Container-->            
+
+            <!-- Player List Container--> 
+            <div class="player-list-container">
+                <table class="player-list">
+                    <tr class="player_0">
+                        <th class="id">0</th>
+                        <th class="name">Halegi</th>
+                        <th class="hero">Гном</th>
+                        <th class="ready">готовий</th>
+                    </tr>
+                    <tr class="player_1">
+                        <th class="id">1</th>
+                        <th class="name">X-P</th>
+                        <th class="hero">Чарівниця</th>
+                        <th class="ready">готовий</th>
+                    </tr>
+                    <tr class="player_2">
+                        <th class="id">2</th>
+                        <th class="name">AD</th>
+                        <th class="hero"></th>
+                        <th class="ready">вибирає</th>
+                    </tr>
+                    <tr class="player_3">
+                        <th class="id">3</th>
+                        <th class="name">Ann</th>
+                        <th class="hero"></th>
+                        <th class="ready">вибирає</th>
+                    </tr>
+                    <tr class="player_4">
+                        <th class="id"></th>
+                        <th class="name"></th>
+                        <th class="hero"></th>
+                        <th class="ready"></th>
+                    </tr>
+                    <tr class="player_5">
+                        <th class="id"></th>
+                        <th class="name"> </th>
+                        <th class="hero"> </th>
+                        <th class="ready"> </th>
+                    </tr>
+                    <tr class="player_6">
+                        <th class="id"></th>
+                        <th class="name"></th>
+                        <th class="hero"></th>
+                        <th class="ready"></th>
+                    </tr>
+                </table>
+            </div>         
+            <!-- End Player List Container-->            
+        </div>
+
+    </div>
+
     <!-- End Waiting Container-->
 
     <!-- Game Container -->
@@ -322,7 +383,7 @@
             </div>      
         </div>
 
-        <div class="footer ">
+        <div class="footer">
             <div class="footer-collapse"><i class="fas fa-bars"></i></div>
 
             <div class="footer-container">
@@ -367,7 +428,7 @@
     <!-- Event Container-->
     <div class="event-container ">
         <div class="event-main ">
-            <div class="event-title">
+            <div class="title">
                 <h1>Lorem ipsum dolor sit amet.</h1>
                 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptates provident ducimus dolorum recusandae debitis commodi atque ipsum voluptatibus vero deserunt!</p>
             </div>

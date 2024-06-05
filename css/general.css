@@ -30,3 +30,28 @@ body {
 .hidden{
     display: none !important;
 }
+
+.title{
+    text-align: center;
+}
+
+.title h1{
+    color: #fae100;
+}
+
+.title h1:after,
+p:after {
+    content: '';
+    display: block;
+
+    height: 2px;
+    width: 100px;
+    border-radius: 1px;
+    background-color: #ffffff44;
+    margin: 10px auto;
+}
+
+p{
+    font-size: 14px;
+    color: #ffffff;
+}
