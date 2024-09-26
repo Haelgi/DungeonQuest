@@ -1,3 +1,4 @@
+.authentication,
 .start-game-container{
     background-image: url('../img/hero_tiles/hero_tiles_back.jpg');
     background-size: cover; 
@@ -62,7 +63,7 @@ color: #fae100;
 font-size: 12px;
 }
 
-.login-box form .btn {
+.login-box .form .btn {
 background: #00000000;
 position: relative;
 display: inline-block;

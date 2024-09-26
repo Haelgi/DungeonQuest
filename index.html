@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="css/all.css">
     
-    <script defer src="script/client.js"></script>
+    <script defer type="module" src="script/generalScripts.js"></script>
 
     <title>Dungeon Quest Online</title>
 </head>
@@ -15,21 +15,21 @@
 <body>
     <!-- Authentication Container -->
 
-    <div class="start-game-container">
+    <div class="authentication">
         <div class="dialog-form-container login-box">
             <h2>Реєстрація</h2>
-            <form>
+            <div class = 'form'>
                 <div class="user-box">
-                    <input type="text" name="username" id="username" required />
+                    <input type="text" name="userName" id="userName" required />
                     <label>Ім'я</label>
                 </div>
-                <!-- <div class="user-box">
-                    <input type="password" name="password" id="password" required />
+                <div class="user-box">
+                    <input type="password" name="userPassword" id="userPassword" required />
                     <label>Пароль</label>
-                </div> -->
+                </div>
                 <button class="btn" id="btn_new_game">Нова гра</button>
                 <button class="btn" id="btn_connect">Приєднатись</button>
-            </form>
+            </div>
         </div>
     </div>
     <!-- End Authentication Container-->
