@@ -10,52 +10,54 @@
 
 
 /* Character Selection Container */
+/* .character-selection-container{
+
+} */
+
 .character-selection-container{
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    align-items: flex-end;
+    align-items: center;
+    min-width: 600px;
+    width: 80vw;
 }
 
-.character-selection-container img{
-    height: 200px;
-}
-
-.character-selection-container p{
-    text-align: center;
-}
 
 .character-selection-container .hero{
-    border-radius: 5px;
+    display: flex;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    flex: 0.5;
+    box-shadow: 0 4px 8px #000; 
+    filter: brightness(0.6);
+    border-radius: 10px;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    height: 350px;
+}
+
+.character-selection-container .hero p{
+    position: absolute;
+    font-size: 20px;
+    color: #fae100;
+    transform: rotate(-90deg);
+    text-align: center;
+    white-space: nowrap;
+    width: 120px;
 }
 
 .character-selection-container .hero:hover{
-    transition: all 1s ease-out;
-    background: #fae1005d;
+    min-width: 540px;
+    flex: 1;
+    height: 400px;
+    filter: brightness(1);
 }
 
-.hero.dwarf p{
-    color: var(--color-dwarf);
-}
-
-.hero.enchantress p{
-    color: var(--color-enchantress);
-}
-
-.hero.hunter p{
-    color: var(--color-hunter);
-}
-
-.hero.knight p{
-    color: var(--color-knight);
-}
-
-.hero.dwarf p{
-    color: var(--color-dwarf);
-}
-
-.hero.dwarf p{
-    color: var(--color-dwarf);
+.character-selection-container .hero:hover p{
+    display: none;
 }
 
 .player-list-container{

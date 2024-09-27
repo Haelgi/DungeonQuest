@@ -15,7 +15,7 @@
 <body>
     <!-- Authentication Container -->
 
-    <div class="authentication">
+    <div class="authentication hidden">
         <div class="dialog-form-container login-box">
             <h2>Реєстрація</h2>
             <div class = 'form'>
@@ -36,7 +36,7 @@
 
     <!-- Waiting Container-->
     <!-- Character Selection Container-->
-    <div class="start-game-container hidden">
+    <div class="start-game-container ">
         <div class="dialog-form-container ">
             <div class="title">
                 <h1>Dungeon Quest Online</h1>
@@ -44,60 +44,25 @@
             </div>
             <!-- Character Selection Container--> 
             <div class="character-selection-container">
-                <div class="hero dwarf"><p>Halegi</p><img src="img/hero_tiles/avatar_dwarf.png" alt=""><p>Гном</p></div>
-                <div class="hero enchantress"><p>X-P</p><img src="img/hero_tiles/avatar_enchantress.png" alt=""><p>Чарівниця</p></div>
-                <div class="hero hunter"><img src="img/hero_tiles/avatar_hunter.png" alt=""><p>Мисливець</p></div>
-                <div class="hero knight"><img src="img/hero_tiles/avatar_knight.png" alt=""><p>Рицар</p></div>
-                <div class="hero mage"><img src="img/hero_tiles/avatar_mage.png" alt=""><p>Маг</p></div>
-                <div class="hero robber"><img src="img/hero_tiles/avatar_robber.png" alt=""><p>Крадій</p></div>
+                <div class="hero dwarf" style="background-image: url('img/hero_tiles/card_dwarf.png')"><p>Гном-Воїн Тарвін</p></div>
+                <div class="hero enchantress active" style="background-image: url('img/hero_tiles/card_enchantress.png')"><p>Чародійка Арвен</p></div>
+                <div class="hero hunter " style="background-image: url('img/hero_tiles/card_hunter.png')"><p>Мисливець Фарн</p></div>
+                <div class="hero knight" style="background-image: url('img/hero_tiles/card_knight.png')"><p>Рицар Хьюгарт</p></div>
+                <div class="hero mage" style="background-image: url('img/hero_tiles/card_mage.png')"><p>Маг Геріон</p></div>
+                <div class="hero robber" style="background-image: url('img/hero_tiles/card_robber.png')"><p>Розбійниця Изабелла</p></div>
             </div>         
             <!-- End Character Selection Container-->            
 
             <!-- Player List Container--> 
             <div class="player-list-container">
                 <table class="player-list">
-                    <tr class="player_0">
-                        <th class="id">0</th>
-                        <th class="name">Halegi</th>
-                        <th class="hero">Гном</th>
-                        <th class="ready">готовий</th>
-                    </tr>
                     <tr class="player_1">
                         <th class="id">1</th>
-                        <th class="name">X-P</th>
-                        <th class="hero">Чарівниця</th>
-                        <th class="ready">готовий</th>
-                    </tr>
-                    <tr class="player_2">
-                        <th class="id">2</th>
-                        <th class="name">AD</th>
+                        <th class="name">Halegi</th>
                         <th class="hero"></th>
-                        <th class="ready">вибирає</th>
+                        <th class="ready">Вибирає</th>
                     </tr>
-                    <tr class="player_3">
-                        <th class="id">3</th>
-                        <th class="name">Ann</th>
-                        <th class="hero"></th>
-                        <th class="ready">вибирає</th>
-                    </tr>
-                    <tr class="player_4">
-                        <th class="id"></th>
-                        <th class="name"></th>
-                        <th class="hero"></th>
-                        <th class="ready"></th>
-                    </tr>
-                    <tr class="player_5">
-                        <th class="id"></th>
-                        <th class="name"> </th>
-                        <th class="hero"> </th>
-                        <th class="ready"> </th>
-                    </tr>
-                    <tr class="player_6">
-                        <th class="id"></th>
-                        <th class="name"></th>
-                        <th class="hero"></th>
-                        <th class="ready"></th>
-                    </tr>
+                   
                 </table>
             </div>         
             <!-- End Player List Container-->            
@@ -109,7 +74,7 @@
 
     <!-- Game Container -->
 
-    <div class="game-container hidden">
+    <div class="game-container ">
         <div class="game-map">
             <div class="head-timer-container">
                 <div class="tile-day day-0" data-x="0">
