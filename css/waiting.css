@@ -20,6 +20,7 @@
     align-items: center;
     min-width: 600px;
     width: 80vw;
+    height: 400px;
 }
 
 
@@ -31,7 +32,7 @@
     cursor: pointer;
     flex: 0.5;
     box-shadow: 0 4px 8px #000; 
-    filter: brightness(0.6);
+    
     border-radius: 10px;
     align-items: center;
     justify-content: center;
@@ -46,7 +47,10 @@
     transform: rotate(-90deg);
     text-align: center;
     white-space: nowrap;
-    width: 120px;
+    height: 30px;
+    background-color: #000000cb;
+    box-shadow: 1px 1px 40px 25px #000000cb;
+    border-radius: 5px;
 }
 
 .character-selection-container .hero:hover{

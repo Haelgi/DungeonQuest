@@ -11,6 +11,7 @@
     border: 0;
     font-family: 'Gabriela', sans-serif;
     font-size: 20px;
+    transition: 0.5s;
 
     /* outline: 1px solid green; */
 } 
