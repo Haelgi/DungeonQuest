@@ -38,6 +38,7 @@
     justify-content: center;
     overflow: hidden;
     height: 350px;
+
 }
 
 .character-selection-container .hero p{
@@ -49,18 +50,19 @@
     white-space: nowrap;
     height: 30px;
     background-color: #000000cb;
-    box-shadow: 1px 1px 40px 25px #000000cb;
+    box-shadow: 1px 1px 20px 15px #000000cb;
     border-radius: 5px;
+    
 }
 
-.character-selection-container .hero:hover{
+.character-selection-container .hero.active{
     min-width: 540px;
     flex: 1;
     height: 400px;
-    filter: brightness(1);
+
 }
 
-.character-selection-container .hero:hover p{
+.character-selection-container .hero.active p{
     display: none;
 }
 
