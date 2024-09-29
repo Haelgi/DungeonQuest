@@ -24,7 +24,7 @@
 }
 
 
-.character-selection-container .hero{
+.character-selection-container .card{
     display: flex;
     background-size: cover;
     background-position: center;
@@ -41,7 +41,7 @@
 
 }
 
-.character-selection-container .hero p{
+.character-selection-container .card p{
     position: absolute;
     font-size: 20px;
     color: #fae100;
@@ -52,17 +52,15 @@
     background-color: #000000cb;
     box-shadow: 1px 1px 20px 15px #000000cb;
     border-radius: 5px;
-    
 }
 
-.character-selection-container .hero.active{
+.character-selection-container .card.active{
     min-width: 540px;
     flex: 1;
     height: 400px;
-
 }
 
-.character-selection-container .hero.active p{
+.character-selection-container .card.active p{
     display: none;
 }
 
@@ -85,4 +83,17 @@
     background-color: #ffffff73;
 }
 
+.player-list button{
+    background: #00000000;
+    padding: 5px;
+    color: #fae100;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.player-list button:hover{
+    background: #fae100;
+    color: #fff;
+    box-shadow: 0 0 5px #fae100, 0 0 25px #fae100, 0 0 50px #fae100, 0 0 100px #fae100;
+}
 /* End Player List Container */
