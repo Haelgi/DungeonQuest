@@ -1,4 +1,12 @@
+/**
+ * replacing the contents of a container
+ *
+ * @export
+ * @param {str} container teg or other selector
+ * @param {str} templatesName name template in folder './templates/...'
+ */
 export function loadTemplate(container, templatesName){
+    const contain = document.querySelector(container);
     fetch(`templates/${templatesName}.html`)
     .then(response => {
         if (!response.ok) {
@@ -7,7 +15,7 @@ export function loadTemplate(container, templatesName){
         return response.text();
     })
     .then(data => {
-        container.innerHTML = data;
+        contain.innerHTML = data;
     })
     .catch(error => {
         console.error('There was a problem with the fetch operation:', error);
