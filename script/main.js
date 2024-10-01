@@ -1,9 +1,12 @@
 import  {loadTemplate}  from './loadTemplate.js';
-import  {authentication}  from './authentication.js';
-
+import  {authentication, game, player}  from './authentication.js';
 
 loadTemplate('body', `authentication`).then(()=>{authentication()});
-console.log(2)
+
+setTimeout(() => {
+    console.log(game, player)
+}, 5000);
+
 
 
 

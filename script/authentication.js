@@ -13,12 +13,12 @@ export function authentication(){
 
     btn_new_game.addEventListener('click', function() {
         if (userName.value && userPassword.value){
-            createNewGame()
+            game = new Game();
             createNewPlayer(userName.value)
             //#TODO отправить данные на сервер на проверку
             //#TODO если проверка провалена вывести сообщение об ошибке
             //#TODO если проверка пройдена
-            console.log(game, player)
+
         }
     });
 
@@ -31,18 +31,13 @@ export function authentication(){
         }
     });
 
-    function createNewGame(){
-        game = new Game();
-    }
-
     function createNewPlayer(name) {
-        //#TODO поменять название переменной игрока, и вообще лучше получить список с сервера
         const playerIdx = game.playerList.length;
         player = new Player(name, playerIdx)
         game.playerList.push(player);
-        // alert(`${player_0.userName} ${player_0.userPassword}`); //проверка работы кнопки
     }
 
-    return game, player
+    return {game, player}
 }
 
+export { game, player };
