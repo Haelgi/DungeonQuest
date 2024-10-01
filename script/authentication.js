@@ -18,6 +18,9 @@ export function authentication(){
             //#TODO отправить данные на сервер на проверку
             //#TODO если проверка провалена вывести сообщение об ошибке
             //#TODO если проверка пройдена
+            game.authentication = true
+            const event = new Event('authenticated');
+            document.dispatchEvent(event);  
 
         }
     });
