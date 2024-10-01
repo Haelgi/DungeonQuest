@@ -1,8 +1,11 @@
-import  {Game}  from './game.js';
-import  {Player}  from './player.js';
 import  {loadTemplate}  from './loadTemplate.js';
+import  {authentication}  from './authentication.js';
+
+
+loadTemplate('body', `authentication`).then(()=>{authentication()});
+console.log(2)
 
 
 
-loadTemplate('body', `authentication`);
+
 
