@@ -18,8 +18,21 @@ game.authentication = true;
 //////////////////////////////////////////////////////////////////////////////////////
 
 export function game_container() {
-    //TODO найти контейнер с тайлайном
-    //TODO написать фунцию движения тайла солца по дням
+
+    const timerContainer = document.querySelector('.head-timer-container');
+
+    function moveSunToken(day){
+        if (day > 38) return;
+        document.querySelector(`.token_sun`).remove();
+        const dayContainer = document.querySelector(`[day="${day}"]`);
+        dayContainer.innerHTML=`
+            <div class="token_sun"></div>
+        `;
+    };
+
+    moveSunToken(0);
+
+
     //TODO привязать дни к обьекту игры
     //TODO написать условие для движения тайла солца по дням
 
