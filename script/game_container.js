@@ -1,28 +1,20 @@
 // import  {game, player}  from './authentication.js';
 
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
-class Player {
-    constructor() {
-        this.idx = 0; 
-        this.name = 'Олег'; 
-        this.hero = 'dwarf'; 
-        this.heroName = 'Гном-Воїн Тарвін';
-        this.authentication = true; 
-    }
-    checkAuthentification(){
-        return this.authentication
-    }
-};
+import  {Game}  from './game.js';
+import  {Player}  from './player.js';
+
 const player = new Player();
-class Game {
-    static gameIdx = 0;
-    constructor() {
-        this.gameIdx = 0;
-        this.playerList = [player];
-        this.authentication = true; 
-    }
-}
+player.idx = 0; 
+player.name = 'Олег'; 
+player.hero = 'dwarf'; 
+player.heroName = 'Гном-Воїн Тарвін';
+player.authentication = true; 
+
 const game = new Game();
+game.gameIdx = 0;
+game.playerList = [player];
+game.authentication = true; 
 //////////////////////////////////////////////////////////////////////////////////////
 
 export function game_container() {
