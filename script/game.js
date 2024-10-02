@@ -5,6 +5,8 @@ export class Game {
     constructor() {
         this.gameIdx = Game.gameIdx++;
         this.playerList = [];
-        this.authentication = false; 
+        this.authentication = false;
+
+        this.day = 0; 
     }
 }

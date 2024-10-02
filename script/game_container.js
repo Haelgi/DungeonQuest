@@ -9,7 +9,13 @@ player.idx = 0;
 player.name = 'Олег'; 
 player.hero = 'dwarf'; 
 player.heroName = 'Гном-Воїн Тарвін';
-player.authentication = true; 
+player.authentication = true;
+player.resolve=4; 
+player.strength=6; 
+player.dexterity=6; 
+player.defense=4; 
+player.luck=5; 
+player.health=16; 
 
 const game = new Game();
 game.gameIdx = 0;
@@ -20,25 +26,22 @@ game.authentication = true;
 export function game_container() {
 
     const timerContainer = document.querySelector('.head-timer-container');
+    const characterCardContainer = document.querySelector('.character-card-container');
 
-    function moveSunToken(day){
-        if (day > 38) return;
-        document.querySelector(`.token_sun`).remove();
-        const dayContainer = document.querySelector(`[day="${day}"]`);
-        dayContainer.innerHTML=`
-            <div class="token_sun"></div>
-        `;
-    };
-
-    moveSunToken(0);
+    // start position //////////////////////////////////////////////////////
+    sunTokenPosition(game.day);
+    addCharacterTablet();
 
 
-    //TODO привязать дни к обьекту игры
-    //TODO написать условие для движения тайла солца по дням
 
-    //TODO найти контейнер с картачками игрока
+
+
+
+
+
+    
     //TODO отрисовать нужного героя
-    //TODO прицепить уровни жизней карточки героя к обьекту игрока
+    //TODO стартовые значения героев зашить в класс + добавить их свойства
     //TODO отрисовать стартовые наборы карт на руку
     //TODO навесить анимацию перелистывания на колоды карт
     
@@ -50,6 +53,30 @@ export function game_container() {
     //TODO записать позицию игрока
     //TODO ставить на позицию митл надземный илим подземный в зависимости от зашел игрок в катакомбы или нет
     //TODO вписать ход игры
-    
-    console.log(game)
+    //TODO написать условие для движения тайла солца по дням
+
 }
+
+function sunTokenPosition(day){
+    if (day > 38) return;
+    const token_sun = document.querySelector(`.token_sun`);
+    if (token_sun) token_sun.remove();
+    const dayContainer = document.querySelector(`[day="${day}"]`);
+    dayContainer.innerHTML=`
+        <div class="token_sun"></div>
+    `;
+};
+
+function addCharacterTablet(){
+    const characterTablet = document.querySelector(`.character-tablet-container`);
+    characterTablet.innerHTML=`
+        <div class="hero-tablet shadow" style="background-image: url('img/hero_tiles/tablet/${player.hero}.jpg')">
+            <div class="hero-value resolve-value">${player.resolve}</div>
+            <div class="hero-value strength-value">${player.strength}</div>
+            <div class="hero-value dexterity-value">${player.dexterity}</div>
+            <div class="hero-value defense-value">${player.defense}</div>
+            <div class="hero-value luck-value">${player.luck}</div>
+            <div class="hero-value health-value">${player.health}</div>             
+        </div>
+    `;
+};
