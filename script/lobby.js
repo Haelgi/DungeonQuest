@@ -1,10 +1,8 @@
 import  {game, player}  from './authentication.js';
 
 export function lobby() {
-    console.log(2)
     const cards = document.querySelectorAll('.card')
     const table = document.querySelector('.player-list')
-    console.log(3)
     createPlayerListTable()
 
     function createPlayerListTable(){
@@ -48,8 +46,8 @@ export function lobby() {
         currentPlayerTr.querySelector(`button`).addEventListener('click', ()=> showGameContainer())
     }
 
-    // function showGameContainer(){
-    //     document.querySelector('.start-game-container').classList.add('hidden');
-    //     document.querySelector('.game-container').classList.remove('hidden');
-    // }
+    function showGameContainer(){
+        const event = new Event('confirm');
+        document.dispatchEvent(event);
+    }
 }
