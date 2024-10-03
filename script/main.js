@@ -1,5 +1,5 @@
 import  {loadTemplate}  from './loadTemplate.js';
-import  {authentication, game, player}  from './authentication.js';
+import  {authentication}  from './authentication.js';
 import  {lobby}  from './lobby.js';
 import  {game_container}  from './game_container.js';
 

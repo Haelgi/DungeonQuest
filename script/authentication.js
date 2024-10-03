@@ -39,6 +39,7 @@ export function authentication(){
         player = new Player(name, playerIdx)
         game.playerList.push(player);
     }
+    console.log(1, game, player)
 
     return {game, player}
 }
