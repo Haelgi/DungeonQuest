@@ -33,9 +33,9 @@
 .card-deck-container{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
-    width: 500px;
+    min-width: 500px;
+    height: 400px;
     margin: 0px 0px 10px 10px;
 }
 
@@ -43,15 +43,17 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    height: 380px;
     cursor: pointer;
     flex: 0.5;
     box-shadow: 0 4px 8px #000; 
-    filter: brightness(0.6);
+
     border-radius: 10px;
+    
+    height: 380px;
+    filter: brightness(0.6);
 }
 
-.card-deck.select{
+.card-deck.active{
     max-width: 290px;
     flex: 10;
     height: 400px;

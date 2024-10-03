@@ -1,4 +1,5 @@
 // import  {game, player}  from './authentication.js';
+import  {scrolCards}  from './scrolCards.js';
 
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
 import  {Game}  from './game.js';
@@ -8,7 +9,7 @@ import  {heroes}  from './heroes.js';
 const player = new Player();
 player.idx = 0; 
 player.name = 'Олег'; 
-player.hero = heroes['dwarf']; 
+player.hero = heroes['robber']; 
 player.authentication = true;
 
 
@@ -19,15 +20,11 @@ game.authentication = true;
 //////////////////////////////////////////////////////////////////////////////////////
 
 export function game_container() {
-
-    const timerContainer = document.querySelector('.head-timer-container');
-    const characterCardContainer = document.querySelector('.character-card-container');
-
     // start position //////////////////////////////////////////////////////
     sunTokenPosition(game.day);
     addCharacterTablet();
-
-    //TODO отрисовать стартовые наборы карт на руку
+    drawAbilitieCard()
+    scrolCards('.abilitie-card-container')
     //TODO навесить анимацию перелистывания на колоды карт
     
     //TODO выбор стартовой позиции
@@ -64,4 +61,13 @@ function addCharacterTablet(){
             <div class="hero-value health-value">${player.hero.health}</div>             
         </div>
     `;
+};
+
+function drawAbilitieCard(){
+    const abilitieCardContainer = document.querySelector(`.abilitie-card-container`);
+    player.hero.abilities.forEach((abilitie, idx) => {
+        abilitieCardContainer.innerHTML+=`
+            <div id="${idx}" class="card-deck " style="background-image: url(${abilitie.source})"></div>        
+        `
+    });
 };

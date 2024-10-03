@@ -1,5 +1,5 @@
 class Hero {
-    constructor(name, heroName, resolve, strength, dexterity, defense, luck, health, special, abilitie) {
+    constructor(name, heroName, resolve, strength, dexterity, defense, luck, health, special, abilities) {
         this.name = name; 
         this.heroName = heroName; 
         this.resolve = resolve; 
@@ -9,7 +9,7 @@ class Hero {
         this.luck = luck; 
         this.health = health; 
         this.special = special; 
-        this.abilitie = abilitie; 
+        this.abilities = abilities; 
     };
 };
 
@@ -36,7 +36,7 @@ const dwarf = new Hero('dwarf', 'Гном-Воїн Тарвін', 0, 9, 4, 5, 4,
             и всех прилегающих к ней комнат.*/
     }},
 
-    {name:'Знание Катакомб', source:'img/abilitie_cards/abilitie_dwarf_03_1.jpg', effect: function(){
+    {name:'Знание Катакомб', source:'img/abilitie_cards/abilitie_dwarf_04_1.jpg', effect: function(){
     /* TODO Сбросьте перед тем, как тянуть Карту Катакомб. 
             Вытяните 4 Карты Катакомб, посмотрите их и положите в любом порядке наверх Колоды Катакомб. 
             Потом тяните Карту Катакомб.*/
@@ -69,7 +69,7 @@ const enchantress = new Hero('enchantress','Чародійка Арвен', 0, 5
             Посмотрите их и положите в любом порядке наверх колоды Карт Поиска.*/
     }},
 
-    {name:'Транформация', source:'img/abilitie_cards/abilitie_enchantress_03_1.jpg', effect: function(){
+    {name:'Транформация', source:'img/abilitie_cards/abilitie_enchantress_04_1.jpg', effect: function(){
     /* TODO Сбросьте эту карту после того, как Вы вытащили тайл Комнаты Подземелья. 
             Вытяните еще один тайл Комнаты Подземелья и выберите, какой из них Вы поместите на поле. 
             Замешайте другой тайл обратно в стопку тайлов Комнат Подземелья.*/
@@ -103,7 +103,7 @@ const hunter = new Hero('hunter','Мисливець Фарн', 0, 6, 6, 4, 5, 1
             приняв 1 из выпавших результатов.*/
     }},
 
-    {name:'Обнаружение Ловушек', source:'img/abilitie_cards/abilitie_hunter_03_1.jpg', effect: function(){
+    {name:'Обнаружение Ловушек', source:'img/abilitie_cards/abilitie_hunter_04_1.jpg', effect: function(){
     /* TODO Сбросьте эту карту после того как Вы вытянули Карту Ловушки. 
             Сбросьте Карту Ловушки не разыгрывая ее эффекта.*/
     }},
@@ -138,7 +138,7 @@ const knight = new Hero('knight','Рицар Хьюгарт', 0, 7, 5, 9, 4, 17,
             Дополнительные ранения будут игнорироваться.*/
     }},
 
-    {name:'Крепкие Доспехи', source:'img/abilitie_cards/abilitie_knight_03_1.jpg', effect: function(){
+    {name:'Крепкие Доспехи', source:'img/abilitie_cards/abilitie_knight_04_1.jpg', effect: function(){
     /* TODO Сбросьте эту карту после того как Вы вытянули Карту Подземелья, или Карту Катакомб. 
             Вы можете не разыгрывать эффект вытянутой карты.*/
     }},
@@ -167,7 +167,7 @@ const mage = new Hero('mage','Маг Геріон', 0, 3, 5, 4, 9, 14, function 
     /* TODO Сбросьте эту карту в время своего хода. У Вас исцеляется 4 ранения.*/
     }},
 
-    {name:'Боевая Магия', source:'img/abilitie_cards/abilitie_mage_03_1.jpg', effect: function(){
+    {name:'Боевая Магия', source:'img/abilitie_cards/abilitie_mage_04_1.jpg', effect: function(){
     /* TODO Сбросив эту карту в бою, Вы будете наносить ранения противнику при выпадении значений 1-4 на кубике.*/
     }},
    
@@ -197,7 +197,7 @@ const robber = new Hero('robber','Розбійниця Изабелла', 0, 4, 
             Сбросьте Карту Ловушки не разыгрывая ее эффекта.*/
     }},
 
-    {name:'Шестое Чувство', source:'img/abilitie_cards/abilitie_robber_03_1.jpg', effect: function(){
+    {name:'Шестое Чувство', source:'img/abilitie_cards/abilitie_robber_04_1.jpg', effect: function(){
     /* TODO Способность может применяться к любой колоде карт, кроме колоды Карт Дракона. 
             Сбросьте эту карту после того, как Вы вытянули карту из какой-либо колоды. 
             Вытяните еще одну карту из той же колоды и выберите, эффект какой из этих двух карт Вы разыграете, 
