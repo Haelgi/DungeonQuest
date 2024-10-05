@@ -25,9 +25,20 @@ export function game_container() {
     addCharacterTablet();
     drawAbilitieCard()
     scrolCards('.abilitie-card-container')
-    //TODO навесить анимацию перелистывания на колоды карт
-    
     //TODO выбор стартовой позиции
+    const startFields = document.querySelectorAll(`.start-field`);
+    selectAvailableField(startFields)
+
+    function selectAvailableField(fields, func){
+        const playingField = document.querySelector(`.playing-field`);
+        playingField.classList.add('shading')
+        fields.forEach(field => {
+            field.insertAdjacentHTML('afterbegin', `
+                <div class="available-field"></div>
+            `);
+        });
+    }
+    
     //TODO помещение туда нового тайла 
     //TODO разворот тайла в нужное положение
     //TODO создать класс для тайлов

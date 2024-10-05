@@ -8,6 +8,7 @@
     margin: 0 auto 0 auto;
     border-radius: 20px;
     box-shadow: 0 4px 8px #000;
+
 }
 
 
@@ -17,13 +18,40 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
+    z-index: -1; 
+}
+
+.playing-field.shading{
+    background-color: #00000080;
 }
 
 .tile-field{
+    position: relative;
+    box-sizing: border-box;
     width: 82px;
     height: 82px;
-
 }
+
+.available-field{
+    position: absolute;
+    box-sizing: border-box;
+    border: 4px dashed rgb(12, 145, 18);
+    width: 82px;
+    height: 82px;
+    z-index: 10;
+}
+
+.available-field:hover{
+    background: repeating-linear-gradient(
+        -45deg,      /* Угол наклона штрихов */
+        rgb(0, 192, 16),      /* Цвет первой линии */
+        rgb(0, 192, 16) 2px,  /* Толщина первой линии */
+        rgba(255, 255, 255, 0) 2px,  /* Промежуток между линиями */
+        rgba(255, 255, 255, 0) 10px  /* Завершающий промежуток перед повторением */
+    );
+}
+
+
 
 .hero_token_catacomb{
     width: 60px;
@@ -31,19 +59,19 @@
 }
 
 .hero_mitl{
-    position: relative;
-    top: -180px;
-    left: 15px;
+    position: absolute;
+    top: -20px;
+    left: 25px;
     height: 78px; 
     z-index: 10;
 }
 
 .room_token_catacomb{
-    width: 60px;
-    z-index: 1;
-    position: relative;
-    top: -80px;
+    position: absolute;
+    top: 15px;
     left: 12px;
+    width: 50px;
+    z-index: 1;
 }
 
 /* End Game field --------------------------------------------------*/
