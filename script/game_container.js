@@ -26,19 +26,28 @@ export function game_container() {
     drawAbilitieCard()
     scrolCards('.abilitie-card-container')
     //TODO выбор стартовой позиции
+    //найти стартовые блоки
+    //повесить слушатель событий
+    //
+    const playingField = document.querySelector(`.playing-field`);
     const startFields = document.querySelectorAll(`.start-field`);
-    selectAvailableField(startFields)
+    makeMove(startFields);
+    
+    function makeMove(fields) {
+        highlightFields(fields);
 
-    function selectAvailableField(fields, func){
-        const playingField = document.querySelector(`.playing-field`);
-        playingField.classList.add('shading')
-        fields.forEach(field => {
-            field.insertAdjacentHTML('afterbegin', `
-                <div class="available-field"></div>
-            `);
-        });
+        playingField.addEventListener('click', (e)=> {
+            if(e.target.closest('.available')){
+                console.log('click', e.target.parentElement)
+                removeHighlightFields(fields);
+            }
+        }, { once: true } );
+        
     }
     
+    //TODO помещение туда фигурки игрока 
+        
+    //TODO выбор дотсупного поля для хода
     //TODO помещение туда нового тайла 
     //TODO разворот тайла в нужное положение
     //TODO создать класс для тайлов
@@ -80,5 +89,25 @@ function drawAbilitieCard(){
         abilitieCardContainer.innerHTML+=`
             <div id="${idx}" class="card-deck " style="background-image: url(${abilitie.source})"></div>        
         `
+    });
+};
+
+function highlightFields(fields){
+    playingField.classList.add('shading')
+    fields.forEach(field => {
+        field.classList.add('available')
+        field.insertAdjacentHTML('afterbegin', `
+            <div class="available-field"></div>
+        `);
+    });
+};
+
+function removeHighlightFields(fields){
+    playingField.classList.remove('shading')
+    fields.forEach(field => {
+        field.classList.remove('available')
+        const highlight = field.querySelector(`.available-field`);
+        highlight.remove();
+
     });
 };
