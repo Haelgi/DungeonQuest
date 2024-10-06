@@ -23,9 +23,8 @@ game.authentication = true;
 export function game_container() {
 
     const playingField = document.querySelector(`.playing-field`);
-    // const startFields = document.querySelectorAll(`.start-field`);
+
     // start position //////////////////////////////////////////////////////
-    sunTokenPosition(0);
     addCharacterTablet(player.hero);
     drawAbilitieCard(player.hero);
     scrolCards('.abilitie-card-container');
@@ -33,6 +32,11 @@ export function game_container() {
     // end start position //////////////////////////////////////////////////////
     
     // start game //////////////////////////////////////////////////////
+    sunTokenPosition(game.day);
+
+
+
+    
     function gameLoop() {
 
 
