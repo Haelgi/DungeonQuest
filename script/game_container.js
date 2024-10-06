@@ -24,13 +24,12 @@ export function game_container() {
 
     const playingField = document.querySelector(`.playing-field`);
     // const startFields = document.querySelectorAll(`.start-field`);
-    const startFields = [[0,0], [11,0], [0,11], [11,11]];
     // start position //////////////////////////////////////////////////////
     sunTokenPosition(0);
     addCharacterTablet(player.hero);
     drawAbilitieCard(player.hero);
     scrolCards('.abilitie-card-container');
-    makeMove(startFields);
+    makeMove(game.startFields);
     // end start position //////////////////////////////////////////////////////
     
     // start game //////////////////////////////////////////////////////
