@@ -8,7 +8,7 @@ export class Game {
         this.authentication = false;
 
         this.day = 0; 
-        this.startFields=[[0,0], [15,0], [0,11], [15,11]]; 
+        this.startFields=[[0,0], [14,0], [0,11], [14,11]]; 
         this.playingField=[]; 
     }
 }

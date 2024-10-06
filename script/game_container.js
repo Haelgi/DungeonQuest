@@ -29,25 +29,40 @@ export function game_container() {
     drawAbilitieCard(player.hero);
     scrolCards('.abilitie-card-container');
     makeMove(game.startFields);
+
     // end start position //////////////////////////////////////////////////////
     
     // start game //////////////////////////////////////////////////////
-    sunTokenPosition(game.day);
-
-
-
-    
     function gameLoop() {
-
+        if (player.position){
+            makeMove(newCoordinate());
+        }
+        
+        
 
         requestAnimationFrame(gameLoop);
     };
+    
+    requestAnimationFrame(gameLoop);
+    
+    //TODO выбор дотсупного поля для хода
+    sunTokenPosition(game.day);
+    // makeMove(newCoordinate());
 
-    // requestAnimationFrame(gameLoop);
+    function newCoordinate() {
+        const [x, y] = player.position;
+        const coordinates = [];
+        x > 0 && coordinates.push([x - 1, y]);   
+        x < 14 && coordinates.push([x + 1, y]);  
+        y > 0 && coordinates.push([x, y - 1]);   
+        y < 11 && coordinates.push([x, y + 1]);  
+        return coordinates;
+    }
+    
+
 
 
         
-    //TODO выбор дотсупного поля для хода
     //TODO помещение туда нового тайла 
     //TODO разворот тайла в нужное положение
     //TODO создать класс для тайлов
@@ -101,14 +116,15 @@ export function game_container() {
 
     function makeMove(array) {
         const fields = getElementsByData(array);
-        
-        highlightFields(fields);
+        if (!document.querySelector(`.available-field`)){
+            highlightFields(fields);
+        }
 
         playingField.addEventListener('click', (e)=> {
             if(e.target.closest('.available')){
                 const field = e.target.parentElement;
-                const x = field.getAttribute('data-x'); 
-                const y = field.getAttribute('data-y');
+                const x = Number(field.getAttribute('data-x')); 
+                const y = Number(field.getAttribute('data-y'));
                 player.position = [x, y];
                 putHeroMitl(field)
                 removeHighlightFields(fields);
