@@ -23,23 +23,43 @@ game.authentication = true;
 export function game_container() {
 
     const playingField = document.querySelector(`.playing-field`);
-    const startFields = document.querySelectorAll(`.start-field`);
+    // const startFields = document.querySelectorAll(`.start-field`);
+    const startFields = [[0,0], [11,0], [0,11], [11,11]];
     // start position //////////////////////////////////////////////////////
-    sunTokenPosition(game.day);
-    addCharacterTablet();
-    drawAbilitieCard()
-    scrolCards('.abilitie-card-container')
+    sunTokenPosition(0);
+    addCharacterTablet(player.hero);
+    drawAbilitieCard(player.hero);
+    scrolCards('.abilitie-card-container');
     makeMove(startFields);
+    // end start position //////////////////////////////////////////////////////
+    
+    // start game //////////////////////////////////////////////////////
+    function gameLoop() {
+
+
+        requestAnimationFrame(gameLoop);
+    };
+
+    // requestAnimationFrame(gameLoop);
+
+
         
     //TODO выбор дотсупного поля для хода
     //TODO помещение туда нового тайла 
     //TODO разворот тайла в нужное положение
     //TODO создать класс для тайлов
     //TODO добавить свойства для тайлов
-    //TODO записать позицию игрока
-    //TODO ставить на позицию митл надземный илим подземный в зависимости от зашел игрок в катакомбы или нет
     //TODO вписать ход игры
     //TODO написать условие для движения тайла солца по дням
+
+    function getElementsByData(array){
+        const fields = [];
+        array.forEach( e => {
+            const field = document.querySelector(`[data-y="${e[1]}"][data-x="${e[0]}"]`);
+            fields.push(field)
+        });
+        return fields
+    }
 
 
 
@@ -53,30 +73,32 @@ export function game_container() {
         `;
     };
 
-    function addCharacterTablet(){
+    function addCharacterTablet(heroObj){
         const characterTablet = document.querySelector(`.character-tablet-container`);
         characterTablet.innerHTML=`
-            <div class="hero-tablet shadow" style="background-image: url('img/hero_tiles/tablet/${String(player.hero.name)}.jpg')">
-                <div class="hero-value resolve-value">${player.hero.resolve}</div>
-                <div class="hero-value strength-value">${player.hero.strength}</div>
-                <div class="hero-value dexterity-value">${player.hero.dexterity}</div>
-                <div class="hero-value defense-value">${player.hero.defense}</div>
-                <div class="hero-value luck-value">${player.hero.luck}</div>
-                <div class="hero-value health-value">${player.hero.health}</div>             
+            <div class="hero-tablet shadow" style="background-image: url('img/hero_tiles/tablet/${String(heroObj.name)}.jpg')">
+                <div class="hero-value resolve-value">${heroObj.resolve}</div>
+                <div class="hero-value strength-value">${heroObj.strength}</div>
+                <div class="hero-value dexterity-value">${heroObj.dexterity}</div>
+                <div class="hero-value defense-value">${heroObj.defense}</div>
+                <div class="hero-value luck-value">${heroObj.luck}</div>
+                <div class="hero-value health-value">${heroObj.health}</div>             
             </div>
         `;
     };
 
-    function drawAbilitieCard(){
+    function drawAbilitieCard(heroObj){
         const abilitieCardContainer = document.querySelector(`.abilitie-card-container`);
-        player.hero.abilities.forEach((abilitie, idx) => {
+        heroObj.abilities.forEach((abilitie, idx) => {
             abilitieCardContainer.innerHTML+=`
                 <div id="${idx}" class="card-deck " style="background-image: url(${abilitie.source})"></div>        
             `
         });
     };
 
-    function makeMove(fields) {
+    function makeMove(array) {
+        const fields = getElementsByData(array);
+        
         highlightFields(fields);
 
         playingField.addEventListener('click', (e)=> {
@@ -84,7 +106,7 @@ export function game_container() {
                 const field = e.target.parentElement;
                 const x = field.getAttribute('data-x'); 
                 const y = field.getAttribute('data-y');
-                player.position = {x:x, y:y};
+                player.position = [x, y];
                 putHeroMitl(field)
                 removeHighlightFields(fields);
             }
