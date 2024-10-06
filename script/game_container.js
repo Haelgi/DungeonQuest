@@ -1,5 +1,6 @@
 // import  {game, player}  from './authentication.js';
 import  {scrolCards}  from './scrolCards.js';
+import  {room_tiles}  from './room_tiles.js';
 
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
 import  {Game}  from './game.js';
@@ -34,6 +35,7 @@ export function game_container() {
     
     // start game //////////////////////////////////////////////////////
     function gameLoop() {
+        sunTokenPosition(game.day);
         if (player.position){
             makeMove(newCoordinate());
         }
@@ -45,9 +47,13 @@ export function game_container() {
     
     requestAnimationFrame(gameLoop);
     
-    //TODO выбор дотсупного поля для хода
-    sunTokenPosition(game.day);
-    // makeMove(newCoordinate());
+    //TODO создать класс для тайлов
+    //TODO помещение туда нового тайла 
+    //TODO разворот тайла в нужное положение
+    //TODO добавить свойства для тайлов
+    //TODO вписать ход игры
+    //TODO написать условие для движения тайла солца по дням
+
 
     function newCoordinate() {
         const [x, y] = player.position;
@@ -59,17 +65,6 @@ export function game_container() {
         return coordinates;
     }
     
-
-
-
-        
-    //TODO помещение туда нового тайла 
-    //TODO разворот тайла в нужное положение
-    //TODO создать класс для тайлов
-    //TODO добавить свойства для тайлов
-    //TODO вписать ход игры
-    //TODO написать условие для движения тайла солца по дням
-
     function getElementsByData(array){
         const fields = [];
         array.forEach( e => {
@@ -78,8 +73,6 @@ export function game_container() {
         });
         return fields
     }
-
-
 
     function sunTokenPosition(day){
         if (day > 38) return;
@@ -126,12 +119,29 @@ export function game_container() {
                 const x = Number(field.getAttribute('data-x')); 
                 const y = Number(field.getAttribute('data-y'));
                 player.position = [x, y];
+                // TODO отправить позицию на сервер
+                if (!field.querySelector(`.tile-map`) && !field.classList.contains(`start-field`)){
+                    drawFieldTile(field);
+                };
                 putHeroMitl(field)
                 removeHighlightFields(fields);
             }
         }, { once: true } );
         
     }
+
+    function drawFieldTile(field){
+        //TODO добавить массив с номерами тайлов в обьект игры
+        //TODO взять номер тайла из массива и удалить его из массива 
+        //TODO отрисовать рандомный тайл 
+        //TODO направление следующего хода управлять тайлом 
+
+
+        field.insertAdjacentHTML('afterbegin', `
+            <img class="tile-field tile-map" src="img/room_tiles/room_007.jpg" alt="" style="rotate: 0deg;">
+        `);
+
+    };
 
     function highlightFields(fields){
         playingField.classList.add('shading')
