@@ -1,24 +1,24 @@
-// import  {game, player}  from './authentication.js';
+import  {game, player}  from './authentication.js';
 import  {scrolCards}  from './scrolCards.js';
 import  {room_tiles}  from './room_tiles.js';
 
 
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
-import  {Game}  from './game.js';
-import  {Player}  from './player.js';
-import  {heroes}  from './heroes.js';
+// import  {Game}  from './game.js';
+// import  {Player}  from './player.js';
+// import  {heroes}  from './heroes.js';
 
-const player = new Player();
-player.idx = 0; 
-player.name = 'Олег'; 
-player.hero = heroes['robber']; 
-player.authentication = true;
+// const player = new Player();
+// player.idx = 0; 
+// player.name = 'Олег'; 
+// player.hero = heroes['robber']; 
+// player.authentication = true;
 
 
-const game = new Game();
-game.gameIdx = 0;
-game.playerList = [player];
-game.authentication = true; 
+// const game = new Game();
+// game.gameIdx = 0;
+// game.playerList = [player];
+// game.authentication = true; 
 //////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -118,27 +118,32 @@ export function game_container() {
                 const field = e.target.parentElement;
                 const x = Number(field.getAttribute('data-x')); 
                 const y = Number(field.getAttribute('data-y'));
-                player.position = [x, y];
                 // TODO отправить позицию на сервер
-                if (!field.querySelector(`.tile-map`) && !field.classList.contains(`start-field`)){
-                    drawFieldTile(field);
+                if (!field.querySelector(`.tile-map`) && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)){
+                    drawFieldTile(field, x, y);
                 };
-                putHeroMitl(field)
+                putHeroMitl(field, x, y)
                 removeHighlightFields(fields);
+                player.position = [x, y];
             }
         }, { once: true } );
         
     }
 
-    function drawFieldTile(field){
+    function drawFieldTile(field, x, y){
         const roomNumber = getRundomElement(game.room_tiles, room_tiles).number;
-        //TODO взять номер тайла из массива и удалить его из массива 
-        //TODO отрисовать рандомный тайл 
+        let rotate;
+
+        if (x > player.position[0]) {rotate = 90}  
+        if (x < player.position[0]) {rotate = -90}  
+        if (y > player.position[1]) {rotate = 180}  
+        if (y < player.position[1]) {rotate = 0}  
+
         //TODO направление следующего хода управлять тайлом 
 
         field.classList.add('shadow')
         field.insertAdjacentHTML('afterbegin', `
-            <img class="tile-field tile-map" src="img/room_tiles/room_${roomNumber}.jpg" alt="" style="rotate: 0deg;">
+            <img class="tile-field tile-map" src="img/room_tiles/room_${roomNumber}.jpg" alt="" style="rotate: ${rotate}deg;">
         `);
 
     };
@@ -169,14 +174,25 @@ export function game_container() {
         });
     };
 
-    function putHeroMitl(field){
+    function putHeroMitl(field, x, y){
         const hero_mitl = playingField.querySelector(`.hero_mitl.${player.hero.name}`);
         const hero_token_catacomb = playingField.querySelector(`.hero_token_catacomb.${player.hero.name}`);
-        hero_mitl && hero_mitl.remove();
-        hero_token_catacomb && hero_token_catacomb.remove();
-        field.innerHTML += player.catacomb
-        ? `<img class="hero_token_catacomb ${player.hero.name}" src="img/hero_tiles/token/${player.hero.name}.png" alt="" style="rotate: 0deg;">`
-        : `<img class="hero_mitl ${player.hero.name}" src="img/hero_tiles/mitle/${player.hero.name}.png" alt="">`;
+        let top = -10;
+        let left = 10;
+        
+        if (!field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)){
+            if (x > player.position[0]) {top = -10; left= -30;}; 
+            if (x < player.position[0]) {top = -10; left= 55;};  
+            if (y > player.position[1]) {top = -50; left= 10;}; 
+            if (y < player.position[1]) {top = 40; left= 10;}; 
+        };
 
+        if (hero_mitl) {hero_mitl.remove()};
+        if (hero_token_catacomb) {hero_token_catacomb.remove()};
+        if (player.catacomb) {
+            field.innerHTML +=`<img class="hero_token_catacomb ${player.hero.name}" src="img/hero_tiles/token/${player.hero.name}.png" alt="" style="rotate: 0deg;">`
+        } else {
+            field.innerHTML +=`<img class="hero_mitl ${player.hero.name}" src="img/hero_tiles/mitle/${player.hero.name}.png" alt="" style="top: ${top}px; left: ${left}px;">`
+        }
     }
 }
