@@ -2,6 +2,7 @@
 import  {scrolCards}  from './scrolCards.js';
 import  {room_tiles}  from './room_tiles.js';
 
+
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
 import  {Game}  from './game.js';
 import  {Player}  from './player.js';
@@ -47,8 +48,7 @@ export function game_container() {
     
     requestAnimationFrame(gameLoop);
     
-    //TODO создать класс для тайлов
-    //TODO помещение туда нового тайла 
+
     //TODO разворот тайла в нужное положение
     //TODO добавить свойства для тайлов
     //TODO вписать ход игры
@@ -131,17 +131,24 @@ export function game_container() {
     }
 
     function drawFieldTile(field){
-        //TODO добавить массив с номерами тайлов в обьект игры
+        const roomNumber = getRundomElement(game.room_tiles, room_tiles).number;
         //TODO взять номер тайла из массива и удалить его из массива 
         //TODO отрисовать рандомный тайл 
         //TODO направление следующего хода управлять тайлом 
 
-
+        field.classList.add('shadow')
         field.insertAdjacentHTML('afterbegin', `
-            <img class="tile-field tile-map" src="img/room_tiles/room_007.jpg" alt="" style="rotate: 0deg;">
+            <img class="tile-field tile-map" src="img/room_tiles/room_${roomNumber}.jpg" alt="" style="rotate: 0deg;">
         `);
 
     };
+
+    function getRundomElement(idxArr, objArr){
+        const randomIdx = Math.floor(Math.random() * idxArr.length);
+        idxArr.splice(randomIdx, 1);
+        return objArr[randomIdx]
+    }
+
 
     function highlightFields(fields){
         playingField.classList.add('shading')

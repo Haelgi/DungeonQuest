@@ -1,5 +1,5 @@
 class Tile{
-    constructor() {
+    constructor(number, left, up, right, down, dungeon, search, trap, catacomb, special) {
         this.number = number;
         
         this.up = up;
@@ -19,148 +19,148 @@ class Tile{
 }
 
 const room_tiles = [
-    new Tile(number=1, left=false, up= false, right=false, down='grille', dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=2, left=false, up='door', right=false, down='grille', dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=3, left=false, up=true, right=false, down='grille', dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=4, left=true, up=false, right=false, down='grille', dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=5, left=true, up='door', right=true, down='grille', dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=6, left=false, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=true, special=false),
-    new Tile(number=7, left=false, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=true, special=false),
-    new Tile(number=8, left=false, up= false, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=true, special=false),
-    new Tile(number=9, left=false, up= false, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=true, special=false),
-    new Tile(number=10, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=true, special=false),
+    new Tile(1, false, false, false, 'grille', true, true, false, false, false),
+    new Tile(2, false, 'door', false, 'grille', true, true, false, false, false),
+    new Tile(3, false, true, false, 'grille', true, true, false, false, false),
+    new Tile(4, true, false, false, 'grille', true, true, false, false, false),
+    new Tile(5, true, 'door', true, 'grille', true, true, false, false, false),
+    new Tile(6, false, true, true, true, true, true, false, true, false),
+    new Tile(7, false, true, true, true, true, true, false, true, false),
+    new Tile(8, false, false, true, true, true, true, false, true, false),
+    new Tile(9, false, false, true, true, true, true, false, true, false),
+    new Tile(10, true, true, true, true, true, true, false, true, false),
     
-    new Tile(number=11, left=false, up= true, right=false, down=true, dungeon=true, search=false, trap=false, catacomb=false, special='collapse'),//обвал
-    new Tile(number=12, left=false, up= true, right=false, down=true, dungeon=true, search=false, trap=false, catacomb=false, special='collapse'),//обвал
-    new Tile(number=13, left=true, up= true, right=true, down=true, dungeon=true, search=false, trap=false, catacomb=false, special='collapse'),//обвал
-    new Tile(number=14, left=true, up= true, right=true, down=true, dungeon=true, search=false, trap=false, catacomb=false, special='collapse'),//обвал
-    new Tile(number=15, left=true, up= true, right=true, down=true, dungeon=true, search=false, trap=false, catacomb=false, special='abyss right'),//Пропасть
-    new Tile(number=16, left='door', up= true, right='door', down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=17, left='door', up= true, right='door', down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=18, left=true, up= 'door', right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=19, left=true, up= true, right='door', down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=20, left=true, up= true, right=true, down=true, dungeon=false, search=false, trap=true, catacomb=false, special=false),
+    new Tile(11, false, true, false, true, true, false, false, false, 'collapse'),//обвал
+    new Tile(12, false, true, false, true, true, false, false, false, 'collapse'),//обвал
+    new Tile(13, true, true, true, true, true, false, false, false, 'collapse'),//обвал
+    new Tile(14, true, true, true, true, true, false, false, false, 'collapse'),//обвал
+    new Tile(15, true, true, true, true, true, false, false, false, 'abyss right'),//Пропасть
+    new Tile(16, 'door', true, 'door', true, true, true, false, false, false),
+    new Tile(17, 'door', true, 'door', true, true, true, false, false, false),
+    new Tile(18, true, 'door', true, true, true, true, false, false, false),
+    new Tile(19, true, true, 'door', true, true, true, false, false, false),
+    new Tile(20, true, true, true, true, false, false, true, false, false),
     
-    new Tile(number=21, left=true, up= false, right=true, down='grille', dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=22, left=true, up= false, right=true, down='grille', dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=23, left=true, up= 'door', right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=24, left=true, up= 'door', right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=25, left=false, up= 'door', right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=26, left=false, up= true, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=27, left=false, up= true, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=28, left=false, up= false, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=29, left=false, up= false, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=30, left=false, up= false, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
+    new Tile(21, true, false, true, 'grille', true, true, false, false, false),
+    new Tile(22, true, false, true, 'grille', true, true, false, false, false),
+    new Tile(23, true, 'door', false, true, true, true, false, false, false),
+    new Tile(24, true, 'door', false, true, true, true, false, false, false),
+    new Tile(25, false, 'door', true, true, true, true, false, false, false),
+    new Tile(26, false, true, false, true, true, true, false, false, false),
+    new Tile(27, false, true, false, true, true, true, false, false, false),
+    new Tile(28, false, false, false, true, true, true, false, false, false),
+    new Tile(29, false, false, false, true, true, true, false, false, false),
+    new Tile(30, false, false, false, true, true, true, false, false, false),
     
-    new Tile(number=31, left=false, up= true, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=32, left=false, up= true, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=33, left=false, up= false, right=false, down=true, dungeon=false, search=true, trap=false, catacomb=false, special='rotate'),// повернуть на 180
-    new Tile(number=34, left=false, up= false, right=false, down=true, dungeon=false, search=true, trap=false, catacomb=false, special='rotate'),// повернуть на 180
-    new Tile(number=35, left=false, up= false, right=false, down=true, dungeon=false, search=true, trap=false, catacomb=false, special='rotate'),// повернуть на 180
-    new Tile(number=36, left=false, up= true, right=true, down='grille', dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=37, left=true, up= true, right=false, down='grille', dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=37, left=true, up= true, right=true, down='grille', dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=39, left=true, up= true, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=true, special=false),
-    new Tile(number=40, left=false, up= false, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=true, special=false),
+    new Tile(31, false, true, false, true, true, true, false, false, false),
+    new Tile(32, false, true, false, true, true, true, false, false, false),
+    new Tile(33, false, false, false, true, false, true, false, false, 'rotate'),// повернуть на 180
+    new Tile(34, false, false, false, true, false, true, false, false, 'rotate'),// повернуть на 180
+    new Tile(35, false, false, false, true, false, true, false, false, 'rotate'),// повернуть на 180
+    new Tile(36, false, true, true, 'grille', true, true, false, false, false),
+    new Tile(37, true, true, false, 'grille', true, true, false, false, false),
+    new Tile(37, true, true, true, 'grille', true, true, false, false, false),
+    new Tile(39, true, true, false, true, true, true, false, true, false),
+    new Tile(40, false, false, false, true, true, true, false, true, false),
     
-    new Tile(number=41, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=true, special=false),
-    new Tile(number=42, left=false, up= true, right=false, down=true, dungeon=false, search=false, trap=false, catacomb=false, special='pit'),//бездонная яма
-    new Tile(number=43, left=false, up= true, right=false, down=true, dungeon=false, search=false, trap=false, catacomb=false, special='pit'),//бездонная яма
-    new Tile(number=44, left=true, up= true, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=true, special=false),
-    new Tile(number=45, left=true, up= true, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=true, special=false),
-    new Tile(number=46, left=true, up= true, right=true, down=true, dungeon=true, search=false, trap=false, catacomb=false, special='abyss right'),//Пропасть
-    new Tile(number=47, left=true, up= true, right=true, down=true, dungeon=true, search=false, trap=false, catacomb=false, special='abyss left'),//Пропасть
-    new Tile(number=48, left=true, up= true, right=true, down=true, dungeon=true, search=false, trap=false, catacomb=false, special='abyss left'),//Пропасть
-    new Tile(number=49, left=true, up= true, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=50, left=true, up= true, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
+    new Tile(41, true, true, true, true, true, true, false, true, false),
+    new Tile(42, false, true, false, true, false, false, false, false, 'pit'),//бездонная яма
+    new Tile(43, false, true, false, true, false, false, false, false, 'pit'),//бездонная яма
+    new Tile(44, true, true, false, true, true, true, false, true, false),
+    new Tile(45, true, true, false, true, true, true, false, true, false),
+    new Tile(46, true, true, true, true, true, false, false, false, 'abyss right'),//Пропасть
+    new Tile(47, true, true, true, true, true, false, false, false, 'abyss left'),//Пропасть
+    new Tile(48, true, true, true, true, true, false, false, false, 'abyss left'),//Пропасть
+    new Tile(49, true, true, false, true, true, true, false, false, false),
+    new Tile(50, true, true, false, true, true, true, false, false, false),
     
-    new Tile(number=51, left=true, up= true, right=true, down=true, dungeon=false, search=false, trap=true, catacomb=false, special=false),
-    new Tile(number=52, left=false, up= true, right=true, down=true, dungeon=false, search=false, trap=true, catacomb=false, special=false),
-    new Tile(number=53, left=true, up= true, right=false, down=true, dungeon=false, search=false, trap=true, catacomb=false, special=false),
-    new Tile(number=54, left=false, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=55, left=false, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=56, left=false, up= 'door', right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=57, left='door', up= 'door', right='door', down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=58, left='door', up= 'door', right='door', down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=59, left=true, up= true, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special='web'),// паутина
-    new Tile(number=60, left=true, up= true, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special='web'),// паутина
+    new Tile(51, true, true, true, true, false, false, true, false, false),
+    new Tile(52, false, true, true, true, false, false, true, false, false),
+    new Tile(53, true, true, false, true, false, false, true, false, false),
+    new Tile(54, false, true, true, true, true, true, false, false, false),
+    new Tile(55, false, true, true, true, true, true, false, false, false),
+    new Tile(56, false, 'door', true, true, true, true, false, false, false),
+    new Tile(57, 'door', 'door', 'door', true, true, true, false, false, false),
+    new Tile(58, 'door', 'door', 'door', true, true, true, false, false, false),
+    new Tile(59, true, true, true, true, false, false, false, false, 'web'),// паутина
+    new Tile(60, true, true, true, true, false, false, false, false, 'web'),// паутина
     
-    new Tile(number=61, left=false, up= false, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=62, left=false, up= false, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=63, left=false, up= false, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=64, left=false, up= false, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=65, left=false, up= false, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=66, left=false, up= false, right=false, down=true, dungeon=false, search=true, trap=false, catacomb=false, special='rotate'),// повернуть на 180
-    new Tile(number=67, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=68, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=69, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=70, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
+    new Tile(61, false, false, false, true, true, true, false, false, false),
+    new Tile(62, false, false, false, true, true, true, false, false, false),
+    new Tile(63, false, false, false, true, true, true, false, false, false),
+    new Tile(64, false, false, false, true, true, true, false, false, false),
+    new Tile(65, false, false, false, true, true, true, false, false, false),
+    new Tile(66, false, false, false, true, false, true, false, false, 'rotate'),// повернуть на 180
+    new Tile(67, true, true, true, true, true, true, false, false, false),
+    new Tile(68, true, true, true, true, true, true, false, false, false),
+    new Tile(69, true, true, true, true, true, true, false, false, false),
+    new Tile(70, true, true, true, true, true, true, false, false, false),
     
-    new Tile(number=71, left=false, up= false, right=[4,5,6], down=[1,2,3], dungeon=false, search=false, trap=false, catacomb=false, special='dark'), // темная комната
-    new Tile(number=72, left=false, up= true, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=73, left=false, up= true, right=false, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=74, left=false, up= false, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=75, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=76, left=true, up= true, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=true, special=false), 
-    new Tile(number=77, left=false, up= true, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=78, left=false, up= true, right=false, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=79, left=false, up= false, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=80, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
+    new Tile(71, false, false, [4,5,6], [1,2,3], false, false, false, false, 'dark'), // темная комната
+    new Tile(72, false, true, true, true, false, false, false, false, false), 
+    new Tile(73, false, true, false, true, false, false, false, false, false), 
+    new Tile(74, false, false, true, true, true, true, false, false, false), 
+    new Tile(75, true, true, true, true, true, true, false, false, false), 
+    new Tile(76, true, true, false, true, true, true, false, true, false), 
+    new Tile(77, false, true, true, true, false, false, false, false, false), 
+    new Tile(78, false, true, false, true, false, false, false, false, false), 
+    new Tile(79, false, false, true, true, true, true, false, false, false), 
+    new Tile(80, true, true, true, true, true, true, false, false, false), 
     
-    new Tile(number=81, left=true, up= true, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=82, left=true, up= false, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=83, left=false, up= false, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=84, left=false, up= false, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=85, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=86, left=false, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=87, left=true, up= false, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=88, left=false, up= false, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=89, left=false, up= false, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=90, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
+    new Tile(81, true, true, false, true, true, true, false, false, false), 
+    new Tile(82, true, false, true, true, false, false, false, false, false), 
+    new Tile(83, false, false, true, true, false, false, false, false, false), 
+    new Tile(84, false, false, true, true, true, true, false, false, false), 
+    new Tile(85, true, true, true, true, true, true, false, false, false), 
+    new Tile(86, false, true, true, true, true, true, false, false, false), 
+    new Tile(87, true, false, true, true, false, false, false, false, false), 
+    new Tile(88, false, false, true, true, false, false, false, false, false), 
+    new Tile(89, false, false, true, true, true, true, false, false, false), 
+    new Tile(90, true, true, true, true, true, true, false, false, false), 
     
-    new Tile(number=91, left=true, up= true, right=false, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=92, left=true, up= false, right=false, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=93, left=false, up= false, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=94, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=95, left=true, up= true, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special='web'),// паутина
-    new Tile(number=96, left=true, up= true, right=false, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=97, left=true, up= false, right=false, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=98, left=true, up= false, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=99, left=true, up= false, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=100, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
+    new Tile(91, true, true, false, true, false, false, false, false, false), 
+    new Tile(92, true, false, false, true, false, false, false, false, false), 
+    new Tile(93, false, false, true, true, true, true, false, false, false), 
+    new Tile(94, true, true, true, true, true, true, false, false, false), 
+    new Tile(95, true, true, true, true, false, false, false, false, 'web'),// паутина
+    new Tile(96, true, true, false, true, false, false, false, false, false), 
+    new Tile(97, true, false, false, true, false, false, false, false, false), 
+    new Tile(98, true, false, false, true, true, true, false, false, false), 
+    new Tile(99, true, false, false, true, true, true, false, false, false), 
+    new Tile(100, true, true, true, true, true, true, false, false, false), 
     
-    new Tile(number=101, left=true, up= true, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=102, left=true, up= true, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special=false), 
-    new Tile(number=103, left=true, up= false, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=104, left=true, up= false, right=false, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false), 
-    new Tile(number=105, left=false, up= true, right=false, down=true, dungeon=false, search=false, trap=false, catacomb=false, special='bridge'), //мост
-    new Tile(number=106, left=false, up= true, right=false, down=true, dungeon=false, search=false, trap=false, catacomb=false, special='bridge'), //мост
-    new Tile(number=107, left=false, up= true, right=false, down=true, dungeon=false, search=false, trap=false, catacomb=false, special='bridge'), //мост
-    new Tile(number=108, left=false, up= true, right=false, down=true, dungeon=false, search=false, trap=false, catacomb=false, special='bridge'), //мост
-    new Tile(number=109, left=true, up= false, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=110, left=true, up= false, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
+    new Tile(101, true, true, true, true, false, false, false, false, false), 
+    new Tile(102, true, true, true, true, false, false, false, false, false), 
+    new Tile(103, true, false, false, true, true, true, false, false, false), 
+    new Tile(104, true, false, false, true, true, true, false, false, false), 
+    new Tile(105, false, true, false, true, false, false, false, false, 'bridge'), //мост
+    new Tile(106, false, true, false, true, false, false, false, false, 'bridge'), //мост
+    new Tile(107, false, true, false, true, false, false, false, false, 'bridge'), //мост
+    new Tile(108, false, true, false, true, false, false, false, false, 'bridge'), //мост
+    new Tile(109, true, false, true, true, true, true, false, false, false),
+    new Tile(110, true, false, true, true, true, true, false, false, false),
     
-    new Tile(number=111, left=true, up= false, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=112, left=true, up= false, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=113, left=[3,4], up= false, right=[5,6], down=[1,2], dungeon=false, search=false, trap=false, catacomb=false, special='dark'), // темная комната
-    new Tile(number=114, left=[3,4], up= false, right=[5,6], down=[1,2], dungeon=false, search=false, trap=false, catacomb=false, special='dark'), // темная комната
-    new Tile(number=115, left=[3,4], up= false, right=[5,6], down=[1,2], dungeon=false, search=false, trap=false, catacomb=false, special='dark'), // темная комната
-    new Tile(number=116, left=[4,5,6], up= false, right=false, down=[1,2,3], dungeon=false, search=false, trap=false, catacomb=false, special='dark'), // темная комната
-    new Tile(number=117, left=true, up= true, right=true, down=true, dungeon=false, search=false, trap=true, catacomb=false, special=false),
-    new Tile(number=118, left=true, up= true, right=false, down=true, dungeon=false, search=false, trap=true, catacomb=false, special=false),
-    new Tile(number=119, left=false, up= true, right=true, down=true, dungeon=false, search=false, trap=true, catacomb=false, special=false),
-    new Tile(number=120, left=true, up= true, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special='web'),// паутина
+    new Tile(111, true, false, true, true, true, true, false, false, false),
+    new Tile(112, true, false, true, true, true, true, false, false, false),
+    new Tile(113, [3,4], false, [5,6], [1,2], false, false, false, false, 'dark'), // темная комната
+    new Tile(114, [3,4], false, [5,6], [1,2], false, false, false, false, 'dark'), // темная комната
+    new Tile(115, [3,4], false, [5,6], [1,2], false, false, false, false, 'dark'), // темная комната
+    new Tile(116, [4,5,6], false, false, [1,2,3], false, false, false, false, 'dark'), // темная комната
+    new Tile(117, true, true, true, true, false, false, true, false, false),
+    new Tile(118, true, true, false, true, false, false, true, false, false),
+    new Tile(119, false, true, true, true, false, false, true, false, false),
+    new Tile(120, true, true, true, true, false, false, false, false, 'web'),// паутина
     
-    new Tile(number=121, left=true, up= true, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special='web'),// паутина
-    new Tile(number=122, left=false, up= true, right=false, down=true, dungeon=false, search=false, trap=false, catacomb=false, special='pit'),//бездонная яма
-    new Tile(number=123, left='door', up= 'door', right='door', down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=124, left='door', up= 'door', right='door', down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=125, left=false, up= 'door', right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=126, left=true, up= true, right=true, down=true, dungeon=true, search=false, trap=false, catacomb=false, special='abyss left'),//Пропасть
-    new Tile(number=127, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=128, left=true, up= true, right=true, down=true, dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=129, left=true, up= true, right=true, down='grille', dungeon=true, search=true, trap=false, catacomb=false, special=false),
-    new Tile(number=130, left=true, up= true, right=true, down=true, dungeon=false, search=false, trap=false, catacomb=false, special='web')// паутина
+    new Tile(121, true, true, true, true, false, false, false, false, 'web'),// паутина
+    new Tile(122, false, true, false, true, false, false, false, false, 'pit'),//бездонная яма
+    new Tile(123, 'door', 'door', 'door', true, true, true, false, false, false),
+    new Tile(124, 'door', 'door', 'door', true, true, true, false, false, false),
+    new Tile(125, false, 'door', true, true, true, true, false, false, false),
+    new Tile(126, true, true, true, true, true, false, false, false, 'abyss left'),//Пропасть
+    new Tile(127, true, true, true, true, true, true, false, false, false),
+    new Tile(128, true, true, true, true, true, true, false, false, false),
+    new Tile(129, true, true, true, 'grille', true, true, false, false, false),
+    new Tile(130, true, true, true, true, false, false, false, false, 'web')// паутина
 ]
 
 
