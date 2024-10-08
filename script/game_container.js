@@ -1,24 +1,24 @@
-// import  {game, player}  from './authentication.js';
+import  {game, player}  from './authentication.js';
 import  {scrolCards}  from './scrolCards.js';
 import  {room_tiles}  from './room_tiles.js';
 
 
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
-import  {Game}  from './game.js';
-import  {Player}  from './player.js';
-import  {heroes}  from './heroes.js';
+// import  {Game}  from './game.js';
+// import  {Player}  from './player.js';
+// import  {heroes}  from './heroes.js';
 
-const player = new Player();
-player.idx = 0; 
-player.name = 'Олег'; 
-player.hero = heroes['robber']; 
-player.authentication = true;
+// const player = new Player();
+// player.idx = 0; 
+// player.name = 'Олег'; 
+// player.hero = heroes['robber']; 
+// player.authentication = true;
 
 
-const game = new Game();
-game.gameIdx = 0;
-game.playerList = [player];
-game.authentication = true; 
+// const game = new Game();
+// game.gameIdx = 0;
+// game.playerList = [player];
+// game.authentication = true; 
 //////////////////////////////////////////////////////////////////////////////////////
 
 
