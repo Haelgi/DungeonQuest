@@ -1,24 +1,24 @@
-// import  {game, player}  from './authentication.js';
+import  {game, player}  from './authentication.js';
 import  {addScrolCardsEffect}  from './addScrolCardsEffect.js';
 import  {room_tiles}  from './room_tiles.js';
 
 
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
-import  {Game}  from './game.js';
-import  {Player}  from './player.js';
-import  {heroes}  from './heroes.js';
+// import  {Game}  from './game.js';
+// import  {Player}  from './player.js';
+// import  {heroes}  from './heroes.js';
 
-const player = new Player();
-player.idx = 0; 
-player.name = 'Олег'; 
-player.hero = heroes['enchantress']; 
-player.authentication = true;
+// const player = new Player();
+// player.idx = 0; 
+// player.name = 'Олег'; 
+// player.hero = heroes['enchantress']; 
+// player.authentication = true;
 
 
-const game = new Game();
-game.gameIdx = 0;
-game.playerList = [player];
-game.authentication = true; 
+// const game = new Game();
+// game.gameIdx = 0;
+// game.playerList = [player];
+// game.authentication = true; 
 //////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -124,12 +124,10 @@ export function game_container() {
         }
 
         playingField.addEventListener('click', (e)=> {
-            console.log('click')
             if(e.target.closest('.available')){
                 const field = e.target.parentElement;
                 const x = Number(field.getAttribute('data-x')); 
                 const y = Number(field.getAttribute('data-y'));
-                // TODO отправить позицию на сервер
                 if (!game.gameFields[y][x]['id'] && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)){
                     drawFieldTile(field, x, y);
                 };
@@ -137,7 +135,6 @@ export function game_container() {
                 removeHighlightFields(fields);
                 player.position = [x, y];
                 nextCoordinates = newCoordinate()
-                // console.log('nextCoordinates', nextCoordinates)
             }
         }, { once: true } );
         
@@ -145,13 +142,9 @@ export function game_container() {
 
     function checkPermitWay(direction){
         if (!player.position) return true
-        // console.log('player.position', player.position)
         const x = player.position[0];
-        // console.log('x', x)
         const y = player.position[1];
-        // console.log('y', y)
         const tileIdx = game.gameFields[y][x]['id']
-        // console.log('tileIdx', tileIdx)
         const room = room_tiles[tileIdx];
 
         if (!room) return true
@@ -182,18 +175,10 @@ export function game_container() {
                 'down': 'left',
             }
         };
-        console.log('direction', `${direction}`)
-        console.log('game.gameFields[y][x]', game.gameFields[y][x])
-  
+
         const newDirection = directionMapping[game.gameFields[y][x]['r']][direction];
-        console.log('newDirection', newDirection)
+
         const value = room[newDirection];
-
-        // console.log('direction', direction)
-
-        // console.log('player', player)
-        // console.log('game.gameFields', game.gameFields)
-        // console.log('value', value)
 
         if (typeof value === 'string') {
             if (value === 'door') {
