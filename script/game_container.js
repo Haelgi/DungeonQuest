@@ -43,7 +43,6 @@ export function game_container() {
     function gameLoop() {
         sunTokenPosition(game.day);
         if (player.position){
-            
             makeMove(nextCoordinates);
             shiftMitle()
         }
@@ -64,13 +63,65 @@ export function game_container() {
     function newCoordinate() {
         const [x, y] = player.position;
         const coordinates = [];
+
+        if (x > 0 && checkPermitWay([x, y],'left') && checkPermitWay([x - 1, y], 'right')) coordinates.push([x - 1, y]); 
+        if (y > 0 && checkPermitWay([x, y], 'up') && checkPermitWay([x, y - 1], 'down')) coordinates.push([x, y - 1]);   
+        if (x < 14 && checkPermitWay([x, y], 'right') && checkPermitWay([x + 1, y], 'left')) coordinates.push([x + 1, y]);  
+        if (y < 11 && checkPermitWay([x, y], 'down') && checkPermitWay([x, y + 1], 'up'))  coordinates.push([x, y + 1]);  
         
-        if (x > 0 && checkPermitWay('left')) coordinates.push([x - 1, y]); 
-        if (y > 0 && checkPermitWay('up')) coordinates.push([x, y - 1]);   
-        if (x < 14 && checkPermitWay('right')) coordinates.push([x + 1, y]);  
-        if (y < 11 && checkPermitWay('down'))  coordinates.push([x, y + 1]);  
- 
         return coordinates;
+    }
+        
+    function checkPermitWay(coordinat, direction){
+        if (!player.position) return true
+        const [x, y] = coordinat;
+        const tileIdx = game.gameFields[y][x]['id'];
+        const room = room_tiles[tileIdx];
+
+        if (!room) return true
+        
+        const directionMapping = {
+            '0': {
+                'left' : 'left',
+                'up': 'up',
+                'right': 'right',
+                'down' : 'down',
+            },
+            '90': {
+                'left' : 'down',
+                'up': 'left',
+                'right': 'up',
+                'down' : 'right',
+            },
+            '180': {
+                'left' : 'right',
+                'up' : 'down',
+                'right' : 'left',
+                'down' : 'up',
+            },
+            '270': {
+                'left' : 'up',
+                'up' : 'right',
+                'right' : 'down',
+                'down': 'left',
+            }
+        };
+
+        const newDirection = directionMapping[game.gameFields[y][x]['r']][direction];
+
+        const value = room[newDirection];
+
+        if (typeof value === 'string') {
+            if (value === 'door') {
+                // TODO запустить проверку
+                return true
+            }
+            if (value === 'grille') {
+                // TODO запустить проверку
+                return true
+            }
+        }
+        if (value) return true
     }
 
 
@@ -140,58 +191,6 @@ export function game_container() {
         
     }
 
-    function checkPermitWay(direction){
-        if (!player.position) return true
-        const x = player.position[0];
-        const y = player.position[1];
-        const tileIdx = game.gameFields[y][x]['id']
-        const room = room_tiles[tileIdx];
-
-        if (!room) return true
-        
-        const directionMapping = {
-            '0': {
-                'left' : 'left',
-                'up': 'up',
-                'right': 'right',
-                'down' : 'down',
-            },
-            '90': {
-                'left' : 'down',
-                'up': 'left',
-                'right': 'up',
-                'down' : 'right',
-            },
-            '180': {
-                'left' : 'right',
-                'up' : 'down',
-                'right' : 'left',
-                'down' : 'up',
-            },
-            '270': {
-                'left' : 'up',
-                'up' : 'right',
-                'right' : 'down',
-                'down': 'left',
-            }
-        };
-
-        const newDirection = directionMapping[game.gameFields[y][x]['r']][direction];
-
-        const value = room[newDirection];
-
-        if (typeof value === 'string') {
-            if (value === 'door') {
-                // TODO запустить проверку
-                return true
-            }
-            if (value === 'grille') {
-                // TODO запустить проверку
-                return true
-            }
-        }
-        if (value) return true
-    }
 
     function drawFieldTile(field, x, y){
         const roomNumber = getRundomElement(game.room_tiles, room_tiles).number;
