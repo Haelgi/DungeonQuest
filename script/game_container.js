@@ -64,12 +64,17 @@ export function game_container() {
         const [x, y] = player.position;
         const coordinates = [];
 
-        if (x > 0 && checkPermitWay([x, y],'left') && checkPermitWay([x - 1, y], 'right')) coordinates.push([x - 1, y]); 
-        if (y > 0 && checkPermitWay([x, y], 'up') && checkPermitWay([x, y - 1], 'down')) coordinates.push([x, y - 1]);   
-        if (x < 14 && checkPermitWay([x, y], 'right') && checkPermitWay([x + 1, y], 'left')) coordinates.push([x + 1, y]);  
-        if (y < 11 && checkPermitWay([x, y], 'down') && checkPermitWay([x, y + 1], 'up'))  coordinates.push([x, y + 1]);  
+        if (x > 0 && checkPermitWay([x, y],'left') && checkPermitWay([x - 1, y], 'right') && checkOtherPlayer([x - 1, y])) coordinates.push([x - 1, y]); 
+        if (y > 0 && checkPermitWay([x, y], 'up') && checkPermitWay([x, y - 1], 'down') && checkOtherPlayer([x, y - 1])) coordinates.push([x, y - 1]);   
+        if (x < 14 && checkPermitWay([x, y], 'right') && checkPermitWay([x + 1, y], 'left') && checkOtherPlayer([x + 1, y])) coordinates.push([x + 1, y]);  
+        if (y < 11 && checkPermitWay([x, y], 'down') && checkPermitWay([x, y + 1], 'up') && checkOtherPlayer([x, y + 1]))  coordinates.push([x, y + 1]);  
         
         return coordinates;
+    }
+
+    function checkOtherPlayer(coordinat){
+        const [x, y] = coordinat;
+        if(!game.gameFields[y][x]['[id]']) return true
     }
         
     function checkPermitWay(coordinat, direction){
@@ -79,7 +84,7 @@ export function game_container() {
         const room = room_tiles[tileIdx];
 
         if (!room) return true
-        
+
         const directionMapping = {
             '0': {
                 'left' : 'left',
@@ -205,8 +210,6 @@ export function game_container() {
         field.insertAdjacentHTML('afterbegin', `
             <img class="tile-field tile-map" src="img/room_tiles/room_${roomNumber}.jpg" alt="" style="rotate: ${rotate}deg;">`);
             
-        // player.roomIdx = roomNumber-1;
-        // player.roomRotate = rotate;
         game.gameFields[y][x]['id'] = roomNumber-1;
         game.gameFields[y][x]['r'] = rotate;
         game.gameFields[y][x]['p'] = player.name;
@@ -245,13 +248,6 @@ export function game_container() {
         const hero_token_catacomb = playingField.querySelector(`.hero_token_catacomb.${player.hero.name}`);
         let top = -10;
         let left = 10;
-        // позиционирование митла на входе в новую комнату
-        // if (!field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)){
-        //     if (x > player.position[0]) {top = -10; left= -30;}; 
-        //     if (x < player.position[0]) {top = -10; left= 55;};  
-        //     if (y > player.position[1]) {top = -50; left= 10;}; 
-        //     if (y < player.position[1]) {top = 40; left= 10;}; 
-        // };
 
         if (hero_mitl) {hero_mitl.remove()};
         if (hero_token_catacomb) {hero_token_catacomb.remove()};
