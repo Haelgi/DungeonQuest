@@ -1,24 +1,24 @@
-import  {game, player}  from './authentication.js';
+// import  {game, player}  from './authentication.js';
 import  {scrolCards}  from './scrolCards.js';
 import  {room_tiles}  from './room_tiles.js';
 
 
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
-// import  {Game}  from './game.js';
-// import  {Player}  from './player.js';
-// import  {heroes}  from './heroes.js';
+import  {Game}  from './game.js';
+import  {Player}  from './player.js';
+import  {heroes}  from './heroes.js';
 
-// const player = new Player();
-// player.idx = 0; 
-// player.name = 'Олег'; 
-// player.hero = heroes['robber']; 
-// player.authentication = true;
+const player = new Player();
+player.idx = 0; 
+player.name = 'Олег'; 
+player.hero = heroes['robber']; 
+player.authentication = true;
 
 
-// const game = new Game();
-// game.gameIdx = 0;
-// game.playerList = [player];
-// game.authentication = true; 
+const game = new Game();
+game.gameIdx = 0;
+game.playerList = [player];
+game.authentication = true; 
 //////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -32,6 +32,7 @@ export function game_container() {
     scrolCards('.abilitie-card-container');
     makeMove(game.startFields);
 
+
     // end start position //////////////////////////////////////////////////////
     
     // start game //////////////////////////////////////////////////////
@@ -39,6 +40,7 @@ export function game_container() {
         sunTokenPosition(game.day);
         if (player.position){
             makeMove(newCoordinate());
+            shiftMitle()
         }
         
         
@@ -179,13 +181,13 @@ export function game_container() {
         const hero_token_catacomb = playingField.querySelector(`.hero_token_catacomb.${player.hero.name}`);
         let top = -10;
         let left = 10;
-        
-        if (!field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)){
-            if (x > player.position[0]) {top = -10; left= -30;}; 
-            if (x < player.position[0]) {top = -10; left= 55;};  
-            if (y > player.position[1]) {top = -50; left= 10;}; 
-            if (y < player.position[1]) {top = 40; left= 10;}; 
-        };
+        // позиционирование митла на входе в новую комнату
+        // if (!field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)){
+        //     if (x > player.position[0]) {top = -10; left= -30;}; 
+        //     if (x < player.position[0]) {top = -10; left= 55;};  
+        //     if (y > player.position[1]) {top = -50; left= 10;}; 
+        //     if (y < player.position[1]) {top = 40; left= 10;}; 
+        // };
 
         if (hero_mitl) {hero_mitl.remove()};
         if (hero_token_catacomb) {hero_token_catacomb.remove()};
@@ -195,4 +197,18 @@ export function game_container() {
             field.innerHTML +=`<img class="hero_mitl ${player.hero.name}" src="img/hero_tiles/mitle/${player.hero.name}.png" alt="" style="top: ${top}px; left: ${left}px;">`
         }
     }
+
+    function shiftMitle(){
+        const heroMitl = document.querySelector('.hero_mitl');
+        const currentField = heroMitl.parentElement;
+        currentField.addEventListener('mouseenter', () => {
+            heroMitl.style.top = '-60px';
+            heroMitl.style.left = '-40px';
+        });
+        
+        currentField.addEventListener('mouseleave', () => {
+            heroMitl.style.top = '-10px';
+            heroMitl.style.left = '10px';
+        });
+    };    
 }
