@@ -60,7 +60,7 @@ const room_tiles = [
     new Tile(36, false, true, true, 'grille', true, true, false, false, false),
     new Tile(37, true, true, false, 'grille', true, true, false, false, false),
     new Tile(37, true, true, true, 'grille', true, true, false, false, false),
-    new Tile(39, true, true, false, true, true, true, false, true, false),
+    new Tile(39, true, false, false, true, true, true, false, true, false),
     new Tile(40, false, false, false, true, true, true, false, true, false),
     
     new Tile(41, true, true, true, true, true, true, false, true, false),

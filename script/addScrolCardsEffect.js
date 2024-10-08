@@ -1,4 +1,4 @@
-export function scrolCards(container){
+export function addScrolCardsEffect(container){
     const parentContainer = document.querySelector(container);
     const cards = parentContainer.querySelectorAll('*');
     cards.forEach(card => {
