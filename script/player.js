@@ -7,5 +7,7 @@ export class Player {
         this.authentication = false;
         this.position;
         this.catacomb = false;
+        this.roomIdx;
+        this.roomRotate;
     }
 }

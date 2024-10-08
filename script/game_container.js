@@ -1,24 +1,24 @@
-import  {game, player}  from './authentication.js';
+// import  {game, player}  from './authentication.js';
 import  {scrolCards}  from './scrolCards.js';
 import  {room_tiles}  from './room_tiles.js';
 
 
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
-// import  {Game}  from './game.js';
-// import  {Player}  from './player.js';
-// import  {heroes}  from './heroes.js';
+import  {Game}  from './game.js';
+import  {Player}  from './player.js';
+import  {heroes}  from './heroes.js';
 
-// const player = new Player();
-// player.idx = 0; 
-// player.name = 'Олег'; 
-// player.hero = heroes['robber']; 
-// player.authentication = true;
+const player = new Player();
+player.idx = 0; 
+player.name = 'Олег'; 
+player.hero = heroes['enchantress']; 
+player.authentication = true;
 
 
-// const game = new Game();
-// game.gameIdx = 0;
-// game.playerList = [player];
-// game.authentication = true; 
+const game = new Game();
+game.gameIdx = 0;
+game.playerList = [player];
+game.authentication = true; 
 //////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -51,7 +51,6 @@ export function game_container() {
     requestAnimationFrame(gameLoop);
     
 
-    //TODO разворот тайла в нужное положение
     //TODO добавить свойства для тайлов
     //TODO вписать ход игры
     //TODO написать условие для движения тайла солца по дням
@@ -60,12 +59,15 @@ export function game_container() {
     function newCoordinate() {
         const [x, y] = player.position;
         const coordinates = [];
-        x > 0 && coordinates.push([x - 1, y]);   
-        x < 14 && coordinates.push([x + 1, y]);  
-        y > 0 && coordinates.push([x, y - 1]);   
-        y < 11 && coordinates.push([x, y + 1]);  
+        
+        if (x > 0 && checkPermitWay('left')) coordinates.push([x - 1, y]); 
+        if (y > 0 && checkPermitWay('up')) coordinates.push([x, y - 1]);   
+        if (x < 14 && checkPermitWay('right')) coordinates.push([x + 1, y]);  
+        if (y < 11 && checkPermitWay('down'))  coordinates.push([x, y + 1]);  
         return coordinates;
     }
+
+
     
     function getElementsByData(array){
         const fields = [];
@@ -132,22 +134,68 @@ export function game_container() {
         
     }
 
+    function checkPermitWay(direction){
+        const room = room_tiles[player.roomIdx];
+        if (!room) return true
+        
+        
+        const directionMapping = {
+            0: direction,
+            90: {
+                up: 'left',
+                right: 'up',
+                down : 'right',
+                left : 'down',
+            },
+            180: {
+                right : 'left',
+                down : 'up',
+                left : 'right',
+                up : 'down',
+            },
+            270: {
+                down: 'left',
+                left : 'up',
+                up : 'right',
+                right : 'down',
+            }
+        };
+        
+        const newDirection = directionMapping[player.roomRotate][direction];
+        const value = room[newDirection];
+
+        if (typeof value === 'string') {
+            if (value === 'door') {
+                // TODO запустить проверку
+                return true
+            }
+            if (value === 'grille') {
+                // TODO запустить проверку
+                return true
+            }
+        }
+        if (value) return true
+    }
+
     function drawFieldTile(field, x, y){
         const roomNumber = getRundomElement(game.room_tiles, room_tiles).number;
+        
         let rotate;
-
+        
         if (x > player.position[0]) {rotate = 90}  
-        if (x < player.position[0]) {rotate = -90}  
+        if (x < player.position[0]) {rotate = 270}  
         if (y > player.position[1]) {rotate = 180}  
         if (y < player.position[1]) {rotate = 0}  
-
+        
         //TODO направление следующего хода управлять тайлом 
-
+        
         field.classList.add('shadow')
         field.insertAdjacentHTML('afterbegin', `
             <img class="tile-field tile-map" src="img/room_tiles/room_${roomNumber}.jpg" alt="" style="rotate: ${rotate}deg;">
-        `);
-
+            `);
+            
+        player.roomIdx = roomNumber-1;
+        player.roomRotate = rotate;
     };
 
     function getRundomElement(idxArr, objArr){
