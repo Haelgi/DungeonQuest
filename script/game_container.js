@@ -64,12 +64,12 @@ export function game_container() {
     function newCoordinate() {
         const [x, y] = player.position;
         const coordinates = [];
+
+        if (x > 0 && checkPermitWay([x, y],'left') && checkPermitWay([x - 1, y], 'right')) coordinates.push([x - 1, y]); 
+        if (y > 0 && checkPermitWay([x, y], 'up') && checkPermitWay([x, y - 1], 'down')) coordinates.push([x, y - 1]);   
+        if (x < 14 && checkPermitWay([x, y], 'right') && checkPermitWay([x + 1, y], 'left')) coordinates.push([x + 1, y]);  
+        if (y < 11 && checkPermitWay([x, y], 'down') && checkPermitWay([x, y + 1], 'up'))  coordinates.push([x, y + 1]);  
         
-        if (x > 0 && checkPermitWay('left')) coordinates.push([x - 1, y]); 
-        if (y > 0 && checkPermitWay('up')) coordinates.push([x, y - 1]);   
-        if (x < 14 && checkPermitWay('right')) coordinates.push([x + 1, y]);  
-        if (y < 11 && checkPermitWay('down'))  coordinates.push([x, y + 1]);  
- 
         return coordinates;
     }
 
