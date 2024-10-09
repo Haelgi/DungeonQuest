@@ -63,12 +63,15 @@ export function game_container() {
     function newCoordinate() {
         const [x, y] = player.position;
         const coordinates = [];
+        const ifPlayerInTower = game.startFields.some(coord => coord[0] === x && coord[1] === y);
+
+        
 
         if (x > 0 && checkPermitWay([x, y],'left') && checkPermitWay([x - 1, y], 'right') && checkOtherPlayer([x - 1, y])) coordinates.push([x - 1, y]); 
         if (y > 0 && checkPermitWay([x, y], 'up') && checkPermitWay([x, y - 1], 'down') && checkOtherPlayer([x, y - 1])) coordinates.push([x, y - 1]);   
         if (x < 14 && checkPermitWay([x, y], 'right') && checkPermitWay([x + 1, y], 'left') && checkOtherPlayer([x + 1, y])) coordinates.push([x + 1, y]);  
         if (y < 11 && checkPermitWay([x, y], 'down') && checkPermitWay([x, y + 1], 'up') && checkOtherPlayer([x, y + 1]))  coordinates.push([x, y + 1]);  
-        
+        if (ifPlayerInTower) coordinates.push(...game.startFields)
         return coordinates;
     }
 

@@ -15,5 +15,8 @@ import  {game_container}  from './game_container.js';
 
 loadTemplate('body', `game_container`).then(()=>{game_container()});
 
+//TODO добавить подсказки к ходу игры
+// показать где старт
+
 
 
