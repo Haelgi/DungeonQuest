@@ -166,3 +166,5 @@ const room_tiles = [
 
 export {room_tiles}
 
+//TODO добавить свойства для тайлов
+//TODO добавить еффекты

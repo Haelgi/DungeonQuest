@@ -9,8 +9,8 @@ export class Game {
 
         this.day = 0; 
         this.startFields=[[0,0], [14,0], [0,11], [14,11]]; 
-        this.gameFields=Array(12).fill().map(() => Array(15).fill().map(() => ({}))); 
         this.room_tiles=Array.from({ length: 130 }, (_, index) => index + 1); 
+        this.gameFields=Array(12).fill().map(() => Array(15).fill().map(() => ({}))); 
     }
 }
 

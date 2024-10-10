@@ -9,5 +9,6 @@ export class Player {
         this.catacomb = false;
         this.roomIdx;
         this.roomRotate;
+        this.card_abilitie = Array.from({ length: 5 }, (_, index) => index + 1);
     }
 }

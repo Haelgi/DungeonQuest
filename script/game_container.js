@@ -1,17 +1,17 @@
 // import  {game, player}  from './authentication.js';
-import  {addScrolCardsEffect}  from './addScrolCardsEffect.js';
-import  {room_tiles}  from './room_tiles.js';
+import  {addScrolCardsEffect}  from './function/addScrolCardsEffect.js';
+import  {room_tiles}  from './cards/room_tiles.js';
+import  {heroes}  from './cards/heroes.js';
 
 
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
 import  {Game}  from './game.js';
 import  {Player}  from './player.js';
-import  {heroes}  from './heroes.js';
 
 const player = new Player();
 player.idx = 0; 
 player.name = 'Олег'; 
-player.hero = heroes['enchantress']; 
+player.hero = 'enchantress'; 
 player.authentication = true;
 
 
@@ -55,8 +55,71 @@ export function game_container() {
     requestAnimationFrame(gameLoop);
     
 
-    //TODO добавить свойства для тайлов
+    // TODO создать класс колоды катакомб
+    // TODO создать класс колоды мертвецов
+    // TODO создать класс колоды ловушек
+    // TODO создать класс колоды склепов
+    // TODO создать класс колоды дверей
+    // TODO создать класс колоды поиска
+    // TODO создать класс колоды сокровищь
+    // TODO создать класс колоды монстров
+    
+
+    // TODO создать класс колоды дракона
+    // TODO в класс игры добавить список с айди карт колоды катакомб
+    // TODO в класс игры добавить список с айди карт колоды мертвецов
+    // TODO в класс игры добавить список с айди карт колоды ловушек
+    // TODO в класс игры добавить список с айди карт колоды склепов
+    // TODO в класс игры добавить список с айди карт колоды дверей
+    // TODO в класс игры добавить список с айди карт колоды поиска
+    // TODO в класс игры добавить список с айди карт колоды сокровищь
+    // TODO в класс игры добавить список с айди карт колоды монстров
+    // TODO в класс игры добавить список с айди карт колоды дракона
+    
+
+    // TODO описать колоду катакомб
+    // TODO описать колоду мертвецов
+    // TODO описать колоду ловушек
+    // TODO описать колоду склепов
+    // TODO описать колоду дверей
+    // TODO описать колоду поиска
+    // TODO описать колоду сокровищь
+    // TODO описать колоду монстров
+    // TODO описать колоду дракона
+
+    // TODO закодировать колоду способностей
+    // TODO закодировать колоду катакомб
+    // TODO закодировать колоду мертвецов
+    // TODO закодировать колоду ловушек
+    // TODO закодировать колоду склепов
+    // TODO закодировать колоду дверей
+    // TODO закодировать колоду поиска
+    // TODO закодировать колоду сокровищь
+    // TODO закодировать колоду монстров
+    // TODO закодировать колоду дракона
+
+
     //TODO вписать ход игры
+    // если есть еффекты картами, играем их - обязательно
+    // делаем обыск в комнате
+    // или входим в другую комнату
+        // если попали в ловушку/засада/спец еффект разигрываем карту ловушки/засада/спец еффект - обязательно
+        // если есть значек подземелия разигрываем карту подземелия - обязательно
+            // если попался враг, тянем рандомную жизнь для врага
+            // играем бой
+
+    // если попали в катакомбах идем в выбранном направлении тянем вместо карт подземелья карту катакомб
+        //если нашли карту выход, выбираем направление и кидаем куб что б узнать где мы выдем на ружу
+
+
+    // если попали в сокровишницу
+        // тянем спит ли дракон
+            //если нет, тянем 2 сокровища
+            // если да, скидываем все сокровища, кидаем 2d6 и получаем весь этот урон        
+    //конец хода двигаем день и тайл солнца
+    // все карты сбрасываются
+    // выйти из подземелья можно только через другую башню
+
     //TODO написать условие для движения тайла солца по дням
 
 
@@ -153,28 +216,30 @@ export function game_container() {
         `;
     };
 
-    function addCharacterTablet(heroObj){
+    function addCharacterTablet(heroName){
         const characterTablet = document.querySelector(`.character-tablet-container`);
         characterTablet.innerHTML=`
-            <div class="hero-tablet shadow" style="background-image: url('img/hero_tiles/tablet/${String(heroObj.name)}.jpg')">
-                <div class="hero-value resolve-value">${heroObj.resolve}</div>
-                <div class="hero-value strength-value">${heroObj.strength}</div>
-                <div class="hero-value dexterity-value">${heroObj.dexterity}</div>
-                <div class="hero-value defense-value">${heroObj.defense}</div>
-                <div class="hero-value luck-value">${heroObj.luck}</div>
-                <div class="hero-value health-value">${heroObj.health}</div>             
+            <div class="hero-tablet shadow" style="background-image: url('img/hero_tiles/tablet/${heroName}.jpg')">
+                <div class="hero-value resolve-value">${heroes[heroName].resolve}</div>
+                <div class="hero-value strength-value">${heroes[heroName].strength}</div>
+                <div class="hero-value dexterity-value">${heroes[heroName].dexterity}</div>
+                <div class="hero-value defense-value">${heroes[heroName].defense}</div>
+                <div class="hero-value luck-value">${heroes[heroName].luck}</div>
+                <div class="hero-value health-value">${heroes[heroName].health}</div>             
             </div>
         `;
     };
 
-    function drawAbilitieCard(heroObj){
+    function drawAbilitieCard(heroName){
         const abilitieCardContainer = document.querySelector(`.abilitie-card-container`);
-        heroObj.abilities.forEach((abilitie, idx) => {
+        heroes[heroName].abilities.forEach((item, idx) => {
             abilitieCardContainer.innerHTML+=`
-                <div id="${idx}" class="card-deck " style="background-image: url(${abilitie.source})"></div>        
+                <div id="${idx}" class="card-deck " style="background-image: url('img/abilitie_cards/abilitie_${heroName}_${item.id}.jpg')"></div>        
             `
         });
     };
+
+    //img\abilitie_cards\abilitie_enchantress_4.jpg
 
     function makeMove(array) {
         const fields = getElementsByData(array);
@@ -247,17 +312,17 @@ export function game_container() {
     };
 
     function putHeroMitl(field, x, y){
-        const hero_mitl = playingField.querySelector(`.hero_mitl.${player.hero.name}`);
-        const hero_token_catacomb = playingField.querySelector(`.hero_token_catacomb.${player.hero.name}`);
+        const hero_mitl = playingField.querySelector(`.hero_mitl.${player.hero}`);
+        const hero_token_catacomb = playingField.querySelector(`.hero_token_catacomb.${player.hero}`);
         let top = -10;
         let left = 10;
 
         if (hero_mitl) {hero_mitl.remove()};
         if (hero_token_catacomb) {hero_token_catacomb.remove()};
         if (player.catacomb) {
-            field.innerHTML +=`<img class="hero_token_catacomb ${player.hero.name}" src="img/hero_tiles/token/${player.hero.name}.png" alt="" style="rotate: 0deg;">`
+            field.innerHTML +=`<img class="hero_token_catacomb ${player.hero}" src="img/hero_tiles/token/${player.hero}.png" alt="" style="rotate: 0deg;">`
         } else {
-            field.innerHTML +=`<img class="hero_mitl ${player.hero.name}" src="img/hero_tiles/mitle/${player.hero.name}.png" alt="" style="top: ${top}px; left: ${left}px;">`
+            field.innerHTML +=`<img class="hero_mitl ${player.hero}" src="img/hero_tiles/mitle/${player.hero}.png" alt="" style="top: ${top}px; left: ${left}px;">`
         }
     }
 

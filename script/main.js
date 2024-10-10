@@ -1,4 +1,4 @@
-import  {loadTemplate}  from './loadTemplate.js';
+import  {loadTemplate}  from './function/loadTemplate.js';
 import  {authentication}  from './authentication.js';
 import  {lobby}  from './lobby.js';
 import  {game_container}  from './game_container.js';
