@@ -1,7 +1,17 @@
 // import  {game, player}  from './authentication.js';
 import  {addScrolCardsEffect}  from './function/addScrolCardsEffect.js';
-import  {room_tiles}  from './cards/room_tiles.js';
 import  {heroes}  from './cards/heroes.js';
+import  {room_tiles}  from './cards/room_tiles.js';
+import  {dungeon_cards}  from './cards/dungeon_cards.js';
+import  {catacomb_cards}  from './cards/catacomb_cards.js';
+import  {deadman_cards}  from './cards/deadman_cards.js';
+import  {trap_cards}  from './cards/trap_cards.js';
+import  {сrypt_cards}  from './cards/сrypt_cards.js';
+import  {door_cards}  from './cards/door_cards.js';
+import  {search_cards}  from './cards/search_cards.js';
+import  {treasure_cards}  from './cards/treasure_cards.js';
+import  {monster_cards}  from './cards/monster_cards.js';
+import  {dragon_cards}  from './cards/dragon_cards.js';
 
 
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
@@ -53,27 +63,6 @@ export function game_container() {
     };
     
     requestAnimationFrame(gameLoop);
-    
-
-
-    // TODO создать класс колоды ловушек
-    // TODO создать класс колоды склепов
-    // TODO создать класс колоды дверей
-    // TODO создать класс колоды поиска
-    // TODO создать класс колоды сокровищь
-    // TODO создать класс колоды монстров
-    // TODO создать класс колоды дракона
-
-
-
-    // TODO в класс игры добавить список с айди карт колоды ловушек
-    // TODO в класс игры добавить список с айди карт колоды склепов
-    // TODO в класс игры добавить список с айди карт колоды дверей
-    // TODO в класс игры добавить список с айди карт колоды поиска
-    // TODO в класс игры добавить список с айди карт колоды сокровищь
-    // TODO в класс игры добавить список с айди карт колоды монстров
-    // TODO в класс игры добавить список с айди карт колоды дракона
-    
 
 
     //TODO вписать ход игры
