@@ -49,6 +49,21 @@ export function game_container() {
 
     // end start position //////////////////////////////////////////////////////
     
+    function drawFieldTileTests(roomNumber, rotate, x, y){
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)  
+        
+        field.classList.add('shadow')
+        field.insertAdjacentHTML('afterbegin', `
+            <img class="tile-field tile-map" src="img/room_tiles/room_${roomNumber}.jpg" alt="" style="rotate: ${rotate}deg;">`);
+            
+        game.gameFields[y][x]['id'] = roomNumber-1;
+        game.gameFields[y][x]['r'] = rotate;
+    };
+    
+    // drawFieldTileTests(15, 90, 1, 0);
+    // drawFieldTileTests(15, 90, 0, 1);
+    // drawFieldTileTests(15, 0, 1, 1);
+    
     // start game //////////////////////////////////////////////////////
     function gameLoop() {
         sunTokenPosition(game.day);
@@ -96,10 +111,10 @@ export function game_container() {
 
         
 
-        if (x > 0 && checkPermitWay([x, y],'left') && checkPermitWay([x - 1, y], 'right') && checkOtherPlayer([x - 1, y])) coordinates.push([x - 1, y]); 
-        if (y > 0 && checkPermitWay([x, y], 'up') && checkPermitWay([x, y - 1], 'down') && checkOtherPlayer([x, y - 1])) coordinates.push([x, y - 1]);   
-        if (x < 14 && checkPermitWay([x, y], 'right') && checkPermitWay([x + 1, y], 'left') && checkOtherPlayer([x + 1, y])) coordinates.push([x + 1, y]);  
-        if (y < 11 && checkPermitWay([x, y], 'down') && checkPermitWay([x, y + 1], 'up') && checkOtherPlayer([x, y + 1]))  coordinates.push([x, y + 1]);  
+        if (x > 0 && checkPermitWay([x, y],'left') && checkPermitWayNeighbour([x - 1, y], 'right') && checkOtherPlayer([x - 1, y])) coordinates.push([x - 1, y]); 
+        if (y > 0 && checkPermitWay([x, y], 'up') && checkPermitWayNeighbour([x, y - 1], 'down') && checkOtherPlayer([x, y - 1])) coordinates.push([x, y - 1]);   
+        if (x < 14 && checkPermitWay([x, y], 'right') && checkPermitWayNeighbour([x + 1, y], 'left') && checkOtherPlayer([x + 1, y])) coordinates.push([x + 1, y]);  
+        if (y < 11 && checkPermitWay([x, y], 'down') && checkPermitWayNeighbour([x, y + 1], 'up') && checkOtherPlayer([x, y + 1]))  coordinates.push([x, y + 1]);  
         if (ifPlayerInTower) coordinates.push(...game.startFields)
         return coordinates;
     }
@@ -108,14 +123,48 @@ export function game_container() {
         const [x, y] = coordinat;
         if(!game.gameFields[y][x]['[id]']) return true
     }
+
+    function checkPermitWayNeighbour(coordinat, direction) {
+        const [x, y] = coordinat;
+        const tileIdx = game.gameFields[y][x]['id'];
+        const room = room_tiles[tileIdx];
+    
+        if (!room) return true;
+        
+        let permission = checkPermitWay(coordinat, direction);
+    
+        if (room.special === 'abyss' && !(player.position[0] === x && player.position[1] === y) && !permission) {
+
+            while (!permission) {
+                switch (game.gameFields[y][x]['r']) {
+                    case '0':
+                        game.gameFields[y][x]['r'] = '180';
+                        break;
+                    case '90':
+                        game.gameFields[y][x]['r'] = '270';
+                        break;
+                    case '270':
+                        game.gameFields[y][x]['r'] = '90';
+                        break;
+                    case '180':
+                        game.gameFields[y][x]['r'] = '0';
+                        break;
+                }
+                permission = checkPermitWay(coordinat, direction);
+            }
+        }
+    
+        return permission;
+    }
         
     function checkPermitWay(coordinat, direction){
-        if (!player.position) return true
+       
         const [x, y] = coordinat;
         const tileIdx = game.gameFields[y][x]['id'];
         const room = room_tiles[tileIdx];
 
         if (!room) return true
+
 
         const directionMapping = {
             '0': {
@@ -148,6 +197,7 @@ export function game_container() {
 
         const value = room[newDirection];
 
+
         if (typeof value === 'string') {
             if (value === 'door') {
                 // TODO запустить проверку
@@ -158,7 +208,9 @@ export function game_container() {
                 return true
             }
         }
-        if (value) return true
+
+        if (!value) return false
+        return true
     }
 
 

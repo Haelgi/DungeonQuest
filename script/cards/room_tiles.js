@@ -34,7 +34,7 @@ const room_tiles = [
     new Tile(12, false, true, false, true, true, false, false, false, 'collapse'),//обвал
     new Tile(13, true, true, true, true, true, false, false, false, 'collapse'),//обвал
     new Tile(14, true, true, true, true, true, false, false, false, 'collapse'),//обвал
-    new Tile(15, true, true, true, true, true, false, false, false, 'abyss right'),//Пропасть
+    new Tile(15, false, false, true, true, true, false, false, false, 'abyss'),//Пропасть
     new Tile(16, 'door', true, 'door', true, true, true, false, false, false),
     new Tile(17, 'door', true, 'door', true, true, true, false, false, false),
     new Tile(18, true, 'door', true, true, true, true, false, false, false),
@@ -68,9 +68,9 @@ const room_tiles = [
     new Tile(43, false, true, false, true, false, false, false, false, 'pit'),//бездонная яма
     new Tile(44, true, true, false, true, true, true, false, true, false),
     new Tile(45, true, true, false, true, true, true, false, true, false),
-    new Tile(46, true, true, true, true, true, false, false, false, 'abyss right'),//Пропасть
-    new Tile(47, true, true, true, true, true, false, false, false, 'abyss left'),//Пропасть
-    new Tile(48, true, true, true, true, true, false, false, false, 'abyss left'),//Пропасть
+    new Tile(46, false, false, true, true, true, false, false, false, 'abyss'),//Пропасть
+    new Tile(47, true, false, false, true, true, false, false, false, 'abyss'),//Пропасть
+    new Tile(48, true, false, false, true, true, false, false, false, 'abyss'),//Пропасть
     new Tile(49, true, true, false, true, true, true, false, false, false),
     new Tile(50, true, true, false, true, true, true, false, false, false),
     
@@ -156,7 +156,7 @@ const room_tiles = [
     new Tile(123, 'door', 'door', 'door', true, true, true, false, false, false),
     new Tile(124, 'door', 'door', 'door', true, true, true, false, false, false),
     new Tile(125, false, 'door', true, true, true, true, false, false, false),
-    new Tile(126, true, true, true, true, true, false, false, false, 'abyss left'),//Пропасть
+    new Tile(126, true, false, false, true, true, false, false, false, 'abyss'),//Пропасть
     new Tile(127, true, true, true, true, true, true, false, false, false),
     new Tile(128, true, true, true, true, true, true, false, false, false),
     new Tile(129, true, true, true, 'grille', true, true, false, false, false),
