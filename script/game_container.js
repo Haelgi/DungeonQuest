@@ -109,12 +109,10 @@ export function game_container() {
         const coordinates = [];
         const ifPlayerInTower = game.startFields.some(coord => coord[0] === x && coord[1] === y);
 
-        
-
-        if (x > 0 && checkPermitWay([x, y],'left') && checkPermitWayNeighbour([x - 1, y], 'right') && checkOtherPlayer([x - 1, y])) coordinates.push([x - 1, y]); 
-        if (y > 0 && checkPermitWay([x, y], 'up') && checkPermitWayNeighbour([x, y - 1], 'down') && checkOtherPlayer([x, y - 1])) coordinates.push([x, y - 1]);   
-        if (x < 14 && checkPermitWay([x, y], 'right') && checkPermitWayNeighbour([x + 1, y], 'left') && checkOtherPlayer([x + 1, y])) coordinates.push([x + 1, y]);  
-        if (y < 11 && checkPermitWay([x, y], 'down') && checkPermitWayNeighbour([x, y + 1], 'up') && checkOtherPlayer([x, y + 1]))  coordinates.push([x, y + 1]);  
+        if (x > 0 && checkPermitWay([x, y],'left') && checkOtherPlayer([x - 1, y]) && checkPermitWayNeighbour([x - 1, y], 'right') ) coordinates.push([x - 1, y]); 
+        if (y > 0 && checkPermitWay([x, y], 'up') && checkOtherPlayer([x, y - 1]) && checkPermitWayNeighbour([x, y - 1], 'down') ) coordinates.push([x, y - 1]);   
+        if (x < 14 && checkPermitWay([x, y], 'right') && checkOtherPlayer([x + 1, y]) && checkPermitWayNeighbour([x + 1, y], 'left') ) coordinates.push([x + 1, y]);  
+        if (y < 11 && checkPermitWay([x, y], 'down')  && checkOtherPlayer([x, y + 1]) && checkPermitWayNeighbour([x, y + 1], 'up') )  coordinates.push([x, y + 1]);  
         if (ifPlayerInTower) coordinates.push(...game.startFields)
         return coordinates;
     }
@@ -130,7 +128,7 @@ export function game_container() {
         const room = room_tiles[tileIdx];
     
         if (!room) return true;
-        
+
         let permission = checkPermitWay(coordinat, direction);
     
         if (room.special === 'abyss' && !(player.position[0] === x && player.position[1] === y) && !permission) {
