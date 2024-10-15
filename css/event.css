@@ -1,8 +1,7 @@
 .event-container{
     position: fixed;
-    top: 0;
+
     width: 100vw;
-    height: 100vh;
     z-index: 100;
     display: flex;
     align-items: center;
@@ -10,7 +9,10 @@
 }
 
 .event-main{
-    width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
     padding: 20px;
     background-color: #000000cb;
     border-radius: 10px;
@@ -32,5 +34,30 @@
     width: 4px;
     border-radius: 1px;
     background-color: #ffffff44;
-    margin: auto 10px;
+    margin: auto 10px ;
+}
+
+.event-container .card{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 4px 8px #000; 
+    border-radius: 10px;
+    height: 450px;
+    width: 300px;
+}
+
+.event-container button{
+    background: #fae100;
+    padding: 5px;
+    color: #000000;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+.event-container button:hover{
+    background: #fae100;
+    color: #fff;
+    box-shadow: 0 0 5px #fae100, 0 0 25px #fae100, 0 0 50px #fae100, 0 0 100px #fae100;
 }

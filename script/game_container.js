@@ -1,5 +1,6 @@
 // import  {game, player}  from './authentication.js';
 import  {addScrolCardsEffect}  from './function/addScrolCardsEffect.js';
+import  {getRundomElement}  from './function/getRundomElement.js';
 import  {heroes}  from './cards/heroes.js';
 import  {room_tiles}  from './cards/room_tiles.js';
 import  {dungeon_cards}  from './cards/dungeon_cards.js';
@@ -18,14 +19,13 @@ import  {dragon_cards}  from './cards/dragon_cards.js';
 import  {Game}  from './game.js';
 import  {Player}  from './player.js';
 
-const player = new Player();
+export const player = new Player();
 player.idx = 0; 
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
 player.authentication = true;
 
-
-const game = new Game();
+export const game = new Game();
 game.gameIdx = 0;
 game.playerList = [player];
 game.authentication = true; 
@@ -34,7 +34,10 @@ game.authentication = true;
 
 export function game_container() {
 
+    const body = document.querySelector(`body`);
     const playingField = document.querySelector(`.playing-field`);
+    
+    let nextCoordinates;
 
     // start position //////////////////////////////////////////////////////
     addCharacterTablet(player.hero);
@@ -44,7 +47,6 @@ export function game_container() {
     addScrolCardsEffect('.treasure-card-container');
     makeMove(game.startFields);
 
-    let nextCoordinates;
 
 
     // end start position //////////////////////////////////////////////////////
@@ -81,6 +83,7 @@ export function game_container() {
 
 
     //TODO вписать ход игры
+    //проверка стадии хода черех тру фолс брейк
     // если есть еффекты картами, играем их - обязательно
     // делаем обыск в комнате
     // или входим в другую комнату
@@ -210,8 +213,6 @@ export function game_container() {
         if (!value) return false
         return true
     }
-
-
     
     function getElementsByData(array){
         const fields = [];
@@ -255,8 +256,6 @@ export function game_container() {
         });
     };
 
-    //img\abilitie_cards\abilitie_enchantress_4.jpg
-
     function makeMove(array) {
         const fields = getElementsByData(array);
         if (!document.querySelector(`.available-field`)){
@@ -268,17 +267,99 @@ export function game_container() {
                 const field = e.target.parentElement;
                 const x = Number(field.getAttribute('data-x')); 
                 const y = Number(field.getAttribute('data-y'));
+                let roomNumber;
                 if (!game.gameFields[y][x]['id'] && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)){
-                    drawFieldTile(field, x, y);
+                   roomNumber = drawFieldTile(field, x, y);
                 };
-                putHeroMitl(field, x, y);
+                putHeroMitl(field);
                 removeHighlightFields(fields);
                 player.position = [x, y];
                 nextCoordinates = newCoordinate()
+                //TODO проверка есть ли карты негативных еффектов
+                //TODO проверка есть ли на тайле подземелие
+                checkDungeonCard(roomNumber)
+                //TODO проверка хотим искать или хотим идти
             }
         }, { once: true } );
         
     }
+
+    function checkDungeonCard(roomNumber) {
+        if (!roomNumber) return
+        if (room_tiles[roomNumber-1].dungeon) {
+
+            eventDungen(0);
+   
+        };   
+        // console.log(room_tiles[roomNumber-1].dungeon)        
+    };
+
+    // TODO сделать функцию вызова окна событий
+
+    function eventDungen(cardId) {
+        //TODO поменять айди на динамический
+        const card = dungeon_cards[cardId]
+
+        body.insertAdjacentHTML('afterbegin', 
+            `<div class="event-container">
+                    <div class="event-main ">
+                        <div class="title">
+                            <h1>Події підземелля</h1>
+                        </div>
+
+                        <div class="event-article">
+                            <div class="event-section">
+                                <div class="card" style="background-image: url('img/dungeon_cards/dungeon_${card.id}.jpg')"></div>
+                            </div>
+                        </div>
+
+                        <button class="btn" id="btn_event_dungen">${card.btnName}</button>
+                    </div>
+                </div>
+            `);
+
+            const eventContainer = body.querySelector('.event-container');
+            const btn = body.querySelector('#btn_event_dungen');
+
+            btn.addEventListener('click', ()=>{
+                eventContainer.remove()
+                eventMonster(card.effect()['id'])
+            });
+    }
+
+    function eventMonster(cardId) {
+        //TODO поменять название кнопок
+        //TODO поменять добавить варианты сразится убежать
+        //TODO добавить поле с броском кубов, по верх окна
+        const card = monster_cards[cardId-1]
+
+        body.insertAdjacentHTML('afterbegin', 
+            `<div class="event-container">
+                    <div class="event-main ">
+                        <div class="title">
+                            <h1>Напад Монстра</h1>
+                        </div>
+
+                        <div class="event-article">
+                            <div class="event-section">
+                                <div class="card" style="background-image: url('img/monster_cards/monster_${card.id}.jpg')"></div>
+                            </div>
+                        </div>
+                        
+                        <button class="btn" id="btn_event_dungen">Пропустити</button>
+                    </div>
+                </div>
+            `);
+
+            const eventContainer = body.querySelector('.event-container');
+            const btn = body.querySelector('#btn_event_dungen');
+
+            btn.addEventListener('click', ()=>{
+                eventContainer.remove()
+            });
+    }
+
+
 
 
     function drawFieldTile(field, x, y){
@@ -299,17 +380,11 @@ export function game_container() {
         game.gameFields[y][x]['p'] = player.name;
 
         delete game.gameFields[player.position[1]][player.position[0]]['p'];
+        return roomNumber
     };
 
-    function getRundomElement(idxArr, objArr){
-        const randomIdx = Math.floor(Math.random() * idxArr.length);
-        idxArr.splice(randomIdx, 1);
-        return objArr[randomIdx]
-    }
-
-
     function highlightFields(fields){
-        playingField.classList.add('shading')
+        // playingField.classList.add('shading')
         fields.forEach(field => {
             field.classList.add('available')
             field.insertAdjacentHTML('afterbegin', `
@@ -319,7 +394,7 @@ export function game_container() {
     };
 
     function removeHighlightFields(fields){
-        playingField.classList.remove('shading')
+        // playingField.classList.remove('shading')
         fields.forEach(field => {
             field.classList.remove('available')
             const highlight = field.querySelector(`.available-field`);
@@ -327,7 +402,7 @@ export function game_container() {
         });
     };
 
-    function putHeroMitl(field, x, y){
+    function putHeroMitl(field){
         const hero_mitl = playingField.querySelector(`.hero_mitl.${player.hero}`);
         const hero_token_catacomb = playingField.querySelector(`.hero_token_catacomb.${player.hero}`);
         let top = -10;
