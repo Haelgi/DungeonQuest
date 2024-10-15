@@ -276,7 +276,6 @@ export function game_container() {
                 player.position = [x, y];
                 nextCoordinates = newCoordinate()
                 //TODO проверка есть ли карты негативных еффектов
-                //TODO проверка есть ли на тайле подземелие
                 checkDungeonCard(roomNumber)
                 //TODO проверка хотим искать или хотим идти
             }
@@ -286,19 +285,13 @@ export function game_container() {
 
     function checkDungeonCard(roomNumber) {
         if (!roomNumber) return
-        if (room_tiles[roomNumber-1].dungeon) {
-
-            eventDungen(0);
-   
+        if (room_tiles[roomNumber-1].dungeon) {     
+            eventDungen();
         };   
-        // console.log(room_tiles[roomNumber-1].dungeon)        
     };
 
-    // TODO сделать функцию вызова окна событий
-
-    function eventDungen(cardId) {
-        //TODO поменять айди на динамический
-        const card = dungeon_cards[cardId]
+    function eventDungen() {
+        const card = getRundomElement(game.dungeon_cards, dungeon_cards)
 
         body.insertAdjacentHTML('afterbegin', 
             `<div class="event-container">
@@ -323,15 +316,26 @@ export function game_container() {
 
             btn.addEventListener('click', ()=>{
                 eventContainer.remove()
-                eventMonster(card.effect()['id'])
+                if (!card.effect) return
+                eventMonster(card.effect())
             });
     }
 
-    function eventMonster(cardId) {
+    function eventMonster(card) {
         //TODO поменять название кнопок
         //TODO поменять добавить варианты сразится убежать
         //TODO добавить поле с броском кубов, по верх окна
-        const card = monster_cards[cardId-1]
+        let cards
+        let eventSection = '';
+        if (Array.isArray(card)) {
+            cards = card;
+        } else {
+            cards = [card];
+        }
+        console.log(cards)
+        cards.forEach(card => {
+            eventSection += `<div class="card" style="background-image: url('img/monster_cards/monster_${card.id}.jpg')"></div>`
+        });
 
         body.insertAdjacentHTML('afterbegin', 
             `<div class="event-container">
@@ -340,12 +344,10 @@ export function game_container() {
                             <h1>Напад Монстра</h1>
                         </div>
 
-                        <div class="event-article">
-                            <div class="event-section">
-                                <div class="card" style="background-image: url('img/monster_cards/monster_${card.id}.jpg')"></div>
-                            </div>
+                        <div class="event-section">
+                            ${eventSection}
                         </div>
-                        
+
                         <button class="btn" id="btn_event_dungen">Пропустити</button>
                     </div>
                 </div>
@@ -358,9 +360,6 @@ export function game_container() {
                 eventContainer.remove()
             });
     }
-
-
-
 
     function drawFieldTile(field, x, y){
         const roomNumber = getRundomElement(game.room_tiles, room_tiles).number;
