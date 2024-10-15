@@ -285,46 +285,13 @@ export function game_container() {
 
     function checkDungeonCard(roomNumber) {
         if (!roomNumber) return
-        if (room_tiles[roomNumber-1].dungeon) {     
-            eventDungen();
+        if (room_tiles[roomNumber-1].dungeon) {   
+            const card = getRundomElement(game.dungeon_cards, dungeon_cards)   
+            eventWindow(card);
         };   
     };
 
-    function eventDungen() {
-        const card = getRundomElement(game.dungeon_cards, dungeon_cards)
-
-        body.insertAdjacentHTML('afterbegin', 
-            `<div class="event-container">
-                    <div class="event-main ">
-                        <div class="title">
-                            <h1>Події підземелля</h1>
-                        </div>
-
-                        <div class="event-article">
-                            <div class="event-section">
-                                <div class="card" style="background-image: url('img/dungeon_cards/dungeon_${card.id}.jpg')"></div>
-                            </div>
-                        </div>
-
-                        <button class="btn" id="btn_event_dungen">${card.btnName}</button>
-                    </div>
-                </div>
-            `);
-
-            const eventContainer = body.querySelector('.event-container');
-            const btn = body.querySelector('#btn_event_dungen');
-
-            btn.addEventListener('click', ()=>{
-                eventContainer.remove()
-                if (!card.effect) return
-                eventMonster(card.effect())
-            });
-    }
-
-    function eventMonster(card) {
-        //TODO поменять название кнопок
-        //TODO поменять добавить варианты сразится убежать
-        //TODO добавить поле с броском кубов, по верх окна
+    function eventWindow(card) {
         let cards
         let eventSection = '';
         if (Array.isArray(card)) {
@@ -332,32 +299,33 @@ export function game_container() {
         } else {
             cards = [card];
         }
-        console.log(cards)
         cards.forEach(card => {
-            eventSection += `<div class="card" style="background-image: url('img/monster_cards/monster_${card.id}.jpg')"></div>`
+            eventSection += `<div class="card" style="background-image: url('img/${card.getPack()}_cards/${card.getPack()}_${card.id}.jpg')"></div>`
         });
 
         body.insertAdjacentHTML('afterbegin', 
             `<div class="event-container">
                     <div class="event-main ">
                         <div class="title">
-                            <h1>Напад Монстра</h1>
+                            <h1>${card.getTitle()}</h1>
                         </div>
 
                         <div class="event-section">
                             ${eventSection}
                         </div>
 
-                        <button class="btn" id="btn_event_dungen">Пропустити</button>
+                        <button class="btn" id="btn_event">${card.btnName}</button>
                     </div>
                 </div>
             `);
 
             const eventContainer = body.querySelector('.event-container');
-            const btn = body.querySelector('#btn_event_dungen');
+            const btn = body.querySelector('#btn_event');
 
             btn.addEventListener('click', ()=>{
                 eventContainer.remove()
+                if (card.effect() === undefined) return
+                eventWindow(card.effect())
             });
     }
 
