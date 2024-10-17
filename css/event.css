@@ -1,14 +1,14 @@
-.event-container{
+.event-container {
     position: fixed;
-
     width: 100vw;
+    height: 100vh; /* Родительский контейнер занимает всю высоту окна */
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.event-main{
+.event-main {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -17,6 +17,31 @@
     background-color: #000000cb;
     border-radius: 10px;
     box-shadow: 1px 1px 40px 25px #000000cb;
+    min-width: 320px;
+    max-width: 70vh;
+    flex-grow: 1; 
+    max-height: 90vh; 
+    overflow-y: auto; 
+}
+
+.event-main::-webkit-scrollbar {
+    width: 12px; 
+}
+
+.event-main::-webkit-scrollbar-thumb {
+    background-color: #fae100; 
+    border-radius: 10px; 
+    border: 3px solid transparent; 
+    background-clip: padding-box; 
+}
+
+
+.event-main::-webkit-scrollbar-button {
+    display: none;
+}
+
+.event-main::-webkit-scrollbar-track {
+    background-color: transparent;
 }
 
 .event-article{
@@ -27,6 +52,8 @@
 .event-section{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .division-line{
