@@ -238,10 +238,12 @@ export function game_container() {
 
         if (typeof value === 'string') {
             if (value === 'door') {
+                drawDoorIcon(x,y, direction)
                 // TODO запустить проверку
-                return true
+
             }
             if (value === 'grille') {
+                drawGrilleIcon(x,y, direction)
                 // TODO запустить проверку
                 return true
             }
@@ -303,6 +305,7 @@ export function game_container() {
     };
 
     function makeMove(array) {
+
         const fields = getElementsByData(array);
         
         if (!document.querySelector(`.available-field`)){
@@ -311,6 +314,8 @@ export function game_container() {
 
         playingField.addEventListener('click', (e)=> {
             if(e.target.closest('.available')){
+                removeDoorIcon()
+                removeGrilleIcon()
                 const field = e.target.parentElement;
                 const x = Number(field.getAttribute('data-x')); 
                 const y = Number(field.getAttribute('data-y'));
@@ -331,8 +336,9 @@ export function game_container() {
                 }
                 removeSearchIcon()
 
+
                 if (room_tiles[game.gameFields[y][x]['id']].search && (game.gameFields[y][x]['s'] === undefined || game.gameFields[y][x]['s'] < 2)) {
-                    putSearchIcon(field)
+                    drawSearchIcon(field)
                     clickSerchIcon(x,y)
                 }
             }
@@ -393,7 +399,7 @@ export function game_container() {
         }
     }
 
-    function putSearchIcon(field){
+    function drawSearchIcon(field){
         const searchIcon = playingField.querySelector(`.search-icon`);
         if (searchIcon) searchIcon.remove()
         field.insertAdjacentHTML('afterbegin', `
@@ -401,10 +407,71 @@ export function game_container() {
         `);
     }
 
+    function drawDoorIcon(x,y, direction){
+        switch (direction) {
+            case 'left':
+                x = x - 1;
+                break;
+            case 'up':
+                y = y - 1;
+                break;
+            case 'right':
+                x = x + 1;
+                break;
+            case 'down':
+                y = y + 1;
+                break;
+        }
+        const searchIcon = playingField.querySelector(`.door-icon`);
+        if (searchIcon) searchIcon.remove()
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+        console.log(x,y)
+        console.log(field)
+        field.insertAdjacentHTML('afterbegin', `
+            <i class="fa-solid fa-door-closed door-icon"></i>
+        `);
+    }
+
+    function drawGrilleIcon(x,y, direction){
+        switch (direction) {
+            case 'left':
+                x = x - 1;
+                break;
+            case 'up':
+                y = y - 1;
+                break;
+            case 'right':
+                x = x + 1;
+                break;
+            case 'down':
+                y = y + 1;
+                break;
+        }
+        const searchIcon = playingField.querySelector(`.grille-icon`);
+        if (searchIcon) searchIcon.remove()
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+        console.log(x,y)
+        console.log(field)
+        field.insertAdjacentHTML('afterbegin', `
+            <i class="fa-solid fa-dungeon grille-icon"></i>
+        `);
+    }
+
     function removeSearchIcon(){
         const searchIcon = playingField.querySelector(`.search-icon`);
         if (searchIcon) searchIcon.remove()
     }
+
+    function removeDoorIcon(){
+        const searchIcon = playingField.querySelector(`.door-icon`);
+        if (searchIcon) searchIcon.remove()
+    }
+
+    function removeGrilleIcon(){
+        const searchIcon = playingField.querySelector(`.grille-icon`);
+        if (searchIcon) searchIcon.remove()
+    }
+
 
     function shiftMitle(){
         const heroMitl = document.querySelector('.hero_mitl');

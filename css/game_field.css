@@ -33,18 +33,30 @@
 }
 
 .tile-field i{
+    font-size: 40px;
+    color: #fae1004d;
+    text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.315), 0 0 20px rgba(0, 0, 0, 0.322), 0 0 20px rgba(0, 0, 0, 0.233);
+}
+
+.tile-field i.search-icon{
     position: absolute;
     top: -30px;
     left: 40px;
-    font-size: 40px;
-    color: #fae100;
-    text-shadow: 0px 0px 20px black, 0 0 20px black, 0 0 20px black;
     padding: 7px;
+    color: #fae100b4;
+    z-index: 20;
+}
+
+.tile-field i.door-icon,
+.tile-field i.grille-icon{
+    position: absolute;
+    padding: 20px;
     z-index: 20;
 }
 
 .tile-field i:hover{
-    text-shadow: 0px 0px 20px orange, 0 0 20px orange, 0 0 20px white;
+    color: #fae100;
+    text-shadow: 0px 0px 20px rgb(255, 166, 0), 0 0 20px rgb(255, 166, 0), 0 0 20px white;
 }
 
 .available-field{
