@@ -2,7 +2,9 @@ class Card {
     constructor(id, name, effect) {
         this.id = id;  
         this.name = name;  
-        this.effect = effect;  
+        this.effect = effect;
+        this.title = 'Пастка';  
+        this.pack = 'trap';  
     };
 };
 

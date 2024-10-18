@@ -6,16 +6,11 @@ class Card {
         this.effect = effect;  
         this.health = health;  
         this.penalty = penalty;  
-        this.btnName = btnName;  
+        this.btnName = btnName;
+        this.title = 'Напад Монстра';  
+        this.pack = 'monster';  
     };
 
-    getTitle(){
-        return 'Напад Монстра'
-    }
-
-    getPack(){
-        return 'monster'
-    }
 };
 
 const monster_cards = [

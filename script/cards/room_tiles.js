@@ -1,20 +1,15 @@
 class Tile{
     constructor(number, left, up, right, down, dungeon, search, trap, catacomb, special) {
         this.number = number;
-        
         this.up = up;
         this.left = left;
         this.right = right;
         this.down = down;
-
         this.dungeon = dungeon;
         this.search = search;
         this.trap = trap;
-        this.catacomb = catacomb;
-        
-        
+        this.catacomb = catacomb; 
         this.special = special;
-
     }
 }
 
