@@ -90,6 +90,7 @@ export function game_container() {
         if (player.position){
             makeMove(nextCoordinates);
             shiftMitle()
+            
         }
         requestAnimationFrame(gameLoop);
     };
@@ -331,11 +332,11 @@ export function game_container() {
                     createNewEvent('dungeon'); 
                 }
                 removeSearchIcon()
-
-                if (room_tiles[game.gameFields[y][x]['id']].search) {
-                    createNewEvent('search');
+                
+                console.log(game.gameFields[y][x]['s'])
+                if (room_tiles[game.gameFields[y][x]['id']].search && (game.gameFields[y][x]['s'] === undefined || game.gameFields[y][x]['s'] < 2)) {
                     putSearchIcon(field)
-                     
+                    clickSerchIcon(x,y)
                 }
             }
         }, { once: true } );
@@ -419,6 +420,23 @@ export function game_container() {
         currentField.addEventListener('mouseleave', () => {
             heroMitl.style.top = '-10px';
             heroMitl.style.left = '10px';
+        });
+    };
+
+    function clickSerchIcon(x,y){
+        const serchIcon = document.querySelector('.search-icon');
+        serchIcon.addEventListener('click', () => {
+            const card = getRundomElement(game.search_cards, search_cards)
+            eventWindow(card)
+            removeSearchIcon()
+            console.log(game.gameFields[y][x])
+            console.log(game.gameFields[y][x])
+            if (game.gameFields[y][x]['s']===undefined) {
+                game.gameFields[y][x]['s'] = 1
+            } else {
+                game.gameFields[y][x]['s'] += 1
+            }
+            console.log(game.gameFields[y][x])
         });
     };
     
