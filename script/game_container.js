@@ -1,6 +1,8 @@
 // import  {game, player}  from './authentication.js';
+import  {loadTemplate}  from './function/loadTemplate.js';
 import  {addScrolCardsEffect}  from './function/addScrolCardsEffect.js';
-import  {getRundomElement}  from './function/getRundomElement.js';
+import  {diceRoll}  from './function/diceRoll.js';
+import  {getRundomElement, rundom}  from './function/getRundomElement.js';
 import  {heroes}  from './cards/heroes.js';
 import  {room_tiles}  from './cards/room_tiles.js';
 import  {dungeon_cards}  from './cards/dungeon_cards.js';
@@ -24,6 +26,7 @@ player.idx = 0;
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
 player.authentication = true;
+// player.effectCardContainer = [dungeon_cards[52], dungeon_cards[52]];
 
 export const game = new Game();
 game.gameIdx = 0;
@@ -42,12 +45,11 @@ export function game_container() {
     // start position //////////////////////////////////////////////////////
     addCharacterTablet(player.hero);
     drawAbilitieCard(player.hero);
+    drawEffectCard(player);
     addScrolCardsEffect('.abilitie-card-container');
     addScrolCardsEffect('.effect-card-container');
     addScrolCardsEffect('.treasure-card-container');
     makeMove(game.startFields);
-
-
 
     // end start position //////////////////////////////////////////////////////
     
@@ -62,10 +64,13 @@ export function game_container() {
         game.gameFields[y][x]['r'] = rotate;
     };
     
-    // drawFieldTileTests(15, 90, 1, 0);
+    drawFieldTileTests(1, 90, 1, 0);
     // drawFieldTileTests(15, 90, 0, 1);
     // drawFieldTileTests(15, 0, 1, 1);
-    
+
+
+
+
     // start game //////////////////////////////////////////////////////
     function gameLoop() {
         sunTokenPosition(game.day);
@@ -73,50 +78,78 @@ export function game_container() {
             makeMove(nextCoordinates);
             shiftMitle()
         }
-        
-        
-
         requestAnimationFrame(gameLoop);
     };
-    
     requestAnimationFrame(gameLoop);
 
+    function checkDungeonCard(roomNumber) {
+        if (!roomNumber) return
+        if (room_tiles[roomNumber-1].dungeon) {   
+            const card = getRundomElement(game.dungeon_cards, dungeon_cards)   
+            eventWindow(card);
+        };   
+    };
 
-    //TODO вписать ход игры
-    //проверка стадии хода черех тру фолс брейк
-    // если есть еффекты картами, играем их - обязательно
-    // делаем обыск в комнате
-    // или входим в другую комнату
-        // если попали в ловушку/засада/спец еффект разигрываем карту ловушки/засада/спец еффект - обязательно
-        // если есть значек подземелия разигрываем карту подземелия - обязательно
-            // если попался враг, тянем рандомную жизнь для врага
-            // играем бой
+    function eventWindow(card) {
+        let cards
+        let eventSection = '';
+        if (Array.isArray(card)) {
+            cards = card;
+        } else {
+            cards = [card];
+        }
+        cards.forEach(card => {
+            eventSection += `<div class="card" style="background-image: url('img/${card.getPack()}_cards/${card.getPack()}_${card.id}.jpg')"></div>`
+        });
 
-    // если попали в катакомбах идем в выбранном направлении тянем вместо карт подземелья карту катакомб
-        //если нашли карту выход, выбираем направление и кидаем куб что б узнать где мы выдем на ружу
+        body.insertAdjacentHTML('afterbegin', 
+            `<div class="event-container">
+                    <div class="event-main ">
+                        <div class="title">
+                            <h1>${card.getTitle()}</h1>
+                        </div>
 
+                        <div class="event-section">
+                            ${eventSection}
+                        </div>
 
-    // если попали в сокровишницу
-        // тянем спит ли дракон
-            //если нет, тянем 2 сокровища
-            // если да, скидываем все сокровища, кидаем 2d6 и получаем весь этот урон        
-    //конец хода двигаем день и тайл солнца
-    // все карты сбрасываются
-    // выйти из подземелья можно только через другую башню
+                        <button class="btn" id="btn_event">${card.btnName}</button>
+                    </div>
+                </div>
+            `);
 
-    //TODO написать условие для движения тайла солца по дням
+            const eventContainer = body.querySelector('.event-container');
+            const btn = body.querySelector('#btn_event');
 
+            btn.addEventListener('click', ()=>{
+                eventContainer.remove()
+                if (card.effect() === undefined) return
+                eventWindow(card.effect())
+            });
+    }
+
+    function isPlayerInTower() {
+        if (!player.position) return false
+        const [x, y] = player.position;
+        return game.startFields.some(coord => coord[0] === x && coord[1] === y);
+    }
+
+    function isPlayerInTreasury() {
+        if (!player.position) return false
+        const [x, y] = player.position;
+        return game.treasuryFields.some(coord => coord[0] === x && coord[1] === y);
+    }
 
     function newCoordinate() {
         const [x, y] = player.position;
         const coordinates = [];
-        const ifPlayerInTower = game.startFields.some(coord => coord[0] === x && coord[1] === y);
+        // const ifPlayerInTower = game.startFields.some(coord => coord[0] === x && coord[1] === y);
 
         if (x > 0 && checkPermitWay([x, y],'left') && checkOtherPlayer([x - 1, y]) && checkPermitWayNeighbour([x - 1, y], 'right') ) coordinates.push([x - 1, y]); 
         if (y > 0 && checkPermitWay([x, y], 'up') && checkOtherPlayer([x, y - 1]) && checkPermitWayNeighbour([x, y - 1], 'down') ) coordinates.push([x, y - 1]);   
         if (x < 14 && checkPermitWay([x, y], 'right') && checkOtherPlayer([x + 1, y]) && checkPermitWayNeighbour([x + 1, y], 'left') ) coordinates.push([x + 1, y]);  
         if (y < 11 && checkPermitWay([x, y], 'down')  && checkOtherPlayer([x, y + 1]) && checkPermitWayNeighbour([x, y + 1], 'up') )  coordinates.push([x, y + 1]);  
-        if (ifPlayerInTower) coordinates.push(...game.startFields)
+        if (isPlayerInTower()) coordinates.push(...game.startFields)
         return coordinates;
     }
 
@@ -166,7 +199,6 @@ export function game_container() {
 
         if (!room) return true
 
-
         const directionMapping = {
             '0': {
                 'left' : 'left',
@@ -195,7 +227,6 @@ export function game_container() {
         };
 
         const newDirection = directionMapping[game.gameFields[y][x]['r']][direction];
-
         const value = room[newDirection];
 
 
@@ -256,8 +287,19 @@ export function game_container() {
         });
     };
 
+    function drawEffectCard(player){
+        const abilitieCardContainer = document.querySelector(`.effect-card-container`);
+        player.effectCardContainer.forEach((card) => {
+            abilitieCardContainer.innerHTML+=`
+                <div id="${card.id}" class="card-deck " style="background-image: url('img/${card.getPack}_cards/${card.getPack}_${card.id}.jpg')"></div>        
+            `
+        });
+    };
+
     function makeMove(array) {
+        // TODO добавить условия проверки разрешения сделать ход
         const fields = getElementsByData(array);
+        
         if (!document.querySelector(`.available-field`)){
             highlightFields(fields);
         }
@@ -268,65 +310,23 @@ export function game_container() {
                 const x = Number(field.getAttribute('data-x')); 
                 const y = Number(field.getAttribute('data-y'));
                 let roomNumber;
-                if (!game.gameFields[y][x]['id'] && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)){
-                   roomNumber = drawFieldTile(field, x, y);
+                console.log(game.gameFields[y][x]['id'])
+                console.log(field.classList.contains(`start-field`))
+                console.log(!field.classList.contains(`treasury`))
+                if (game.gameFields[y][x]['id'] === undefined && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)){
+                    roomNumber = drawFieldTile(field, x, y);
+
                 };
                 putHeroMitl(field);
+
                 removeHighlightFields(fields);
                 player.position = [x, y];
                 nextCoordinates = newCoordinate()
-                //TODO проверка есть ли карты негативных еффектов
-                checkDungeonCard(roomNumber)
-                //TODO проверка хотим искать или хотим идти
+
+
             }
         }, { once: true } );
         
-    }
-
-    function checkDungeonCard(roomNumber) {
-        if (!roomNumber) return
-        if (room_tiles[roomNumber-1].dungeon) {   
-            const card = getRundomElement(game.dungeon_cards, dungeon_cards)   
-            eventWindow(card);
-        };   
-    };
-
-    function eventWindow(card) {
-        let cards
-        let eventSection = '';
-        if (Array.isArray(card)) {
-            cards = card;
-        } else {
-            cards = [card];
-        }
-        cards.forEach(card => {
-            eventSection += `<div class="card" style="background-image: url('img/${card.getPack()}_cards/${card.getPack()}_${card.id}.jpg')"></div>`
-        });
-
-        body.insertAdjacentHTML('afterbegin', 
-            `<div class="event-container">
-                    <div class="event-main ">
-                        <div class="title">
-                            <h1>${card.getTitle()}</h1>
-                        </div>
-
-                        <div class="event-section">
-                            ${eventSection}
-                        </div>
-
-                        <button class="btn" id="btn_event">${card.btnName}</button>
-                    </div>
-                </div>
-            `);
-
-            const eventContainer = body.querySelector('.event-container');
-            const btn = body.querySelector('#btn_event');
-
-            btn.addEventListener('click', ()=>{
-                eventContainer.remove()
-                if (card.effect() === undefined) return
-                eventWindow(card.effect())
-            });
     }
 
     function drawFieldTile(field, x, y){
@@ -351,7 +351,6 @@ export function game_container() {
     };
 
     function highlightFields(fields){
-        // playingField.classList.add('shading')
         fields.forEach(field => {
             field.classList.add('available')
             field.insertAdjacentHTML('afterbegin', `
@@ -361,7 +360,6 @@ export function game_container() {
     };
 
     function removeHighlightFields(fields){
-        // playingField.classList.remove('shading')
         fields.forEach(field => {
             field.classList.remove('available')
             const highlight = field.querySelector(`.available-field`);
