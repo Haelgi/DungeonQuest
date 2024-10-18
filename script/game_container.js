@@ -49,7 +49,14 @@ export function game_container() {
     addScrolCardsEffect('.abilitie-card-container');
     addScrolCardsEffect('.effect-card-container');
     addScrolCardsEffect('.treasure-card-container');
-    makeMove(game.startFields);
+    
+
+    document.addEventListener('dungeon', () => {
+        console.log(`createNewEvent('dungeon')`)
+        const card = getRundomElement(game.dungeon_cards, dungeon_cards)   
+        eventWindow(card);
+    });
+    document.addEventListener('search', () => {console.log(`createNewEvent('search')`)});
 
     // end start position //////////////////////////////////////////////////////
     
@@ -58,37 +65,36 @@ export function game_container() {
         
         field.classList.add('shadow')
         field.insertAdjacentHTML('afterbegin', `
-            <img class="tile-field tile-map" src="img/room_tiles/room_${roomNumber}.jpg" alt="" style="rotate: ${rotate}deg;">`);
+            <img class="tile-field tile-map" src="img/room_tiles/room_${roomNumber}.jpg" alt="" style="rotate: ${rotate}deg;">`
+        );
             
         game.gameFields[y][x]['id'] = roomNumber-1;
         game.gameFields[y][x]['r'] = rotate;
     };
     
-    drawFieldTileTests(1, 90, 1, 0);
+    drawFieldTileTests(5, 90, 1, 0);
     // drawFieldTileTests(15, 90, 0, 1);
     // drawFieldTileTests(15, 0, 1, 1);
+
+    putHeroMitl(getElementsByData([0,0]))
 
 
 
 
     // start game //////////////////////////////////////////////////////
+
     function gameLoop() {
         sunTokenPosition(game.day);
+        
+        if (!player.position) makeMove(game.startFields);
         if (player.position){
             makeMove(nextCoordinates);
             shiftMitle()
         }
         requestAnimationFrame(gameLoop);
     };
-    requestAnimationFrame(gameLoop);
 
-    function checkDungeonCard(roomNumber) {
-        if (!roomNumber) return
-        if (room_tiles[roomNumber-1].dungeon) {   
-            const card = getRundomElement(game.dungeon_cards, dungeon_cards)   
-            eventWindow(card);
-        };   
-    };
+    requestAnimationFrame(gameLoop);
 
     function eventWindow(card) {
         let cards
@@ -99,14 +105,14 @@ export function game_container() {
             cards = [card];
         }
         cards.forEach(card => {
-            eventSection += `<div class="card" style="background-image: url('img/${card.getPack()}_cards/${card.getPack()}_${card.id}.jpg')"></div>`
+            eventSection += `<div class="card" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>`
         });
 
         body.insertAdjacentHTML('afterbegin', 
             `<div class="event-container">
                     <div class="event-main ">
                         <div class="title">
-                            <h1>${card.getTitle()}</h1>
+                            <h1>${card.title}</h1>
                         </div>
 
                         <div class="event-section">
@@ -310,20 +316,27 @@ export function game_container() {
                 const x = Number(field.getAttribute('data-x')); 
                 const y = Number(field.getAttribute('data-y'));
                 let roomNumber;
-                console.log(game.gameFields[y][x]['id'])
-                console.log(field.classList.contains(`start-field`))
-                console.log(!field.classList.contains(`treasury`))
+
                 if (game.gameFields[y][x]['id'] === undefined && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)){
                     roomNumber = drawFieldTile(field, x, y);
-
                 };
-                putHeroMitl(field);
 
+                putHeroMitl(field);
                 removeHighlightFields(fields);
                 player.position = [x, y];
                 nextCoordinates = newCoordinate()
 
+                if (!room_tiles[game.gameFields[y][x]['id']]) return
+                if (room_tiles[game.gameFields[y][x]['id']].dungeon) {
+                    createNewEvent('dungeon'); 
+                }
+                removeSearchIcon()
 
+                if (room_tiles[game.gameFields[y][x]['id']].search) {
+                    createNewEvent('search');
+                    putSearchIcon(field)
+                     
+                }
             }
         }, { once: true } );
         
@@ -382,6 +395,19 @@ export function game_container() {
         }
     }
 
+    function putSearchIcon(field){
+        const searchIcon = playingField.querySelector(`.search-icon`);
+        if (searchIcon) searchIcon.remove()
+        field.insertAdjacentHTML('afterbegin', `
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        `);
+    }
+
+    function removeSearchIcon(){
+        const searchIcon = playingField.querySelector(`.search-icon`);
+        if (searchIcon) searchIcon.remove()
+    }
+
     function shiftMitle(){
         const heroMitl = document.querySelector('.hero_mitl');
         const currentField = heroMitl.parentElement;
@@ -394,5 +420,10 @@ export function game_container() {
             heroMitl.style.top = '-10px';
             heroMitl.style.left = '10px';
         });
-    };    
+    };
+    
+    function createNewEvent(eventName){
+        const event = new Event(eventName);
+        document.dispatchEvent(event);
+    }
 }
