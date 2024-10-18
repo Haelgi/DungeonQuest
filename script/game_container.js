@@ -52,11 +52,10 @@ export function game_container() {
     
 
     document.addEventListener('dungeon', () => {
-        console.log(`createNewEvent('dungeon')`)
         const card = getRundomElement(game.dungeon_cards, dungeon_cards)   
         eventWindow(card);
     });
-    document.addEventListener('search', () => {console.log(`createNewEvent('search')`)});
+    
 
     // end start position //////////////////////////////////////////////////////
     
@@ -304,7 +303,6 @@ export function game_container() {
     };
 
     function makeMove(array) {
-        // TODO добавить условия проверки разрешения сделать ход
         const fields = getElementsByData(array);
         
         if (!document.querySelector(`.available-field`)){
@@ -332,8 +330,7 @@ export function game_container() {
                     createNewEvent('dungeon'); 
                 }
                 removeSearchIcon()
-                
-                console.log(game.gameFields[y][x]['s'])
+
                 if (room_tiles[game.gameFields[y][x]['id']].search && (game.gameFields[y][x]['s'] === undefined || game.gameFields[y][x]['s'] < 2)) {
                     putSearchIcon(field)
                     clickSerchIcon(x,y)
@@ -429,14 +426,13 @@ export function game_container() {
             const card = getRundomElement(game.search_cards, search_cards)
             eventWindow(card)
             removeSearchIcon()
-            console.log(game.gameFields[y][x])
-            console.log(game.gameFields[y][x])
+
             if (game.gameFields[y][x]['s']===undefined) {
                 game.gameFields[y][x]['s'] = 1
             } else {
                 game.gameFields[y][x]['s'] += 1
             }
-            console.log(game.gameFields[y][x])
+
         });
     };
     
