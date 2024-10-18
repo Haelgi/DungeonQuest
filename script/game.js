@@ -10,6 +10,7 @@ export class Game {
         this.day = 0; 
         this.gameFields=Array(12).fill().map(() => Array(15).fill().map(() => ({}))); 
         this.startFields=[[0,0], [14,0], [0,11], [14,11]]; 
+        this.treasuryFields=[[7,5], [7,6]]; 
         this.room_tiles=Array.from({ length: 130 }, (_, index) => index + 1); 
         this.dungeon_cards=Array.from({ length: 60 }, (_, index) => index + 1); 
         this.catacomb_cards=Array.from({ length: 50 }, (_, index) => index + 1); 
