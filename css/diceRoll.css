@@ -2,10 +2,23 @@
 .dice-game {
     min-width: 300px;
 }
+
+.dice-section{
+    display: flex;
+}
   
 .dice-container {
-    position: relative;
-    display: inline-block;
+    margin: 10px;
+}
+
+.roll-button{
+    display: flex;
+    height: 70px;
+}
+
+#roll{
+    margin: 0;
+    height: 40px
 }
   
 .dice {
@@ -26,19 +39,7 @@
     background-color: #747070;
     box-shadow: inset 2px 2px #b1afaf;
 }
-  
-.dice-one {
-    position: absolute;
-    left: 30px;
-
-}
-  
-.dice-two {
-    position: absolute;
-    left: 150px;
     
-}
-  
 .side {
     position: absolute;
     background-color: #ffF;
@@ -74,6 +75,31 @@
     transform: rotateY(-180deg) translateZ(50px); 
 }
   
+.show-1 { /*correct*/
+    transform: rotateX(720deg) rotateZ(-720deg);
+}
+  
+.show-2 {
+    transform: rotateX(-900deg) rotateZ(1080deg); 
+}
+  
+.show-6 {
+    transform: rotateY(-450deg) rotateZ(-1440deg); 
+}
+  
+.show-3 {
+    transform: rotateY(810deg) rotateZ(720deg); 
+}
+  
+.show-4 { /*correct*/
+    transform: rotateX(-810deg) rotateZ(-1080deg); 
+}
+  
+.show-5 { /*correct*/
+    transform: rotateX(450deg) rotateZ(-720deg); 
+}
+  
+/*   
 .show-1 {
     transform: rotateX(720deg) rotateZ(-720deg);
 }
@@ -97,7 +123,7 @@
 .show-2 {
     transform: rotateX(450deg) rotateZ(-720deg); 
 }
-  
+   */
 .two-1, .three-1, .four-1, .five-1, .six-1 {
     top: 20%;
     left: 20%; 

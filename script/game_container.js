@@ -49,13 +49,14 @@ export function game_container() {
     addScrolCardsEffect('.abilitie-card-container');
     addScrolCardsEffect('.effect-card-container');
     addScrolCardsEffect('.treasure-card-container');
+
+    diceRollWindow('Перевірка на', 'Cпритність', heroes[player.hero].dexterity, 2)
     
 
     document.addEventListener('dungeon', () => {
         const card = getRundomElement(game.dungeon_cards, dungeon_cards)   
         eventWindow(card);
     });
-    
 
     // end start position //////////////////////////////////////////////////////
     
@@ -134,6 +135,102 @@ export function game_container() {
             });
     }
 
+    function diceRollWindow(title, valueName, value, diceCount) {
+        let diceContainers = '';    
+        let count = 1;
+        let diceResult = Number();
+
+
+        while (count <= diceCount) {
+            diceContainers +=
+                `<div class="dice-container">
+                    <div id='dice${count}' class="dice dice-${count}">
+                    <div class='side one'>
+                        <div class="dot one-1"></div>
+                    </div>
+                    <div class='side two'>
+                        <div class="dot two-1"></div>
+                        <div class="dot two-2"></div>
+                    </div>
+                    <div class='side three'>
+                        <div class="dot three-1"></div>
+                        <div class="dot three-2"></div>
+                        <div class="dot three-3"></div>
+                    </div>
+                    <div class='side four'>
+                        <div class="dot four-1"></div>
+                        <div class="dot four-2"></div>
+                        <div class="dot four-3"></div>
+                        <div class="dot four-4"></div>
+                    </div>
+                    <div class='side five'>
+                        <div class="dot five-1"></div>
+                        <div class="dot five-2"></div>
+                        <div class="dot five-3"></div>
+                        <div class="dot five-4"></div>
+                        <div class="dot five-5"></div>
+                    </div>
+                    <div class='side six'>
+                        <div class="dot six-1"></div>
+                        <div class="dot six-2"></div>
+                        <div class="dot six-3"></div>
+                        <div class="dot six-4"></div>
+                        <div class="dot six-5"></div>
+                        <div class="dot six-6"></div>
+                    </div>
+                    </div>
+                </div>`;
+            count += 1;
+        }
+    
+        document.body.insertAdjacentHTML('afterbegin', 
+            `<div class="event-container">
+                <div class="event-main ">
+                    <div class="title">
+                        <h1>${title} ${valueName}</h1>
+                    </div>
+                    <div class="dice-section">${diceContainers}</div>
+                    <div class='roll-button'>
+                        <button id='roll'>Кинути Кубики</button>
+                    </div>
+                    <p> Ваша ${valueName}:  ${value}</p>
+                </div>
+            </div>`
+        );
+    
+        const diceElements = document.querySelectorAll('.dice');
+        const btn = document.getElementById('roll');
+    
+        btn.addEventListener('click', () => rollAllDice());
+    
+        function rollAllDice() {
+            diceResult= Number()
+            diceElements.forEach((dice) => {
+                roll(dice);
+                console.log(diceResult)
+
+            });
+
+        }
+    
+        function roll(dice) {
+            const value = Math.floor((Math.random() * 6) + 1);
+            console.log(value)
+            diceResult += value;
+    
+            for (let i = 1; i <= 6; i++) {
+                dice.classList.remove('show-' + i);
+                if (value === i) {
+                    dice.classList.add('show-' + i);
+                }
+            }
+            //TODO добавить условия при которых можно перебросить кубик
+            // btn.remove()
+            
+        }
+    }
+    
+
     function isPlayerInTower() {
         if (!player.position) return false
         const [x, y] = player.position;
@@ -151,10 +248,10 @@ export function game_container() {
         const coordinates = [];
         // const ifPlayerInTower = game.startFields.some(coord => coord[0] === x && coord[1] === y);
 
-        if (x > 0 && checkPermitWay([x, y],'left') && checkOtherPlayer([x - 1, y]) && checkPermitWayNeighbour([x - 1, y], 'right') ) coordinates.push([x - 1, y]); 
-        if (y > 0 && checkPermitWay([x, y], 'up') && checkOtherPlayer([x, y - 1]) && checkPermitWayNeighbour([x, y - 1], 'down') ) coordinates.push([x, y - 1]);   
-        if (x < 14 && checkPermitWay([x, y], 'right') && checkOtherPlayer([x + 1, y]) && checkPermitWayNeighbour([x + 1, y], 'left') ) coordinates.push([x + 1, y]);  
-        if (y < 11 && checkPermitWay([x, y], 'down')  && checkOtherPlayer([x, y + 1]) && checkPermitWayNeighbour([x, y + 1], 'up') )  coordinates.push([x, y + 1]);  
+        if (x > 0 && checkPermitWay([x, y],'left', true) && checkOtherPlayer([x - 1, y]) && checkPermitWayNeighbour([x - 1, y], 'right', false) ) coordinates.push([x - 1, y]); 
+        if (y > 0 && checkPermitWay([x, y], 'up', true) && checkOtherPlayer([x, y - 1]) && checkPermitWayNeighbour([x, y - 1], 'down', false) ) coordinates.push([x, y - 1]);   
+        if (x < 14 && checkPermitWay([x, y], 'right', true) && checkOtherPlayer([x + 1, y]) && checkPermitWayNeighbour([x + 1, y], 'left', false) ) coordinates.push([x + 1, y]);  
+        if (y < 11 && checkPermitWay([x, y], 'down', true)  && checkOtherPlayer([x, y + 1]) && checkPermitWayNeighbour([x, y + 1], 'up', false) )  coordinates.push([x, y + 1]);  
         if (isPlayerInTower()) coordinates.push(...game.startFields)
         return coordinates;
     }
@@ -164,14 +261,14 @@ export function game_container() {
         if(!game.gameFields[y][x]['[id]']) return true
     }
 
-    function checkPermitWayNeighbour(coordinat, direction) {
+    function checkPermitWayNeighbour(coordinat, direction , checkDoor) {
         const [x, y] = coordinat;
         const tileIdx = game.gameFields[y][x]['id'];
         const room = room_tiles[tileIdx];
     
         if (!room) return true;
 
-        let permission = checkPermitWay(coordinat, direction);
+        let permission = checkPermitWay(coordinat, direction , checkDoor);
     
         if (room.special === 'abyss' && !(player.position[0] === x && player.position[1] === y) && !permission) {
 
@@ -197,7 +294,7 @@ export function game_container() {
         return permission;
     }
         
-    function checkPermitWay(coordinat, direction){
+    function checkPermitWay(coordinat, direction, checkDoor){
        
         const [x, y] = coordinat;
         const tileIdx = game.gameFields[y][x]['id'];
@@ -236,14 +333,15 @@ export function game_container() {
         const value = room[newDirection];
 
 
-        if (typeof value === 'string') {
+        if (typeof value === 'string' && checkDoor=== true) {
             if (value === 'door') {
                 drawDoorIcon(x,y, direction)
-                // TODO запустить проверку
-
+                clickDoorIcon()
             }
+
             if (value === 'grille') {
                 drawGrilleIcon(x,y, direction)
+                clickGrilleIcon()
                 // TODO запустить проверку
                 return true
             }
@@ -425,8 +523,6 @@ export function game_container() {
         const searchIcon = playingField.querySelector(`.door-icon`);
         if (searchIcon) searchIcon.remove()
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
-        console.log(x,y)
-        console.log(field)
         field.insertAdjacentHTML('afterbegin', `
             <i class="fa-solid fa-door-closed door-icon"></i>
         `);
@@ -500,6 +596,24 @@ export function game_container() {
                 game.gameFields[y][x]['s'] += 1
             }
 
+        });
+    };
+
+    function clickDoorIcon(){
+        const serchIcon = document.querySelector('.door-icon');
+        serchIcon.addEventListener('click', () => {
+            const card = getRundomElement(game.door_cards, door_cards)
+            eventWindow(card)
+            removeDoorIcon()
+        });
+    };
+
+    function clickGrilleIcon(){
+        const serchIcon = document.querySelector('.grille-icon');
+        serchIcon.addEventListener('click', () => {
+            const card = getRundomElement(game.door_cards, door_cards)
+            eventWindow(card)
+            removeDoorIcon()
         });
     };
     
