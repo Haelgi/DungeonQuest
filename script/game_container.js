@@ -51,6 +51,7 @@ export function game_container() {
 
     clickDoorIcon()
     clickGrilleIcon()
+    clickCollapseIcon()
 
 
     // playDungeonEvent()
@@ -75,7 +76,7 @@ export function game_container() {
         game.gameFields[y][x]['r'] = rotate;
     };
     
-    // drawFieldTileTests(15, 90, 1,  0);
+    drawFieldTileTests(11, 90, 1,  0);
     // drawFieldTileTests(2, 180, 1,  1);
     // drawFieldTileTests(5, 0, 0, 1);
     // drawFieldTileTests(15, 0, 1, 1);
@@ -236,10 +237,10 @@ export function game_container() {
     
                 if (diceResult <= value) {
                     title = '<h1 style="color:green;">Успіх!</h1>';
-                    eventResult = true;  // Успешный результат
+                    eventResult = true; 
                 } else {
                     title = '<h1 style="color:red;">Провал!</h1>';
-                    eventResult = false;  // Провал
+                    eventResult = false; 
                 }
     
                 document.body.insertAdjacentHTML('afterbegin', 
@@ -278,10 +279,10 @@ export function game_container() {
         const coordinates = [];
         // const ifPlayerInTower = game.startFields.some(coord => coord[0] === x && coord[1] === y);
 
-        if (x > 0 && checkPermitWay([x, y],'left', true) && checkOtherPlayer([x - 1, y]) && checkPermitWayNeighbour([x - 1, y], 'right', false) ) coordinates.push([x - 1, y]); 
-        if (y > 0 && checkPermitWay([x, y], 'up', true) && checkOtherPlayer([x, y - 1]) && checkPermitWayNeighbour([x, y - 1], 'down', false) ) coordinates.push([x, y - 1]);   
-        if (x < 14 && checkPermitWay([x, y], 'right', true) && checkOtherPlayer([x + 1, y]) && checkPermitWayNeighbour([x + 1, y], 'left', false) ) coordinates.push([x + 1, y]);  
-        if (y < 11 && checkPermitWay([x, y], 'down', true)  && checkOtherPlayer([x, y + 1]) && checkPermitWayNeighbour([x, y + 1], 'up', false) )  coordinates.push([x, y + 1]);  
+        if (x > 0 && checkOtherPlayer([x - 1, y]) && checkPermitWayNeighbour([x - 1, y], 'right', false)  && checkPermitWay([x, y],'left', true)) coordinates.push([x - 1, y]); 
+        if (y > 0 && checkOtherPlayer([x, y - 1]) && checkPermitWayNeighbour([x, y - 1], 'down', false)  && checkPermitWay([x, y], 'up', true)) coordinates.push([x, y - 1]);   
+        if (x < 14 && checkOtherPlayer([x + 1, y]) && checkPermitWayNeighbour([x + 1, y], 'left', false)  && checkPermitWay([x, y], 'right', true)) coordinates.push([x + 1, y]);  
+        if (y < 11  && checkOtherPlayer([x, y + 1]) && checkPermitWayNeighbour([x, y + 1], 'up', false)  && checkPermitWay([x, y], 'down', true))  coordinates.push([x, y + 1]);  
         if (isPlayerInTower()) coordinates.push(...game.startFields)
         return coordinates;
     }
@@ -291,14 +292,14 @@ export function game_container() {
         if(!game.gameFields[y][x]['[id]']) return true
     }
 
-    function checkPermitWayNeighbour(coordinat, direction , checkDoor) {
+    function checkPermitWayNeighbour(coordinat, direction , checkBarrier) {
         const [x, y] = coordinat;
         const tileIdx = game.gameFields[y][x]['id'];
         const room = room_tiles[tileIdx];
     
         if (!room) return true;
 
-        let permission = checkPermitWay(coordinat, direction , checkDoor);
+        let permission = checkPermitWay(coordinat, direction , checkBarrier);
     
         if (room.special === 'abyss' && !(player.position[0] === x && player.position[1] === y) && !permission) {
 
@@ -324,7 +325,7 @@ export function game_container() {
         return permission;
     }
         
-    function checkPermitWay(coordinat, direction, checkDoor){
+    function checkPermitWay(coordinat, direction, checkBarrier){
         // console.log(`[enter] checkPermitWay ${coordinat} ${direction}`)
        
         const [x, y] = coordinat;
@@ -362,19 +363,14 @@ export function game_container() {
 
         const newDirection = directionMapping[game.gameFields[y][x]['r']][direction];
         const value = room[newDirection];
+        
+        if (value && newDirection !== 'down' && room.special === 'collapse' && checkBarrier=== true) drawCollapseIcon(x,y, direction);
 
+        if (typeof value === 'string' && checkBarrier=== true) {
+            if (value === 'door') drawDoorIcon(x,y, direction);
+            if (value === 'grille') drawGrilleIcon(x,y, direction);
+        };
 
-        if (typeof value === 'string' && checkDoor=== true) {
-            if (value === 'door') {
-                drawDoorIcon(x,y, direction)
-                
-            }
-
-            if (value === 'grille') {
-                drawGrilleIcon(x,y, direction)
-            }
-        }
-        // console.log(`[end] checkPermitWay ${direction}`)
         if (!value) return false
         return true
     }
@@ -438,7 +434,10 @@ export function game_container() {
         }
     
         playingField.addEventListener('click', (e) => {
+            player.positionPrevious = player.position
+
             if (e.target.closest('.grille-icon')) return
+            if (e.target.closest('.collapse-icon')) return
 
             if (e.target.closest('.available')) {
                 const field = e.target.parentElement;
@@ -453,9 +452,11 @@ export function game_container() {
                 removeHighlightFields(fields);
                 removeDoorIcon();
                 removeGrilleIcon();
+                removeCollapseIcon()
     
                 putHeroMitl(field);
-    
+
+                
                 player.position = [x, y];
                 nextCoordinates = newCoordinate();
     
@@ -554,7 +555,6 @@ export function game_container() {
         field.insertAdjacentHTML('afterbegin', `
             <i class="fa-solid fa-door-closed door-icon"></i>
         `);
-        
     }
 
     function drawGrilleIcon(x,y, direction){
@@ -580,6 +580,27 @@ export function game_container() {
         `);
     }
 
+    function drawCollapseIcon(x,y, direction){
+        switch (direction) {
+            case 'left':
+                x = x - 1;
+                break;
+            case 'up':
+                y = y - 1;
+                break;
+            case 'right':
+                x = x + 1;
+                break;
+            case 'down':
+                y = y + 1;
+                break;
+        }
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+        field.insertAdjacentHTML('afterbegin', `
+            <i class="fa-solid fa-road-barrier collapse-icon"></i>
+        `);
+    }
+
     function removeSearchIcon(){
         const searchIcon = playingField.querySelector(`.search-icon`);
         if (searchIcon) searchIcon.remove()
@@ -591,9 +612,13 @@ export function game_container() {
     }
 
     function removeGrilleIcon(){
-        // console.log('[Enter] removeGrilleIcon()')
         const grilleIcon = playingField.querySelector(`.grille-icon`);
         if (grilleIcon) grilleIcon.remove()
+    }
+
+    function removeCollapseIcon(){
+        const collapseIcon = playingField.querySelectorAll(`.collapse-icon`);
+        if (collapseIcon) collapseIcon.forEach(element => {element.remove()});
     }
 
 
@@ -640,17 +665,25 @@ export function game_container() {
     function clickGrilleIcon() {
         playingField.addEventListener('click', (e) => {
             if (e.target.closest('.grille-icon')) {
-                diceRollWindow('Перевірка на', 'Силу', heroes[player.hero].strength, 2)
+                diceRollWindow('Перевірка на', 'Силa', heroes[player.hero].strength, 2)
                     .then((eventResult) => {
                         if (eventResult) e.target.remove();
                     });
             }
         });
     }
-    
 
-
-    
+    function clickCollapseIcon() {
+        playingField.addEventListener('click', (e) => {
+            if (e.target.closest('.collapse-icon')) {
+                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, 2)
+                    .then((eventResult) => {
+                        if (eventResult) e.target.remove();
+                    });
+            }
+        });
+    }
+        
     function createNewEvent(eventName){
         const event = new Event(eventName);
         document.dispatchEvent(event);

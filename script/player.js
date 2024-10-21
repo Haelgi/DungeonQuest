@@ -5,6 +5,7 @@ export class Player {
         this.name = userName; 
         this.hero; 
         this.authentication = false;
+        this.positionPrevious;
         this.position;
         this.finish = false;
         this.catacomb = false;
