@@ -364,7 +364,7 @@ export function game_container() {
         const newDirection = directionMapping[game.gameFields[y][x]['r']][direction];
         const value = room[newDirection];
         
-        if (value && newDirection !== 'down' && room.special === 'collapse' && checkBarrier=== true) drawCollapseIcon(x,y, direction);
+        if (value && room.special === 'collapse' && checkBarrier=== true) drawCollapseIcon(x,y, direction);
 
         if (typeof value === 'string' && checkBarrier=== true) {
             if (value === 'door') drawDoorIcon(x,y, direction);
@@ -595,6 +595,9 @@ export function game_container() {
                 y = y + 1;
                 break;
         }
+        const [x0,y0] = player.positionPrevious
+        console.log('player.positionPrevious: ',player.positionPrevious,'Checked pos :',x,y)
+        if (x===x0 && y===y0) return
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         field.insertAdjacentHTML('afterbegin', `
             <i class="fa-solid fa-road-barrier collapse-icon"></i>
