@@ -26,7 +26,6 @@ player.idx = 0;
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
 player.authentication = true;
-// player.effectCardContainer = [dungeon_cards[52], dungeon_cards[52]];
 
 export const game = new Game();
 game.gameIdx = 0;
@@ -78,7 +77,7 @@ export function game_container() {
     
     // drawFieldTileTests(15, 90, 1,  0);
     // drawFieldTileTests(2, 180, 1,  1);
-    // drawFieldTileTests(15, 90, 0, 1);
+    // drawFieldTileTests(5, 0, 0, 1);
     // drawFieldTileTests(15, 0, 1, 1);
 
 
@@ -453,6 +452,7 @@ export function game_container() {
     
                 removeHighlightFields(fields);
                 removeDoorIcon();
+                removeGrilleIcon();
     
                 putHeroMitl(field);
     
