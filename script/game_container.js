@@ -76,8 +76,8 @@ export function game_container() {
         game.gameFields[y][x]['r'] = rotate;
     };
     
-    drawFieldTileTests(15, 90, 1,  0);
-    drawFieldTileTests(2, 180, 1,  1);
+    // drawFieldTileTests(15, 90, 1,  0);
+    // drawFieldTileTests(2, 180, 1,  1);
     // drawFieldTileTests(15, 90, 0, 1);
     // drawFieldTileTests(15, 0, 1, 1);
 
@@ -440,7 +440,7 @@ export function game_container() {
     
         playingField.addEventListener('click', (e) => {
             if (e.target.closest('.grille-icon')) return
-            
+
             if (e.target.closest('.available')) {
                 const field = e.target.parentElement;
                 const x = Number(field.getAttribute('data-x'));
