@@ -29,7 +29,7 @@ const room_tiles = [
     new Tile(12, false, true, false, true, true, false, false, false, 'collapse'),//обвал
     new Tile(13, true, true, true, true, true, false, false, false, 'collapse'),//обвал
     new Tile(14, true, true, true, true, true, false, false, false, 'collapse'),//обвал
-    new Tile(15, false, false, true, true, true, false, false, false, 'abyss'),//Пропасть
+    new Tile(15, false, false, true, true, false, false, false, false, 'abyss'),//Пропасть
     new Tile(16, 'door', true, 'door', true, true, true, false, false, false),
     new Tile(17, 'door', true, 'door', true, true, true, false, false, false),
     new Tile(18, true, 'door', true, true, true, true, false, false, false),

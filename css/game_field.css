@@ -40,8 +40,8 @@
 
 .tile-field i.search-icon{
     position: absolute;
-    top: -30px;
-    left: 40px;
+    top: -25px;
+    left: 55px;
     padding: 7px;
     color: #fae100b4;
     z-index: 20;
@@ -51,7 +51,7 @@
 .tile-field i.grille-icon{
     position: absolute;
     padding: 20px;
-    z-index: 20;
+    z-index: 30;
 }
 
 .tile-field i:hover{

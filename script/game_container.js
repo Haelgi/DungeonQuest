@@ -50,13 +50,17 @@ export function game_container() {
     addScrolCardsEffect('.effect-card-container');
     addScrolCardsEffect('.treasure-card-container');
 
-    diceRollWindow('Перевірка на', 'Cпритність', heroes[player.hero].dexterity, 2)
-    
+    clickDoorIcon()
+    clickGrilleIcon()
 
-    document.addEventListener('dungeon', () => {
+
+    // playDungeonEvent()
+
+    function playDungeonEvent(){
+        document.addEventListener('dungeon', () => {
         const card = getRundomElement(game.dungeon_cards, dungeon_cards)   
         eventWindow(card);
-    });
+    });}
 
     // end start position //////////////////////////////////////////////////////
     
@@ -72,13 +76,10 @@ export function game_container() {
         game.gameFields[y][x]['r'] = rotate;
     };
     
-    drawFieldTileTests(5, 90, 1, 0);
+    drawFieldTileTests(15, 90, 1,  0);
+    drawFieldTileTests(2, 180, 1,  1);
     // drawFieldTileTests(15, 90, 0, 1);
     // drawFieldTileTests(15, 0, 1, 1);
-
-    putHeroMitl(getElementsByData([0,0]))
-
-
 
 
     // start game //////////////////////////////////////////////////////
@@ -136,99 +137,129 @@ export function game_container() {
     }
 
     function diceRollWindow(title, valueName, value, diceCount) {
-        let diceContainers = '';    
-        let count = 1;
-        let diceResult = Number();
-
-
-        while (count <= diceCount) {
-            diceContainers +=
-                `<div class="dice-container">
-                    <div id='dice${count}' class="dice dice-${count}">
-                    <div class='side one'>
-                        <div class="dot one-1"></div>
-                    </div>
-                    <div class='side two'>
-                        <div class="dot two-1"></div>
-                        <div class="dot two-2"></div>
-                    </div>
-                    <div class='side three'>
-                        <div class="dot three-1"></div>
-                        <div class="dot three-2"></div>
-                        <div class="dot three-3"></div>
-                    </div>
-                    <div class='side four'>
-                        <div class="dot four-1"></div>
-                        <div class="dot four-2"></div>
-                        <div class="dot four-3"></div>
-                        <div class="dot four-4"></div>
-                    </div>
-                    <div class='side five'>
-                        <div class="dot five-1"></div>
-                        <div class="dot five-2"></div>
-                        <div class="dot five-3"></div>
-                        <div class="dot five-4"></div>
-                        <div class="dot five-5"></div>
-                    </div>
-                    <div class='side six'>
-                        <div class="dot six-1"></div>
-                        <div class="dot six-2"></div>
-                        <div class="dot six-3"></div>
-                        <div class="dot six-4"></div>
-                        <div class="dot six-5"></div>
-                        <div class="dot six-6"></div>
-                    </div>
-                    </div>
-                </div>`;
-            count += 1;
-        }
+        return new Promise((resolve, reject) => {
+            let diceContainers = '';    
+            let count = 1;
+            let diceResult = 0;
+            let eventResult = false;
     
-        document.body.insertAdjacentHTML('afterbegin', 
-            `<div class="event-container">
-                <div class="event-main ">
-                    <div class="title">
-                        <h1>${title} ${valueName}</h1>
-                    </div>
-                    <div class="dice-section">${diceContainers}</div>
-                    <div class='roll-button'>
-                        <button id='roll'>Кинути Кубики</button>
-                    </div>
-                    <p> Ваша ${valueName}:  ${value}</p>
-                </div>
-            </div>`
-        );
-    
-        const diceElements = document.querySelectorAll('.dice');
-        const btn = document.getElementById('roll');
-    
-        btn.addEventListener('click', () => rollAllDice());
-    
-        function rollAllDice() {
-            diceResult= Number()
-            diceElements.forEach((dice) => {
-                roll(dice);
-                console.log(diceResult)
-
-            });
-
-        }
-    
-        function roll(dice) {
-            const value = Math.floor((Math.random() * 6) + 1);
-            console.log(value)
-            diceResult += value;
-    
-            for (let i = 1; i <= 6; i++) {
-                dice.classList.remove('show-' + i);
-                if (value === i) {
-                    dice.classList.add('show-' + i);
-                }
+            while (count <= diceCount) {
+                diceContainers +=
+                    `<div class="dice-container">
+                        <div id='dice${count}' class="dice dice-${count}">
+                        <div class='side one'>
+                            <div class="dot one-1"></div>
+                        </div>
+                        <div class='side two'>
+                            <div class="dot two-1"></div>
+                            <div class="dot two-2"></div>
+                        </div>
+                        <div class='side three'>
+                            <div class="dot three-1"></div>
+                            <div class="dot three-2"></div>
+                            <div class="dot three-3"></div>
+                        </div>
+                        <div class='side four'>
+                            <div class="dot four-1"></div>
+                            <div class="dot four-2"></div>
+                            <div class="dot four-3"></div>
+                            <div class="dot four-4"></div>
+                        </div>
+                        <div class='side five'>
+                            <div class="dot five-1"></div>
+                            <div class="dot five-2"></div>
+                            <div class="dot five-3"></div>
+                            <div class="dot five-4"></div>
+                            <div class="dot five-5"></div>
+                        </div>
+                        <div class='side six'>
+                            <div class="dot six-1"></div>
+                            <div class="dot six-2"></div>
+                            <div class="dot six-3"></div>
+                            <div class="dot six-4"></div>
+                            <div class="dot six-5"></div>
+                            <div class="dot six-6"></div>
+                        </div>
+                        </div>
+                    </div>`;
+                count += 1;
             }
-            //TODO добавить условия при которых можно перебросить кубик
-            // btn.remove()
-            
-        }
+    
+            document.body.insertAdjacentHTML('afterbegin', 
+                `<div class="event-container">
+                    <div class="event-main ">
+                        <div class="title">
+                            <h1>${title} ${valueName}</h1>
+                        </div>
+                        <div class="dice-section">${diceContainers}</div>
+                        <div class='roll-button'>
+                            <button id='roll'>Кинути Кубики</button>
+                        </div>
+                        <p> Ваша ${valueName}:  ${value}</p>
+                    </div>
+                </div>`
+            );
+    
+            const diceElements = document.querySelectorAll('.dice');
+            const btn = document.getElementById('roll');
+    
+            btn.addEventListener('click', (element) => {
+                rollAllDice();
+                setTimeout(() => {
+                    diceResultWindow();
+                    resolve(eventResult);  // Передаем результат проверки
+                }, 1700);
+            });
+    
+            function rollAllDice() {
+                diceResult = 0;  // Сброс результата
+                diceElements.forEach((dice) => {
+                    roll(dice); 
+                });
+            }
+    
+            function roll(dice) {
+                const value = Math.floor((Math.random() * 6) + 1);
+                diceResult += value;
+    
+                for (let i = 1; i <= 6; i++) {
+                    dice.classList.remove('show-' + i);
+                    if (value === i) {
+                        dice.classList.add('show-' + i);
+                    }
+                }
+    
+                btn.remove();
+            }
+    
+            function diceResultWindow() {
+                let title;
+    
+                if (diceResult <= value) {
+                    title = '<h1 style="color:green;">Успіх!</h1>';
+                    eventResult = true;  // Успешный результат
+                } else {
+                    title = '<h1 style="color:red;">Провал!</h1>';
+                    eventResult = false;  // Провал
+                }
+    
+                document.body.insertAdjacentHTML('afterbegin', 
+                    `<div class="event-container" style="z-index: 110;">
+                        <div class="event-main ">
+                            <div class="title"> ${title} </div>
+                            <button class="btn" id="btn_result">Закрити</button>
+                        </div>
+                    </div>`
+                );
+    
+                const eventWindows = document.querySelectorAll('.event-container');
+                document.getElementById('btn_result').addEventListener('click', () => {
+                    eventWindows.forEach((e) => e.remove());
+                });
+            }
+        });
     }
+    
     
 
     function isPlayerInTower() {
@@ -295,6 +326,7 @@ export function game_container() {
     }
         
     function checkPermitWay(coordinat, direction, checkDoor){
+        // console.log(`[enter] checkPermitWay ${coordinat} ${direction}`)
        
         const [x, y] = coordinat;
         const tileIdx = game.gameFields[y][x]['id'];
@@ -336,17 +368,14 @@ export function game_container() {
         if (typeof value === 'string' && checkDoor=== true) {
             if (value === 'door') {
                 drawDoorIcon(x,y, direction)
-                clickDoorIcon()
+                
             }
 
             if (value === 'grille') {
                 drawGrilleIcon(x,y, direction)
-                clickGrilleIcon()
-                // TODO запустить проверку
-                return true
             }
         }
-
+        // console.log(`[end] checkPermitWay ${direction}`)
         if (!value) return false
         return true
     }
@@ -403,46 +432,47 @@ export function game_container() {
     };
 
     function makeMove(array) {
-
         const fields = getElementsByData(array);
-        
-        if (!document.querySelector(`.available-field`)){
+    
+        if (!document.querySelector(`.available-field`)) {
             highlightFields(fields);
         }
-
-        playingField.addEventListener('click', (e)=> {
-            if(e.target.closest('.available')){
-                removeDoorIcon()
-                removeGrilleIcon()
+    
+        playingField.addEventListener('click', (e) => {
+            if (e.target.closest('.grille-icon')) return
+            
+            if (e.target.closest('.available')) {
                 const field = e.target.parentElement;
-                const x = Number(field.getAttribute('data-x')); 
+                const x = Number(field.getAttribute('data-x'));
                 const y = Number(field.getAttribute('data-y'));
                 let roomNumber;
-
-                if (game.gameFields[y][x]['id'] === undefined && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)){
+    
+                if (game.gameFields[y][x]['id'] === undefined && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)) {
                     roomNumber = drawFieldTile(field, x, y);
-                };
-
-                putHeroMitl(field);
-                removeHighlightFields(fields);
-                player.position = [x, y];
-                nextCoordinates = newCoordinate()
-
-                if (!room_tiles[game.gameFields[y][x]['id']]) return
-                if (room_tiles[game.gameFields[y][x]['id']].dungeon) {
-                    createNewEvent('dungeon'); 
                 }
-                removeSearchIcon()
-
-
+    
+                removeHighlightFields(fields);
+                removeDoorIcon();
+    
+                putHeroMitl(field);
+    
+                player.position = [x, y];
+                nextCoordinates = newCoordinate();
+    
+                if (!room_tiles[game.gameFields[y][x]['id']]) return;
+                if (room_tiles[game.gameFields[y][x]['id']].dungeon) {
+                    createNewEvent('dungeon');
+                }
+                removeSearchIcon();
+    
                 if (room_tiles[game.gameFields[y][x]['id']].search && (game.gameFields[y][x]['s'] === undefined || game.gameFields[y][x]['s'] < 2)) {
-                    drawSearchIcon(field)
-                    clickSerchIcon(x,y)
+                    drawSearchIcon(field);
+                    clickSerchIcon(x, y);
                 }
             }
-        }, { once: true } );
-        
+        }, { once: true });
     }
+    
 
     function drawFieldTile(field, x, y){
         const roomNumber = getRundomElement(game.room_tiles, room_tiles).number;
@@ -520,12 +550,11 @@ export function game_container() {
                 y = y + 1;
                 break;
         }
-        const searchIcon = playingField.querySelector(`.door-icon`);
-        if (searchIcon) searchIcon.remove()
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         field.insertAdjacentHTML('afterbegin', `
             <i class="fa-solid fa-door-closed door-icon"></i>
         `);
+        
     }
 
     function drawGrilleIcon(x,y, direction){
@@ -546,8 +575,6 @@ export function game_container() {
         const searchIcon = playingField.querySelector(`.grille-icon`);
         if (searchIcon) searchIcon.remove()
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
-        console.log(x,y)
-        console.log(field)
         field.insertAdjacentHTML('afterbegin', `
             <i class="fa-solid fa-dungeon grille-icon"></i>
         `);
@@ -559,13 +586,14 @@ export function game_container() {
     }
 
     function removeDoorIcon(){
-        const searchIcon = playingField.querySelector(`.door-icon`);
-        if (searchIcon) searchIcon.remove()
+        const doorIcon = playingField.querySelectorAll(`.door-icon`);
+        if (doorIcon) doorIcon.forEach(element => {element.remove()});
     }
 
     function removeGrilleIcon(){
-        const searchIcon = playingField.querySelector(`.grille-icon`);
-        if (searchIcon) searchIcon.remove()
+        // console.log('[Enter] removeGrilleIcon()')
+        const grilleIcon = playingField.querySelector(`.grille-icon`);
+        if (grilleIcon) grilleIcon.remove()
     }
 
 
@@ -600,22 +628,28 @@ export function game_container() {
     };
 
     function clickDoorIcon(){
-        const serchIcon = document.querySelector('.door-icon');
-        serchIcon.addEventListener('click', () => {
-            const card = getRundomElement(game.door_cards, door_cards)
-            eventWindow(card)
-            removeDoorIcon()
+        playingField.addEventListener('click', (e) => {
+            if(e.target.closest('.door-icon')) {
+                e.target.remove()
+                const card = getRundomElement(game.door_cards, door_cards)
+                eventWindow(card)
+            }
         });
     };
 
-    function clickGrilleIcon(){
-        const serchIcon = document.querySelector('.grille-icon');
-        serchIcon.addEventListener('click', () => {
-            const card = getRundomElement(game.door_cards, door_cards)
-            eventWindow(card)
-            removeDoorIcon()
+    function clickGrilleIcon() {
+        playingField.addEventListener('click', (e) => {
+            if (e.target.closest('.grille-icon')) {
+                diceRollWindow('Перевірка на', 'Силу', heroes[player.hero].strength, 2)
+                    .then((eventResult) => {
+                        if (eventResult) e.target.remove();
+                    });
+            }
         });
-    };
+    }
+    
+
+
     
     function createNewEvent(eventName){
         const event = new Event(eventName);
