@@ -24,6 +24,7 @@
     overflow-y: auto; 
 }
 
+
 .event-main::-webkit-scrollbar {
     width: 12px; 
 }
