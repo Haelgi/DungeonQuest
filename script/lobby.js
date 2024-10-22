@@ -1,5 +1,5 @@
 import  {game, player}  from './authentication.js';
-import  {heroes}  from './heroes.js';
+import  {heroes}  from './cards/heroes.js';
 
 
 export function lobby() {
@@ -27,7 +27,7 @@ export function lobby() {
             removeActiveClasses();
             card.classList.add('active');
             const heroIdx = card.getAttribute('id');
-            player.hero = heroes[heroIdx];
+            player.hero = heroes[heroIdx].name;
 
             changePlayerListTable(player)
             //TODO отправить на сервер выбор игрока, вернуть выбор другим игрокам, заблокировать выбранные варианты
@@ -44,7 +44,7 @@ export function lobby() {
 
     function changePlayerListTable(player){
         const currentPlayerTr = document.querySelector(`.player_${player.idx}`)
-        currentPlayerTr.querySelector(`.hero`).textContent=`${player.hero.heroName}`
+        currentPlayerTr.querySelector(`.hero`).textContent=`${heroes[player.hero].heroName}`
         currentPlayerTr.querySelector(`.ready`).innerHTML = `<button>Підтвердити</button>`
         currentPlayerTr.querySelector(`button`).addEventListener('click', ()=> showGameContainer())
     }

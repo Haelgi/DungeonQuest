@@ -5,9 +5,12 @@ export class Player {
         this.name = userName; 
         this.hero; 
         this.authentication = false;
+        this.positionPrevious;
         this.position;
+        this.finish = false;
         this.catacomb = false;
-        this.roomIdx;
-        this.roomRotate;
+        this.card_abilitie = Array.from({ length: 5 }, (_, index) => index + 1);
+        this.effectCardContainer = [];
+        this.attack = 1;
     }
 }
