@@ -13,13 +13,9 @@
 
 .roll-button{
     display: flex;
-    height: 70px;
+    padding: 10px;
 }
 
-#roll{
-    margin: 0;
-    height: 40px
-}
   
 .dice {
     position: relative;

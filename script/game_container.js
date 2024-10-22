@@ -200,6 +200,9 @@ export function game_container() {
                     <div class='roll-button'>
                         <button id='roll'>Кинути Кубики</button>
                     </div>
+                    <div class='roll-button'>
+                        <button id='close'>Закрити</button>
+                    </div>
                     <p> Ваша ${valueName}: ${value} </p>
                     ${resolveInner}
                 </div>
@@ -207,13 +210,18 @@ export function game_container() {
         );
     
         const diceElements = document.querySelectorAll('.dice');
-        const btn = document.getElementById('roll');
+        const btnRoll = document.getElementById('roll');
+        const btnClose = document.getElementById('close');
     
-        btn.addEventListener('click', () => {
+        btnRoll.addEventListener('click', () => {
             rollAllDice();
             setTimeout(() => {
                 diceResultWindow();
             }, 1700);
+        });
+
+        btnClose.addEventListener('click', () => {
+            document.querySelector('.event-container').remove()
         });
     
         function rollAllDice() {
@@ -234,7 +242,7 @@ export function game_container() {
                 }
             }
     
-            btn.remove();
+            btnRoll.remove();
         }
     
         function diceResultWindow() {
@@ -323,12 +331,10 @@ export function game_container() {
         if (!room) return true;
 
         let permission = checkPermitWay(coordinat, direction , checkBarrier);
-        console.log('permission = ', permission)
     
         if (permission === 'abyss' && !(player.position[0] === x && player.position[1] === y)) {
 
             while (permission === 'abyss') {
-                console.log('rotation = ', game.gameFields[y][x]['r'])
                 switch (game.gameFields[y][x]['r']) {
                     case '0':
                         game.gameFields[y][x]['r'] = '180';
