@@ -55,11 +55,18 @@ export function game_container() {
     clickAbyssIcon()
 
 
+    playTrapEvent()
     // playDungeonEvent()
 
     function playDungeonEvent(){
         document.addEventListener('dungeon', () => {
         const card = getRundomElement(game.dungeon_cards, dungeon_cards)   
+        eventWindow(card);
+    });}
+
+    function playTrapEvent(){
+        document.addEventListener('trap', () => {
+        const card = getRundomElement(game.trap_cards, trap_cards)   
         eventWindow(card);
     });}
 
@@ -77,7 +84,7 @@ export function game_container() {
         game.gameFields[y][x]['r'] = rotate;
     };
     
-    // drawFieldTileTests(15, '90', 1,  0);
+    drawFieldTileTests(33, '90', 1,  0);
     // drawFieldTileTests(46, '0', 1,  1);
     // drawFieldTileTests(2, 180, 1,  1);
     // drawFieldTileTests(5, 0, 0, 1);
@@ -290,8 +297,6 @@ export function game_container() {
             });
         }
     }
-    
-    
 
     function isPlayerInTower() {
         if (!player.position) return false
@@ -489,15 +494,19 @@ export function game_container() {
                 removeAbyssIcon()
     
                 putHeroMitl(field);
-
+                
                 
                 player.position = [x, y];
                 nextCoordinates = newCoordinate();
+                if (room_tiles[game.gameFields[y][x]['id']].special === 'rotate') {
+                    rotateRoomTile()
+                    nextCoordinates = newCoordinate();
+                };
     
                 if (!room_tiles[game.gameFields[y][x]['id']]) return;
-                if (room_tiles[game.gameFields[y][x]['id']].dungeon) {
-                    createNewEvent('dungeon');
-                }
+                if (room_tiles[game.gameFields[y][x]['id']].dungeon) createNewEvent('dungeon');
+                if (room_tiles[game.gameFields[y][x]['id']].trap) createNewEvent('trap');
+
                 removeSearchIcon();
     
                 if (room_tiles[game.gameFields[y][x]['id']].search && (game.gameFields[y][x]['s'] === undefined || game.gameFields[y][x]['s'] < 2)) {
@@ -506,6 +515,38 @@ export function game_container() {
                 }
             }
         }, { once: true });
+    }
+
+    function rotateRoomTile() {
+        const [x, y] = player.position;
+        const rotateOld = game.gameFields[y][x]['r'];
+        const parentElement = document.querySelector(`[data-y="${y}"][data-x="${x}"]`);
+        const childTileField = parentElement.querySelector('.tile-field');
+
+        let rotateNew;
+
+        switch (rotateOld) {
+            case '0':
+                rotateNew = '180';
+                break;
+            case '90':
+                rotateNew = '270';
+                break;
+            case '270':
+                rotateNew = '90';
+                break;
+            case '180':
+                rotateNew = '0';
+                break;
+        }
+
+        game.gameFields[y][x]['r'] = rotateNew;
+    
+
+    
+        if (childTileField) {
+            childTileField.style.rotate = `${rotateNew}deg`;
+        }
     }
     
 
