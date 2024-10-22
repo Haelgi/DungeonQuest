@@ -26,7 +26,7 @@ player.idx = 0;
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
 player.authentication = true;
-heroes[player.hero].resolve = 10
+// heroes[player.hero].resolve = 10
 
 export const game = new Game();
 game.gameIdx = 0;
@@ -52,6 +52,7 @@ export function game_container() {
     clickDoorIcon()
     clickGrilleIcon()
     clickCollapseIcon()
+    clickAbyssIcon()
 
 
     // playDungeonEvent()
@@ -76,7 +77,8 @@ export function game_container() {
         game.gameFields[y][x]['r'] = rotate;
     };
     
-    drawFieldTileTests(5, 90, 1,  0);
+    // drawFieldTileTests(15, '90', 1,  0);
+    // drawFieldTileTests(46, '0', 1,  1);
     // drawFieldTileTests(2, 180, 1,  1);
     // drawFieldTileTests(5, 0, 0, 1);
     // drawFieldTileTests(15, 0, 1, 1);
@@ -321,10 +323,12 @@ export function game_container() {
         if (!room) return true;
 
         let permission = checkPermitWay(coordinat, direction , checkBarrier);
+        console.log('permission = ', permission)
     
-        if (room.special === 'abyss' && !(player.position[0] === x && player.position[1] === y) && !permission) {
+        if (permission === 'abyss' && !(player.position[0] === x && player.position[1] === y)) {
 
-            while (!permission) {
+            while (permission === 'abyss') {
+                console.log('rotation = ', game.gameFields[y][x]['r'])
                 switch (game.gameFields[y][x]['r']) {
                     case '0':
                         game.gameFields[y][x]['r'] = '180';
@@ -339,7 +343,7 @@ export function game_container() {
                         game.gameFields[y][x]['r'] = '0';
                         break;
                 }
-                permission = checkPermitWay(coordinat, direction);
+                permission = checkPermitWay(coordinat, direction, checkBarrier);
             }
         }
     
@@ -347,7 +351,6 @@ export function game_container() {
     }
         
     function checkPermitWay(coordinat, direction, checkBarrier){
-        // console.log(`[enter] checkPermitWay ${coordinat} ${direction}`)
        
         const [x, y] = coordinat;
         const tileIdx = game.gameFields[y][x]['id'];
@@ -390,10 +393,11 @@ export function game_container() {
         if (typeof value === 'string' && checkBarrier=== true) {
             if (value === 'door') drawDoorIcon(x,y, direction);
             if (value === 'grille') drawGrilleIcon(x,y, direction);
+            if (value === 'abyss') drawAbyssIcon(x,y, direction);
+
         };
 
-        if (!value) return false
-        return true
+        return value
     }
     
     function getElementsByData(array){
@@ -459,6 +463,7 @@ export function game_container() {
 
             if (e.target.closest('.grille-icon')) return
             if (e.target.closest('.collapse-icon')) return
+            if (e.target.closest('.abyss-icon')) return
 
             if (e.target.closest('.available')) {
                 const field = e.target.parentElement;
@@ -471,9 +476,11 @@ export function game_container() {
                 }
     
                 removeHighlightFields(fields);
+                removeSearchIcon();
                 removeDoorIcon();
                 removeGrilleIcon();
                 removeCollapseIcon()
+                removeAbyssIcon()
     
                 putHeroMitl(field);
 
@@ -510,7 +517,7 @@ export function game_container() {
             <img class="tile-field tile-map" src="img/room_tiles/room_${roomNumber}.jpg" alt="" style="rotate: ${rotate}deg;">`);
             
         game.gameFields[y][x]['id'] = roomNumber-1;
-        game.gameFields[y][x]['r'] = rotate;
+        game.gameFields[y][x]['r'] = String(rotate);
         game.gameFields[y][x]['p'] = player.name;
 
         delete game.gameFields[player.position[1]][player.position[0]]['p'];
@@ -593,8 +600,6 @@ export function game_container() {
                 y = y + 1;
                 break;
         }
-        const searchIcon = playingField.querySelector(`.grille-icon`);
-        if (searchIcon) searchIcon.remove()
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         field.insertAdjacentHTML('afterbegin', `
             <i class="fa-solid fa-dungeon grille-icon"></i>
@@ -617,11 +622,31 @@ export function game_container() {
                 break;
         }
         const [x0,y0] = player.positionPrevious
-        console.log('player.positionPrevious: ',player.positionPrevious,'Checked pos :',x,y)
         if (x===x0 && y===y0) return
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         field.insertAdjacentHTML('afterbegin', `
             <i class="fa-solid fa-road-barrier collapse-icon"></i>
+        `);
+    }
+
+    function drawAbyssIcon(x,y, direction){
+        switch (direction) {
+            case 'left':
+                x = x - 1;
+                break;
+            case 'up':
+                y = y - 1;
+                break;
+            case 'right':
+                x = x + 1;
+                break;
+            case 'down':
+                y = y + 1;
+                break;
+        }
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+        field.insertAdjacentHTML('afterbegin', `
+            <i class="fa-solid fa-arrow-up-from-ground-water abyss-icon"></i>
         `);
     }
 
@@ -643,6 +668,11 @@ export function game_container() {
     function removeCollapseIcon(){
         const collapseIcon = playingField.querySelectorAll(`.collapse-icon`);
         if (collapseIcon) collapseIcon.forEach(element => {element.remove()});
+    }
+
+    function removeAbyssIcon(){
+        const abyssIcon = playingField.querySelectorAll(`.abyss-icon`);
+        if (abyssIcon) abyssIcon.forEach(element => {element.remove()});
     }
 
 
@@ -690,7 +720,6 @@ export function game_container() {
         playingField.addEventListener('click', (e) => {
             if (e.target.closest('.grille-icon')) {
                 diceRollWindow('Перевірка на', 'Силa', heroes[player.hero].strength, 2, e.target)
-                    
             }
         });
     }
@@ -698,8 +727,15 @@ export function game_container() {
     function clickCollapseIcon() {
         playingField.addEventListener('click', (e) => {
             if (e.target.closest('.collapse-icon')) {
-                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, 2, e.target)
-                    
+                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, 2, e.target)   
+            }
+        });
+    }
+
+    function clickAbyssIcon() {
+        playingField.addEventListener('click', (e) => {
+            if (e.target.closest('.abyss-icon')) {
+                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, 2, e.target)   
             }
         });
     }
