@@ -82,8 +82,10 @@
 
 
 .hero_token_catacomb{
+    position: absolute;
     width: 60px;
     height: 78px;
+    z-index: 10;
 }
 
 

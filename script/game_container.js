@@ -56,6 +56,7 @@ export function game_container() {
 
 
     playTrapEvent()
+    playPitEvent()
     // playDungeonEvent()
 
     function playDungeonEvent(){
@@ -68,6 +69,20 @@ export function game_container() {
         document.addEventListener('trap', () => {
         const card = getRundomElement(game.trap_cards, trap_cards)   
         eventWindow(card);
+    });}
+
+    function playPitEvent(){
+        document.addEventListener('pit', () => {
+            diceRollWindow('Перевірка на', 'Удача', heroes[player.hero].luck, 2, false, '', falseFn)
+            function falseFn(){
+                const field = document.querySelector(`[data-y="${player.position[1]}"][data-x="${player.position[0]}"]`)
+                heroes[player.hero].health -=6
+                //TODO вернуть вход в катакомбы
+                // player.catacomb = true
+                // putHeroMitl(field)
+            } 
+        // если false -6 hp игрок в катакомбах
+            
     });}
 
     // end start position //////////////////////////////////////////////////////
@@ -84,7 +99,7 @@ export function game_container() {
         game.gameFields[y][x]['r'] = rotate;
     };
     
-    drawFieldTileTests(33, '90', 1,  0);
+    drawFieldTileTests(43, '90', 1,  0);
     // drawFieldTileTests(46, '0', 1,  1);
     // drawFieldTileTests(2, 180, 1,  1);
     // drawFieldTileTests(5, 0, 0, 1);
@@ -146,14 +161,16 @@ export function game_container() {
             });
     }
 
-    function diceRollWindow(title, valueName, value, diceCount, elementTarget) {
+    function diceRollWindow(title, valueName, value, diceCount, closeBtn, trueFn, falseFn) {
     
         let diceContainers = '';    
         let count = 1;
         let diceResult = 0;
         let resolveInner = '';
+        let closeBtnInner = '';
         const resolvePlayer = heroes[player.hero].resolve;
         if ( resolvePlayer > 0) resolveInner = `<p> Ваша Рішучість: +${resolvePlayer}</p>`;
+        if (closeBtn) closeBtnInner = `<div class='roll-button'><button id='close'>Закрити</button></div>`;
     
         while (count <= diceCount) {
             diceContainers +=
@@ -207,9 +224,7 @@ export function game_container() {
                     <div class='roll-button'>
                         <button id='roll'>Кинути Кубики</button>
                     </div>
-                    <div class='roll-button'>
-                        <button id='close'>Закрити</button>
-                    </div>
+                    ${closeBtnInner}
                     <p> Ваша ${valueName}: ${value} </p>
                     ${resolveInner}
                 </div>
@@ -227,9 +242,12 @@ export function game_container() {
             }, 1700);
         });
 
-        btnClose.addEventListener('click', () => {
-            document.querySelector('.event-container').remove()
-        });
+        if (btnClose) {
+            btnClose.addEventListener('click', () => {
+                document.querySelector('.event-container').remove()
+            });
+        }
+
     
         function rollAllDice() {
             diceResult = 0;
@@ -258,7 +276,7 @@ export function game_container() {
     
             if (diceResult <= value) {
                 title = '<h1 style="color:green;">Успіх!</h1>';
-                elementTarget.remove(); 
+                if (trueFn) trueFn()
             }
     
             if (diceResult > value && diceResult <= (value + heroes[player.hero].resolve)) {
@@ -268,7 +286,8 @@ export function game_container() {
     
             if (diceResult > (value + heroes[player.hero].resolve)) {
                 title = '<h1 style="color:red;">Провал!</h1>';
-                heroes[player.hero].resolve +=1; 
+                heroes[player.hero].resolve +=1;
+                if (falseFn) falseFn()
             }
     
             document.body.insertAdjacentHTML('afterbegin', 
@@ -287,7 +306,7 @@ export function game_container() {
                 const diff = diceResult - value;
                 if (heroes[player.hero].resolve >= diff) {
                     heroes[player.hero].resolve -= diff;
-                    elementTarget.remove();  
+                    if (trueFn) trueFn();  
                     eventWindows.forEach((e) => e.remove());
                 }
             });
@@ -313,7 +332,6 @@ export function game_container() {
     function newCoordinate() {
         const [x, y] = player.position;
         const coordinates = [];
-        // const ifPlayerInTower = game.startFields.some(coord => coord[0] === x && coord[1] === y);
 
         if (x > 0 && checkOtherPlayer([x - 1, y]) && checkPermitWayNeighbour([x - 1, y], 'right', false)  && checkPermitWay([x, y],'left', true)) coordinates.push([x - 1, y]); 
         if (y > 0 && checkOtherPlayer([x, y - 1]) && checkPermitWayNeighbour([x, y - 1], 'down', false)  && checkPermitWay([x, y], 'up', true)) coordinates.push([x, y - 1]);   
@@ -498,7 +516,7 @@ export function game_container() {
                 
                 player.position = [x, y];
                 nextCoordinates = newCoordinate();
-                if (room_tiles[game.gameFields[y][x]['id']].special === 'rotate') {
+                if (roomNumber && room_tiles[game.gameFields[y][x]['id']].special === 'rotate') {
                     rotateRoomTile()
                     nextCoordinates = newCoordinate();
                 };
@@ -506,6 +524,7 @@ export function game_container() {
                 if (!room_tiles[game.gameFields[y][x]['id']]) return;
                 if (room_tiles[game.gameFields[y][x]['id']].dungeon) createNewEvent('dungeon');
                 if (room_tiles[game.gameFields[y][x]['id']].trap) createNewEvent('trap');
+                if (room_tiles[game.gameFields[y][x]['id']].special === 'pit') createNewEvent('pit');
 
                 removeSearchIcon();
     
@@ -597,9 +616,13 @@ export function game_container() {
         if (hero_mitl) {hero_mitl.remove()};
         if (hero_token_catacomb) {hero_token_catacomb.remove()};
         if (player.catacomb) {
-            field.innerHTML +=`<img class="hero_token_catacomb ${player.hero}" src="img/hero_tiles/token/${player.hero}.png" alt="" style="rotate: 0deg;">`
+            field.insertAdjacentHTML('afterbegin', `
+                <img class="hero_token_catacomb ${player.hero}" src="img/hero_tiles/token/${player.hero}.png" alt="" style="rotate: 0deg;">
+            `);
         } else {
-            field.innerHTML +=`<img class="hero_mitl ${player.hero}" src="img/hero_tiles/mitle/${player.hero}.png" alt="" style="top: ${top}px; left: ${left}px;">`
+            field.insertAdjacentHTML('afterbegin', `
+                <img class="hero_mitl ${player.hero}" src="img/hero_tiles/mitle/${player.hero}.png" alt="" style="top: ${top}px; left: ${left}px;">
+            `); 
         }
     }
 
@@ -725,6 +748,7 @@ export function game_container() {
 
     function shiftMitle(){
         const heroMitl = document.querySelector('.hero_mitl');
+        if (!heroMitl) return
         const currentField = heroMitl.parentElement;
         currentField.addEventListener('mouseenter', () => {
             heroMitl.style.top = '-60px';
@@ -766,7 +790,8 @@ export function game_container() {
     function clickGrilleIcon() {
         playingField.addEventListener('click', (e) => {
             if (e.target.closest('.grille-icon')) {
-                diceRollWindow('Перевірка на', 'Силa', heroes[player.hero].strength, 2, e.target)
+                function trueFn(){e.target.remove()} 
+                diceRollWindow('Перевірка на', 'Силa', heroes[player.hero].strength, 2, true, trueFn)
             }
         });
     }
@@ -774,7 +799,8 @@ export function game_container() {
     function clickCollapseIcon() {
         playingField.addEventListener('click', (e) => {
             if (e.target.closest('.collapse-icon')) {
-                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, 2, e.target)   
+                function trueFn(){e.target.remove()}
+                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, 2, true, trueFn)   
             }
         });
     }
@@ -782,7 +808,8 @@ export function game_container() {
     function clickAbyssIcon() {
         playingField.addEventListener('click', (e) => {
             if (e.target.closest('.abyss-icon')) {
-                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, 2, e.target)   
+                function trueFn(){e.target.remove()}
+                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, true, trueFn)   
             }
         });
     }
