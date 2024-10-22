@@ -53,6 +53,7 @@ export function game_container() {
     clickGrilleIcon()
     clickCollapseIcon()
     clickAbyssIcon()
+    clickWebIcon()
 
 
     playTrapEvent()
@@ -99,7 +100,7 @@ export function game_container() {
         game.gameFields[y][x]['r'] = rotate;
     };
     
-    drawFieldTileTests(43, '90', 1,  0);
+    drawFieldTileTests(59, '90', 1,  0);
     // drawFieldTileTests(46, '0', 1,  1);
     // drawFieldTileTests(2, 180, 1,  1);
     // drawFieldTileTests(5, 0, 0, 1);
@@ -418,6 +419,7 @@ export function game_container() {
         const value = room[newDirection];
         
         if (value && room.special === 'collapse' && checkBarrier=== true) drawCollapseIcon(x,y, direction);
+        if (value && room.special === 'web' && checkBarrier=== true) drawWebIcon(x,y, direction);
 
         if (typeof value === 'string' && checkBarrier=== true) {
             if (value === 'door') drawDoorIcon(x,y, direction);
@@ -492,6 +494,7 @@ export function game_container() {
 
             if (e.target.closest('.grille-icon')) return
             if (e.target.closest('.collapse-icon')) return
+            if (e.target.closest('.web-icon')) return
             if (e.target.closest('.abyss-icon')) return
 
             if (e.target.closest('.available')) {
@@ -509,6 +512,7 @@ export function game_container() {
                 removeDoorIcon();
                 removeGrilleIcon();
                 removeCollapseIcon()
+                removeWebIcon()
                 removeAbyssIcon()
     
                 putHeroMitl(field);
@@ -699,6 +703,29 @@ export function game_container() {
         `);
     }
 
+    function drawWebIcon(x,y, direction){
+        switch (direction) {
+            case 'left':
+                x = x - 1;
+                break;
+            case 'up':
+                y = y - 1;
+                break;
+            case 'right':
+                x = x + 1;
+                break;
+            case 'down':
+                y = y + 1;
+                break;
+        }
+        const [x0,y0] = player.positionPrevious
+        if (x===x0 && y===y0) return
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+        field.insertAdjacentHTML('afterbegin', `
+            <i class="fa-solid fa-kip-sign web-icon"></i>
+        `);
+    }
+
     function drawAbyssIcon(x,y, direction){
         switch (direction) {
             case 'left':
@@ -738,6 +765,11 @@ export function game_container() {
     function removeCollapseIcon(){
         const collapseIcon = playingField.querySelectorAll(`.collapse-icon`);
         if (collapseIcon) collapseIcon.forEach(element => {element.remove()});
+    }
+
+    function removeWebIcon(){
+        const webIcon = playingField.querySelectorAll(`.web-icon`);
+        if (webIcon) webIcon.forEach(element => {element.remove()});
     }
 
     function removeAbyssIcon(){
@@ -801,6 +833,15 @@ export function game_container() {
             if (e.target.closest('.collapse-icon')) {
                 function trueFn(){e.target.remove()}
                 diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, 2, true, trueFn)   
+            }
+        });
+    }
+
+    function clickWebIcon() {
+        playingField.addEventListener('click', (e) => {
+            if (e.target.closest('.web-icon')) {
+                function trueFn(){e.target.remove()}
+                diceRollWindow('Перевірка на', 'Силa', heroes[player.hero].strength, 2, true, trueFn)   
             }
         });
     }
