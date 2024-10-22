@@ -49,6 +49,7 @@
 
 .tile-field i.door-icon,
 .tile-field i.collapse-icon,
+.tile-field i.abyss-icon,
 .tile-field i.grille-icon{
     padding: 20px;
     z-index: 30;
