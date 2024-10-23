@@ -26,6 +26,7 @@ player.idx = 0;
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
 player.authentication = true;
+player.treasureCardContainer = [[],[],[]];
 // heroes[player.hero].resolve = 10
 
 export const game = new Game();
@@ -55,6 +56,7 @@ export function game_container() {
     clickCollapseIcon()
     clickAbyssIcon()
     clickWebIcon()
+    clickBridgeIcon()
 
 
     playTrapEvent()
@@ -99,7 +101,7 @@ export function game_container() {
         game.gameFields[y][x]['r'] = rotate;
     };
     
-    drawFieldTileTests(71, '90', 1,  0);
+    drawFieldTileTests(105, '90', 1,  0);
     // drawFieldTileTests(46, '0', 1,  1);
     // drawFieldTileTests(2, 180, 1,  1);
     // drawFieldTileTests(5, 0, 0, 1);
@@ -167,8 +169,11 @@ export function game_container() {
         let count = 1;
         let diceResult = 0;
         let resolveInner = '';
+        let treasureInner = '';
         let closeBtnInner = '';
         const resolvePlayer = heroes[player.hero].resolve;
+        const treasure = player.treasureCardContainer.length;
+        if ( treasure > 0 && valueName === 'Спритність') treasureInner = `<p> Кількість Скарбів: -${treasure}</p>`;
         if ( resolvePlayer > 0) resolveInner = `<p> Ваша Рішучість: +${resolvePlayer}</p>`;
         if (closeBtn) closeBtnInner = `<div class='roll-button'><button id='close'>Закрити</button></div>`;
     
@@ -227,6 +232,7 @@ export function game_container() {
                     ${closeBtnInner}
                     <p> Ваша ${valueName}: ${value} </p>
                     ${resolveInner}
+                    ${treasureInner}
                 </div>
             </div>`
         );
@@ -274,13 +280,15 @@ export function game_container() {
         function diceResultWindow() {
             let title;
             let addBtn = '';
+            let result;
+            if ( treasure > 0 && valueName === 'Спритність') diceResult + treasure
     
-            if (diceResult <= value) {
+            if (diceResult <= (value)) {
                 title = '<h1 style="color:green;">Успіх!</h1>';
-                if (trueFn) trueFn()
+                result = true
             }
     
-            if (diceResult > value && diceResult <= (value + heroes[player.hero].resolve)) {
+            if (diceResult > value && diceResult <= (value + heroes[player.hero].resolve )) {
                 title = '<h1 style="color:red;">Провал....?</h1>';
                 addBtn = `<button class="btn" id="btn_add_resolve">Додати Рішучості</button>`;
             }
@@ -288,7 +296,7 @@ export function game_container() {
             if (diceResult > (value + heroes[player.hero].resolve)) {
                 title = '<h1 style="color:red;">Провал!</h1>';
                 heroes[player.hero].resolve +=1;
-                if (falseFn) falseFn()
+                result = false
             }
     
             document.body.insertAdjacentHTML('afterbegin', 
@@ -307,13 +315,15 @@ export function game_container() {
                 const diff = diceResult - value;
                 if (heroes[player.hero].resolve >= diff) {
                     heroes[player.hero].resolve -= diff;
-                    if (trueFn) trueFn();  
                     eventWindows.forEach((e) => e.remove());
+                    if (trueFn) trueFn();  
                 }
             });
     
             document.getElementById('btn_close').addEventListener('click', () => {
                 eventWindows.forEach((e) => e.remove());
+                if (result===true) trueFn()
+                if (result===false) falseFn()
             });
         }
     }
@@ -420,9 +430,8 @@ export function game_container() {
         
         if (value && room.special === 'collapse' && checkBarrier=== true) drawCollapseIcon(x,y, direction);
         if (value && room.special === 'web' && checkBarrier=== true) drawWebIcon(x,y, direction);
-        if (value && room.special === 'dark' && checkBarrier=== true) {
-            return value.includes(diceRollResultGlobal)  
-        };
+        if (value && room.special === 'dark' && checkBarrier=== true) return value.includes(diceRollResultGlobal);
+        if (value && room.special === 'bridge' && checkBarrier=== true) drawBridgeIcon(x,y, direction);
 
         if (typeof value === 'string' && checkBarrier=== true) {
             if (value === 'door') drawDoorIcon(x,y, direction);
@@ -499,6 +508,7 @@ export function game_container() {
             if (e.target.closest('.collapse-icon')) return
             if (e.target.closest('.web-icon')) return
             if (e.target.closest('.abyss-icon')) return
+            if (e.target.closest('.bridge-icon')) return
 
             if (e.target.closest('.available')) {
                 const field = e.target.parentElement;
@@ -516,6 +526,7 @@ export function game_container() {
                 removeGrilleIcon();
                 removeCollapseIcon()
                 removeWebIcon()
+                removeBridgeIcon()
                 removeAbyssIcon()
     
                 putHeroMitl(field);
@@ -528,11 +539,20 @@ export function game_container() {
                     nextCoordinates = newCoordinate();
                 };
                 if (room_tiles[game.gameFields[y][x]['id']]?.special === 'dark') {
-                    diceRollWindow('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', 'Удача', 6, 1, false, trueFn)
+                    diceRollWindow('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', 'Удача', 6, 1, false, trueFn);
+                
                     function trueFn() {
-                        nextCoordinates = newCoordinate();                        
+                        nextCoordinates = newCoordinate();
+                        
+                        if (nextCoordinates.length === 0) {
+                            console.log('Нет доступных ходов, переброс кубика...');
+                            diceRollWindow('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', 'Удача', 6, 1, false, trueFn);
+                        } else {
+                            console.log('nextCoordinates: ', nextCoordinates);
+                        }
                     }
-                };
+                }
+                
     
                 if (!room_tiles[game.gameFields[y][x]['id']]) return;
                 if (room_tiles[game.gameFields[y][x]['id']].dungeon) createNewEvent('dungeon');
@@ -735,6 +755,29 @@ export function game_container() {
         `);
     }
 
+    function drawBridgeIcon(x,y, direction){
+        switch (direction) {
+            case 'left':
+                x = x - 1;
+                break;
+            case 'up':
+                y = y - 1;
+                break;
+            case 'right':
+                x = x + 1;
+                break;
+            case 'down':
+                y = y + 1;
+                break;
+        }
+        const [x0,y0] = player.positionPrevious
+        if (x===x0 && y===y0) return
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+        field.insertAdjacentHTML('afterbegin', `
+            <i class="fa-solid fa-bridge-circle-exclamation bridge-icon"></i>
+        `);
+    }
+
     function drawAbyssIcon(x,y, direction){
         switch (direction) {
             case 'left':
@@ -779,6 +822,11 @@ export function game_container() {
     function removeWebIcon(){
         const webIcon = playingField.querySelectorAll(`.web-icon`);
         if (webIcon) webIcon.forEach(element => {element.remove()});
+    }
+
+    function removeBridgeIcon(){
+        const bridgeIcon = playingField.querySelectorAll(`.bridge-icon`);
+        if (bridgeIcon) bridgeIcon.forEach(element => {element.remove()});
     }
 
     function removeAbyssIcon(){
@@ -851,6 +899,28 @@ export function game_container() {
             if (e.target.closest('.web-icon')) {
                 function trueFn(){e.target.remove()}
                 diceRollWindow('Перевірка на', 'Силa', heroes[player.hero].strength, 2, true, trueFn)   
+            }
+        });
+    }
+
+    function clickBridgeIcon() {
+        playingField.addEventListener('click', (e) => {
+            if (e.target.closest('.bridge-icon')) {
+                function trueFn(){e.target.remove()}
+                function falseFn(){
+                    const field = document.querySelector(`[data-y="${player.position[1]}"][data-x="${player.position[0]}"]`)
+                    
+                    removeBridgeIcon()
+                    diceRollWindow('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.', '', 6, 1, false, trueFn);
+                    function trueFn(){
+                        heroes[player.hero].health -= diceRollResultGlobal;
+                    }
+
+                    //TODO вернуть вход в катакомбы
+                    // player.catacomb = true
+                    // putHeroMitl(field)
+                } 
+                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, 2, true, trueFn, falseFn)   
             }
         });
     }

@@ -11,6 +11,7 @@ export class Player {
         this.catacomb = false;
         this.card_abilitie = Array.from({ length: 5 }, (_, index) => index + 1);
         this.effectCardContainer = [];
+        this.treasureCardContainer = [];
         this.attack = 1;
     }
 }
