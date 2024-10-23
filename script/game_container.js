@@ -40,6 +40,7 @@ export function game_container() {
     const body = document.querySelector(`body`);
     const playingField = document.querySelector(`.playing-field`);
     
+    let diceRollResultGlobal = false;
     let nextCoordinates;
 
     // start position //////////////////////////////////////////////////////
@@ -74,7 +75,7 @@ export function game_container() {
 
     function playPitEvent(){
         document.addEventListener('pit', () => {
-            diceRollWindow('Перевірка на', 'Удача', heroes[player.hero].luck, 2, false, '', falseFn)
+            diceRollWindow('Перевірка на', 'Удача', heroes[player.hero].luck, 2, false, false, falseFn)
             function falseFn(){
                 const field = document.querySelector(`[data-y="${player.position[1]}"][data-x="${player.position[0]}"]`)
                 heroes[player.hero].health -=6
@@ -82,8 +83,6 @@ export function game_container() {
                 // player.catacomb = true
                 // putHeroMitl(field)
             } 
-        // если false -6 hp игрок в катакомбах
-            
     });}
 
     // end start position //////////////////////////////////////////////////////
@@ -100,7 +99,7 @@ export function game_container() {
         game.gameFields[y][x]['r'] = rotate;
     };
     
-    // drawFieldTileTests(59, '90', 1,  0);
+    drawFieldTileTests(71, '90', 1,  0);
     // drawFieldTileTests(46, '0', 1,  1);
     // drawFieldTileTests(2, 180, 1,  1);
     // drawFieldTileTests(5, 0, 0, 1);
@@ -259,6 +258,7 @@ export function game_container() {
     
         function roll(dice) {
             const value = Math.floor((Math.random() * 6) + 1);
+            diceRollResultGlobal = value;
             diceResult += value;
     
             for (let i = 1; i <= 6; i++) {
@@ -420,6 +420,9 @@ export function game_container() {
         
         if (value && room.special === 'collapse' && checkBarrier=== true) drawCollapseIcon(x,y, direction);
         if (value && room.special === 'web' && checkBarrier=== true) drawWebIcon(x,y, direction);
+        if (value && room.special === 'dark' && checkBarrier=== true) {
+            return value.includes(diceRollResultGlobal)  
+        };
 
         if (typeof value === 'string' && checkBarrier=== true) {
             if (value === 'door') drawDoorIcon(x,y, direction);
@@ -523,6 +526,12 @@ export function game_container() {
                 if (room_tiles[game.gameFields[y][x]['id']]?.special === 'rotate') {
                     rotateRoomTile()
                     nextCoordinates = newCoordinate();
+                };
+                if (room_tiles[game.gameFields[y][x]['id']]?.special === 'dark') {
+                    diceRollWindow('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', 'Удача', 6, 1, false, trueFn)
+                    function trueFn() {
+                        nextCoordinates = newCoordinate();                        
+                    }
                 };
     
                 if (!room_tiles[game.gameFields[y][x]['id']]) return;
