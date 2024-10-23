@@ -77,7 +77,7 @@ export function game_container() {
 
     function playPitEvent(){
         document.addEventListener('pit', () => {
-            diceRollWindow('Перевірка на', 'Удача', heroes[player.hero].luck, 2, false, false, falseFn)
+            diceRollWindow('Зайшовши в кімнату у вас під ногами виявилася дуже крихка підлога, щоб не провалитися в катакомби перевірте свою', 'Удача', heroes[player.hero].luck, 2, false, false, falseFn)
             function falseFn(){
                 const field = document.querySelector(`[data-y="${player.position[1]}"][data-x="${player.position[0]}"]`)
                 heroes[player.hero].health -=6
@@ -101,7 +101,7 @@ export function game_container() {
         game.gameFields[y][x]['r'] = rotate;
     };
     
-    drawFieldTileTests(105, '90', 1,  0);
+    // drawFieldTileTests(105, '90', 1,  0);
     // drawFieldTileTests(46, '0', 1,  1);
     // drawFieldTileTests(2, 180, 1,  1);
     // drawFieldTileTests(5, 0, 0, 1);
@@ -880,7 +880,7 @@ export function game_container() {
         playingField.addEventListener('click', (e) => {
             if (e.target.closest('.grille-icon')) {
                 function trueFn(){e.target.remove()} 
-                diceRollWindow('Перевірка на', 'Силa', heroes[player.hero].strength, 2, true, trueFn)
+                diceRollWindow('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірка на', 'Силa', heroes[player.hero].strength, 2, true, trueFn)
             }
         });
     }
@@ -889,7 +889,7 @@ export function game_container() {
         playingField.addEventListener('click', (e) => {
             if (e.target.closest('.collapse-icon')) {
                 function trueFn(){e.target.remove()}
-                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, 2, true, trueFn)   
+                diceRollWindow('Перед вами кімната заповнена уламками стелі що впала, щоб пройти на інший бік кімнати перевірте свою', 'Спритність', heroes[player.hero].dexterity, 2, true, trueFn)   
             }
         });
     }
@@ -898,7 +898,7 @@ export function game_container() {
         playingField.addEventListener('click', (e) => {
             if (e.target.closest('.web-icon')) {
                 function trueFn(){e.target.remove()}
-                diceRollWindow('Перевірка на', 'Силa', heroes[player.hero].strength, 2, true, trueFn)   
+                diceRollWindow('Перед вами кімната заповнена павутинням, щоб пройти на інший бік кімнати перевірте свою', 'Силa', heroes[player.hero].strength, 2, true, trueFn)   
             }
         });
     }
@@ -909,7 +909,6 @@ export function game_container() {
                 function trueFn(){e.target.remove()}
                 function falseFn(){
                     const field = document.querySelector(`[data-y="${player.position[1]}"][data-x="${player.position[0]}"]`)
-                    
                     removeBridgeIcon()
                     diceRollWindow('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.', '', 6, 1, false, trueFn);
                     function trueFn(){
@@ -920,7 +919,7 @@ export function game_container() {
                     // player.catacomb = true
                     // putHeroMitl(field)
                 } 
-                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, 2, true, trueFn, falseFn)   
+                diceRollWindow('Перед вами широка прірва, через яку прокинуто хитку дошку, щоб не провалитися в катакомби перевірте свою', 'Спритність', heroes[player.hero].dexterity, 2, true, trueFn, falseFn)   
             }
         });
     }
@@ -929,7 +928,7 @@ export function game_container() {
         playingField.addEventListener('click', (e) => {
             if (e.target.closest('.abyss-icon')) {
                 function trueFn(){e.target.remove()}
-                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, 2, true, trueFn)   
+                diceRollWindow('Кімнату розділило навпіл глибоким прірвою, щоб вийти з кімнати по той бік прірви перевірте свою', 'Спритність', heroes[player.hero].dexterity, 2, true, trueFn)   
             }
         });
     }
