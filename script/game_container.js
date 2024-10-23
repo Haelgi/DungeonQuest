@@ -100,7 +100,7 @@ export function game_container() {
         game.gameFields[y][x]['r'] = rotate;
     };
     
-    drawFieldTileTests(59, '90', 1,  0);
+    // drawFieldTileTests(59, '90', 1,  0);
     // drawFieldTileTests(46, '0', 1,  1);
     // drawFieldTileTests(2, 180, 1,  1);
     // drawFieldTileTests(5, 0, 0, 1);
@@ -520,7 +520,7 @@ export function game_container() {
                 
                 player.position = [x, y];
                 nextCoordinates = newCoordinate();
-                if (roomNumber && room_tiles[game.gameFields[y][x]['id']].special === 'rotate') {
+                if (room_tiles[game.gameFields[y][x]['id']]?.special === 'rotate') {
                     rotateRoomTile()
                     nextCoordinates = newCoordinate();
                 };
@@ -850,7 +850,7 @@ export function game_container() {
         playingField.addEventListener('click', (e) => {
             if (e.target.closest('.abyss-icon')) {
                 function trueFn(){e.target.remove()}
-                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, true, trueFn)   
+                diceRollWindow('Перевірка на', 'Спритність', heroes[player.hero].dexterity, 2, true, trueFn)   
             }
         });
     }
