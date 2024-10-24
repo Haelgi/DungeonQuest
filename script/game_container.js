@@ -466,15 +466,15 @@ export function game_container() {
         const newDirection = directionMapping[game.gameFields[y][x]['r']][direction];
         const value = room[newDirection];
         
-        if (value && room.special === 'collapse' && checkBarrier=== true) drawCollapseIcon(x,y, direction);
-        if (value && room.special === 'web' && checkBarrier=== true) drawWebIcon(x,y, direction);
+        if (value && room.special === 'collapse' && checkBarrier=== true) drawIcon(x,y, 'fa-solid fa-road-barrier', room.special, direction, true);
+        if (value && room.special === 'web' && checkBarrier=== true) drawIcon(x,y, 'fa-solid fa-kip-sign', room.special, direction, true);
         if (value && room.special === 'dark' && checkBarrier=== true) return value.includes(diceRollResultGlobal);
-        if (value && room.special === 'bridge' && checkBarrier=== true) drawBridgeIcon(x,y, direction);
+        if (value && room.special === 'bridge' && checkBarrier=== true) drawIcon(x,y, 'fa-solid fa-bridge-circle-exclamation', room.special, direction, true);
 
         if (typeof value === 'string' && checkBarrier=== true) {
-            if (value === 'door') drawDoorIcon(x,y, direction);
-            if (value === 'grille') drawGrilleIcon(x,y, direction);
-            if (value === 'abyss') drawAbyssIcon(x,y, direction);
+            if (value === 'door') drawIcon(x,y, 'fa-solid fa-door-closed', 'door', direction);
+            if (value === 'grille') drawIcon(x,y, 'fa-solid fa-dungeon', 'grille', direction);
+            if (value === 'abyss') drawIcon(x,y, 'fa-solid fa-arrow-up-from-ground-water', 'abyss', direction);
 
         };
 
@@ -558,44 +558,31 @@ export function game_container() {
                 removeIcon('.bridge-icon');
                 removeIcon('.abyss-icon');
                 removeIcon('.end-icon');
-                // removeSearchIcon();
-                // removeTreasureIcon();
-                // removeDoorIcon();
-                // removeGrilleIcon();
-                // removeCollapseIcon()
-                // removeWebIcon()
-                // removeBridgeIcon()
-                // removeAbyssIcon()
-                // removeEndIcon()
+
                 const field = e.target.parentElement;
                 const x = Number(field.getAttribute('data-x'));
                 const y = Number(field.getAttribute('data-y'));
                 let roomNumber;
 
-                console.log(field.classList.contains(`treasury`))
                 if (field.classList.contains(`treasury`) && !player.positionTreasury) {
-                    console.log('first come to Tresury')
                     player.positionTreasury = true;
                     createNewEvent('treasury');
                 };
 
                 if (field.classList.contains(`treasury`) && player.positionTreasury) {
-                    console.log('second come to Tresury')
-                    drawTreasureIcon(field);
+                    drawIcon(x,y, 'fa-regular fa-gem', 'treasure');
                     clickTreasureIcon(x, y);
                 }
-
                 
                 if (game.gameFields[y][x]['id'] === undefined && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)) {
                     roomNumber = drawFieldTile(field, x, y);
-                    
                 }
     
                 removeHighlightFields(fields);
                 
     
-                putHeroMitl(field);
-                drawEndIcon(field);
+                drawHeroMitl(x, y);
+                drawIcon(x, y, 'fa-regular fa-circle-xmark', 'end');
                 clickEndIcon(x, y);
                 
                 
@@ -623,8 +610,8 @@ export function game_container() {
                 
 
                 if (room_tiles[game.gameFields[y][x]['id']].search && (game.gameFields[y][x]['s'] === undefined || game.gameFields[y][x]['s'] < 2)) {
-                    drawSearchIcon(field);
-                    clickSerchIcon(x, y);
+                    drawIcon(x, y, 'fa-solid fa-magnifying-glass', 'search');
+                    clickSerchIcon();
                 }
             }
         }, { once: true });
@@ -701,7 +688,8 @@ export function game_container() {
         });
     };
 
-    function putHeroMitl(field){
+    function drawHeroMitl(x, y){
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         const hero_mitl = playingField.querySelector(`.hero_mitl.${player.hero}`);
         const hero_token_catacomb = playingField.querySelector(`.hero_token_catacomb.${player.hero}`);
 
@@ -718,159 +706,32 @@ export function game_container() {
         }
     }
 
-    function drawSearchIcon(field){
-        const searchIcon = playingField.querySelector(`.search-icon`);
-        if (searchIcon) searchIcon.remove()
-        field.insertAdjacentHTML('afterbegin', `
-            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-        `);
-    }
-
-    function drawEndIcon(field){
-        const endIcon = playingField.querySelector(`.end-icon`);
-        if (endIcon) endIcon.remove()
-        field.insertAdjacentHTML('afterbegin', `
-            <i class="fa-regular fa-circle-xmark end-icon"></i>
-        `);
-    }
-
-    function drawTreasureIcon(field){
-        const treasureIcon = playingField.querySelector(`.treasure-icon`);
-        if (treasureIcon) treasureIcon.remove()
-        field.insertAdjacentHTML('afterbegin', `
-            <i class="fa-regular fa-gem treasure-icon"></i>
-        `);
-    }
-
-    function drawDoorIcon(x,y, direction){
-        switch (direction) {
-            case 'left':
-                x = x - 1;
-                break;
-            case 'up':
-                y = y - 1;
-                break;
-            case 'right':
-                x = x + 1;
-                break;
-            case 'down':
-                y = y + 1;
-                break;
+    function drawIcon(x,y, icon, selectorName ,direction, drawPrevious){
+        if (direction){
+            switch (direction) {
+                case 'left':
+                    x = x - 1;
+                    break;
+                case 'up':
+                    y = y - 1;
+                    break;
+                case 'right':
+                    x = x + 1;
+                    break;
+                case 'down':
+                    y = y + 1;
+                    break;
+            }
         }
+
+        if (drawPrevious) {
+            const [x0,y0] = player.positionPrevious
+            if (x===x0 && y===y0) return
+        }
+
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         field.insertAdjacentHTML('afterbegin', `
-            <i class="fa-solid fa-door-closed door-icon"></i>
-        `);
-    }
-
-    function drawGrilleIcon(x,y, direction){
-        switch (direction) {
-            case 'left':
-                x = x - 1;
-                break;
-            case 'up':
-                y = y - 1;
-                break;
-            case 'right':
-                x = x + 1;
-                break;
-            case 'down':
-                y = y + 1;
-                break;
-        }
-        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
-        field.insertAdjacentHTML('afterbegin', `
-            <i class="fa-solid fa-dungeon grille-icon"></i>
-        `);
-    }
-
-    function drawCollapseIcon(x,y, direction){
-        switch (direction) {
-            case 'left':
-                x = x - 1;
-                break;
-            case 'up':
-                y = y - 1;
-                break;
-            case 'right':
-                x = x + 1;
-                break;
-            case 'down':
-                y = y + 1;
-                break;
-        }
-        const [x0,y0] = player.positionPrevious
-        if (x===x0 && y===y0) return
-        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
-        field.insertAdjacentHTML('afterbegin', `
-            <i class="fa-solid fa-road-barrier collapse-icon"></i>
-        `);
-    }
-
-    function drawWebIcon(x,y, direction){
-        switch (direction) {
-            case 'left':
-                x = x - 1;
-                break;
-            case 'up':
-                y = y - 1;
-                break;
-            case 'right':
-                x = x + 1;
-                break;
-            case 'down':
-                y = y + 1;
-                break;
-        }
-        const [x0,y0] = player.positionPrevious
-        if (x===x0 && y===y0) return
-        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
-        field.insertAdjacentHTML('afterbegin', `
-            <i class="fa-solid fa-kip-sign web-icon"></i>
-        `);
-    }
-
-    function drawBridgeIcon(x,y, direction){
-        switch (direction) {
-            case 'left':
-                x = x - 1;
-                break;
-            case 'up':
-                y = y - 1;
-                break;
-            case 'right':
-                x = x + 1;
-                break;
-            case 'down':
-                y = y + 1;
-                break;
-        }
-        const [x0,y0] = player.positionPrevious
-        if (x===x0 && y===y0) return
-        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
-        field.insertAdjacentHTML('afterbegin', `
-            <i class="fa-solid fa-bridge-circle-exclamation bridge-icon"></i>
-        `);
-    }
-
-    function drawAbyssIcon(x,y, direction){
-        switch (direction) {
-            case 'left':
-                x = x - 1;
-                break;
-            case 'up':
-                y = y - 1;
-                break;
-            case 'right':
-                x = x + 1;
-                break;
-            case 'down':
-                y = y + 1;
-                break;
-        }
-        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
-        field.insertAdjacentHTML('afterbegin', `
-            <i class="fa-solid fa-arrow-up-from-ground-water abyss-icon"></i>
+            <i class="${icon} ${selectorName}-icon"></i>
         `);
     }
 
@@ -879,7 +740,8 @@ export function game_container() {
         if (item) item.forEach(element => {element.remove()});
     }
 
-    function clickSerchIcon(x,y){
+    function clickSerchIcon(){
+        const [x,y] = player.position
         const serchIcon = document.querySelector('.search-icon');
         serchIcon.addEventListener('click', () => {
             const card = getRundomElement(game.search_cards, search_cards)
@@ -895,7 +757,7 @@ export function game_container() {
         });
     };
 
-    function clickEndIcon(x,y){
+    function clickEndIcon(){
         const endIcon = document.querySelector('.end-icon');
         endIcon.addEventListener('click', () => {
             console.log('end move')
@@ -903,7 +765,7 @@ export function game_container() {
         });
     };
 
-    function clickTreasureIcon(x,y){
+    function clickTreasureIcon(){
         const treasureIcon = document.querySelector('.treasure-icon');
         treasureIcon.addEventListener('click', () => {
             const card = getRundomElement(game.treasure_cards, treasure_cards)
