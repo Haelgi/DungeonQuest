@@ -549,15 +549,24 @@ export function game_container() {
             if (e.target.closest('.bridge-icon')) return
 
             if (e.target.closest('.available')) {
-                removeSearchIcon();
-                removeTreasureIcon();
-                removeDoorIcon();
-                removeGrilleIcon();
-                removeCollapseIcon()
-                removeWebIcon()
-                removeBridgeIcon()
-                removeAbyssIcon()
-                removeEndIcon()
+                removeIcon('.search-icon');
+                removeIcon('.treasure-icon');
+                removeIcon('.door-icon');
+                removeIcon('.grille-icon');
+                removeIcon('.collapse-icon');
+                removeIcon('.web-icon');
+                removeIcon('.bridge-icon');
+                removeIcon('.abyss-icon');
+                removeIcon('.end-icon');
+                // removeSearchIcon();
+                // removeTreasureIcon();
+                // removeDoorIcon();
+                // removeGrilleIcon();
+                // removeCollapseIcon()
+                // removeWebIcon()
+                // removeBridgeIcon()
+                // removeAbyssIcon()
+                // removeEndIcon()
                 const field = e.target.parentElement;
                 const x = Number(field.getAttribute('data-x'));
                 const y = Number(field.getAttribute('data-y'));
@@ -865,49 +874,9 @@ export function game_container() {
         `);
     }
 
-    function removeSearchIcon(){
-        const searchIcon = playingField.querySelector(`.search-icon`);
-        if (searchIcon) searchIcon.remove()
-    }
-
-    function removeEndIcon(){
-        const endIcon = playingField.querySelector(`.end-icon`);
-        if (endIcon) endIcon.remove()
-    }
-
-    function removeTreasureIcon(){
-        const treasureIcon = playingField.querySelector(`.treasure-icon`);
-        if (treasureIcon) treasureIcon.remove()
-    }
-
-    function removeDoorIcon(){
-        const doorIcon = playingField.querySelectorAll(`.door-icon`);
-        if (doorIcon) doorIcon.forEach(element => {element.remove()});
-    }
-
-    function removeGrilleIcon(){
-        const grilleIcon = playingField.querySelector(`.grille-icon`);
-        if (grilleIcon) grilleIcon.remove()
-    }
-
-    function removeCollapseIcon(){
-        const collapseIcon = playingField.querySelectorAll(`.collapse-icon`);
-        if (collapseIcon) collapseIcon.forEach(element => {element.remove()});
-    }
-
-    function removeWebIcon(){
-        const webIcon = playingField.querySelectorAll(`.web-icon`);
-        if (webIcon) webIcon.forEach(element => {element.remove()});
-    }
-
-    function removeBridgeIcon(){
-        const bridgeIcon = playingField.querySelectorAll(`.bridge-icon`);
-        if (bridgeIcon) bridgeIcon.forEach(element => {element.remove()});
-    }
-
-    function removeAbyssIcon(){
-        const abyssIcon = playingField.querySelectorAll(`.abyss-icon`);
-        if (abyssIcon) abyssIcon.forEach(element => {element.remove()});
+    function removeIcon(selectorName){
+        const item = playingField.querySelectorAll(selectorName);
+        if (item) item.forEach(element => {element.remove()});
     }
 
     function clickSerchIcon(x,y){
@@ -915,7 +884,7 @@ export function game_container() {
         serchIcon.addEventListener('click', () => {
             const card = getRundomElement(game.search_cards, search_cards)
             eventWindow(card)
-            removeSearchIcon()
+            removeIcon('.search-icon');
 
             if (game.gameFields[y][x]['s']===undefined) {
                 game.gameFields[y][x]['s'] = 1
@@ -985,7 +954,7 @@ export function game_container() {
                 function trueFn(){e.target.remove()}
                 function falseFn(){
                     const field = document.querySelector(`[data-y="${player.position[1]}"][data-x="${player.position[0]}"]`)
-                    removeBridgeIcon()
+                    removeIcon('.bridge-icon');
                     diceRollWindow('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.', '', 6, 1, false, trueFn);
                     function trueFn(){
                         heroes[player.hero].health -= diceRollResultGlobal;
