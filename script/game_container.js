@@ -170,6 +170,39 @@ export function game_container() {
             });
     }
 
+    function endEventWindow() {
+        body.insertAdjacentHTML('afterbegin', 
+            `<div class="event-container">
+                    <div class="event-main ">
+                        <div class="title">
+                            <h1>Завершити свій хід?</h1>
+                        </div>
+
+                        <div class='roll-button'>
+                            <button class="btn" id="btn_yes" style="background:green">Так</button>
+                        </div>
+
+                        <div class='roll-button'>
+                            <button class="btn" id="btn_no" style="background:red">Ні</button>
+                        </div>
+                    </div>
+                </div>
+            `);
+
+            const eventContainer = body.querySelector('.event-container');
+            const btnYes = body.querySelector('#btn_yes');
+            const btnNo = body.querySelector('#btn_no');
+
+            btnYes.addEventListener('click', ()=>{
+                eventContainer.remove()
+                console.log('Завершить свой ход')
+            });
+
+            btnNo.addEventListener('click', ()=>{
+                eventContainer.remove()
+            });
+    }
+
     function diceRollWindow(title, valueName, value, diceCount, closeBtn, trueFn, falseFn) {
     
         let diceContainers = '';    
@@ -917,6 +950,7 @@ export function game_container() {
         const endIcon = document.querySelector('.end-icon');
         endIcon.addEventListener('click', () => {
             console.log('end move')
+            endEventWindow()
         });
     };
 
