@@ -526,6 +526,7 @@ export function game_container() {
                 removeWebIcon()
                 removeBridgeIcon()
                 removeAbyssIcon()
+                removeEndIcon()
                 const field = e.target.parentElement;
                 const x = Number(field.getAttribute('data-x'));
                 const y = Number(field.getAttribute('data-y'));
@@ -547,12 +548,15 @@ export function game_container() {
                 
                 if (game.gameFields[y][x]['id'] === undefined && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)) {
                     roomNumber = drawFieldTile(field, x, y);
+                    
                 }
     
                 removeHighlightFields(fields);
                 
     
                 putHeroMitl(field);
+                drawEndIcon(field);
+                clickEndIcon(x, y);
                 
                 
                 player.position = [x, y];
@@ -681,6 +685,14 @@ export function game_container() {
         if (searchIcon) searchIcon.remove()
         field.insertAdjacentHTML('afterbegin', `
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        `);
+    }
+
+    function drawEndIcon(field){
+        const endIcon = playingField.querySelector(`.end-icon`);
+        if (endIcon) endIcon.remove()
+        field.insertAdjacentHTML('afterbegin', `
+            <i class="fa-regular fa-circle-xmark end-icon"></i>
         `);
     }
 
@@ -829,6 +841,11 @@ export function game_container() {
         if (searchIcon) searchIcon.remove()
     }
 
+    function removeEndIcon(){
+        const endIcon = playingField.querySelector(`.end-icon`);
+        if (endIcon) endIcon.remove()
+    }
+
     function removeTreasureIcon(){
         const treasureIcon = playingField.querySelector(`.treasure-icon`);
         if (treasureIcon) treasureIcon.remove()
@@ -893,6 +910,13 @@ export function game_container() {
                 game.gameFields[y][x]['s'] += 1
             }
 
+        });
+    };
+
+    function clickEndIcon(x,y){
+        const endIcon = document.querySelector('.end-icon');
+        endIcon.addEventListener('click', () => {
+            console.log('end move')
         });
     };
 

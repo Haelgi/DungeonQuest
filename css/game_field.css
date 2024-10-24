@@ -39,6 +39,14 @@
     text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.315), 0 0 20px rgba(0, 0, 0, 0.322), 0 0 20px rgba(0, 0, 0, 0.233);
 }
 
+.tile-field i.end-icon{
+    top: 60px;
+    left: -30px;
+    padding: 7px;
+    color: #fa00008e;
+    z-index: 20;
+}
+
 .tile-field i.search-icon,
 .tile-field i.treasure-icon{
     top: -25px;
@@ -61,6 +69,11 @@
 .tile-field i:hover{
     color: #fae100;
     text-shadow: 0px 0px 20px rgb(255, 166, 0), 0 0 20px rgb(255, 166, 0), 0 0 20px white;
+}
+
+.tile-field i.end-icon:hover{
+    color: #fa0000;
+    text-shadow: 0px 0px 20px rgb(255, 0, 0), 0 0 20px rgb(255, 0, 0), 0 0 20px white;
 }
 
 .available-field{
