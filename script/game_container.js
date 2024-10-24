@@ -123,9 +123,7 @@ export function game_container() {
         
         if (!player.position) makeMove(game.startFields);
         if (player.position){
-            makeMove(nextCoordinates);
-            shiftMitle()
-            
+            makeMove(nextCoordinates);            
         }
         requestAnimationFrame(gameLoop);
     };
@@ -697,8 +695,6 @@ export function game_container() {
     function putHeroMitl(field){
         const hero_mitl = playingField.querySelector(`.hero_mitl.${player.hero}`);
         const hero_token_catacomb = playingField.querySelector(`.hero_token_catacomb.${player.hero}`);
-        let top = -10;
-        let left = 10;
 
         if (hero_mitl) {hero_mitl.remove()};
         if (hero_token_catacomb) {hero_token_catacomb.remove()};
@@ -708,7 +704,7 @@ export function game_container() {
             `);
         } else {
             field.insertAdjacentHTML('afterbegin', `
-                <img class="hero_mitl ${player.hero}" src="img/hero_tiles/mitle/${player.hero}.png" alt="" style="top: ${top}px; left: ${left}px;">
+                <img class="hero_mitl ${player.hero}" src="img/hero_tiles/mitle/${player.hero}.png" alt="">
             `); 
         }
     }
@@ -913,22 +909,6 @@ export function game_container() {
         const abyssIcon = playingField.querySelectorAll(`.abyss-icon`);
         if (abyssIcon) abyssIcon.forEach(element => {element.remove()});
     }
-
-
-    function shiftMitle(){
-        const heroMitl = document.querySelector('.hero_mitl');
-        if (!heroMitl) return
-        const currentField = heroMitl.parentElement;
-        currentField.addEventListener('mouseenter', () => {
-            heroMitl.style.top = '-60px';
-            heroMitl.style.left = '-40px';
-        });
-        
-        currentField.addEventListener('mouseleave', () => {
-            heroMitl.style.top = '-10px';
-            heroMitl.style.left = '10px';
-        });
-    };
 
     function clickSerchIcon(x,y){
         const serchIcon = document.querySelector('.search-icon');
