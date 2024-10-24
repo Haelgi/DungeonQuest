@@ -59,9 +59,9 @@ export function game_container() {
     clickBridgeIcon()
 
 
-    // playTrapEvent()
-    // playPitEvent()
-    // playDungeonEvent()
+    playTrapEvent()
+    playPitEvent()
+    playDungeonEvent()
     playTreasuryEvent()
 
     function playDungeonEvent(){
