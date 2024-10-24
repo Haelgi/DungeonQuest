@@ -26,8 +26,8 @@ player.idx = 0;
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
 player.authentication = true;
-player.treasureCardContainer = [[],[],[]];
-// heroes[player.hero].resolve = 10
+
+heroes[player.hero].resolve = 10
 
 export const game = new Game();
 game.gameIdx = 0;
@@ -59,13 +59,20 @@ export function game_container() {
     clickBridgeIcon()
 
 
-    playTrapEvent()
-    playPitEvent()
+    // playTrapEvent()
+    // playPitEvent()
     // playDungeonEvent()
+    playTreasuryEvent()
 
     function playDungeonEvent(){
         document.addEventListener('dungeon', () => {
         const card = getRundomElement(game.dungeon_cards, dungeon_cards)   
+        eventWindow(card);
+    });}
+
+    function playTreasuryEvent(){
+        document.addEventListener('treasury', () => {
+        const card = getRundomElement(game.dragon_cards, dragon_cards)   
         eventWindow(card);
     });}
 
@@ -322,8 +329,8 @@ export function game_container() {
     
             document.getElementById('btn_close').addEventListener('click', () => {
                 eventWindows.forEach((e) => e.remove());
-                if (result===true) trueFn()
-                if (result===false) falseFn()
+                if (result===true && trueFn) trueFn()
+                if (result===false && falseFn) falseFn()
             });
         }
     }
@@ -511,23 +518,39 @@ export function game_container() {
             if (e.target.closest('.bridge-icon')) return
 
             if (e.target.closest('.available')) {
-                const field = e.target.parentElement;
-                const x = Number(field.getAttribute('data-x'));
-                const y = Number(field.getAttribute('data-y'));
-                let roomNumber;
-    
-                if (game.gameFields[y][x]['id'] === undefined && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)) {
-                    roomNumber = drawFieldTile(field, x, y);
-                }
-    
-                removeHighlightFields(fields);
                 removeSearchIcon();
+                removeTreasureIcon();
                 removeDoorIcon();
                 removeGrilleIcon();
                 removeCollapseIcon()
                 removeWebIcon()
                 removeBridgeIcon()
                 removeAbyssIcon()
+                const field = e.target.parentElement;
+                const x = Number(field.getAttribute('data-x'));
+                const y = Number(field.getAttribute('data-y'));
+                let roomNumber;
+
+                console.log(field.classList.contains(`treasury`))
+                if (field.classList.contains(`treasury`) && !player.positionTreasury) {
+                    console.log('first come to Tresury')
+                    player.positionTreasury = true;
+                    createNewEvent('treasury');
+                };
+
+                if (field.classList.contains(`treasury`) && player.positionTreasury) {
+                    console.log('second come to Tresury')
+                    drawTreasureIcon(field);
+                    clickTreasureIcon(x, y);
+                }
+
+                
+                if (game.gameFields[y][x]['id'] === undefined && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)) {
+                    roomNumber = drawFieldTile(field, x, y);
+                }
+    
+                removeHighlightFields(fields);
+                
     
                 putHeroMitl(field);
                 
@@ -544,12 +567,7 @@ export function game_container() {
                     function trueFn() {
                         nextCoordinates = newCoordinate();
                         
-                        if (nextCoordinates.length === 0) {
-                            console.log('Нет доступных ходов, переброс кубика...');
-                            diceRollWindow('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', 'Удача', 6, 1, false, trueFn);
-                        } else {
-                            console.log('nextCoordinates: ', nextCoordinates);
-                        }
+                        if (nextCoordinates.length === 0) diceRollWindow('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', 'Удача', 6, 1, false, trueFn);
                     }
                 }
                 
@@ -558,9 +576,8 @@ export function game_container() {
                 if (room_tiles[game.gameFields[y][x]['id']].dungeon) createNewEvent('dungeon');
                 if (room_tiles[game.gameFields[y][x]['id']].trap) createNewEvent('trap');
                 if (room_tiles[game.gameFields[y][x]['id']].special === 'pit') createNewEvent('pit');
+                
 
-                removeSearchIcon();
-    
                 if (room_tiles[game.gameFields[y][x]['id']].search && (game.gameFields[y][x]['s'] === undefined || game.gameFields[y][x]['s'] < 2)) {
                     drawSearchIcon(field);
                     clickSerchIcon(x, y);
@@ -664,6 +681,14 @@ export function game_container() {
         if (searchIcon) searchIcon.remove()
         field.insertAdjacentHTML('afterbegin', `
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        `);
+    }
+
+    function drawTreasureIcon(field){
+        const treasureIcon = playingField.querySelector(`.treasure-icon`);
+        if (treasureIcon) treasureIcon.remove()
+        field.insertAdjacentHTML('afterbegin', `
+            <i class="fa-regular fa-gem treasure-icon"></i>
         `);
     }
 
@@ -804,6 +829,11 @@ export function game_container() {
         if (searchIcon) searchIcon.remove()
     }
 
+    function removeTreasureIcon(){
+        const treasureIcon = playingField.querySelector(`.treasure-icon`);
+        if (treasureIcon) treasureIcon.remove()
+    }
+
     function removeDoorIcon(){
         const doorIcon = playingField.querySelectorAll(`.door-icon`);
         if (doorIcon) doorIcon.forEach(element => {element.remove()});
@@ -863,6 +893,14 @@ export function game_container() {
                 game.gameFields[y][x]['s'] += 1
             }
 
+        });
+    };
+
+    function clickTreasureIcon(x,y){
+        const treasureIcon = document.querySelector('.treasure-icon');
+        treasureIcon.addEventListener('click', () => {
+            const card = getRundomElement(game.treasure_cards, treasure_cards)
+            eventWindow(card)
         });
     };
 
