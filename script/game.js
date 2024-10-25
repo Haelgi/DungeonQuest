@@ -1,11 +1,33 @@
-export class Game {
-    
-    static gameIdx = 0;
-   
+import  {loadTemplate}  from './function/loadTemplate.js';
+import  {addScrolCardsEffect}  from './function/addScrolCardsEffect.js';
+import  {getRundomElement, rundom}  from './function/getRundomElement.js';
+import  {heroes}  from './cards/heroes.js';
+import  {room_tiles}  from './cards/room_tiles.js';
+import  {dungeon_cards}  from './cards/dungeon_cards.js';
+import  {catacomb_cards}  from './cards/catacomb_cards.js';
+import  {deadman_cards}  from './cards/deadman_cards.js';
+import  {trap_cards}  from './cards/trap_cards.js';
+import  {сrypt_cards}  from './cards/сrypt_cards.js';
+import  {door_cards}  from './cards/door_cards.js';
+import  {search_cards}  from './cards/search_cards.js';
+import  {treasure_cards}  from './cards/treasure_cards.js';
+import  {monster_cards}  from './cards/monster_cards.js';
+import  {dragon_cards}  from './cards/dragon_cards.js';
+
+
+class Game {
+
     constructor() {
-        this.gameIdx = Game.gameIdx++;
+        this.gameIdx;
+        this.currentPlayerIndex = 0;
         this.playerList = [];
         this.authentication = false;
+
+        this.body;
+        this.playingField;
+        
+        this.diceRollResultGlobal = false;
+        this.nextCoordinates;
 
         this.day = 0; 
         this.gameFields; 
@@ -22,8 +44,14 @@ export class Game {
         this.treasure_cards; 
         this.monster_cards 
         this.dragon_cards;
+        
+        this.fillGamePacks();
 
+    }
+
+    fillGamePacks(){
         this.createGameFields() 
+
         this.refreshRoomTiles()
         this.refreshDungeonCards()
         this.refreshCatacombCards()
@@ -35,7 +63,6 @@ export class Game {
         this.refreshTreasureCards()
         this.refreshMonsterCards()
         this.refreshDragonCards()
-
     }
 
     createGameFields(){this.gameFields=Array(12).fill().map(() => Array(15).fill().map(() => ({})))}
@@ -52,13 +79,797 @@ export class Game {
     refreshMonsterCards(){this.monster_cards=Array.from({ length: 20 }, (_, index) => index + 1)}
     refreshDragonCards(){this.dragon_cards=Array.from({ length: 8 }, (_, index) => index + 1)}
 
+    startPosition(){
+        this.body = document.querySelector(`body`);
+        this.playingField = document.querySelector(`.playing-field`);            
+        this.drawAbilitieCard(this.getCurrentPlayer().hero);
+        this.drawEffectCard(this.getCurrentPlayer());
+        addScrolCardsEffect('.abilitie-card-container');
+        addScrolCardsEffect('.effect-card-container');
+        addScrolCardsEffect('.treasure-card-container');
+    
+        this.clickDoorIcon()
+        this.clickGrilleIcon()
+        this.clickCollapseIcon()
+        this.clickAbyssIcon()
+        this.clickWebIcon()
+        this.clickBridgeIcon()
+    
+    
+        this.playTrapEvent()
+        this.playPitEvent()
+        this.playDungeonEvent()
+        this.playTreasuryEvent()
+    };
+
+    getCurrentPlayer(){return this.playerList[this.currentPlayerIndex]}
+
+    playTrapEvent(){
+        document.addEventListener('trap', () => {
+        const card = getRundomElement(this.trap_cards, trap_cards)   
+        this.eventWindow(card);
+    });}
+
+    playPitEvent(){
+        document.addEventListener('pit', () => {
+            const falseFn =()=>{
+                const field = document.querySelector(`[data-y="${this.getCurrentPlayer().position[1]}"][data-x="${this.getCurrentPlayer().position[0]}"]`)
+                heroes[this.getCurrentPlayer().hero].health -=6
+                //TODO вернуть вход в катакомбы
+                // this.getCurrentPlayer().catacomb = true
+                // putHeroMitl(field)
+            } 
+            this.diceRollWindow('Зайшовши в кімнату у вас під ногами виявилася дуже крихка підлога, щоб не провалитися в катакомби перевірте свою', 'Удача', heroes[this.getCurrentPlayer().hero].luck, 2, false, false, falseFn)
+    });}
+
+    playDungeonEvent(){
+        document.addEventListener('dungeon', () => {
+        const card = getRundomElement(this.dungeon_cards, dungeon_cards)   
+        this.eventWindow(card);
+    });}
+    
+    playTreasuryEvent(){
+        document.addEventListener('treasury', () => {
+        const card = getRundomElement(this.dragon_cards, dragon_cards)   
+        this.eventWindow(card);
+    });}
+        
+    drawFieldTileTests(roomNumber, rotate, x, y){
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)  
+        
+        field.classList.add('shadow')
+        field.insertAdjacentHTML('afterbegin', `
+            <img class="tile-field tile-map" src="img/room_tiles/room_${roomNumber}.jpg" alt="" style="rotate: ${rotate}deg;">`
+        );
+            
+        this.gameFields[y][x]['id'] = roomNumber-1;
+        this.gameFields[y][x]['r'] = rotate;
+    };
+
+    
+        // start game //////////////////////////////////////////////////////
+    
+    eventWindow(card) {
+        let cards
+        let eventSection = '';
+        if (Array.isArray(card)) {
+            cards = card;
+        } else {
+            cards = [card];
+        }
+        cards.forEach(card => {
+            eventSection += `<div class="card" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>`
+        });
+
+        this.body.insertAdjacentHTML('afterbegin', 
+            `<div class="event-container">
+                    <div class="event-main ">
+                        <div class="title">
+                            <h1>${card.title}</h1>
+                        </div>
+
+                        <div class="event-section">
+                            ${eventSection}
+                        </div>
+
+                        <button class="btn" id="btn_event">${card.btnName}</button>
+                    </div>
+                </div>
+            `);
+
+            const eventContainer = this.body.querySelector('.event-container');
+            const btn = this.body.querySelector('#btn_event');
+
+            btn.addEventListener('click', ()=>{
+                eventContainer.remove()
+                if (card.effect() === undefined) return
+                this.eventWindow(card.effect())
+            });
+    }
+    
+    endEventWindow() {
+        this.body.insertAdjacentHTML('afterbegin', 
+            `<div class="event-container">
+                    <div class="event-main ">
+                        <div class="title">
+                            <h1>Завершити свій хід?</h1>
+                        </div>
+
+                        <div class='roll-button'>
+                            <button class="btn" id="btn_yes" style="background:green">Так</button>
+                        </div>
+
+                        <div class='roll-button'>
+                            <button class="btn" id="btn_no" style="background:red">Ні</button>
+                        </div>
+                    </div>
+                </div>
+            `);
+
+            const eventContainer = this.body.querySelector('.event-container');
+            const btnYes = this.body.querySelector('#btn_yes');
+            const btnNo = this.body.querySelector('#btn_no');
+
+            btnYes.addEventListener('click', ()=>{
+                eventContainer.remove()
+                console.log('Завершить свой ход')
+            });
+
+            btnNo.addEventListener('click', ()=>{
+                eventContainer.remove()
+            });
+    }
+    
+    diceRollWindow(title, valueName, value, diceCount, closeBtn, trueFn, falseFn) {
+    
+        let diceContainers = '';    
+        let count = 1;
+        let diceResult = 0;
+        let resolveInner = '';
+        let treasureInner = '';
+        let closeBtnInner = '';
+        const resolvePlayer = heroes[this.getCurrentPlayer().hero].resolve;
+        const treasure = this.getCurrentPlayer().treasureCardContainer.length;
+        if ( treasure > 0 && valueName === 'Спритність') treasureInner = `<p> Кількість Скарбів: -${treasure}</p>`;
+        if ( resolvePlayer > 0) resolveInner = `<p> Ваша Рішучість: +${resolvePlayer}</p>`;
+        if (closeBtn) closeBtnInner = `<div class='roll-button'><button id='close'>Закрити</button></div>`;
+    
+        while (count <= diceCount) {
+            diceContainers +=
+                `<div class="dice-container">
+                    <div id='dice${count}' class="dice dice-${count}">
+                    <div class='side one'>
+                        <div class="dot one-1"></div>
+                    </div>
+                    <div class='side two'>
+                        <div class="dot two-1"></div>
+                        <div class="dot two-2"></div>
+                    </div>
+                    <div class='side three'>
+                        <div class="dot three-1"></div>
+                        <div class="dot three-2"></div>
+                        <div class="dot three-3"></div>
+                    </div>
+                    <div class='side four'>
+                        <div class="dot four-1"></div>
+                        <div class="dot four-2"></div>
+                        <div class="dot four-3"></div>
+                        <div class="dot four-4"></div>
+                    </div>
+                    <div class='side five'>
+                        <div class="dot five-1"></div>
+                        <div class="dot five-2"></div>
+                        <div class="dot five-3"></div>
+                        <div class="dot five-4"></div>
+                        <div class="dot five-5"></div>
+                    </div>
+                    <div class='side six'>
+                        <div class="dot six-1"></div>
+                        <div class="dot six-2"></div>
+                        <div class="dot six-3"></div>
+                        <div class="dot six-4"></div>
+                        <div class="dot six-5"></div>
+                        <div class="dot six-6"></div>
+                    </div>
+                    </div>
+                </div>`;
+            count += 1;
+        }
+    
+        this.body.insertAdjacentHTML('afterbegin', 
+            `<div class="event-container">
+                <div class="event-main">
+                    <div class="title">
+                        <h1>${title} ${valueName}</h1>
+                    </div>
+                    <div class="dice-section">${diceContainers}</div>
+                    <div class='roll-button'>
+                        <button id='roll'>Кинути Кубики</button>
+                    </div>
+                    ${closeBtnInner}
+                    <p> Ваша ${valueName}: ${value} </p>
+                    ${resolveInner}
+                    ${treasureInner}
+                </div>
+            </div>`
+        );
+    
+        const diceElements = document.querySelectorAll('.dice');
+        const btnRoll = document.getElementById('roll');
+        const btnClose = document.getElementById('close');
+    
+        btnRoll.addEventListener('click', () => {
+            rollAllDice();
+            setTimeout(() => {
+                diceResultWindow();
+            }, 1700);
+        });
+
+        if (btnClose) {
+            btnClose.addEventListener('click', () => {
+                document.querySelector('.event-container').remove()
+            });
+        }
+
+        const roll = (dice) => {
+            const value = Math.floor((Math.random() * 6) + 1);
+            diceResult += value;
+        
+            for (let i = 1; i <= 6; i++) {
+                dice.classList.remove('show-' + i);
+                if (value === i) {
+                    dice.classList.add('show-' + i);
+                }
+            }
+        
+            btnRoll.remove();
+        };
+
+    
+        const rollAllDice =()=> {
+            diceResult = 0;
+            diceElements.forEach((dice) => {
+                roll(dice); 
+            });
+        }
+    
+        
+    
+        const diceResultWindow =()=> {
+            let title;
+            let addBtn = '';
+            let result;
+            if ( treasure > 0 && valueName === 'Спритність') diceResult + treasure
+    
+            if (diceResult <= (value)) {
+                title = '<h1 style="color:green;">Успіх!</h1>';
+                result = true
+            }
+    
+            if (diceResult > value && diceResult <= (value + heroes[this.getCurrentPlayer().hero].resolve )) {
+                title = '<h1 style="color:red;">Провал....?</h1>';
+                addBtn = `<button class="btn" id="btn_add_resolve">Додати Рішучості</button>`;
+            }
+    
+            if (diceResult > (value + heroes[this.getCurrentPlayer().hero].resolve)) {
+                title = '<h1 style="color:red;">Провал!</h1>';
+                heroes[this.getCurrentPlayer().hero].resolve +=1;
+                result = false
+            }
+    
+            this.body.insertAdjacentHTML('afterbegin', 
+                `<div class="event-container" style="z-index: 110;">
+                    <div class="event-main ">
+                        <div class="title"> ${title} </div>
+                        ${addBtn}
+                        <button class="btn" id="btn_close">Закрити</button>
+                    </div>
+                </div>`
+            );
+    
+            const eventWindows = document.querySelectorAll('.event-container');
+    
+            document.getElementById('btn_add_resolve')?.addEventListener('click', () => {
+                const diff = diceResult - value;
+                if (heroes[this.getCurrentPlayer().hero].resolve >= diff) {
+                    heroes[this.getCurrentPlayer().hero].resolve -= diff;
+                    eventWindows.forEach((e) => e.remove());
+                    if (trueFn) trueFn();  
+                }
+            });
+    
+            document.getElementById('btn_close').addEventListener('click', () => {
+                eventWindows.forEach((e) => e.remove());
+                if (result===true && trueFn) trueFn()
+                if (result===false && falseFn) falseFn()
+            });
+        }
+    }
+    
+    isPlayerInTower() {
+        if (!this.getCurrentPlayer().position) return false
+        const [x, y] = this.getCurrentPlayer().position;
+        return this.startFields.some(coord => coord[0] === x && coord[1] === y);
+    }
+
+    isPlayerInTreasury() {
+        if (!this.getCurrentPlayer().position) return false
+        const [x, y] = this.getCurrentPlayer().position;
+        return this.treasuryFields.some(coord => coord[0] === x && coord[1] === y);
+    }
+
+    newCoordinate() {
+        const [x, y] = this.getCurrentPlayer().position;
+        const coordinates = [];
+
+        if (x > 0 && this.checkOtherPlayer([x - 1, y]) && this.checkPermitWayNeighbour([x - 1, y], 'right', false)  && this.checkPermitWay([x, y],'left', true)) coordinates.push([x - 1, y]); 
+        if (y > 0 && this.checkOtherPlayer([x, y - 1]) && this.checkPermitWayNeighbour([x, y - 1], 'down', false)  && this.checkPermitWay([x, y], 'up', true)) coordinates.push([x, y - 1]);   
+        if (x < 14 && this.checkOtherPlayer([x + 1, y]) && this.checkPermitWayNeighbour([x + 1, y], 'left', false)  && this.checkPermitWay([x, y], 'right', true)) coordinates.push([x + 1, y]);  
+        if (y < 11  && this.checkOtherPlayer([x, y + 1]) && this.checkPermitWayNeighbour([x, y + 1], 'up', false)  && this.checkPermitWay([x, y], 'down', true))  coordinates.push([x, y + 1]);  
+        if (this.isPlayerInTower()) coordinates.push(...this.startFields)
+        return coordinates;
+    }
+
+    checkOtherPlayer(coordinat){
+        const [x, y] = coordinat;
+        if(!this.gameFields[y][x]['[id]']) return true
+    }
+
+    checkPermitWayNeighbour(coordinat, direction , checkBarrier) {
+        const [x, y] = coordinat;
+        const tileIdx = this.gameFields[y][x]['id'];
+        const room = room_tiles[tileIdx];
+    
+        if (!room) return true;
+
+        let permission = this.checkPermitWay(coordinat, direction , checkBarrier);
+    
+        if (permission === 'abyss' && !(this.getCurrentPlayer().position[0] === x && this.getCurrentPlayer().position[1] === y)) {
+
+            while (permission === 'abyss') {
+                switch (this.gameFields[y][x]['r']) {
+                    case '0':
+                        this.gameFields[y][x]['r'] = '180';
+                        break;
+                    case '90':
+                        this.gameFields[y][x]['r'] = '270';
+                        break;
+                    case '270':
+                        this.gameFields[y][x]['r'] = '90';
+                        break;
+                    case '180':
+                        this.gameFields[y][x]['r'] = '0';
+                        break;
+                }
+                permission = this.checkPermitWay(coordinat, direction, checkBarrier);
+            }
+        }
+    
+        return permission;
+    }
+        
+    checkPermitWay(coordinat, direction, checkBarrier){
+        
+        const [x, y] = coordinat;
+        const tileIdx = this.gameFields[y][x]['id'];
+        const room = room_tiles[tileIdx];
+
+        if (!room) return true
+
+        const directionMapping = {
+            '0': {
+                'left' : 'left',
+                'up': 'up',
+                'right': 'right',
+                'down' : 'down',
+            },
+            '90': {
+                'left' : 'down',
+                'up': 'left',
+                'right': 'up',
+                'down' : 'right',
+            },
+            '180': {
+                'left' : 'right',
+                'up' : 'down',
+                'right' : 'left',
+                'down' : 'up',
+            },
+            '270': {
+                'left' : 'up',
+                'up' : 'right',
+                'right' : 'down',
+                'down': 'left',
+            }
+        };
+
+        const newDirection = directionMapping[this.gameFields[y][x]['r']][direction];
+        const value = room[newDirection];
+        
+        if (value && room.special === 'collapse' && checkBarrier=== true) this.drawIcon(x,y, 'fa-solid fa-road-barrier', room.special, direction, true);
+        if (value && room.special === 'web' && checkBarrier=== true) this.drawIcon(x,y, 'fa-solid fa-kip-sign', room.special, direction, true);
+        if (value && room.special === 'dark' && checkBarrier=== true) return value.includes(this.diceRollResultGlobal);
+        if (value && room.special === 'bridge' && checkBarrier=== true) this.drawIcon(x,y, 'fa-solid fa-bridge-circle-exclamation', room.special, direction, true);
+
+        if (typeof value === 'string' && checkBarrier=== true) {
+            if (value === 'door') this.drawIcon(x,y, 'fa-solid fa-door-closed', 'door', direction);
+            if (value === 'grille') this.drawIcon(x,y, 'fa-solid fa-dungeon', 'grille', direction);
+            if (value === 'abyss') this.drawIcon(x,y, 'fa-solid fa-arrow-up-from-ground-water', 'abyss', direction);
+
+        };
+
+        return value
+    }
+    
+    getElementsByData(array){
+        const fields = [];
+        array.forEach( _ => {
+            const field = document.querySelector(`[data-y="${_[1]}"][data-x="${_[0]}"]`);
+            fields.push(field)
+        });
+        return fields
+    }
+
+    sunTokenPosition(day){
+        if (day > 38) return;
+        const token_sun = document.querySelector(`.token_sun`);
+        if (token_sun) token_sun.remove();
+        const dayContainer = document.querySelector(`[day="${day}"]`);
+        dayContainer.innerHTML=`
+            <div class="token_sun"></div>
+        `;
+    };
+
+    addCharacterTablet(heroName){
+        const characterTablet = document.querySelector(`.character-tablet-container`);
+        characterTablet.innerHTML=`
+            <div class="hero-tablet shadow" style="background-image: url('img/hero_tiles/tablet/${heroName}.jpg')">
+                <div class="hero-value resolve-value">${heroes[heroName].resolve}</div>
+                <div class="hero-value strength-value">${heroes[heroName].strength}</div>
+                <div class="hero-value dexterity-value">${heroes[heroName].dexterity}</div>
+                <div class="hero-value defense-value">${heroes[heroName].defense}</div>
+                <div class="hero-value luck-value">${heroes[heroName].luck}</div>
+                <div class="hero-value health-value">${heroes[heroName].health}</div>             
+            </div>
+        `;
+    };
+
+    drawAbilitieCard(heroName){
+        const abilitieCardContainer = document.querySelector(`.abilitie-card-container`);
+        heroes[heroName].abilities.forEach((item, idx) => {
+            abilitieCardContainer.innerHTML+=`
+                <div id="${idx}" class="card-deck " style="background-image: url('img/abilitie_cards/abilitie_${heroName}_${item.id}.jpg')"></div>        
+            `
+        });
+    };
+
+    drawEffectCard(player){
+        const abilitieCardContainer = document.querySelector(`.effect-card-container`);
+        this.getCurrentPlayer().effectCardContainer.forEach((card) => {
+            abilitieCardContainer.innerHTML+=`
+                <div id="${card.id}" class="card-deck " style="background-image: url('img/${card.getPack}_cards/${card.getPack}_${card.id}.jpg')"></div>        
+            `
+        });
+    };
+
+    makeMove() {
+        let array;
+
+        if (!this.getCurrentPlayer().position) array =this.startFields;
+        if (this.getCurrentPlayer().position) array =this.nextCoordinates;
+
+        const fields = this.getElementsByData(array);
+    
+        if (!document.querySelector(`.available-field`)) {
+            this.highlightFields(fields);
+        }
+    
+        this.playingField.addEventListener('click', (e) => {
+            this.getCurrentPlayer().positionPrevious = this.getCurrentPlayer().position
+
+            if (e.target.closest('.grille-icon')) return
+            if (e.target.closest('.collapse-icon')) return
+            if (e.target.closest('.web-icon')) return
+            if (e.target.closest('.abyss-icon')) return
+            if (e.target.closest('.bridge-icon')) return
+
+            if (e.target.closest('.available')) {
+                this.removeIcon('.search-icon');
+                this.removeIcon('.treasure-icon');
+                this.removeIcon('.door-icon');
+                this.removeIcon('.grille-icon');
+                this.removeIcon('.collapse-icon');
+                this.removeIcon('.web-icon');
+                this.removeIcon('.bridge-icon');
+                this.removeIcon('.abyss-icon');
+                this.removeIcon('.end-icon');
+
+                const field = e.target.parentElement;
+                const x = Number(field.getAttribute('data-x'));
+                const y = Number(field.getAttribute('data-y'));
+                let roomNumber;
+
+                if (field.classList.contains(`treasury`) && !this.getCurrentPlayer().positionTreasury) {
+                    this.getCurrentPlayer().positionTreasury = true;
+                    this.createNewEvent('treasury');
+                };
+
+                if (field.classList.contains(`treasury`) && this.getCurrentPlayer().positionTreasury) {
+                    this.drawIcon(x,y, 'fa-regular fa-gem', 'treasure');
+                    this.clickTreasureIcon(x, y);
+                }
+                
+                if (this.gameFields[y][x]['id'] === undefined && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)) {
+                    roomNumber = this.drawFieldTile(field, x, y);
+                }
+    
+                this.removeHighlightFields(fields);
+                
+    
+                this.drawHeroMitl(x, y);
+                this.drawIcon(x, y, 'fa-regular fa-circle-xmark', 'end');
+                this.clickEndIcon(x, y);
+                
+                
+                this.getCurrentPlayer().position = [x, y];
+                this.nextCoordinates = this.newCoordinate();
+                if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate') {
+                    this.rotateRoomTile()
+                    this.nextCoordinates = this.newCoordinate();
+                };
+                //TODO тут не работает бросок на выход из темной комнаты
+                if (room_tiles[this.gameFields[y][x]['id']]?.special === 'dark') {
+                    const trueFn =()=> {
+                        this.nextCoordinates = this.newCoordinate();
+                        
+                        if (this.nextCoordinates.length === 0) this.diceRollWindow('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', 'Удача', 6, 1, false, trueFn);
+                    }
+                    this.diceRollWindow('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', 'Удача', 6, 1, false, trueFn);
+                
+                }
+                
+    
+                if (!room_tiles[this.gameFields[y][x]['id']]) return;
+                if (room_tiles[this.gameFields[y][x]['id']].dungeon) this.createNewEvent('dungeon');
+                if (room_tiles[this.gameFields[y][x]['id']].trap) this.createNewEvent('trap');
+                if (room_tiles[this.gameFields[y][x]['id']].special === 'pit') this.createNewEvent('pit');
+                
+
+                if (room_tiles[this.gameFields[y][x]['id']].search && (this.gameFields[y][x]['s'] === undefined || this.gameFields[y][x]['s'] < 2)) {
+                    this.drawIcon(x, y, 'fa-solid fa-magnifying-glass', 'search');
+                    this.clickSerchIcon();
+                }
+            }
+        }, { once: true });
+    }
+
+    rotateRoomTile() {
+        const [x, y] = this.getCurrentPlayer().position;
+        const rotateOld = this.gameFields[y][x]['r'];
+        const parentElement = document.querySelector(`[data-y="${y}"][data-x="${x}"]`);
+        const childTileField = parentElement.querySelector('.tile-field');
+
+        let rotateNew;
+
+        switch (rotateOld) {
+            case '0':
+                rotateNew = '180';
+                break;
+            case '90':
+                rotateNew = '270';
+                break;
+            case '270':
+                rotateNew = '90';
+                break;
+            case '180':
+                rotateNew = '0';
+                break;
+        }
+
+        this.gameFields[y][x]['r'] = rotateNew;
+    
+
+    
+        if (childTileField) {
+            childTileField.style.rotate = `${rotateNew}deg`;
+        }
+    }
+    
+    drawFieldTile(field, x, y){
+        const roomNumber = getRundomElement(this.room_tiles, room_tiles).number;
+        let rotate;
+        
+        if (x > this.getCurrentPlayer().position[0]) {rotate = '90'}  
+        if (x < this.getCurrentPlayer().position[0]) {rotate = '270'}  
+        if (y > this.getCurrentPlayer().position[1]) {rotate = '180'}  
+        if (y < this.getCurrentPlayer().position[1]) {rotate = '0'}  
+        
+        field.classList.add('shadow')
+        field.insertAdjacentHTML('afterbegin', `
+            <img class="tile-field tile-map" src="img/room_tiles/room_${roomNumber}.jpg" alt="" style="rotate: ${rotate}deg;">`);
+            
+        this.gameFields[y][x]['id'] = roomNumber-1;
+        this.gameFields[y][x]['r'] = String(rotate);
+        this.gameFields[y][x]['p'] = this.getCurrentPlayer().name;
+
+        delete this.gameFields[this.getCurrentPlayer().position[1]][this.getCurrentPlayer().position[0]]['p'];
+        return roomNumber
+    };
+
+    highlightFields(fields){
+        fields.forEach(field => {
+            field.classList.add('available')
+            field.insertAdjacentHTML('afterbegin', `
+                <div class="available-field"></div>
+            `);
+        });
+    };
+
+    removeHighlightFields(fields){
+        fields.forEach(field => {
+            field.classList.remove('available')
+            const highlight = field.querySelector(`.available-field`);
+            highlight.remove();
+        });
+    };
+
+    drawHeroMitl(x, y){
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+        const hero_mitl = this.playingField.querySelector(`.hero_mitl.${this.getCurrentPlayer().hero}`);
+        const hero_token_catacomb = this.playingField.querySelector(`.hero_token_catacomb.${this.getCurrentPlayer().hero}`);
+
+        if (hero_mitl) {hero_mitl.remove()};
+        if (hero_token_catacomb) {hero_token_catacomb.remove()};
+        if (this.getCurrentPlayer().catacomb) {
+            field.insertAdjacentHTML('afterbegin', `
+                <img class="hero_token_catacomb ${this.getCurrentPlayer().hero}" src="img/hero_tiles/token/${this.getCurrentPlayer().hero}.png" alt="" style="rotate: 0deg;">
+            `);
+        } else {
+            field.insertAdjacentHTML('afterbegin', `
+                <img class="hero_mitl ${this.getCurrentPlayer().hero}" src="img/hero_tiles/mitle/${this.getCurrentPlayer().hero}.png" alt="">
+            `); 
+        }
+    }
+
+    drawIcon(x,y, icon, selectorName ,direction, drawPrevious){
+        if (direction){
+            switch (direction) {
+                case 'left':
+                    x = x - 1;
+                    break;
+                case 'up':
+                    y = y - 1;
+                    break;
+                case 'right':
+                    x = x + 1;
+                    break;
+                case 'down':
+                    y = y + 1;
+                    break;
+            }
+        }
+
+        if (drawPrevious) {
+            const [x0,y0] = this.getCurrentPlayer().positionPrevious
+            if (x===x0 && y===y0) return
+        }
+
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+        field.insertAdjacentHTML('afterbegin', `
+            <i class="${icon} ${selectorName}-icon"></i>
+        `);
+    }
+
+    removeIcon(selectorName){
+        const item = this.playingField.querySelectorAll(selectorName);
+        if (item) item.forEach(element => {element.remove()});
+    }
+
+    clickSerchIcon(){
+        const [x,y] = this.getCurrentPlayer().position
+        const serchIcon = document.querySelector('.search-icon');
+        serchIcon.addEventListener('click', () => {
+            const card = getRundomElement(this.search_cards, search_cards)
+            this.eventWindow(card)
+            this.removeIcon('.search-icon');
+
+            if (this.gameFields[y][x]['s']===undefined) {
+                this.gameFields[y][x]['s'] = 1
+            } else {
+                this.gameFields[y][x]['s'] += 1
+            }
+
+        });
+    };
+
+    clickEndIcon(){
+        const endIcon = document.querySelector('.end-icon');
+        endIcon.addEventListener('click', () => {
+            console.log('end move')
+            this.endEventWindow()
+        });
+    };
+
+    clickTreasureIcon(){
+        const treasureIcon = document.querySelector('.treasure-icon');
+        treasureIcon.addEventListener('click', () => {
+            const card = getRundomElement(this.treasure_cards, treasure_cards)
+            this.eventWindow(card)
+        });
+    };
+
+    clickDoorIcon(){
+        this.playingField.addEventListener('click', (e) => {
+            if(e.target.closest('.door-icon')) {
+                e.target.remove()
+                const card = getRundomElement(this.door_cards, door_cards)
+                this.eventWindow(card)
+            }
+        });
+    };
+
+    clickGrilleIcon() {
+        this.playingField.addEventListener('click', (e) => {
+            if (e.target.closest('.grille-icon')) {
+                const trueFn=()=>{e.target.remove()} 
+                this.diceRollWindow('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірка на', 'Силa', heroes[this.getCurrentPlayer().hero].strength, 2, true, trueFn)
+            }
+        });
+    }
+
+    clickCollapseIcon() {
+        this.playingField.addEventListener('click', (e) => {
+            if (e.target.closest('.collapse-icon')) {
+                const trueFn=()=>{e.target.remove()}
+                this.diceRollWindow('Перед вами кімната заповнена уламками стелі що впала, щоб пройти на інший бік кімнати перевірте свою', 'Спритність', heroes[this.getCurrentPlayer().hero].dexterity, 2, true, trueFn)   
+            }
+        });
+    }
+
+    clickWebIcon() {
+        this.playingField.addEventListener('click', (e) => {
+            if (e.target.closest('.web-icon')) {
+                const trueFn=()=>{e.target.remove()}
+                this.diceRollWindow('Перед вами кімната заповнена павутинням, щоб пройти на інший бік кімнати перевірте свою', 'Силa', heroes[this.getCurrentPlayer().hero].strength, 2, true, trueFn)   
+            }
+        });
+    }
+
+    clickBridgeIcon() {
+        this.playingField.addEventListener('click', (e) => {
+            if (e.target.closest('.bridge-icon')) {
+                const trueFn=()=>{e.target.remove()}
+                const falseFn=()=>{
+                    const field = document.querySelector(`[data-y="${this.getCurrentPlayer().position[1]}"][data-x="${this.getCurrentPlayer().position[0]}"]`)
+                    this.removeIcon('.bridge-icon');
+                    const trueFn=()=>{
+                        heroes[this.getCurrentPlayer().hero].health -= this.diceRollResultGlobal;
+                    }
+                    
+                    //TODO вернуть вход в катакомбы
+                    // this.getCurrentPlayer().catacomb = true
+                    // putHeroMitl(field)
+                    this.diceRollWindow('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.', '', 6, 1, false, trueFn);
+                } 
+                this.diceRollWindow('Перед вами широка прірва, через яку прокинуто хитку дошку, щоб не провалитися в катакомби перевірте свою', 'Спритність', heroes[this.getCurrentPlayer().hero].dexterity, 2, true, trueFn, falseFn)   
+            }
+        });
+    }
+
+    clickAbyssIcon() {
+        this.playingField.addEventListener('click', (e) => {
+            if (e.target.closest('.abyss-icon')) {
+                const trueFn=()=>{e.target.remove()}
+                this.diceRollWindow('Кімнату розділило навпіл глибоким прірвою, щоб вийти з кімнати по той бік прірви перевірте свою', 'Спритність', heroes[this.getCurrentPlayer().hero].dexterity, 2, true, trueFn)   
+            }
+        });
+    }
+        
+    createNewEvent(eventName){
+        const event = new Event(eventName);
+        document.dispatchEvent(event);
+    }
 }
 
-// let a = [[{},{},{}],[{},{},{}],[{},{},{}]]
 
-// a[1][0]['key'] = 'value';
-// delete a[1][0].key;
-
-// console.log(a[1][0]['key'])
-// console.log(a[1][1]['key'])
-// console.log(a[1][1]['key'])
+export const game = new Game();

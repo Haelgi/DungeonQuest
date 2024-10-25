@@ -1,11 +1,12 @@
 
 import  {getRundomElement}  from '../function/getRundomElement.js';
-import  {player, game}  from '../game_container.js';
+import  {game}  from '../game.js';
+import  {player}  from '../player.js';
 import  {monster_cards}  from './monster_cards.js';
 import  {trap_cards}  from './trap_cards.js';
 import  {deadman_cards}  from './deadman_cards.js';
 import  {сrypt_cards}  from './сrypt_cards.js';
-;
+
 
 class Card {
     constructor(id, name, effect, btnName) {

@@ -1,13 +1,13 @@
-export class Player {
+class Player {
     
     constructor(userName, idx) {
         this.idx = idx; 
         this.name = userName; 
         this.hero; 
         this.authentication = false;
-        this.positionPrevious;
+        this.positionPrevious = false;
         this.positionTreasury=false;
-        this.position;
+        this.position = false;
         this.finish = false;
         this.catacomb = false;
         this.card_abilitie = Array.from({ length: 5 }, (_, index) => index + 1);
@@ -16,3 +16,5 @@ export class Player {
         this.attack = 1;
     }
 }
+
+export const player = new Player();

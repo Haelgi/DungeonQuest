@@ -1,7 +1,5 @@
-import  {Game}  from './game.js';
-import  {Player}  from './player.js';
-
-let game, player;
+import  {game}  from './game.js';
+import  {player}  from './player.js';
 
 export function authentication(){    
     const userName = document.getElementById('userName');
@@ -13,7 +11,6 @@ export function authentication(){
 
     btn_new_game.addEventListener('click', function() {
         if (userName.value && userPassword.value){
-            game = new Game();
             createNewPlayer(userName.value)
             //#TODO отправить данные на сервер на проверку
             //#TODO если проверка провалена вывести сообщение об ошибке
@@ -36,12 +33,9 @@ export function authentication(){
 
     function createNewPlayer(name) {
         const playerIdx = game.playerList.length;
-        player = new Player(name, playerIdx)
+        player.name = name;
+        player.playerIdx=playerIdx
         game.playerList.push(player);
     }
-    console.log(1, game, player)
 
-    return {game, player}
 }
-
-export { game, player };
