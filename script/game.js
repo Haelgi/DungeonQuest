@@ -26,7 +26,7 @@ class Game {
         this.body;
         this.playingField;
         
-        this.diceRollResultGlobal = false;
+        this.diceRollResultGlobal;
         this.nextCoordinates;
 
         this.day = 0; 
@@ -313,6 +313,7 @@ class Game {
 
         const roll = (dice) => {
             const value = Math.floor((Math.random() * 6) + 1);
+            this.diceRollResultGlobal = value;
             diceResult += value;
         
             for (let i = 1; i <= 6; i++) {
@@ -545,7 +546,7 @@ class Game {
 
     drawEffectCard(player){
         const abilitieCardContainer = document.querySelector(`.effect-card-container`);
-        this.getCurrentPlayer().effectCardContainer.forEach((card) => {
+        player.effectCardContainer.forEach((card) => {
             abilitieCardContainer.innerHTML+=`
                 <div id="${card.id}" class="card-deck " style="background-image: url('img/${card.getPack}_cards/${card.getPack}_${card.id}.jpg')"></div>        
             `
@@ -613,16 +614,19 @@ class Game {
                 
                 this.getCurrentPlayer().position = [x, y];
                 this.nextCoordinates = this.newCoordinate();
+                
                 if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate') {
                     this.rotateRoomTile()
                     this.nextCoordinates = this.newCoordinate();
                 };
-                //TODO тут не работает бросок на выход из темной комнаты
+
                 if (room_tiles[this.gameFields[y][x]['id']]?.special === 'dark') {
                     const trueFn =()=> {
                         this.nextCoordinates = this.newCoordinate();
                         
-                        if (this.nextCoordinates.length === 0) this.diceRollWindow('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', 'Удача', 6, 1, false, trueFn);
+                        if (this.nextCoordinates.length === 0) {
+                            this.diceRollWindow('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', 'Удача', 6, 1, false, trueFn);
+                        }
                     }
                     this.diceRollWindow('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', 'Удача', 6, 1, false, trueFn);
                 

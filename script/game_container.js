@@ -22,7 +22,7 @@ game.authentication = true;
 
 
 export function game_container() {
-    // game.drawFieldTileTests(105, '90', 1,  0);
+    game.drawFieldTileTests(114, '90', 1,  0);
     // game.drawFieldTileTests(46, '0', 1,  1);
     // game.drawFieldTileTests(2, 180, 1,  1);
     // game.drawFieldTileTests(5, 0, 0, 1);
