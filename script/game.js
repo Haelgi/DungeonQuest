@@ -1,4 +1,5 @@
 import  {loadTemplate}  from './function/loadTemplate.js';
+import  {ew}  from './eventWidows.js';
 import  {addScrolCardsEffect}  from './function/addScrolCardsEffect.js';
 import  {getRundomElement, rundom}  from './function/getRundomElement.js';
 import  {heroes}  from './cards/heroes.js';
@@ -14,6 +15,14 @@ import  {treasure_cards}  from './cards/treasure_cards.js';
 import  {monster_cards}  from './cards/monster_cards.js';
 import  {dragon_cards}  from './cards/dragon_cards.js';
 
+// TODO создать метод завершение хода
+// TODO добавить метод завершение хода в необходимые места 
+
+// TODO создать метод завершение игы
+// TODO добавить условия завершение игы
+
+
+// TODO попробовать создавать окно навешиванием методов цепочкой
 
 class Game {
 
@@ -65,6 +74,8 @@ class Game {
         this.refreshDragonCards()
     }
 
+    getCurrentPlayer(){return this.playerList[this.currentPlayerIndex]}
+
     createGameFields(){this.gameFields=Array(12).fill().map(() => Array(15).fill().map(() => ({})))}
 
     refreshRoomTiles(){ this.room_tiles = Array.from({ length: 130 }, (_, index) => index + 1) }
@@ -102,12 +113,12 @@ class Game {
         this.playTreasuryEvent()
     };
 
-    getCurrentPlayer(){return this.playerList[this.currentPlayerIndex]}
-
+    // Custom Event /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
     playTrapEvent(){
         document.addEventListener('trap', () => {
         const card = getRundomElement(this.trap_cards, trap_cards)   
-        this.eventWindow(card);
+        this.drawCardEW(card);
     });}
 
     playPitEvent(){
@@ -119,21 +130,25 @@ class Game {
                 // this.getCurrentPlayer().catacomb = true
                 // putHeroMitl(field)
             } 
-            this.diceRollWindow('Зайшовши в кімнату у вас під ногами виявилася дуже крихка підлога, щоб не провалитися в катакомби перевірте свою', 'Удача', heroes[this.getCurrentPlayer().hero].luck, 2, false, false, falseFn)
+            this.diceRollEW('Зайшовши в кімнату у вас під ногами виявилася дуже крихка підлога, щоб не провалитися в катакомби перевірте свою Удачу.',`Ваша Удача:  ${heroes[this.getCurrentPlayer().hero].luck} `, heroes[this.getCurrentPlayer().hero].luck, false, 2, false, falseFn)
     });}
 
     playDungeonEvent(){
         document.addEventListener('dungeon', () => {
         const card = getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.eventWindow(card);
+        this.drawCardEW(card);
     });}
     
     playTreasuryEvent(){
         document.addEventListener('treasury', () => {
         const card = getRundomElement(this.dragon_cards, dragon_cards)   
-        this.eventWindow(card);
+        this.drawCardEW(card);
     });}
-        
+
+    // End Custom Event /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Draw Interface Elements /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+           
     drawFieldTileTests(roomNumber, rotate, x, y){
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)  
         
@@ -146,246 +161,114 @@ class Game {
         this.gameFields[y][x]['r'] = rotate;
     };
 
+    // End Draw Interface Elements /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     
-        // start game //////////////////////////////////////////////////////
-    
-    eventWindow(card) {
-        let cards
-        let eventSection = '';
-        if (Array.isArray(card)) {
-            cards = card;
-        } else {
-            cards = [card];
-        }
-        cards.forEach(card => {
-            eventSection += `<div class="card" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>`
+    // Template EventWindows /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    drawCardEW(card) {
+        ew.drawEW(card.title);
+        ew.drawCardsInEW(card);
+        ew.drawBtnInEW('btn', card.btnName, ()=>{
+            ew.removeAllEW()
+            if (card.effect() === undefined) return
+            this.drawCardEW(card.effect())
         });
-
-        this.body.insertAdjacentHTML('afterbegin', 
-            `<div class="event-container">
-                    <div class="event-main ">
-                        <div class="title">
-                            <h1>${card.title}</h1>
-                        </div>
-
-                        <div class="event-section">
-                            ${eventSection}
-                        </div>
-
-                        <button class="btn" id="btn_event">${card.btnName}</button>
-                    </div>
-                </div>
-            `);
-
-            const eventContainer = this.body.querySelector('.event-container');
-            const btn = this.body.querySelector('#btn_event');
-
-            btn.addEventListener('click', ()=>{
-                eventContainer.remove()
-                if (card.effect() === undefined) return
-                this.eventWindow(card.effect())
-            });
     }
     
-    endEventWindow() {
-        this.body.insertAdjacentHTML('afterbegin', 
-            `<div class="event-container">
-                    <div class="event-main ">
-                        <div class="title">
-                            <h1>Завершити свій хід?</h1>
-                        </div>
+    endMoveEW() {
+        ew.drawEW('Завершити свій хід?');
+        ew.drawBtnInEW('btn_yes', 'Так', ()=>{
+            ew.removeAllEW()
+        }, 'green');
+        ew.drawBtnInEW('btn_no', 'Ні', ()=>{
+            ew.removeAllEW()
+        }, 'red');
+    }
 
-                        <div class='roll-button'>
-                            <button class="btn" id="btn_yes" style="background:green">Так</button>
-                        </div>
-
-                        <div class='roll-button'>
-                            <button class="btn" id="btn_no" style="background:red">Ні</button>
-                        </div>
-                    </div>
-                </div>
-            `);
-
-            const eventContainer = this.body.querySelector('.event-container');
-            const btnYes = this.body.querySelector('#btn_yes');
-            const btnNo = this.body.querySelector('#btn_no');
-
-            btnYes.addEventListener('click', ()=>{
-                eventContainer.remove()
-                console.log('Завершить свой ход')
-            });
-
-            btnNo.addEventListener('click', ()=>{
-                eventContainer.remove()
-            });
+    diceRollDarkRoomEW(title) {
+        ew.drawEW(title);
+        ew.drawDiceInEW(1)
+        ew.drawBtnInEW('roll', 'Кинути Кубики', ()=>{
+            ew.rollDiceFn()
+            setTimeout(() => {
+                if (this.nextCoordinates.length === 0) this.diceRollDarkRoomEW(title)
+                this.nextCoordinates = this.newCoordinate();
+                ew.removeAllEW()
+            }, 1700);
+            console.log('this.nextCoordinates', this.nextCoordinates)
+            console.log('this.newCoordinate()', this.newCoordinate())
+        })
+        
     }
     
-    diceRollWindow(title, valueName, value, diceCount, closeBtn, trueFn, falseFn) {
-    
-        let diceContainers = '';    
-        let count = 1;
-        let diceResult = 0;
-        let resolveInner = '';
-        let treasureInner = '';
-        let closeBtnInner = '';
+            
+    diceRollEW(title, txt, value, dexterity, diceCount, trueFn, falseFn) {
+        let newValue = value;
+        let texts = txt;
         const resolvePlayer = heroes[this.getCurrentPlayer().hero].resolve;
         const treasure = this.getCurrentPlayer().treasureCardContainer.length;
-        if ( treasure > 0 && valueName === 'Спритність') treasureInner = `<p> Кількість Скарбів: -${treasure}</p>`;
-        if ( resolvePlayer > 0) resolveInner = `<p> Ваша Рішучість: +${resolvePlayer}</p>`;
-        if (closeBtn) closeBtnInner = `<div class='roll-button'><button id='close'>Закрити</button></div>`;
     
-        while (count <= diceCount) {
-            diceContainers +=
-                `<div class="dice-container">
-                    <div id='dice${count}' class="dice dice-${count}">
-                    <div class='side one'>
-                        <div class="dot one-1"></div>
-                    </div>
-                    <div class='side two'>
-                        <div class="dot two-1"></div>
-                        <div class="dot two-2"></div>
-                    </div>
-                    <div class='side three'>
-                        <div class="dot three-1"></div>
-                        <div class="dot three-2"></div>
-                        <div class="dot three-3"></div>
-                    </div>
-                    <div class='side four'>
-                        <div class="dot four-1"></div>
-                        <div class="dot four-2"></div>
-                        <div class="dot four-3"></div>
-                        <div class="dot four-4"></div>
-                    </div>
-                    <div class='side five'>
-                        <div class="dot five-1"></div>
-                        <div class="dot five-2"></div>
-                        <div class="dot five-3"></div>
-                        <div class="dot five-4"></div>
-                        <div class="dot five-5"></div>
-                    </div>
-                    <div class='side six'>
-                        <div class="dot six-1"></div>
-                        <div class="dot six-2"></div>
-                        <div class="dot six-3"></div>
-                        <div class="dot six-4"></div>
-                        <div class="dot six-5"></div>
-                        <div class="dot six-6"></div>
-                    </div>
-                    </div>
-                </div>`;
-            count += 1;
+        if (resolvePlayer > 0) {
+            texts += ` + ${resolvePlayer} Рішучості`;
         }
     
-        this.body.insertAdjacentHTML('afterbegin', 
-            `<div class="event-container">
-                <div class="event-main">
-                    <div class="title">
-                        <h1>${title} ${valueName}</h1>
-                    </div>
-                    <div class="dice-section">${diceContainers}</div>
-                    <div class='roll-button'>
-                        <button id='roll'>Кинути Кубики</button>
-                    </div>
-                    ${closeBtnInner}
-                    <p> Ваша ${valueName}: ${value} </p>
-                    ${resolveInner}
-                    ${treasureInner}
-                </div>
-            </div>`
-        );
+        if (treasure > 0 && dexterity) {
+            texts += ` - ${treasure} Спритності`;
+            newValue -= treasure;
+        }
     
-        const diceElements = document.querySelectorAll('.dice');
-        const btnRoll = document.getElementById('roll');
-        const btnClose = document.getElementById('close');
-    
-        btnRoll.addEventListener('click', () => {
-            rollAllDice();
+        ew.drawEW(title);
+        ew.drawTxtInEW(texts);
+        ew.drawDiceInEW(diceCount);
+        ew.drawBtnInEW('roll', 'Кинути Кубики', () => {
+            ew.rollDiceFn();
             setTimeout(() => {
-                diceResultWindow();
+                this.rolResultEW(newValue, trueFn, falseFn);
             }, 1700);
         });
+        ew.drawBtnInEW('close', 'Закрити', () => ew.removeAllEW(), 'red');
+    }
+    
 
-        if (btnClose) {
-            btnClose.addEventListener('click', () => {
-                document.querySelector('.event-container').remove()
+    rolResultEW (value, trueFn, falseFn){
+        if (this.diceRollResultGlobal <= (value)) {
+            ew.drawEW('Успіх!', 'green');
+            ew.drawBtnInEW('next','Далі', ()=>{
+                if (trueFn) trueFn();
+                ew.removeAllEW()
             });
+
         }
 
-        const roll = (dice) => {
-            const value = Math.floor((Math.random() * 6) + 1);
-            this.diceRollResultGlobal = value;
-            diceResult += value;
-        
-            for (let i = 1; i <= 6; i++) {
-                dice.classList.remove('show-' + i);
-                if (value === i) {
-                    dice.classList.add('show-' + i);
-                }
-            }
-        
-            btnRoll.remove();
-        };
+        if (this.diceRollResultGlobal > value && this.diceRollResultGlobal <= (value + heroes[this.getCurrentPlayer().hero].resolve )) {
+            ew.drawEW('Провал....?');
+            ew.drawBtnInEW('add_resolve','Додати Рішучості', ()=>{
+                const diff = this.diceRollResultGlobal - value;
 
-    
-        const rollAllDice =()=> {
-            diceResult = 0;
-            diceElements.forEach((dice) => {
-                roll(dice); 
-            });
-        }
-    
-        
-    
-        const diceResultWindow =()=> {
-            let title;
-            let addBtn = '';
-            let result;
-            if ( treasure > 0 && valueName === 'Спритність') diceResult + treasure
-    
-            if (diceResult <= (value)) {
-                title = '<h1 style="color:green;">Успіх!</h1>';
-                result = true
-            }
-    
-            if (diceResult > value && diceResult <= (value + heroes[this.getCurrentPlayer().hero].resolve )) {
-                title = '<h1 style="color:red;">Провал....?</h1>';
-                addBtn = `<button class="btn" id="btn_add_resolve">Додати Рішучості</button>`;
-            }
-    
-            if (diceResult > (value + heroes[this.getCurrentPlayer().hero].resolve)) {
-                title = '<h1 style="color:red;">Провал!</h1>';
-                heroes[this.getCurrentPlayer().hero].resolve +=1;
-                result = false
-            }
-    
-            this.body.insertAdjacentHTML('afterbegin', 
-                `<div class="event-container" style="z-index: 110;">
-                    <div class="event-main ">
-                        <div class="title"> ${title} </div>
-                        ${addBtn}
-                        <button class="btn" id="btn_close">Закрити</button>
-                    </div>
-                </div>`
-            );
-    
-            const eventWindows = document.querySelectorAll('.event-container');
-    
-            document.getElementById('btn_add_resolve')?.addEventListener('click', () => {
-                const diff = diceResult - value;
                 if (heroes[this.getCurrentPlayer().hero].resolve >= diff) {
                     heroes[this.getCurrentPlayer().hero].resolve -= diff;
-                    eventWindows.forEach((e) => e.remove());
+                    ew.removeAllEW()
                     if (trueFn) trueFn();  
                 }
+
             });
-    
-            document.getElementById('btn_close').addEventListener('click', () => {
-                eventWindows.forEach((e) => e.remove());
-                if (result===true && trueFn) trueFn()
-                if (result===false && falseFn) falseFn()
+            ew.drawBtnInEW('next','Далі', ()=>{
+                ew.removeAllEW()
+                if (falseFn) falseFn();
             });
         }
+
+        if (this.diceRollResultGlobal > (value + heroes[this.getCurrentPlayer().hero].resolve)) {
+            ew.drawEW('Провал!', 'red');
+            ew.drawBtnInEW('next','Далі', ()=>{
+                ew.removeAllEW()
+                if (falseFn) falseFn();
+            });
+            heroes[this.getCurrentPlayer().hero].resolve +=1;
+        }
     }
+
     
     isPlayerInTower() {
         if (!this.getCurrentPlayer().position) return false
@@ -554,6 +437,7 @@ class Game {
     };
 
     makeMove() {
+        
         let array;
 
         if (!this.getCurrentPlayer().position) array =this.startFields;
@@ -614,22 +498,22 @@ class Game {
                 
                 this.getCurrentPlayer().position = [x, y];
                 this.nextCoordinates = this.newCoordinate();
-                
+
                 if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate') {
                     this.rotateRoomTile()
                     this.nextCoordinates = this.newCoordinate();
                 };
 
                 if (room_tiles[this.gameFields[y][x]['id']]?.special === 'dark') {
-                    const trueFn =()=> {
-                        this.nextCoordinates = this.newCoordinate();
+                    this.diceRollDarkRoomEW('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.')
+                    // const trueFn =()=> {
+                    //     this.nextCoordinates = this.newCoordinate();
                         
-                        if (this.nextCoordinates.length === 0) {
-                            this.diceRollWindow('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', 'Удача', 6, 1, false, trueFn);
-                        }
-                    }
-                    this.diceRollWindow('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', 'Удача', 6, 1, false, trueFn);
-                
+                    //     if (this.nextCoordinates.length === 0) {
+                    //         this.diceRollEW('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', false, 6, false, 1,  trueFn);
+                    //     }
+                    // }
+                    // this.diceRollEW('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', false, 6, false, 1,  trueFn);                
                 }
                 
     
@@ -644,6 +528,7 @@ class Game {
                     this.clickSerchIcon();
                 }
             }
+            this.diceRollResultGlobal = []
         }, { once: true });
     }
 
@@ -774,7 +659,7 @@ class Game {
         const serchIcon = document.querySelector('.search-icon');
         serchIcon.addEventListener('click', () => {
             const card = getRundomElement(this.search_cards, search_cards)
-            this.eventWindow(card)
+            this.drawCardEW(card)
             this.removeIcon('.search-icon');
 
             if (this.gameFields[y][x]['s']===undefined) {
@@ -789,8 +674,7 @@ class Game {
     clickEndIcon(){
         const endIcon = document.querySelector('.end-icon');
         endIcon.addEventListener('click', () => {
-            console.log('end move')
-            this.endEventWindow()
+            this.endMoveEW()
         });
     };
 
@@ -798,7 +682,7 @@ class Game {
         const treasureIcon = document.querySelector('.treasure-icon');
         treasureIcon.addEventListener('click', () => {
             const card = getRundomElement(this.treasure_cards, treasure_cards)
-            this.eventWindow(card)
+            this.drawCardEW(card)
         });
     };
 
@@ -807,7 +691,7 @@ class Game {
             if(e.target.closest('.door-icon')) {
                 e.target.remove()
                 const card = getRundomElement(this.door_cards, door_cards)
-                this.eventWindow(card)
+                this.drawCardEW(card)
             }
         });
     };
@@ -815,8 +699,8 @@ class Game {
     clickGrilleIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.grille-icon')) {
-                const trueFn=()=>{e.target.remove()} 
-                this.diceRollWindow('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірка на', 'Силa', heroes[this.getCurrentPlayer().hero].strength, 2, true, trueFn)
+                const trueFn = e.target.remove()
+                this.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[this.getCurrentPlayer().hero].strength}`, heroes[this.getCurrentPlayer().hero].strength, false, 2, trueFn)
             }
         });
     }
@@ -824,8 +708,8 @@ class Game {
     clickCollapseIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.collapse-icon')) {
-                const trueFn=()=>{e.target.remove()}
-                this.diceRollWindow('Перед вами кімната заповнена уламками стелі що впала, щоб пройти на інший бік кімнати перевірте свою', 'Спритність', heroes[this.getCurrentPlayer().hero].dexterity, 2, true, trueFn)   
+                const trueFn=e.target.remove()
+                this.diceRollEW('Перед вами кімната заповнена уламками стелі що впала, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[this.getCurrentPlayer().hero].dexterity}`, heroes[this.getCurrentPlayer().hero].dexterity, true, 2, trueFn)   
             }
         });
     }
@@ -833,8 +717,8 @@ class Game {
     clickWebIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.web-icon')) {
-                const trueFn=()=>{e.target.remove()}
-                this.diceRollWindow('Перед вами кімната заповнена павутинням, щоб пройти на інший бік кімнати перевірте свою', 'Силa', heroes[this.getCurrentPlayer().hero].strength, 2, true, trueFn)   
+                const trueFn=e.target.remove()
+                this.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[this.getCurrentPlayer().hero].strength}`, heroes[this.getCurrentPlayer().hero].strength, false, 2, trueFn)
             }
         });
     }
@@ -842,20 +726,18 @@ class Game {
     clickBridgeIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.bridge-icon')) {
-                const trueFn=()=>{e.target.remove()}
-                const falseFn=()=>{
+                const trueFn=e.target.remove()
+                const falseFn = function(){
                     const field = document.querySelector(`[data-y="${this.getCurrentPlayer().position[1]}"][data-x="${this.getCurrentPlayer().position[0]}"]`)
                     this.removeIcon('.bridge-icon');
-                    const trueFn=()=>{
-                        heroes[this.getCurrentPlayer().hero].health -= this.diceRollResultGlobal;
-                    }
+                    const trueFn= heroes[this.getCurrentPlayer().hero].health -= this.diceRollResultGlobal;
                     
                     //TODO вернуть вход в катакомбы
                     // this.getCurrentPlayer().catacomb = true
                     // putHeroMitl(field)
-                    this.diceRollWindow('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.', '', 6, 1, false, trueFn);
+                    this.diceRollEW('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.',false, 6, false, 1, trueFn);
                 } 
-                this.diceRollWindow('Перед вами широка прірва, через яку прокинуто хитку дошку, щоб не провалитися в катакомби перевірте свою', 'Спритність', heroes[this.getCurrentPlayer().hero].dexterity, 2, true, trueFn, falseFn)   
+                this.diceRollEW('Перед вами кімната заповнена уламками стелі що впала, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[this.getCurrentPlayer().hero].dexterity}`, heroes[this.getCurrentPlayer().hero].dexterity, true, 2, trueFn, falseFn)   
             }
         });
     }
@@ -863,8 +745,8 @@ class Game {
     clickAbyssIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.abyss-icon')) {
-                const trueFn=()=>{e.target.remove()}
-                this.diceRollWindow('Кімнату розділило навпіл глибоким прірвою, щоб вийти з кімнати по той бік прірви перевірте свою', 'Спритність', heroes[this.getCurrentPlayer().hero].dexterity, 2, true, trueFn)   
+                const trueFn=e.target.remove()
+                this.diceRollEW('Кімнату розділило навпіл глибоким прірвою, щоб вийти з кімнати по той бік прірви перевірте Спритність.', `Ваша cпритність: ${heroes[this.getCurrentPlayer().hero].dexterity}`, heroes[this.getCurrentPlayer().hero].dexterity, true, 2, trueFn)   
             }
         });
     }

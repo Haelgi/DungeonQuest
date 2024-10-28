@@ -18,5 +18,3 @@ loadTemplate('body', `game_container`).then(()=>{game_container()});
 //TODO добавить подсказки к ходу игры
 // показать где старт
 
-
-
