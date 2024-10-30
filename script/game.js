@@ -461,8 +461,6 @@ class Game {
         }
 
         this.playingField.addEventListener('click', (e) => {
-
-            console.log('playingField.addEventListener click')
             this.getCurrentPlayer().positionPrevious = this.getCurrentPlayer().position
 
             if (e.target.closest('.door-icon')) return
@@ -503,7 +501,7 @@ class Game {
                 if (!room_tiles[this.gameFields[y][x]['id']]) return;
 
                 if (room_tiles[this.gameFields[y][x]['id']].dungeon && this.diceRollResultGlobal) this.playDungeonEvent();
-                console.log(this.diceRollResultGlobal)
+
                 if (room_tiles[this.gameFields[y][x]['id']].trap && this.diceRollResultGlobal) this.playTrapEvent();
                 if (room_tiles[this.gameFields[y][x]['id']].special === 'pit' && this.diceRollResultGlobal) this.playPitEvent();
                 
@@ -523,9 +521,6 @@ class Game {
             }
             
             this.diceRollResultGlobal = 0
-            console.log('end makeMove')
-
-
         }, { once: true });        
     }
 
@@ -606,7 +601,6 @@ class Game {
     };
 
     drawHeroMitl(x, y){
-        console.log('drawHeroMitl')
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         const hero_mitl = this.playingField.querySelector(`.hero_mitl.${this.getCurrentPlayer().hero}`);
         const hero_token_catacomb = this.playingField.querySelector(`.hero_token_catacomb.${this.getCurrentPlayer().hero}`);
