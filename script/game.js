@@ -36,7 +36,7 @@ class Game {
         this.playingField;
         
         this.next = false;
-        this.diceRollResultGlobal;
+        this.diceRollResultGlobal = 0;
         this.nextCoordinates;
         this.darkRoomCoordinates = {};
 
@@ -193,10 +193,9 @@ class Game {
                 ew.removeAllEW()
                 this.nextCoordinates = this.newCoordinate();
                 if (this.nextCoordinates.length === 0)return this.diceRollDarkRoomEW()
-                const [[x,y]] = this.nextCoordinates
-                this.removeAllIcon()
-                this.drawHeroMitl(x, y);
-                
+                // const [[x,y]] = this.nextCoordinates
+                // this.removeAllIcon()
+                // this.drawHeroMitl(x, y);
                 this.nextCoordinates = this.newCoordinate();    
             }, 1700);
         })
@@ -279,6 +278,7 @@ class Game {
             });
             heroes[this.getCurrentPlayer().hero].resolve +=1;
         }
+        this.diceRollResultGlobal = 0
     }
 
     
@@ -297,7 +297,6 @@ class Game {
     newCoordinate() {
         const [x, y] = this.getCurrentPlayer().position;
         const coordinates = [];
-
 
         if (x > 0 && this.checkOtherPlayer([x - 1, y]) && this.checkPermitWayNeighbour([x - 1, y], 'right', false)  && this.checkPermitWay([x, y],'left', true)) coordinates.push([x - 1, y]); 
         if (y > 0 && this.checkOtherPlayer([x, y - 1]) && this.checkPermitWayNeighbour([x, y - 1], 'down', false)  && this.checkPermitWay([x, y], 'up', true)) coordinates.push([x, y - 1]);   
@@ -385,7 +384,7 @@ class Game {
         
         if (value && room.special === 'collapse' && checkBarrier=== true) this.drawIcon(x,y, 'fa-solid fa-road-barrier', room.special, direction, true);
         if (value && room.special === 'web' && checkBarrier=== true) this.drawIcon(x,y, 'fa-solid fa-kip-sign', room.special, direction, true);
-        if (value && room.special === 'dark' && checkBarrier=== true) return value.includes(this.diceRollResultGlobal);
+        if (value && room.special === 'dark' && checkBarrier=== true) return value.includes(this.diceRollResultGlobal)
         if (value && room.special === 'bridge' && checkBarrier=== true) this.drawIcon(x,y, 'fa-solid fa-bridge-circle-exclamation', room.special, direction, true);
 
         if (typeof value === 'string' && checkBarrier=== true) {
@@ -451,7 +450,8 @@ class Game {
     };
 
     makeMove() {
-            
+        
+        
         let array;
         if (!this.getCurrentPlayer().position) array = this.startFields;
         if (this.getCurrentPlayer().position) array =this.nextCoordinates;//[[],[],[]]
@@ -461,6 +461,8 @@ class Game {
         }
 
         this.playingField.addEventListener('click', (e) => {
+
+            console.log('playingField.addEventListener click')
             this.getCurrentPlayer().positionPrevious = this.getCurrentPlayer().position
 
             if (e.target.closest('.door-icon')) return
@@ -500,11 +502,10 @@ class Game {
                 this.nextCoordinates = this.newCoordinate();
                 if (!room_tiles[this.gameFields[y][x]['id']]) return;
 
-                
-                
-                if (room_tiles[this.gameFields[y][x]['id']].dungeon) this.playDungeonEvent();
-                if (room_tiles[this.gameFields[y][x]['id']].trap) this.playTrapEvent();
-                if (room_tiles[this.gameFields[y][x]['id']].special === 'pit') this.playPitEvent();
+                if (room_tiles[this.gameFields[y][x]['id']].dungeon && this.diceRollResultGlobal) this.playDungeonEvent();
+                console.log(this.diceRollResultGlobal)
+                if (room_tiles[this.gameFields[y][x]['id']].trap && this.diceRollResultGlobal) this.playTrapEvent();
+                if (room_tiles[this.gameFields[y][x]['id']].special === 'pit' && this.diceRollResultGlobal) this.playPitEvent();
                 
                 if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate') {
                     this.rotateRoomTile()
@@ -520,7 +521,11 @@ class Game {
                     this.clickSerchIcon();
                 }
             }
-            this.diceRollResultGlobal = []
+            
+            this.diceRollResultGlobal = 0
+            console.log('end makeMove')
+
+
         }, { once: true });        
     }
 
@@ -601,9 +606,8 @@ class Game {
     };
 
     drawHeroMitl(x, y){
-        console.log(x, y)
+        console.log('drawHeroMitl')
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
-        console.log(field)
         const hero_mitl = this.playingField.querySelector(`.hero_mitl.${this.getCurrentPlayer().hero}`);
         const hero_token_catacomb = this.playingField.querySelector(`.hero_token_catacomb.${this.getCurrentPlayer().hero}`);
 
