@@ -191,14 +191,29 @@ class Game {
             ew.rollDiceFn()  
             setTimeout(() => {
                 ew.removeAllEW()
-                console.log(this.diceRollResultGlobal)
                 this.nextCoordinates = this.newCoordinate();
-                console.log(this.nextCoordinates)
-                if (this.nextCoordinates.length === 0) this.diceRollDarkRoomEW()
+                if (this.nextCoordinates.length === 0)return this.diceRollDarkRoomEW()
+                const [[x,y]] = this.nextCoordinates
+                this.removeAllIcon()
+                this.drawHeroMitl(x, y);
+                
+                this.nextCoordinates = this.newCoordinate();    
             }, 1700);
         })
     }
     
+    removeAllIcon(){
+        this.removeIcon('.search-icon');
+        this.removeIcon('.treasure-icon');
+        this.removeIcon('.door-icon');
+        this.removeIcon('.grille-icon');
+        this.removeIcon('.collapse-icon');
+        this.removeIcon('.web-icon');
+        this.removeIcon('.bridge-icon');
+        this.removeIcon('.abyss-icon');
+        this.removeIcon('.end-icon');
+
+    }
             
     diceRollEW(title, txt, value, dexterity, diceCount, trueFn, falseFn) {
         let newValue = value;
@@ -440,12 +455,9 @@ class Game {
         let array;
         if (!this.getCurrentPlayer().position) array = this.startFields;
         if (this.getCurrentPlayer().position) array =this.nextCoordinates;//[[],[],[]]
-        
-        
-        const fields = this.getElementsByData(array);
 
         if (!document.querySelector(`.available-field`)) {
-            this.highlightFields(fields);
+            this.highlightFields(array);
         }
 
         this.playingField.addEventListener('click', (e) => {
@@ -459,15 +471,7 @@ class Game {
             if (e.target.closest('.bridge-icon')) return
 
             if (e.target.closest('.available')) {
-                this.removeIcon('.search-icon');
-                this.removeIcon('.treasure-icon');
-                this.removeIcon('.door-icon');
-                this.removeIcon('.grille-icon');
-                this.removeIcon('.collapse-icon');
-                this.removeIcon('.web-icon');
-                this.removeIcon('.bridge-icon');
-                this.removeIcon('.abyss-icon');
-                this.removeIcon('.end-icon');
+                this.removeAllIcon()
 
                 const field = e.target.parentElement;
                 const x = Number(field.getAttribute('data-x'));
@@ -485,23 +489,19 @@ class Game {
                 }
                 
                 if (this.gameFields[y][x]['id'] === undefined && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)) {
-                    roomNumber = this.drawFieldTile(field, x, y);
+                    roomNumber = this.drawFieldTile(x, y);
                 }
     
-                this.removeHighlightFields(fields);
+                this.removeHighlightFields(array);
                 
     
                 this.drawHeroMitl(x, y);
-                this.drawIcon(x, y, 'fa-regular fa-circle-xmark', 'end');
-                this.clickEndIcon(x, y);
                 
-                
-                this.getCurrentPlayer().position = [x, y];
                 this.nextCoordinates = this.newCoordinate();
+                if (!room_tiles[this.gameFields[y][x]['id']]) return;
 
                 
                 
-                if (!room_tiles[this.gameFields[y][x]['id']]) return;
                 if (room_tiles[this.gameFields[y][x]['id']].dungeon) this.playDungeonEvent();
                 if (room_tiles[this.gameFields[y][x]['id']].trap) this.playTrapEvent();
                 if (room_tiles[this.gameFields[y][x]['id']].special === 'pit') this.playPitEvent();
@@ -511,9 +511,8 @@ class Game {
                     this.nextCoordinates = this.newCoordinate();
                 };
 
-                if (room_tiles[this.gameFields[y][x]['id']].special === 'dark' && !this.diceRollResultGlobal) {
+                if (room_tiles[this.gameFields[y][x]['id']].special === 'dark') {
                     this.diceRollDarkRoomEW()  
-                    this.nextCoordinates = this.newCoordinate();             
                 }
                 
                 if (room_tiles[this.gameFields[y][x]['id']].search && (this.gameFields[y][x]['s'] === undefined || this.gameFields[y][x]['s'] < 2)) {
@@ -557,14 +556,15 @@ class Game {
         }
     }
     
-    drawFieldTile(field, x, y){
+    drawFieldTile(x, y){
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         const roomNumber = getRundomElement(this.room_tiles, room_tiles).number;
         let rotate;
         
-        if (x > this.getCurrentPlayer().position[0]) {rotate = '90'}  
-        if (x < this.getCurrentPlayer().position[0]) {rotate = '270'}  
-        if (y > this.getCurrentPlayer().position[1]) {rotate = '180'}  
-        if (y < this.getCurrentPlayer().position[1]) {rotate = '0'}  
+        if (x > this.getCurrentPlayer().positionPrevious[0]) {rotate = '90'}  
+        if (x < this.getCurrentPlayer().positionPrevious[0]) {rotate = '270'}  
+        if (y > this.getCurrentPlayer().positionPrevious[1]) {rotate = '180'}  
+        if (y < this.getCurrentPlayer().positionPrevious[1]) {rotate = '0'}  
         
         field.classList.add('shadow')
         field.insertAdjacentHTML('afterbegin', `
@@ -575,10 +575,12 @@ class Game {
         this.gameFields[y][x]['p'] = this.getCurrentPlayer().name;
 
         delete this.gameFields[this.getCurrentPlayer().position[1]][this.getCurrentPlayer().position[0]]['p'];
+        
         return roomNumber
     };
 
-    highlightFields(fields){
+    highlightFields(array){
+        const fields = this.getElementsByData(array);
         fields.forEach(field => {
             field.classList.add('available')
             field.insertAdjacentHTML('afterbegin', `
@@ -587,7 +589,10 @@ class Game {
         });
     };
 
-    removeHighlightFields(fields){
+
+
+    removeHighlightFields(array){
+        const fields = this.getElementsByData(array);
         fields.forEach(field => {
             field.classList.remove('available')
             const highlight = field.querySelector(`.available-field`);
@@ -596,7 +601,9 @@ class Game {
     };
 
     drawHeroMitl(x, y){
+        console.log(x, y)
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+        console.log(field)
         const hero_mitl = this.playingField.querySelector(`.hero_mitl.${this.getCurrentPlayer().hero}`);
         const hero_token_catacomb = this.playingField.querySelector(`.hero_token_catacomb.${this.getCurrentPlayer().hero}`);
 
@@ -610,6 +617,13 @@ class Game {
             field.insertAdjacentHTML('afterbegin', `
                 <img class="hero_mitl ${this.getCurrentPlayer().hero}" src="img/hero_tiles/mitle/${this.getCurrentPlayer().hero}.png" alt="">
             `); 
+        }
+        
+        this.drawIcon(x, y, 'fa-regular fa-circle-xmark', 'end');
+        this.clickEndIcon(x, y);            
+        this.getCurrentPlayer().position = [x, y];
+        if (this.gameFields[y][x]['id'] === undefined && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)) {
+            this.drawFieldTile(x, y);
         }
     }
 

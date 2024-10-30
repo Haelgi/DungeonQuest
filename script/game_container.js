@@ -26,7 +26,7 @@ game.authentication = true;
 export function game_container() {
     game.drawFieldTileTests(71, '90', 1,  0);
     // game.drawFieldTileTests(1, '0', 1,  1);
-    game.drawFieldTileTests(20, '180', 1,  1);
+    // game.drawFieldTileTests(20, '180', 1,  1);
 
     game.startPosition();
 
