@@ -254,24 +254,20 @@ class Game {
                 if (trueFn) trueFn();
                 ew.removeAllEW()
             });
-
         }
 
         if (this.diceRollResultGlobal > value && this.diceRollResultGlobal <= (value + heroes[this.getCurrentPlayer().hero].resolve )) {
             ew.drawEW('Провал....?');
             ew.drawBtnInEW('add_resolve','Додати Рішучості', ()=>{
                 const diff = this.diceRollResultGlobal - value;
-
-                if (heroes[this.getCurrentPlayer().hero].resolve >= diff) {
-                    heroes[this.getCurrentPlayer().hero].resolve -= diff;
-                    ew.removeAllEW()
-                    if (trueFn) trueFn();  
-                }
-
+                heroes[this.getCurrentPlayer().hero].resolve -= Math.abs(diff);
+                ew.removeAllEW()
+                if (trueFn) trueFn();  
             });
             ew.drawBtnInEW('next','Далі', ()=>{
                 ew.removeAllEW()
                 if (falseFn) falseFn();
+                heroes[this.getCurrentPlayer().hero].resolve +=1;
             });
         }
 
@@ -283,7 +279,7 @@ class Game {
             });
             heroes[this.getCurrentPlayer().hero].resolve +=1;
         }
-        this.diceRollResultGlobal = 0
+        // this.diceRollResultGlobal = 0
     }
 
     
