@@ -34,6 +34,7 @@ class Game {
 
         this.body;
         this.playingField;
+        this.activeEvent = false
         
         this.next = false;
         this.diceRollResultGlobal = 0;
@@ -112,6 +113,7 @@ class Game {
     // Custom Event /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     playTrapEvent(){
+        this.activeEvent = true
         const card = getRundomElement(this.trap_cards, trap_cards)   
         this.drawCardEW(card);
     }
@@ -121,6 +123,7 @@ class Game {
     }
 
     playPitEvent(){
+        this.activeEvent = true
             const falseFn =()=>{
                 const field = document.querySelector(`[data-y="${this.getCurrentPlayer().position[1]}"][data-x="${this.getCurrentPlayer().position[0]}"]`)
                 heroes[this.getCurrentPlayer().hero].health -=6
@@ -134,8 +137,9 @@ class Game {
     }
 
     playDungeonEvent(){
-            const card = getRundomElement(this.dungeon_cards, dungeon_cards)   
-            this.drawCardEW(card);
+        this.activeEvent = true
+        const card = getRundomElement(this.dungeon_cards, dungeon_cards)   
+        this.drawCardEW(card);
     }
     
     playTreasuryEvent(){
@@ -168,6 +172,7 @@ class Game {
         ew.drawEW(card.title);
         ew.drawCardsInEW(card);
         ew.drawBtnInEW('btn', card.btnName, ()=>{
+            this.activeEvent = false
             ew.removeAllEW()
             if (card.effect() === undefined) return
             this.drawCardEW(card.effect())
@@ -500,10 +505,10 @@ class Game {
                 this.nextCoordinates = this.newCoordinate();
                 if (!room_tiles[this.gameFields[y][x]['id']]) return;
 
-                if (room_tiles[this.gameFields[y][x]['id']].dungeon && this.diceRollResultGlobal) this.playDungeonEvent();
+                if (room_tiles[this.gameFields[y][x]['id']].dungeon && !this.activeEvent) this.playDungeonEvent();
 
-                if (room_tiles[this.gameFields[y][x]['id']].trap && this.diceRollResultGlobal) this.playTrapEvent();
-                if (room_tiles[this.gameFields[y][x]['id']].special === 'pit' && this.diceRollResultGlobal) this.playPitEvent();
+                if (room_tiles[this.gameFields[y][x]['id']].trap && !this.activeEvent) this.playTrapEvent();
+                if (room_tiles[this.gameFields[y][x]['id']].special === 'pit' && !this.activeEvent) this.playPitEvent();
                 
                 if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate') {
                     this.rotateRoomTile()
