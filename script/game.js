@@ -16,13 +16,13 @@ import  {monster_cards}  from './cards/monster_cards.js';
 import  {dragon_cards}  from './cards/dragon_cards.js';
 
 // TODO создать метод завершение хода
-// TODO добавить метод завершение хода в необходимые места 
+// TODO добавить метод завершение хода в необходиміе ме На жаль, ви повернулись у попередню кымнатуста 
 
-// TODO создать метод завершение игы
-// TODO добавить условия завершение игы
+// TODO создать метод завершение игі
+//  На жаль, ви повернулись у попередню кымнатуTODO добавить условия завершение игі
 
 
-// TODO попробовать создавать окно навешиванием методов цепочкой
+// На жаль, ви повернулись у попередню кымнату/ TODO попробовать создавать окно навешиванием методов цепочкой
 
 class Game {
 
@@ -35,8 +35,10 @@ class Game {
         this.body;
         this.playingField;
         
+        this.next = false;
         this.diceRollResultGlobal;
         this.nextCoordinates;
+        this.darkRoomCoordinates = {};
 
         this.day = 0; 
         this.gameFields; 
@@ -105,45 +107,41 @@ class Game {
         this.clickAbyssIcon()
         this.clickWebIcon()
         this.clickBridgeIcon()
-    
-    
-        this.playTrapEvent()
-        this.playPitEvent()
-        this.playDungeonEvent()
-        this.playTreasuryEvent()
     };
 
     // Custom Event /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     playTrapEvent(){
-        document.addEventListener('trap', () => {
         const card = getRundomElement(this.trap_cards, trap_cards)   
         this.drawCardEW(card);
-    });}
+    }
+
+    playDarkRoomEvent(){
+            this.diceRollDarkRoomEW('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.')
+    }
 
     playPitEvent(){
-        document.addEventListener('pit', () => {
             const falseFn =()=>{
                 const field = document.querySelector(`[data-y="${this.getCurrentPlayer().position[1]}"][data-x="${this.getCurrentPlayer().position[0]}"]`)
                 heroes[this.getCurrentPlayer().hero].health -=6
-                //TODO вернуть вход в катакомбы
+                //TODO вернуть вход в катакомбі
+                //На жаль, ви повернулись у попередню кымнату             
                 // this.getCurrentPlayer().catacomb = true
                 // putHeroMitl(field)
             } 
+
             this.diceRollEW('Зайшовши в кімнату у вас під ногами виявилася дуже крихка підлога, щоб не провалитися в катакомби перевірте свою Удачу.',`Ваша Удача:  ${heroes[this.getCurrentPlayer().hero].luck} `, heroes[this.getCurrentPlayer().hero].luck, false, 2, false, falseFn)
-    });}
+    }
 
     playDungeonEvent(){
-        document.addEventListener('dungeon', () => {
-        const card = getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(card);
-    });}
+            const card = getRundomElement(this.dungeon_cards, dungeon_cards)   
+            this.drawCardEW(card);
+    }
     
     playTreasuryEvent(){
-        document.addEventListener('treasury', () => {
         const card = getRundomElement(this.dragon_cards, dragon_cards)   
         this.drawCardEW(card);
-    });}
+    }
 
     // End Custom Event /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -186,20 +184,19 @@ class Game {
         }, 'red');
     }
 
-    diceRollDarkRoomEW(title) {
-        ew.drawEW(title);
+    diceRollDarkRoomEW() {
+        ew.drawEW('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.');
         ew.drawDiceInEW(1)
         ew.drawBtnInEW('roll', 'Кинути Кубики', ()=>{
-            ew.rollDiceFn()
+            ew.rollDiceFn()  
             setTimeout(() => {
-                if (this.nextCoordinates.length === 0) this.diceRollDarkRoomEW(title)
-                this.nextCoordinates = this.newCoordinate();
                 ew.removeAllEW()
+                console.log(this.diceRollResultGlobal)
+                this.nextCoordinates = this.newCoordinate();
+                console.log(this.nextCoordinates)
+                if (this.nextCoordinates.length === 0) this.diceRollDarkRoomEW()
             }, 1700);
-            console.log('this.nextCoordinates', this.nextCoordinates)
-            console.log('this.newCoordinate()', this.newCoordinate())
         })
-        
     }
     
             
@@ -285,6 +282,7 @@ class Game {
     newCoordinate() {
         const [x, y] = this.getCurrentPlayer().position;
         const coordinates = [];
+
 
         if (x > 0 && this.checkOtherPlayer([x - 1, y]) && this.checkPermitWayNeighbour([x - 1, y], 'right', false)  && this.checkPermitWay([x, y],'left', true)) coordinates.push([x - 1, y]); 
         if (y > 0 && this.checkOtherPlayer([x, y - 1]) && this.checkPermitWayNeighbour([x, y - 1], 'down', false)  && this.checkPermitWay([x, y], 'up', true)) coordinates.push([x, y - 1]);   
@@ -382,6 +380,7 @@ class Game {
 
         };
 
+
         return value
     }
     
@@ -437,21 +436,22 @@ class Game {
     };
 
     makeMove() {
-        
+            
         let array;
-
-        if (!this.getCurrentPlayer().position) array =this.startFields;
-        if (this.getCurrentPlayer().position) array =this.nextCoordinates;
-
+        if (!this.getCurrentPlayer().position) array = this.startFields;
+        if (this.getCurrentPlayer().position) array =this.nextCoordinates;//[[],[],[]]
+        
+        
         const fields = this.getElementsByData(array);
-    
+
         if (!document.querySelector(`.available-field`)) {
             this.highlightFields(fields);
         }
-    
+
         this.playingField.addEventListener('click', (e) => {
             this.getCurrentPlayer().positionPrevious = this.getCurrentPlayer().position
 
+            if (e.target.closest('.door-icon')) return
             if (e.target.closest('.grille-icon')) return
             if (e.target.closest('.collapse-icon')) return
             if (e.target.closest('.web-icon')) return
@@ -476,7 +476,7 @@ class Game {
 
                 if (field.classList.contains(`treasury`) && !this.getCurrentPlayer().positionTreasury) {
                     this.getCurrentPlayer().positionTreasury = true;
-                    this.createNewEvent('treasury');
+                    this.playTreasuryEvent();
                 };
 
                 if (field.classList.contains(`treasury`) && this.getCurrentPlayer().positionTreasury) {
@@ -499,37 +499,30 @@ class Game {
                 this.getCurrentPlayer().position = [x, y];
                 this.nextCoordinates = this.newCoordinate();
 
+                
+                
+                if (!room_tiles[this.gameFields[y][x]['id']]) return;
+                if (room_tiles[this.gameFields[y][x]['id']].dungeon) this.playDungeonEvent();
+                if (room_tiles[this.gameFields[y][x]['id']].trap) this.playTrapEvent();
+                if (room_tiles[this.gameFields[y][x]['id']].special === 'pit') this.playPitEvent();
+                
                 if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate') {
                     this.rotateRoomTile()
                     this.nextCoordinates = this.newCoordinate();
                 };
 
-                if (room_tiles[this.gameFields[y][x]['id']]?.special === 'dark') {
-                    this.diceRollDarkRoomEW('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.')
-                    // const trueFn =()=> {
-                    //     this.nextCoordinates = this.newCoordinate();
-                        
-                    //     if (this.nextCoordinates.length === 0) {
-                    //         this.diceRollEW('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', false, 6, false, 1,  trueFn);
-                    //     }
-                    // }
-                    // this.diceRollEW('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.', false, 6, false, 1,  trueFn);                
+                if (room_tiles[this.gameFields[y][x]['id']].special === 'dark' && !this.diceRollResultGlobal) {
+                    this.diceRollDarkRoomEW()  
+                    this.nextCoordinates = this.newCoordinate();             
                 }
                 
-    
-                if (!room_tiles[this.gameFields[y][x]['id']]) return;
-                if (room_tiles[this.gameFields[y][x]['id']].dungeon) this.createNewEvent('dungeon');
-                if (room_tiles[this.gameFields[y][x]['id']].trap) this.createNewEvent('trap');
-                if (room_tiles[this.gameFields[y][x]['id']].special === 'pit') this.createNewEvent('pit');
-                
-
                 if (room_tiles[this.gameFields[y][x]['id']].search && (this.gameFields[y][x]['s'] === undefined || this.gameFields[y][x]['s'] < 2)) {
                     this.drawIcon(x, y, 'fa-solid fa-magnifying-glass', 'search');
                     this.clickSerchIcon();
                 }
             }
             this.diceRollResultGlobal = []
-        }, { once: true });
+        }, { once: true });        
     }
 
     rotateRoomTile() {
@@ -689,9 +682,9 @@ class Game {
     clickDoorIcon(){
         this.playingField.addEventListener('click', (e) => {
             if(e.target.closest('.door-icon')) {
-                e.target.remove()
                 const card = getRundomElement(this.door_cards, door_cards)
                 this.drawCardEW(card)
+                e.target.remove()
             }
         });
     };
@@ -699,7 +692,7 @@ class Game {
     clickGrilleIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.grille-icon')) {
-                const trueFn = e.target.remove()
+                const trueFn = ()=>  e.target.remove()
                 this.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[this.getCurrentPlayer().hero].strength}`, heroes[this.getCurrentPlayer().hero].strength, false, 2, trueFn)
             }
         });
@@ -708,7 +701,7 @@ class Game {
     clickCollapseIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.collapse-icon')) {
-                const trueFn=e.target.remove()
+                const trueFn = ()=>  e.target.remove()
                 this.diceRollEW('Перед вами кімната заповнена уламками стелі що впала, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[this.getCurrentPlayer().hero].dexterity}`, heroes[this.getCurrentPlayer().hero].dexterity, true, 2, trueFn)   
             }
         });
@@ -717,7 +710,7 @@ class Game {
     clickWebIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.web-icon')) {
-                const trueFn=e.target.remove()
+                const trueFn = ()=>  e.target.remove()
                 this.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[this.getCurrentPlayer().hero].strength}`, heroes[this.getCurrentPlayer().hero].strength, false, 2, trueFn)
             }
         });
@@ -726,13 +719,14 @@ class Game {
     clickBridgeIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.bridge-icon')) {
-                const trueFn=e.target.remove()
+                const trueFn = ()=>  e.target.remove()
                 const falseFn = function(){
                     const field = document.querySelector(`[data-y="${this.getCurrentPlayer().position[1]}"][data-x="${this.getCurrentPlayer().position[0]}"]`)
                     this.removeIcon('.bridge-icon');
-                    const trueFn= heroes[this.getCurrentPlayer().hero].health -= this.diceRollResultGlobal;
+                    const trueFn = ()=>  heroes[this.getCurrentPlayer().hero].health -= this.diceRollResultGlobal;
                     
-                    //TODO вернуть вход в катакомбы
+                    //TODO вернуть вход в катакомбі
+                    //На жаль, ви повернулись у попередню кымнату                 
                     // this.getCurrentPlayer().catacomb = true
                     // putHeroMitl(field)
                     this.diceRollEW('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.',false, 6, false, 1, trueFn);
@@ -745,7 +739,7 @@ class Game {
     clickAbyssIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.abyss-icon')) {
-                const trueFn=e.target.remove()
+                const trueFn = ()=> e.target.remove()
                 this.diceRollEW('Кімнату розділило навпіл глибоким прірвою, щоб вийти з кімнати по той бік прірви перевірте Спритність.', `Ваша cпритність: ${heroes[this.getCurrentPlayer().hero].dexterity}`, heroes[this.getCurrentPlayer().hero].dexterity, true, 2, trueFn)   
             }
         });

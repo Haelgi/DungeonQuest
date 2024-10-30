@@ -98,8 +98,7 @@ class EventWidows{
     drawBtnInEW(id, name, fn, bg){
         const element = document.querySelector('.btn-section');
         element.insertAdjacentHTML('beforeend', `<button id=${id} style="background:${bg}">${name}</button>`);
-
-        document.getElementById(id).addEventListener('click', () => fn());
+        document.getElementById(id).addEventListener('click', () => fn(), {once: true});
     }
 
     drawTxtInEW(text){
