@@ -24,12 +24,15 @@ game.authentication = true;
 
 
 export function game_container() {
-    // game.drawFieldTileTests(71, '180', 1,  11);
-    // game.drawFieldTileTests(20, '180', 1,  10);
+    // game.drawFieldTileTests(114, '0', 1,  0);
+    // game.drawFieldTileTests(114, '0', 2,  0);
+    // game.drawFieldTileTests(114, '180', 1,  1);
     // game.drawFieldTileTests(1, '0', 1,  1);
+    // game.drawFieldTileTests(1, '0', 2,  0);
     // game.drawFieldTileTests(20, '180', 1,  1);
 
     game.startPosition();
+    
 
     function gameLoop() {
         game.sunTokenPosition(game.day);

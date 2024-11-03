@@ -14,6 +14,7 @@ import  {search_cards}  from './cards/search_cards.js';
 import  {treasure_cards}  from './cards/treasure_cards.js';
 import  {monster_cards}  from './cards/monster_cards.js';
 import  {dragon_cards}  from './cards/dragon_cards.js';
+import { player } from './player.js';
 
 // TODO создать метод завершение хода
 // TODO добавить метод завершение хода в необходиміе ме На жаль, ви повернулись у попередню кымнатуста 
@@ -119,21 +120,22 @@ class Game {
     }
 
     playDarkRoomEvent(){
-            this.diceRollDarkRoomEW('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.')
+        this.diceRollDarkRoomEW()
     }
 
     playPitEvent(){
         this.activeEvent = true
-            const falseFn =()=>{
-                const field = document.querySelector(`[data-y="${this.getCurrentPlayer().position[1]}"][data-x="${this.getCurrentPlayer().position[0]}"]`)
-                heroes[this.getCurrentPlayer().hero].health -=6
-                //TODO вернуть вход в катакомбі
-                //На жаль, ви повернулись у попередню кымнату             
-                // this.getCurrentPlayer().catacomb = true
-                // putHeroMitl(field)
-            } 
+        const trueFn =()=> this.endMove()
+        const falseFn =()=>{
+            heroes[this.getCurrentPlayer().hero].health -=6
+            //TODO вернуть вход в катакомбі
+            //На жаль, ви повернулись у попередню кымнату             
+            this.getCurrentPlayer().catacomb = true
+            this.drawHeroMitl(this.getCurrentPlayer().position[0], this.getCurrentPlayer().position[1]);
+            this.endMove()
+        } 
 
-            this.diceRollEW('Зайшовши в кімнату у вас під ногами виявилася дуже крихка підлога, щоб не провалитися в катакомби перевірте свою Удачу.',`Ваша Удача:  ${heroes[this.getCurrentPlayer().hero].luck} `, heroes[this.getCurrentPlayer().hero].luck, false, 2, false, falseFn)
+        this.diceRollEW('Зайшовши в кімнату у вас під ногами виявилася дуже крихка підлога, щоб не провалитися в катакомби перевірте свою Удачу.',`Ваша Удача:  ${heroes[this.getCurrentPlayer().hero].luck} `, heroes[this.getCurrentPlayer().hero].luck, false, 2, trueFn, falseFn)
     }
 
     playDungeonEvent(){
@@ -183,27 +185,28 @@ class Game {
         ew.drawEW('Завершити свій хід?');
         ew.drawBtnInEW('btn_yes', 'Так', ()=>{
             ew.removeAllEW()
+            this.endMove()
         }, 'green');
+
         ew.drawBtnInEW('btn_no', 'Ні', ()=>{
             ew.removeAllEW()
         }, 'red');
     }
 
     diceRollDarkRoomEW() {
+        this.nextCoordinates = []
+
         ew.drawEW('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.');
         ew.drawDiceInEW(1)
-        ew.drawBtnInEW('roll', 'Кинути Кубики', ()=>{
+        const trueFn = ()=>{
             ew.rollDiceFn()  
             setTimeout(() => {
-                ew.removeAllEW()
-                this.nextCoordinates = this.newCoordinate();
-                if (this.nextCoordinates.length === 0)return this.diceRollDarkRoomEW()
-                // const [[x,y]] = this.nextCoordinates
-                // this.removeAllIcon()
-                // this.drawHeroMitl(x, y);
-                this.nextCoordinates = this.newCoordinate();    
+                ew.removeAllEW();
+                if (!this.darkRoomCoordinates[this.diceRollResultGlobal]) return this.diceRollDarkRoomEW();
+                this.nextCoordinates = [this.darkRoomCoordinates[this.diceRollResultGlobal]];
             }, 1700);
-        })
+        }
+        ew.drawBtnInEW('roll', 'Кинути Кубики', trueFn)
     }
     
     removeAllIcon(){
@@ -341,7 +344,7 @@ class Game {
                 permission = this.checkPermitWay(coordinat, direction, checkBarrier);
             }
         }
-    
+
         return permission;
     }
         
@@ -350,6 +353,7 @@ class Game {
         const [x, y] = coordinat;
         const tileIdx = this.gameFields[y][x]['id'];
         const room = room_tiles[tileIdx];
+        let newCoord= ''
 
         if (!room) return true
 
@@ -385,7 +389,7 @@ class Game {
         
         if (value && room.special === 'collapse' && checkBarrier=== true) this.drawIcon(x,y, 'fa-solid fa-road-barrier', room.special, direction, true);
         if (value && room.special === 'web' && checkBarrier=== true) this.drawIcon(x,y, 'fa-solid fa-kip-sign', room.special, direction, true);
-        if (value && room.special === 'dark' && checkBarrier=== true) return value.includes(this.diceRollResultGlobal)
+        
         if (value && room.special === 'bridge' && checkBarrier=== true) this.drawIcon(x,y, 'fa-solid fa-bridge-circle-exclamation', room.special, direction, true);
 
         if (typeof value === 'string' && checkBarrier=== true) {
@@ -395,7 +399,28 @@ class Game {
 
         };
 
+        if (value !== false && room.special === 'dark' && checkBarrier=== true) {
+            switch (direction) {
+                case 'left':
+                    newCoord = [x - 1, y];
+                    break;
+                case 'up':
+                    newCoord = [x, y - 1];
+                    break;
+                case 'right':
+                    newCoord = [x + 1, y];
+                    break;
+                case 'down':
+                    newCoord = [x, y + 1];
+                    break;
+            }
 
+            value.forEach(element => {
+                this.darkRoomCoordinates[element] = newCoord    
+            });
+
+        }
+        
         return value
     }
     
@@ -409,7 +434,8 @@ class Game {
     }
 
     sunTokenPosition(day){
-        if (day > 38) return;
+        console.log(day)
+        if (day > 38) return this.endGame();
         const token_sun = document.querySelector(`.token_sun`);
         if (token_sun) token_sun.remove();
         const dayContainer = document.querySelector(`[day="${day}"]`);
@@ -451,8 +477,6 @@ class Game {
     };
 
     makeMove() {
-        
-        
         let array;
         if (!this.getCurrentPlayer().position) array = this.startFields;
         if (this.getCurrentPlayer().position) array =this.nextCoordinates;//[[],[],[]]
@@ -492,6 +516,7 @@ class Game {
                 if (this.gameFields[y][x]['id'] === undefined && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)) {
                     roomNumber = this.drawFieldTile(x, y);
                 }
+                
     
                 this.removeHighlightFields(array);
                 
@@ -499,6 +524,7 @@ class Game {
                 this.drawHeroMitl(x, y);
                 
                 this.nextCoordinates = this.newCoordinate();
+
                 if (!room_tiles[this.gameFields[y][x]['id']]) return;
 
                 if (room_tiles[this.gameFields[y][x]['id']].dungeon && !this.activeEvent) this.playDungeonEvent();
@@ -509,6 +535,7 @@ class Game {
                 if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate') {
                     this.rotateRoomTile()
                     this.nextCoordinates = this.newCoordinate();
+                    this.endMove()
                 };
 
                 if (room_tiles[this.gameFields[y][x]['id']].special === 'dark') {
@@ -519,10 +546,59 @@ class Game {
                     this.drawIcon(x, y, 'fa-solid fa-magnifying-glass', 'search');
                     this.clickSerchIcon();
                 }
+                if(room_tiles[this.gameFields[y][x]['id']]?.special === 'bridge') {
+                    this.removeCoordinateFromArray([player.positionPrevious[0],player.positionPrevious[1]], this.nextCoordinates)
+                }
+
+                if(room_tiles[this.gameFields[y][x]['id']]?.special !== 'bridge' 
+                    && room_tiles[this.gameFields[y][x]['id']]?.special !== 'corridor'
+                    && !this.getCurrentPlayer().positionTreasury) {
+                    this.endMove()      
+                }
             }
             
             this.diceRollResultGlobal = 0
+
         }, { once: true });        
+    }
+
+    removeCoordinateFromArray(elem, arr){
+        const index = arr.findIndex(item => 
+            item[0] === elem[0] && item[1] === elem[1]
+        );
+        if (index !== -1) {
+            arr.splice(index, 1);
+        }
+    }
+
+    toggleCurrentPlayer(){
+        if (this.playerList.length -1 < this.currentPlayerIndex) this.currentPlayerIndex += 1;
+        if (this.playerList.length -1 === this.currentPlayerIndex) {
+            this.currentPlayerIndex += 0;
+            this.day += 1;
+            console.log(this.day)
+        }
+    }
+
+    queueEW(){
+        const name = this.getCurrentPlayer().name;
+        if(player.idx === this.currentPlayerIndex && this.playerList.length > 1){
+            ew.drawEW(`${name}, ваш крок!`);
+            ew.drawBtnInEW('close', 'Розпочати!', ()=> ew.removeAllEW())
+        } 
+        if(player.idx !== this.currentPlayerIndex){
+            console.log('else')
+            ew.drawEW(`Очівання гравця ${name}!`)
+        }
+    }
+
+    endMove(){
+        this.toggleCurrentPlayer()
+        this.queueEW()
+    }
+
+    endGame(){
+        console.log('Game Over')
     }
 
     rotateRoomTile() {
@@ -589,8 +665,6 @@ class Game {
             `);
         });
     };
-
-
 
     removeHighlightFields(array){
         const fields = this.getElementsByData(array);
@@ -673,6 +747,7 @@ class Game {
             } else {
                 this.gameFields[y][x]['s'] += 1
             }
+            this.endMove()
 
         });
     };
@@ -706,7 +781,8 @@ class Game {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.grille-icon')) {
                 const trueFn = ()=>  e.target.remove()
-                this.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[this.getCurrentPlayer().hero].strength}`, heroes[this.getCurrentPlayer().hero].strength, false, 2, trueFn)
+                const falseFn = ()=>  this.endMove()
+                this.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[this.getCurrentPlayer().hero].strength}`, heroes[this.getCurrentPlayer().hero].strength, false, 2, trueFn, falseFn)
             }
         });
     }
@@ -715,7 +791,8 @@ class Game {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.collapse-icon')) {
                 const trueFn = ()=>  e.target.remove()
-                this.diceRollEW('Перед вами кімната заповнена уламками стелі що впала, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[this.getCurrentPlayer().hero].dexterity}`, heroes[this.getCurrentPlayer().hero].dexterity, true, 2, trueFn)   
+                const falseFn = ()=>  this.endMove()
+                this.diceRollEW('Перед вами кімната заповнена уламками стелі що впала, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[this.getCurrentPlayer().hero].dexterity}`, heroes[this.getCurrentPlayer().hero].dexterity, true, 2, trueFn, falseFn)   
             }
         });
     }
@@ -724,7 +801,8 @@ class Game {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.web-icon')) {
                 const trueFn = ()=>  e.target.remove()
-                this.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[this.getCurrentPlayer().hero].strength}`, heroes[this.getCurrentPlayer().hero].strength, false, 2, trueFn)
+                const falseFn = ()=>  this.endMove()
+                this.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[this.getCurrentPlayer().hero].strength}`, heroes[this.getCurrentPlayer().hero].strength, false, 2, trueFn, falseFn)
             }
         });
     }
@@ -733,18 +811,20 @@ class Game {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.bridge-icon')) {
                 const trueFn = ()=>  e.target.remove()
-                const falseFn = function(){
-                    const field = document.querySelector(`[data-y="${this.getCurrentPlayer().position[1]}"][data-x="${this.getCurrentPlayer().position[0]}"]`)
+                const falseFn = ()=>{
                     this.removeIcon('.bridge-icon');
-                    const trueFn = ()=>  heroes[this.getCurrentPlayer().hero].health -= this.diceRollResultGlobal;
+                    const trueFn = ()=>  {
+                        heroes[this.getCurrentPlayer().hero].health -= this.diceRollResultGlobal;
+                        this.endMove()
+                    };
                     
                     //TODO вернуть вход в катакомбі
                     //На жаль, ви повернулись у попередню кымнату                 
-                    // this.getCurrentPlayer().catacomb = true
-                    // putHeroMitl(field)
+                    this.getCurrentPlayer().catacomb = true
+                    this.drawHeroMitl(this.getCurrentPlayer().position[0], this.getCurrentPlayer().position[1]);
                     this.diceRollEW('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.',false, 6, false, 1, trueFn);
                 } 
-                this.diceRollEW('Перед вами кімната заповнена уламками стелі що впала, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[this.getCurrentPlayer().hero].dexterity}`, heroes[this.getCurrentPlayer().hero].dexterity, true, 2, trueFn, falseFn)   
+                this.diceRollEW('Перед вами кімната з глибокою прірвою, через яку перекинуто хитку дошку, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[this.getCurrentPlayer().hero].dexterity}`, heroes[this.getCurrentPlayer().hero].dexterity, true, 2, trueFn, falseFn)   
             }
         });
     }
@@ -753,7 +833,15 @@ class Game {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.abyss-icon')) {
                 const trueFn = ()=> e.target.remove()
-                this.diceRollEW('Кімнату розділило навпіл глибоким прірвою, щоб вийти з кімнати по той бік прірви перевірте Спритність.', `Ваша cпритність: ${heroes[this.getCurrentPlayer().hero].dexterity}`, heroes[this.getCurrentPlayer().hero].dexterity, true, 2, trueFn)   
+                const falseFn =()=>{
+                    heroes[this.getCurrentPlayer().hero].health -=5
+                    //TODO вернуть вход в катакомбі
+                    //На жаль, ви повернулись у попередню кымнату             
+                    this.getCurrentPlayer().catacomb = true
+                    this.drawHeroMitl(this.getCurrentPlayer().position[0], this.getCurrentPlayer().position[1]);
+                    this.endMove()
+                } 
+                this.diceRollEW('Кімнату розділило навпіл глибоким прірвою, щоб вийти з кімнати по той бік прірви перевірте Спритність.', `Ваша cпритність: ${heroes[this.getCurrentPlayer().hero].dexterity}`, heroes[this.getCurrentPlayer().hero].dexterity, true, 2, trueFn, falseFn)   
             }
         });
     }
