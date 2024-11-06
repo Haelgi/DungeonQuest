@@ -119,10 +119,6 @@ class Game {
         this.drawCardEW(card);
     }
 
-    playDarkRoomEvent(){
-        this.diceRollDarkRoomEW()
-    }
-
     playPitEvent(){
         this.activeEvent = true
         const trueFn =()=> this.endMove()
@@ -195,7 +191,6 @@ class Game {
 
     diceRollDarkRoomEW() {
         this.nextCoordinates = []
-
         ew.drawEW('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.');
         ew.drawDiceInEW(1)
         const trueFn = ()=>{
@@ -204,6 +199,7 @@ class Game {
                 ew.removeAllEW();
                 if (!this.darkRoomCoordinates[this.diceRollResultGlobal]) return this.diceRollDarkRoomEW();
                 this.nextCoordinates = [this.darkRoomCoordinates[this.diceRollResultGlobal]];
+                this.activeEvent = false
             }, 1700);
         }
         ew.drawBtnInEW('roll', 'Кинути Кубики', trueFn)
@@ -282,7 +278,6 @@ class Game {
             });
             heroes[this.getCurrentPlayer().hero].resolve +=1;
         }
-        // this.diceRollResultGlobal = 0
     }
 
     
@@ -479,69 +474,67 @@ class Game {
     makeMove() {
         let array;
         if (!this.getCurrentPlayer().position) array = this.startFields;
-        if (this.getCurrentPlayer().position) array =this.nextCoordinates;//[[],[],[]]
-
+        if (this.getCurrentPlayer().position) array =this.nextCoordinates;
+    
         if (!document.querySelector(`.available-field`)) {
             this.highlightFields(array);
         }
-
-        this.playingField.addEventListener('click', (e) => {
-            this.getCurrentPlayer().positionPrevious = this.getCurrentPlayer().position
-
-            if (e.target.closest('.door-icon')) return
-            if (e.target.closest('.grille-icon')) return
-            if (e.target.closest('.collapse-icon')) return
-            if (e.target.closest('.web-icon')) return
-            if (e.target.closest('.abyss-icon')) return
-            if (e.target.closest('.bridge-icon')) return
-
+    
+        this.playingField.removeEventListener('click', this.moveEventHandler); 
+    
+        this.moveEventHandler = (e) => {
+            this.getCurrentPlayer().positionPrevious = this.getCurrentPlayer().position;
+    
+            if (e.target.closest('.door-icon')) return;
+            if (e.target.closest('.grille-icon')) return;
+            if (e.target.closest('.collapse-icon')) return;
+            if (e.target.closest('.web-icon')) return;
+            if (e.target.closest('.abyss-icon')) return;
+            if (e.target.closest('.bridge-icon')) return;
+    
             if (e.target.closest('.available')) {
-                this.removeAllIcon()
-
+                this.removeAllIcon();
+    
                 const field = e.target.parentElement;
                 const x = Number(field.getAttribute('data-x'));
                 const y = Number(field.getAttribute('data-y'));
                 let roomNumber;
-
+    
                 if (field.classList.contains(`treasury`) && !this.getCurrentPlayer().positionTreasury) {
                     this.getCurrentPlayer().positionTreasury = true;
                     this.playTreasuryEvent();
                 };
-
+    
                 if (field.classList.contains(`treasury`) && this.getCurrentPlayer().positionTreasury) {
-                    this.drawIcon(x,y, 'fa-regular fa-gem', 'treasure');
+                    this.drawIcon(x, y, 'fa-regular fa-gem', 'treasure');
                     this.clickTreasureIcon(x, y);
                 }
-                
+    
                 if (this.gameFields[y][x]['id'] === undefined && !field.classList.contains(`start-field`) && !field.classList.contains(`treasury`)) {
                     roomNumber = this.drawFieldTile(x, y);
                 }
-                
     
                 this.removeHighlightFields(array);
-                
-    
                 this.drawHeroMitl(x, y);
-                
                 this.nextCoordinates = this.newCoordinate();
-
+    
                 if (!room_tiles[this.gameFields[y][x]['id']]) return;
-
+    
                 if (room_tiles[this.gameFields[y][x]['id']].dungeon && !this.activeEvent) this.playDungeonEvent();
-
+    
                 if (room_tiles[this.gameFields[y][x]['id']].trap && !this.activeEvent) this.playTrapEvent();
                 if (room_tiles[this.gameFields[y][x]['id']].special === 'pit' && !this.activeEvent) this.playPitEvent();
-                
+    
                 if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate') {
                     this.rotateRoomTile()
                     this.nextCoordinates = this.newCoordinate();
                     this.endMove()
                 };
-
+    
                 if (room_tiles[this.gameFields[y][x]['id']].special === 'dark') {
                     this.diceRollDarkRoomEW()  
                 }
-                
+    
                 if (room_tiles[this.gameFields[y][x]['id']].search && (this.gameFields[y][x]['s'] === undefined || this.gameFields[y][x]['s'] < 2)) {
                     this.drawIcon(x, y, 'fa-solid fa-magnifying-glass', 'search');
                     this.clickSerchIcon();
@@ -549,17 +542,18 @@ class Game {
                 if(room_tiles[this.gameFields[y][x]['id']]?.special === 'bridge') {
                     this.removeCoordinateFromArray([player.positionPrevious[0],player.positionPrevious[1]], this.nextCoordinates)
                 }
-
+    
                 if(room_tiles[this.gameFields[y][x]['id']]?.special !== 'bridge' 
-                    && room_tiles[this.gameFields[y][x]['id']]?.special !== 'corridor'
+                    && room_tiles[this.gameFields[y][x]['id']]?.special !== 'corridor' 
                     && !this.getCurrentPlayer().positionTreasury) {
                     this.endMove()      
                 }
             }
-            
-            this.diceRollResultGlobal = 0
-
-        }, { once: true });        
+    
+            this.diceRollResultGlobal = 0;
+        };
+    
+        this.playingField.addEventListener('click', this.moveEventHandler, { once: true });
     }
 
     removeCoordinateFromArray(elem, arr){
@@ -593,8 +587,10 @@ class Game {
     }
 
     endMove(){
+        console.log('endMove()')
         this.toggleCurrentPlayer()
         this.queueEW()
+        this.activeEvent = false
     }
 
     endGame(){
