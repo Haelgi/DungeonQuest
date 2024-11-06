@@ -43,17 +43,12 @@ export function game_container() {
         
         
         game.makeMove();
-        
-<<<<<<< HEAD
-        if (!player.position) makeMove(game.startFields);
-        if (player.position){
+
+        makeMove(nextCoordinates);
+        shiftMitle()
             
-            makeMove(nextCoordinates);
-            shiftMitle()
-            
-        }
-=======
->>>>>>> d41303b45df36beead40e92cc18a812d29a047e1
+
+
         requestAnimationFrame(gameLoop);
     };
 
