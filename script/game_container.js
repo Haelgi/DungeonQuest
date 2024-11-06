@@ -40,14 +40,8 @@ export function game_container() {
     function gameLoop() {
         game.sunTokenPosition(game.day);
         game.addCharacterTablet(player.hero);
-        
-        
+
         game.makeMove();
-
-        makeMove(nextCoordinates);
-        shiftMitle()
-            
-
 
         requestAnimationFrame(gameLoop);
     };

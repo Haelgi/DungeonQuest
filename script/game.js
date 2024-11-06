@@ -429,7 +429,6 @@ class Game {
     }
 
     sunTokenPosition(day){
-        console.log(day)
         if (day > 38) return this.endGame();
         const token_sun = document.querySelector(`.token_sun`);
         if (token_sun) token_sun.remove();
@@ -571,7 +570,6 @@ class Game {
         if (this.playerList.length -1 === this.currentPlayerIndex) {
             this.currentPlayerIndex += 0;
             this.day += 1;
-            console.log(this.day)
         }
     }
 
@@ -581,14 +579,10 @@ class Game {
             ew.drawEW(`${name}, ваш крок!`);
             ew.drawBtnInEW('close', 'Розпочати!', ()=> ew.removeAllEW())
         } 
-        if(player.idx !== this.currentPlayerIndex){
-            console.log('else')
-            ew.drawEW(`Очівання гравця ${name}!`)
-        }
+        if(player.idx !== this.currentPlayerIndex) ew.drawEW(`Очівання гравця ${name}!`)
     }
 
     endMove(){
-        console.log('endMove()')
         this.toggleCurrentPlayer()
         this.queueEW()
         this.activeEvent = false
