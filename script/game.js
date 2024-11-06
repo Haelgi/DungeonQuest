@@ -545,6 +545,7 @@ class Game {
     
                 if(room_tiles[this.gameFields[y][x]['id']]?.special !== 'bridge' 
                     && room_tiles[this.gameFields[y][x]['id']]?.special !== 'corridor' 
+                    && room_tiles[this.gameFields[y][x]['id']]?.special !== 'pit' 
                     && !this.getCurrentPlayer().positionTreasury) {
                     this.endMove()      
                 }
