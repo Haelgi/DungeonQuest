@@ -1,4 +1,5 @@
-import  {game, player}  from './authentication.js';
+import  {game}  from './game.js';
+import  {player}  from './player.js';
 import  {heroes}  from './cards/heroes.js';
 
 

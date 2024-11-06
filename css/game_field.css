@@ -39,7 +39,16 @@
     text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.315), 0 0 20px rgba(0, 0, 0, 0.322), 0 0 20px rgba(0, 0, 0, 0.233);
 }
 
-.tile-field i.search-icon{
+.tile-field i.end-icon{
+    top: 60px;
+    left: -30px;
+    padding: 7px;
+    color: #fa00008e;
+    z-index: 20;
+}
+
+.tile-field i.search-icon,
+.tile-field i.treasure-icon{
     top: -25px;
     left: 55px;
     padding: 7px;
@@ -49,7 +58,9 @@
 
 .tile-field i.door-icon,
 .tile-field i.collapse-icon,
+.tile-field i.web-icon,
 .tile-field i.abyss-icon,
+.tile-field i.bridge-icon,
 .tile-field i.grille-icon{
     padding: 20px;
     z-index: 30;
@@ -58,6 +69,11 @@
 .tile-field i:hover{
     color: #fae100;
     text-shadow: 0px 0px 20px rgb(255, 166, 0), 0 0 20px rgb(255, 166, 0), 0 0 20px white;
+}
+
+.tile-field i.end-icon:hover{
+    color: #fa0000;
+    text-shadow: 0px 0px 20px rgb(255, 0, 0), 0 0 20px rgb(255, 0, 0), 0 0 20px white;
 }
 
 .available-field{
@@ -82,15 +98,24 @@
 
 
 .hero_token_catacomb{
+    position: absolute;
     width: 60px;
     height: 78px;
+    z-index: 10;
 }
 
 
 .hero_mitl{
     position: absolute;
+    top : -10px;
+    left : 10px;
     height: 80px; 
     z-index: 10;
+}
+
+.tile-field:hover .hero_mitl{
+    top : -60px;
+    left : -40px;
 }
 
 .room_token_catacomb{
