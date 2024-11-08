@@ -10,6 +10,7 @@ class Player {
         this.position = false;
         this.finish = false;
         this.catacomb = false;
+        this.catacombDirection = 0;
         this.card_abilitie = Array.from({ length: 5 }, (_, index) => index + 1);
         this.effectCardContainer = [];
         this.treasureCardContainer = [];
