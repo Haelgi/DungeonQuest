@@ -14,6 +14,7 @@ player.name = 'Олег';
 player.hero = 'enchantress'; 
 player.authentication = true;
 player.treasureCardContainer = [1,2,3];
+player.catacombCardContainer = [1,2,3];
 
 heroes[player.hero].resolve = 10
 
@@ -24,7 +25,7 @@ game.authentication = true;
 
 
 export function game_container() {
-    game.drawFieldTileTests(6, '90', 1,  0);
+    // game.drawFieldTileTests(42, '90', 1,  0);
     // game.drawFieldTileTests(11, '90', 2,  0);
     // game.drawFieldTileTests(11, '180', 1,  1);
     // game.drawFieldTileTests(113, '0', 1,  0);
