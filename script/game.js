@@ -124,10 +124,8 @@ class Game {
         this.activeEvent = true
         const trueFn =()=> this.endMove()
         const falseFn =()=>{
-            heroes[player.hero].health -=6
-            //TODO вернуть вход в катакомбі
-            //На жаль, ви повернулись у попередню кымнату             
-            player.catacomb = true
+            heroes[player.hero].health -=6           
+            this.getDirectionCatacomb()
             this.drawHeroMitl(player.position[0], player.position[1]);
             this.endMove()
         } 
@@ -138,6 +136,12 @@ class Game {
     playDungeonEvent(){
         this.activeEvent = true
         const card = getRundomElement(this.dungeon_cards, dungeon_cards)   
+        this.drawCardEW(card);
+    }
+
+    playCatacombEvent(){
+        this.activeEvent = true
+        const card = getRundomElement(this.catacomb_cards, catacomb_cards)   
         this.drawCardEW(card);
     }
     
@@ -188,6 +192,14 @@ class Game {
         ew.drawBtnInEW('btn_no', 'Ні', ()=>{
             ew.removeAllEW()
         }, 'red');
+    }
+
+    escapeCatacomb(){
+        // TODO закончить escapeCatacomb
+        console.log('escape Catacomb')
+        player.catacomb = false
+        this.drawHeroMitl(player.position[0], player.position[1]);
+        this.endMove()
     }
 
     diceRollDarkRoomEW() {
@@ -383,12 +395,12 @@ class Game {
         const newDirection = directionMapping[this.gameFields[y][x]['r']][direction];
         const value = room[newDirection];
         
-        if (value && room.special === 'collapse' && checkBarrier=== true) this.drawIcon(x,y, 'fa-solid fa-road-barrier', room.special, direction, true);
-        if (value && room.special === 'web' && checkBarrier=== true) this.drawIcon(x,y, 'fa-solid fa-kip-sign', room.special, direction, true);
+        if (value && room.special === 'collapse' && checkBarrier=== true && !player.catacomb) this.drawIcon(x,y, 'fa-solid fa-road-barrier', room.special, direction, true);
+        if (value && room.special === 'web' && checkBarrier=== true && !player.catacomb) this.drawIcon(x,y, 'fa-solid fa-kip-sign', room.special, direction, true);
         
-        if (value && room.special === 'bridge' && checkBarrier=== true) this.drawIcon(x,y, 'fa-solid fa-bridge-circle-exclamation', room.special, direction, true);
+        if (value && room.special === 'bridge' && checkBarrier=== true && !player.catacomb) this.drawIcon(x,y, 'fa-solid fa-bridge-circle-exclamation', room.special, direction, true);
 
-        if (typeof value === 'string' && checkBarrier=== true) {
+        if (typeof value === 'string' && checkBarrier=== true && !player.catacomb) {
             if (value === 'door') this.drawIcon(x,y, 'fa-solid fa-door-closed', 'door', direction);
             if (value === 'grille') this.drawIcon(x,y, 'fa-solid fa-dungeon', 'grille', direction);
             if (value === 'abyss') this.drawIcon(x,y, 'fa-solid fa-arrow-up-from-ground-water', 'abyss', direction);
@@ -494,13 +506,18 @@ class Game {
     
             if (e.target.closest('.available')) {
                 this.removeAllIcon();
-    
+
                 const field = e.target.parentElement;
                 const x = Number(field.getAttribute('data-x'));
                 const y = Number(field.getAttribute('data-y'));
                 let roomNumber;
+
+                if (player.catacomb && !this.activeEvent) {
+                    this.playCatacombEvent()
+                    this.endMove()
+                }
     
-                if (field.classList.contains(`treasury`) && !player.positionTreasury) {
+                if (field.classList.contains(`treasury`) && !player.positionTreasury && !player.catacomb) {
                     player.positionTreasury = true;
                     this.playTreasuryEvent();
                 };
@@ -514,10 +531,9 @@ class Game {
     
                 this.removeHighlightFields(array);
                 this.drawHeroMitl(x, y);
+
                 if (!player.catacomb) this.nextCoordinates = this.newCoordinate();
-                if (player.catacomb) {
-                    this.nextCoordinates = this.newCoordinateInCatacomb()
-                };
+                if (player.catacomb) {this.nextCoordinates = this.newCoordinateInCatacomb()};
     
                 if (!room_tiles[this.gameFields[y][x]['id']]) return;
     
@@ -548,14 +564,15 @@ class Game {
                     this.clickCatacombIcon();
                 }
 
-                if(room_tiles[this.gameFields[y][x]['id']]?.special === 'bridge') {
+                if(room_tiles[this.gameFields[y][x]['id']]?.special === 'bridge' && !player.catacomb) {
                     this.removeCoordinateFromArray([player.positionPrevious[0],player.positionPrevious[1]], this.nextCoordinates)
                 }
     
                 if(room_tiles[this.gameFields[y][x]['id']]?.special !== 'bridge' 
                     && room_tiles[this.gameFields[y][x]['id']]?.special !== 'corridor' 
                     && room_tiles[this.gameFields[y][x]['id']]?.special !== 'pit' 
-                    && !player.positionTreasury) {
+                    && !player.positionTreasury
+                    && !player.catacomb) {
                     this.endMove()      
                 }
             }
@@ -658,7 +675,6 @@ class Game {
     };
 
     highlightFields(array){
-        console.log(array)
         if (!array) return
         const fields = this.getElementsByData(array);
         fields.forEach(field => {
@@ -693,10 +709,12 @@ class Game {
             field.insertAdjacentHTML('afterbegin', `
                 <img class="hero_mitl ${player.hero}" src="img/hero_tiles/mitle/${player.hero}.png" alt="">
             `); 
+
+            this.drawIcon(x, y, 'fa-regular fa-circle-xmark', 'end');
+            this.clickEndIcon(x, y);
         }
         
-        this.drawIcon(x, y, 'fa-regular fa-circle-xmark', 'end');
-        this.clickEndIcon(x, y);            
+                    
         player.position = [x, y];
 
         if (this.gameFields[y][x]['id'] === undefined 
@@ -783,7 +801,10 @@ class Game {
 
     clickCatacombIcon(){
         const catacombIcon = document.querySelector('.catacomb-icon');
-        catacombIcon.addEventListener('click', () => this.getDirectionCatacomb());
+        catacombIcon.addEventListener('click', () => {
+            this.getDirectionCatacomb()
+            this.endMove()
+        });
     };
 
     getDirectionCatacomb(){
@@ -798,7 +819,9 @@ class Game {
     
             ew.drawEW('Виберіть напрямок руху у катакакомбах.')
             ew.drawTxtInEW('Змінити напрямок руху буде неможливо.')
-            ew.drawBtnInEW('close', 'Далі', ()=>ew.removeAllEW())
+            ew.drawBtnInEW('close', 'Далі', ()=>{
+                ew.removeAllEW()
+            })
             return
         }
 
@@ -806,7 +829,11 @@ class Game {
             player.catacomb = false
             this.drawHeroMitl(player.position[0], player.position[1]);
             ew.drawEW('Ви вийщли з катакомб.')
-            ew.drawBtnInEW('close', 'Далі', ()=>ew.removeAllEW())
+            ew.drawBtnInEW('close', 'Далі', ()=>{
+                ew.removeAllEW()
+                this.endMove()
+            })
+
             return
         }
     }
@@ -956,9 +983,7 @@ class Game {
                         this.endMove()
                     };
                     
-                    //TODO вернуть вход в катакомбі
-                    //На жаль, ви повернулись у попередню кымнату                 
-                    player.catacomb = true
+                    this.getDirectionCatacomb()
                     this.drawHeroMitl(player.position[0], player.position[1]);
                     this.diceRollEW('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.',false, 6, false, 1, trueFn);
                 } 
@@ -973,9 +998,7 @@ class Game {
                 const trueFn = ()=> e.target.remove()
                 const falseFn =()=>{
                     heroes[player.hero].health -=5
-                    //TODO вернуть вход в катакомбі
-                    //На жаль, ви повернулись у попередню кымнату             
-                    player.catacomb = true
+                    this.getDirectionCatacomb()
                     this.drawHeroMitl(player.position[0], player.position[1]);
                     this.endMove()
                 } 
