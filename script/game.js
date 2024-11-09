@@ -142,7 +142,8 @@ class Game {
         this.activeEvent = true
         const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
         // this.drawCardEW(card);
-        this.drawCardEW(catacomb_cards[9]);
+        // TODO убрать хардкод с карт катакомб
+        this.drawCardEW(catacomb_cards[21]);
     }
     
     playTreasuryEvent(){
@@ -178,7 +179,7 @@ class Game {
             this.activeEvent = false
             ew.removeAllEW()
             if (card.effect() === undefined) return
-            this.drawCardEW(card.effect())
+            card.effect()
         });
     }
     
@@ -208,7 +209,6 @@ class Game {
     }
 
     escapeCatacomb(){
-        // TODO закончить escapeCatacomb
         console.log('escape Catacomb')
         player.catacomb = false
         const x = player.position[0]
