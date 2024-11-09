@@ -552,37 +552,8 @@ class Game {
                 if (player.catacomb) this.nextCoordinates = this.newCoordinateInCatacomb();
     
                 if (!room_tiles[this.gameFields[y][x]['id']]) return;
-    
-                if (room_tiles[this.gameFields[y][x]['id']].dungeon && !this.activeEvent) this.playDungeonEvent();
-    
-                if (room_tiles[this.gameFields[y][x]['id']].trap && !this.activeEvent) this.playTrapEvent();
-                if (room_tiles[this.gameFields[y][x]['id']].special === 'pit' && !this.activeEvent && !player.catacomb) this.playPitEvent();
-    
-                if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate' && !player.catacomb) {
-                    this.rotateRoomTile()
-                    this.nextCoordinates = this.newCoordinate();
-                    this.endMove()
-                };
-    
-                if (room_tiles[this.gameFields[y][x]['id']].special === 'dark' && !player.catacomb) {
-                    this.diceRollDarkRoomEW()  
-                }
-    
-                if (room_tiles[this.gameFields[y][x]['id']].search 
-                    && (this.gameFields[y][x]['s'] === undefined || this.gameFields[y][x]['s'] < 2)
-                    && !player.catacomb) {
-                    this.drawIcon(x, y, 'fa-solid fa-magnifying-glass', 'search');
-                    this.clickSerchIcon();
-                }
-                
-                if (room_tiles[this.gameFields[y][x]['id']].catacomb) {
-                    this.drawIcon(x, y, 'fa-solid fa-person-through-window', 'catacomb');
-                    this.clickCatacombIcon();
-                }
 
-                if(room_tiles[this.gameFields[y][x]['id']]?.special === 'bridge' && !player.catacomb) {
-                    this.removeCoordinateFromArray([player.positionPrevious[0],player.positionPrevious[1]], this.nextCoordinates)
-                }
+                this.checkRoomEvents()
     
                 if(room_tiles[this.gameFields[y][x]['id']]?.special !== 'bridge' 
                     && room_tiles[this.gameFields[y][x]['id']]?.special !== 'corridor' 
