@@ -101,6 +101,10 @@ class EventWidows{
         document.getElementById(id).addEventListener('click', () => fn(), {once: true});
     }
 
+    removeRawBtnInEW(id){
+        document.getElementById(id).remove()
+    }
+
     drawTxtInEW(text){
         const element = document.querySelector('.title');
         element.insertAdjacentHTML('beforeend', `<p>${text}</p>`);

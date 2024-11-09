@@ -135,7 +135,7 @@ class Game {
     playDungeonEvent(){
         this.activeEvent = true
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(card);
+        this.drawCardEW(dungeon_cards[27]);
     }
 
     playCatacombEvent(){
@@ -143,7 +143,7 @@ class Game {
         const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
         // this.drawCardEW(card);
         // TODO убрать хардкод с карт катакомб
-        this.drawCardEW(catacomb_cards[21]);
+        this.drawCardEW(catacomb_cards[25]);
     }
     
     playTreasuryEvent(){
@@ -164,7 +164,7 @@ class Game {
         );
             
         this.gameFields[y][x]['id'] = roomNumber-1;
-        this.gameFields[y][x]['r'] = rotate;
+        this.gameFields[y][x]['r'] = Number(rotate);
     };
 
     // End Draw Interface Elements /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -175,9 +175,8 @@ class Game {
     drawCardEW(card) {
         ew.drawEW(card.title);
         ew.drawCardsInEW(card);
-        ew.drawBtnInEW('btn', card.btnName, ()=>{
+        ew.drawBtnInEW('btn_ew', card.btnName, ()=>{
             this.activeEvent = false
-            ew.removeAllEW()
             if (card.effect() === undefined) return
             card.effect()
         });
@@ -582,7 +581,7 @@ class Game {
         if (room_tiles[this.gameFields[y][x]['id']].special === 'pit' && !this.activeEvent && !player.catacomb) this.playPitEvent();
 
         if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate' && !player.catacomb) {
-            this.rotateRoomTile()
+            this.rotateRoomTile(180)
             this.nextCoordinates = this.newCoordinate();
             this.endMove()
         };
@@ -644,35 +643,24 @@ class Game {
         console.log('Game Over')
     }
 
-    rotateRoomTile() {
+    rotateRoomTile(angl) {
         const [x, y] = player.position;
-        const rotateOld = this.gameFields[y][x]['r'];
         const parentElement = document.querySelector(`[data-y="${y}"][data-x="${x}"]`);
         const childTileField = parentElement.querySelector('.tile-field');
+        
+        let rotate = this.gameFields[y][x]['r'];
+        console.log(rotate)
 
-        let rotateNew;
+        rotate = rotate + angl;
+        console.log(rotate)
 
-        switch (rotateOld) {
-            case '0':
-                rotateNew = '180';
-                break;
-            case '90':
-                rotateNew = '270';
-                break;
-            case '270':
-                rotateNew = '90';
-                break;
-            case '180':
-                rotateNew = '0';
-                break;
-        }
+        if (rotate > 270) rotate = angl - 270;
+        console.log(rotate)
 
-        this.gameFields[y][x]['r'] = rotateNew;
-    
-
+        this.gameFields[y][x]['r'] = Number(rotate);
     
         if (childTileField) {
-            childTileField.style.rotate = `${rotateNew}deg`;
+            childTileField.style.rotate = `${rotate}deg`;
         }
     }
     
@@ -681,17 +669,17 @@ class Game {
         const roomNumber = this.getRundomElement(this.room_tiles, room_tiles).number;
         let rotate;
         
-        if (x > player.positionPrevious[0]) {rotate = '90'}  
-        if (x < player.positionPrevious[0]) {rotate = '270'}  
-        if (y > player.positionPrevious[1]) {rotate = '180'}  
-        if (y < player.positionPrevious[1]) {rotate = '0'}  
+        if (x > player.positionPrevious[0]) {rotate = 90}  
+        if (x < player.positionPrevious[0]) {rotate = 270}  
+        if (y > player.positionPrevious[1]) {rotate = 180}  
+        if (y < player.positionPrevious[1]) {rotate = 0}  
         
         field.classList.add('shadow')
         field.insertAdjacentHTML('afterbegin', `
             <img class="tile-field tile-map" src="img/room_tiles/room_${roomNumber}.jpg" alt="" style="rotate: ${rotate}deg;">`);
             
         this.gameFields[y][x]['id'] = roomNumber-1;
-        this.gameFields[y][x]['r'] = String(rotate);
+        this.gameFields[y][x]['r'] = Number(rotate);
         this.gameFields[y][x]['p'] = player.name;
 
         delete this.gameFields[player.position[1]][player.position[0]]['p'];
@@ -961,7 +949,7 @@ class Game {
                 if (y < player.position[1]) rotate = 0
 
                 
-                player.catacombDirection = rotate
+                player.catacombDirection = Number(rotate)
                 this.drawHeroMitl(player.position[0], player.position[1]);
 
                 this.removeIcon('.arrow-icon')

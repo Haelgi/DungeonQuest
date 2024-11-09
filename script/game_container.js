@@ -13,14 +13,19 @@ player.idx = 0;
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
 player.authentication = true;
+// player.catacomb = true;
 player.treasureCardContainer = [1,2,3];
 player.catacombCardContainer = [1,2,3];
+// player.positionPrevious = [[1,2]];
 
 heroes[player.hero].resolve = 10
 
 game.gameIdx = 0;
 game.playerList = [player];
 game.authentication = true; 
+// game.startFields = [[2,2]]; 
+
+
 //////////////////////////////////////////////////////////////////////////////////////
 
 
