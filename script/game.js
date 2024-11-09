@@ -1,7 +1,6 @@
 import  {loadTemplate}  from './function/loadTemplate.js';
 import  {ew}  from './eventWidows.js';
 import  {addScrolCardsEffect}  from './function/addScrolCardsEffect.js';
-import  {getRundomElement, rundom}  from './function/getRundomElement.js';
 import  {heroes}  from './cards/heroes.js';
 import  {room_tiles}  from './cards/room_tiles.js';
 import  {dungeon_cards}  from './cards/dungeon_cards.js';
@@ -116,7 +115,7 @@ class Game {
     
     playTrapEvent(){
         this.activeEvent = true
-        const card = getRundomElement(this.trap_cards, trap_cards)   
+        const card = this.getRundomElement(this.trap_cards, trap_cards)   
         this.drawCardEW(card);
     }
 
@@ -135,18 +134,19 @@ class Game {
 
     playDungeonEvent(){
         this.activeEvent = true
-        const card = getRundomElement(this.dungeon_cards, dungeon_cards)   
+        const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         this.drawCardEW(card);
     }
 
     playCatacombEvent(){
         this.activeEvent = true
-        const card = getRundomElement(this.catacomb_cards, catacomb_cards)   
-        this.drawCardEW(card);
+        const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
+        // this.drawCardEW(card);
+        this.drawCardEW(catacomb_cards[9]);
     }
     
     playTreasuryEvent(){
-        const card = getRundomElement(this.dragon_cards, dragon_cards)   
+        const card = this.getRundomElement(this.dragon_cards, dragon_cards)   
         this.drawCardEW(card);
     }
 
@@ -194,11 +194,28 @@ class Game {
         }, 'red');
     }
 
+    escapeCatacombEW(){
+        ew.drawEW('Бажаєте покинути катакомби?')
+
+        ew.drawBtnInEW('next', 'Так', ()=>{
+            ew.removeAllEW()
+            this.escapeCatacomb()
+        }, 'green')
+
+        ew.drawBtnInEW('close', 'Ні', ()=>{
+            ew.removeAllEW()
+        }, 'red')
+    }
+
     escapeCatacomb(){
         // TODO закончить escapeCatacomb
         console.log('escape Catacomb')
         player.catacomb = false
-        this.drawHeroMitl(player.position[0], player.position[1]);
+        const x = player.position[0]
+        const y = player.position[1]
+        this.removeHighlightFields(this.nextCoordinates)
+        this.drawHeroMitl(x, y);
+        this.checkRoomEvents()
         this.endMove()
     }
 
@@ -510,8 +527,7 @@ class Game {
                 const field = e.target.parentElement;
                 const x = Number(field.getAttribute('data-x'));
                 const y = Number(field.getAttribute('data-y'));
-                let roomNumber;
-
+                
                 if (player.catacomb && !this.activeEvent) {
                     this.playCatacombEvent()
                     this.endMove()
@@ -533,7 +549,7 @@ class Game {
                 this.drawHeroMitl(x, y);
 
                 if (!player.catacomb) this.nextCoordinates = this.newCoordinate();
-                if (player.catacomb) {this.nextCoordinates = this.newCoordinateInCatacomb()};
+                if (player.catacomb) this.nextCoordinates = this.newCoordinateInCatacomb();
     
                 if (!room_tiles[this.gameFields[y][x]['id']]) return;
     
@@ -581,6 +597,44 @@ class Game {
         };
     
         this.playingField.addEventListener('click', this.moveEventHandler, { once: true });
+    }
+
+    checkRoomEvents(){
+        const x = player.position[0]
+        const y = player.position[1]
+
+        if (!player.catacomb) this.nextCoordinates = this.newCoordinate();
+
+        if (room_tiles[this.gameFields[y][x]['id']].dungeon && !this.activeEvent) this.playDungeonEvent();
+
+        if (room_tiles[this.gameFields[y][x]['id']].trap && !this.activeEvent) this.playTrapEvent();
+        if (room_tiles[this.gameFields[y][x]['id']].special === 'pit' && !this.activeEvent && !player.catacomb) this.playPitEvent();
+
+        if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate' && !player.catacomb) {
+            this.rotateRoomTile()
+            this.nextCoordinates = this.newCoordinate();
+            this.endMove()
+        };
+
+        if (room_tiles[this.gameFields[y][x]['id']].special === 'dark' && !player.catacomb) {
+            this.diceRollDarkRoomEW()  
+        }
+
+        if (room_tiles[this.gameFields[y][x]['id']].search 
+            && (this.gameFields[y][x]['s'] === undefined || this.gameFields[y][x]['s'] < 2)
+            && !player.catacomb) {
+            this.drawIcon(x, y, 'fa-solid fa-magnifying-glass', 'search');
+            this.clickSerchIcon();
+        }
+        
+        if (room_tiles[this.gameFields[y][x]['id']].catacomb) {
+            this.drawIcon(x, y, 'fa-solid fa-person-through-window', 'catacomb');
+            this.clickCatacombIcon();
+        }
+
+        if(room_tiles[this.gameFields[y][x]['id']]?.special === 'bridge' && !player.catacomb) {
+            this.removeCoordinateFromArray([player.positionPrevious[0],player.positionPrevious[1]], this.nextCoordinates)
+        }
     }
 
     removeCoordinateFromArray(elem, arr){
@@ -653,7 +707,7 @@ class Game {
     
     drawTileField(x, y){
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
-        const roomNumber = getRundomElement(this.room_tiles, room_tiles).number;
+        const roomNumber = this.getRundomElement(this.room_tiles, room_tiles).number;
         let rotate;
         
         if (x > player.positionPrevious[0]) {rotate = '90'}  
@@ -723,6 +777,8 @@ class Game {
             && !player.catacomb) {
             this.drawTileField(x, y);
         }
+
+
     }
 
     drawIcon(x,y, icon, selectorName ,direction, drawPrevious){
@@ -778,7 +834,7 @@ class Game {
         const [x,y] = player.position
         const serchIcon = document.querySelector('.search-icon');
         serchIcon.addEventListener('click', () => {
-            const card = getRundomElement(this.search_cards, search_cards)
+            const card = this.getRundomElement(this.search_cards, search_cards)
             this.drawCardEW(card)
             this.removeIcon('.search-icon');
 
@@ -901,7 +957,7 @@ class Game {
     clickTreasureIcon(){
         const treasureIcon = document.querySelector('.treasure-icon');
         treasureIcon.addEventListener('click', () => {
-            const card = getRundomElement(this.treasure_cards, treasure_cards)
+            const card = this.getRundomElement(this.treasure_cards, treasure_cards)
             this.drawCardEW(card)
         });
     };
@@ -909,7 +965,7 @@ class Game {
     clickDoorIcon(){
         this.playingField.addEventListener('click', (e) => {
             if(e.target.closest('.door-icon')) {
-                const card = getRundomElement(this.door_cards, door_cards)
+                const card = this.getRundomElement(this.door_cards, door_cards)
                 this.drawCardEW(card)
                 e.target.remove()
             }
@@ -1010,6 +1066,16 @@ class Game {
     createNewEvent(eventName){
         const event = new Event(eventName);
         document.dispatchEvent(event);
+    }
+
+    getRundomElement(idxArr, objArr){
+        const randomIdx = this.rundom(idxArr.length);
+        idxArr.splice(randomIdx, 1);
+        return objArr[randomIdx]
+    }
+    
+    rundom(maxValue){
+        return Math.floor(Math.random() * maxValue);
     }
 }
 
