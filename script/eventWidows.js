@@ -5,6 +5,7 @@ class EventWidows{
     static zIndex = 100;
 
     drawEW(title, color) {
+        game.activeEvent = true
         const element = document.querySelector('body');
         element.insertAdjacentHTML('afterbegin', 
             `<div class="event-container" style="z-index: ${EventWidows.zIndex};">
@@ -18,7 +19,19 @@ class EventWidows{
         EventWidows.zIndex +=1;
     }
 
+    removeTitile(){
+        document.querySelector('.event-main').querySelector('.title').remove();
+    }
+
+    addTitleToEW(txt){
+        const main = document.querySelector('.event-main');
+        main.insertAdjacentHTML('afterbegin', 
+            `<div class="title"><h1>${txt}</h1></div>`
+        );
+    }
+
     removeAllEW(){
+        game.activeEvent = false
         const elements = document.querySelectorAll('.event-container')
         elements.forEach(element => {
             element.remove()

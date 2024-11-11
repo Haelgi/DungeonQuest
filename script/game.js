@@ -35,6 +35,7 @@ class Game {
         this.body;
         this.playingField;
         this.activeEvent = false
+        this.removePreviousTileField = false
         
         this.next = false;
         this.diceRollResultGlobal = 0;
@@ -114,13 +115,11 @@ class Game {
     // Custom Event /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     
     playTrapEvent(){
-        this.activeEvent = true
         const card = this.getRundomElement(this.trap_cards, trap_cards)   
         this.drawCardEW(card);
     }
 
     playPitEvent(){
-        this.activeEvent = true
         const trueFn =()=> this.endMove()
         const falseFn =()=>{
             heroes[player.hero].health -=6           
@@ -133,13 +132,11 @@ class Game {
     }
 
     playDungeonEvent(){
-        this.activeEvent = true
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         this.drawCardEW(dungeon_cards[27]);
     }
 
     playCatacombEvent(){
-        this.activeEvent = true
         const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
         // this.drawCardEW(card);
         // TODO убрать хардкод с карт катакомб
@@ -208,7 +205,6 @@ class Game {
     }
 
     escapeCatacomb(){
-        console.log('escape Catacomb')
         player.catacomb = false
         const x = player.position[0]
         const y = player.position[1]
@@ -271,7 +267,31 @@ class Game {
                 this.rolResultEW(newValue, trueFn, falseFn);
             }, 1700);
         });
-        ew.drawBtnInEW('close', 'Закрити', () => ew.removeAllEW(), 'red');
+    }
+    
+    addDiceRollSection(  txt, value, dexterity, diceCount, trueFn, falseFn) {
+        let newValue = value;
+        let texts = txt;
+        const resolvePlayer = heroes[player.hero].resolve;
+        const treasure = player.treasureCardContainer.length;
+    
+        if (resolvePlayer > 0) {
+            texts += ` + ${resolvePlayer} Рішучості`;
+        }
+    
+        if (treasure > 0 && dexterity) {
+            texts += ` - ${treasure} Спритності`;
+            newValue -= treasure;
+        }
+    
+        ew.drawTxtInEW(texts);
+        ew.drawDiceInEW(diceCount);
+        ew.drawBtnInEW('roll', 'Кинути Кубики', () => {
+            ew.rollDiceFn();
+            setTimeout(() => {
+                this.rolResultEW(newValue, trueFn, falseFn);
+            }, 1700);
+        });
     }
     
 
@@ -499,10 +519,18 @@ class Game {
         });
     };
 
+    checkEventCards(){
+        if (player.eventCardContainer.length === 0 || this.activeEvent) return
+        const [card] = player.eventCardContainer.splice(0, 1);
+        this.drawCardEW(card)
+    }
+
     makeMove() {
         let array;
         if (!player.position) array = this.startFields;
         if (player.position ) array = this.nextCoordinates;
+
+        this.checkEventCards()
     
         if (!document.querySelector(`.available-field`)) {
             this.highlightFields(array);    
@@ -512,7 +540,7 @@ class Game {
     
         this.moveEventHandler = (e) => {
             player.positionPrevious = player.position;
-    
+
             if (e.target.closest('.door-icon')) return;
             if (e.target.closest('.grille-icon')) return;
             if (e.target.closest('.collapse-icon')) return;
@@ -522,6 +550,11 @@ class Game {
     
             if (e.target.closest('.available')) {
                 this.removeAllIcon();
+
+                if(this.removePreviousTileField) {
+                    game.removePreviousTileField = false
+                    this.removeTileField(player.positionPrevious[0], player.positionPrevious[1])
+                }
 
                 const field = e.target.parentElement;
                 const x = Number(field.getAttribute('data-x'));
@@ -555,12 +588,17 @@ class Game {
                 this.checkRoomEvents()
     
                 if(room_tiles[this.gameFields[y][x]['id']]?.special !== 'bridge' 
-                    && room_tiles[this.gameFields[y][x]['id']]?.special !== 'corridor' 
-                    && room_tiles[this.gameFields[y][x]['id']]?.special !== 'pit' 
-                    && !player.positionTreasury
-                    && !player.catacomb) {
+                   && room_tiles[this.gameFields[y][x]['id']]?.special !== 'corridor' 
+                   && room_tiles[this.gameFields[y][x]['id']]?.special !== 'pit' 
+                   && !player.positionTreasury
+                   && !player.catacomb
+                   && !player.extraMove) {
+                    player.extraMove = false
                     this.endMove()      
                 }
+                
+
+                player.extraMove = false
             }
     
             this.diceRollResultGlobal = 0;
@@ -649,13 +687,10 @@ class Game {
         const childTileField = parentElement.querySelector('.tile-field');
         
         let rotate = this.gameFields[y][x]['r'];
-        console.log(rotate)
 
         rotate = rotate + angl;
-        console.log(rotate)
 
         if (rotate > 270) rotate = angl - 270;
-        console.log(rotate)
 
         this.gameFields[y][x]['r'] = Number(rotate);
     
@@ -685,6 +720,14 @@ class Game {
         delete this.gameFields[player.position[1]][player.position[0]]['p'];
         
         return roomNumber
+    };
+    
+    removeTileField(x, y){
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+        field.querySelector(`.tile-map`).remove()
+        field.classList.remove('shadow')
+        this.gameFields[y][x] = [];
+
     };
 
     highlightFields(array){
