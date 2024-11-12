@@ -51,6 +51,7 @@
     
     height: 380px;
     filter: brightness(0.6);
+    transition: transform 0.5s ease-in-out, filter 0.5s ease;
 }
 
 .card-deck.active{
@@ -58,6 +59,7 @@
     flex: 10;
     height: 400px;
     filter: brightness(1);
+
 }
 
 /* End Card Deck  Container ------*/
