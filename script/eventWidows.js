@@ -118,6 +118,34 @@ class EventWidows{
         document.getElementById(id).remove()
     }
 
+    addEmptyFeldForCard(feldCount){
+        const element = document.querySelector('.event-section');
+        let emptyFelds ='';
+        let count = 1;
+
+        while (count <= feldCount) {
+            emptyFelds +=
+                `<div class="card-feld"></div>`;
+            count += 1;
+        }
+
+        element.insertAdjacentHTML('beforeend', `<div class="card-feld-section">${emptyFelds}</div>`);
+    }
+
+    addPackCards(packCards){
+        const element = document.querySelector('.event-section');
+        let cardDeckContainer ='';
+
+        packCards.forEach(card => {
+            console.log(card)
+            cardDeckContainer += `
+                <div id="${card.id}" class="card-deck" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>        
+            `
+        });
+
+        element.insertAdjacentHTML('beforeend', `<div class="card-deck-container">${cardDeckContainer}</div>`);
+    }
+
     drawTxtInEW(text){
         const element = document.querySelector('.title');
         element.insertAdjacentHTML('beforeend', `<p>${text}</p>`);
