@@ -133,7 +133,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(dungeon_cards[27]);
+        this.drawCardEW(dungeon_cards[33]);
     }
 
     playCatacombEvent(){
@@ -503,9 +503,13 @@ class Game {
 
     drawAbilitieCard(heroName){
         const abilitieCardContainer = document.querySelector(`.abilitie-card-container`);
+        let activeId = Math.round((heroes[heroName].abilities.length-1)/2)
+
         heroes[heroName].abilities.forEach((item, idx) => {
+            let active = ''
+            if(idx === activeId) active = 'active'
             abilitieCardContainer.innerHTML+=`
-                <div id="${idx}" class="card-deck " style="background-image: url('img/abilitie_cards/abilitie_${heroName}_${item.id}.jpg')"></div>        
+                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/abilitie_cards/abilitie_${heroName}_${item.id}.jpg')"></div>        
             `
         });
     };
