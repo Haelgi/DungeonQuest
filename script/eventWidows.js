@@ -134,12 +134,14 @@ class EventWidows{
 
     addPackCards(packCards){
         const element = document.querySelector('.event-section');
+        let activeId = Math.round((packCards.length-1)/2)
         let cardDeckContainer ='';
 
-        packCards.forEach(card => {
-            console.log(card)
+        packCards.forEach((card, idx) => {
+            let active = ''
+            if(idx === activeId) active = 'active'
             cardDeckContainer += `
-                <div id="${card.id}" class="card-deck" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>        
+                <div id="${card.id}" class="card-deck ${active}" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>        
             `
         });
 

@@ -1,3 +1,4 @@
+import  {addScrolCardsEffect}  from '../function/addScrolCardsEffect.js';
 import  {ew}  from '../eventWidows.js';
 import  {game}  from '../game.js';
 import  {player}  from '../player.js';
@@ -140,6 +141,7 @@ function goblinExplorer(){
 
     // добавить стопку карт и сокровищами
     ew.addPackCards(player.treasureCardContainer)
+    addScrolCardsEffect('.card-deck-container');
     
     // добавить возможность их листать
     // добавить возможность выьмпаит карту повторным нажатием
