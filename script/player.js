@@ -15,7 +15,6 @@ class Player {
         this.effectCardContainer = [];
         this.treasureCardContainer = [];
         this.catacombCardContainer = [];
-        this.trophyCardContainer = [];
         this.eventCardContainer = [];
         this.attack = 1;
         this.extraMove = false
