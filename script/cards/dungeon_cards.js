@@ -20,27 +20,46 @@ class Card {
 
 };
 
+function distributionCards(arr){
+    arr.forEach(card => {
+        if (card.type === 'treasure') player.treasureCardContainer.push(card)
+        if (card.type === 'event') player.eventCardContainer.push(card)
+    });
+}
+
 function attack(){
-    ew.removeAllEW(); 
-    game.drawCardEW(game.getRundomElement(game.monster_cards, monster_cards))
+    const card = game.getRundomElement(game.monster_cards, monster_cards)
+    distributionCards([card])
+
+    ew.removeAllEW();
+    game.drawCardEW(card)
     /*На Вас напали! Вам предстоит вступить в бой с монстром. Тяните Карту Монстра.*/
 }
 
 function trap(){
+    const card = game.getRundomElement(game.trap_cards, trap_cards)
+    distributionCards([card])
+
     ew.removeAllEW(); 
-    game.drawCardEW(game.getRundomElement(game.trap_cards, trap_cards))
+    game.drawCardEW(card)
     /*Своим неосторожным движением Вы активировали ловушку. Тяните Карту Ловушки.*/
 }
 
 function deadAdventurer(){
+    const card = game.getRundomElement(game.deadman_cards, deadman_cards)
+    distributionCards([card])
+
     ew.removeAllEW(); 
-    game.drawCardEW(game.getRundomElement(game.deadman_cards, deadman_cards))
+    game.drawCardEW(card)
     /*Вы увидели мертвого приключенца. Чтобы обыскать его тяните Карту Мертвеца.*/
 }
 
 function crypt(){
+    const card = game.getRundomElement(game.сrypt_cards, сrypt_cards)
+    distributionCards([card])
+
     ew.removeAllEW(); 
-    game.drawCardEW(game.getRundomElement(game.сrypt_cards, сrypt_cards))
+    game.drawCardEW(card)
     /*Вы можете обыскать склеп в надежде найти что-нибудь ценное. Если Вы решили это сделать, тяните Карту Склепа.*/
 }
 
@@ -54,18 +73,11 @@ function collapse(){
 function burial(){
     ew.removeAllEW()
 
-    const cards = [deadman_cards[10],
-                   deadman_cards[10],
-                   deadman_cards[10]]
+    const cards = [game.getRundomElement(game.deadman_cards, deadman_cards),
+                   game.getRundomElement(game.deadman_cards, deadman_cards),
+                   game.getRundomElement(game.deadman_cards, deadman_cards)]
 
-    // const cards = [game.getRundomElement(game.deadman_cards, deadman_cards),
-    //                game.getRundomElement(game.deadman_cards, deadman_cards),
-    //                game.getRundomElement(game.deadman_cards, deadman_cards)]
-
-    cards.forEach(card => {
-        if (card.type === 'trophy') player.trophyCardContainer.push(card)
-        if (card.type === 'event') player.eventCardContainer.push(card)
-    });
+    distributionCards(cards)
 
     game.drawCardEW(cards)
     ew.removeTitile()
@@ -99,22 +111,46 @@ function wallCollapse(){
 function undergroundNecropolis(){
     ew.removeAllEW()
 
-    game.drawCardEW(
-        [game.getRundomElement(game.сrypt_cards, сrypt_cards),
-         game.getRundomElement(game.сrypt_cards, сrypt_cards),
-         game.getRundomElement(game.сrypt_cards, сrypt_cards)
-        ]
-    )
+    const cards = [game.getRundomElement(game.сrypt_cards, сrypt_cards),
+                    game.getRundomElement(game.сrypt_cards, сrypt_cards),
+                    game.getRundomElement(game.сrypt_cards, сrypt_cards)]
+    
+    distributionCards(cards)
 
-    // TODO реализовать добавление карт в колоды 
+    game.drawCardEW(cards)
+    ew.removeTitile()
+    ew.addTitleToEW('Події підземелля')
 
     ew.removeRawBtnInEW('btn_ew')
     ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+
     /*Вы нашли подземный некрополь. Вы можете вытянуть 3 Карты Склепа.*/
 }
 
 function goblinExplorer(){
-    if(player){}
+    if(player.treasureCardContainer.length < 2) {
+        ew.removeAllEW()
+        ew.drawEW('У вас недостатаня кількість трофеїв.')
+        ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+        return
+    }
+
+    // добавить два поля для карт
+    ew.addEmptyFeldForCard(2)
+
+    // добавить стопку карт и сокровищами
+    ew.addPackCards(player.treasureCardContainer)
+    
+    // добавить возможность их листать
+    // добавить возможность выьмпаит карту повторным нажатием
+    // при выборе карты удалить ее из стопки и добавить в выбранную клетку
+    // если одна клетка занята выбрать другую
+    // ыозможность переключаться между клетками 
+    // если выбираем замену карты в клетке то добавляя клетку новую карту старую вернуть в колоду
+    // выделить первое поле по умолчанию
+    // добавтььб кнопку отказа
+    // добавить кнопку подвкрждения 
+
     /*Вы встретили гоблина-исследователя. 
     В обмен на 2 Ваших Трофея он готов показать секретный проход. 
     Если хотите, можете сбросить 2 своих Трофея и немедленно переместиться в любую соседнюю область. 
