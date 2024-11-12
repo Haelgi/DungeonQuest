@@ -143,6 +143,7 @@ function goblinExplorer(){
     ew.addPackCards(player.treasureCardContainer)
     addScrolCardsEffect('.card-deck-container');
     
+    
     // добавить возможность их листать
     // добавить возможность выьмпаит карту повторным нажатием
     // при выборе карты удалить ее из стопки и добавить в выбранную клетку

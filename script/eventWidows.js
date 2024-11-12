@@ -121,11 +121,11 @@ class EventWidows{
     addEmptyFeldForCard(feldCount){
         const element = document.querySelector('.event-section');
         let emptyFelds ='';
-        let count = 1;
+        let count = 0;
 
-        while (count <= feldCount) {
+        while (count <= feldCount - 1) {
             emptyFelds +=
-                `<div class="card-feld"></div>`;
+                `<div id="${count}" class="card-feld"></div>`;
             count += 1;
         }
 
@@ -141,7 +141,7 @@ class EventWidows{
             let active = ''
             if(idx === activeId) active = 'active'
             cardDeckContainer += `
-                <div id="${card.id}" class="card-deck ${active}" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>        
+                <div id="${card.id-1}" class="card-deck ${active}" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>        
             `
         });
 

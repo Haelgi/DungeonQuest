@@ -91,3 +91,15 @@
     color: #fff;
     box-shadow: 0 0 5px #fae100, 0 0 25px #fae100, 0 0 50px #fae100, 0 0 100px #fae100;
 }
+
+.card-feld-section{
+    display:flex;
+}
+
+.card-feld{
+    height: 200px;
+    width: 130px;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(255, 255, 255, 0.849) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
