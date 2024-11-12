@@ -8,35 +8,27 @@ export function addScrolCardsEffect(container){
     const parentContainer = document.querySelector(container);
     const cards = parentContainer.querySelectorAll('*');
 
-    if ('ontouchstart' in window) {
-        clickDown = 'touchstart'
-        clickMove = 'touchmove'
-        clickUp = 'touchend'
-    }
-
-    parentContainer.addEventListener(clickDown, (e)=>{
-        if (!e.target.closest('.card-deck-container')) return
+    parentContainer.addEventListener('mousedown', (e)=>{
+        e.preventDefault()
         startX = e.clientX
-        if ('ontouchstart' in window) startX = e.touches[0].clientX;
     })
     
-    parentContainer.addEventListener(clickMove, (e)=>{
+    parentContainer.addEventListener('mousemove', (e)=>{
         if (!startX) return
         endX = e.clientX
-        if ('ontouchstart' in window) endX = e.touches[0].clientX;
     })
     
-    parentContainer.addEventListener(clickUp, (e)=>{
+    parentContainer.addEventListener('mouseup', (e)=>{
         if (startX - endX > 10) {
-            let elem = e.target.nextElementSibling
-            if (elem===null) return 
+            let elem = parentContainer.querySelector('.active')?.nextElementSibling
+            if (!elem) return 
             removeActiveClasses();
             elem.classList.add('active')
         }
         
         if (endX - startX > 10) { 
-            let elem = e.target.previousElementSibling
-            if (elem===null) return 
+            let elem = parentContainer.querySelector('.active')?.previousElementSibling
+            if (!elem) return 
             removeActiveClasses();
             elem.classList.add('active')
         }
