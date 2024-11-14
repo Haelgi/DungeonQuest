@@ -140,12 +140,44 @@ function goblinExplorer(){
     ew.addEmptyFeldForCard(2)
 
     // добавить стопку карт и сокровищами
-    ew.addPackCards(player.treasureCardContainer)
-    addScrolCardsEffect('.card-deck-container');
+    ew.addPackCards(player.treasureCardContainer, 'event-deck-container')
+    
+    // while (condition) {
+        
+    // }
+    addScrolCardsEffect('.event-deck-container', (e)=> removeCardFromPack(e));
+
+    function removeCardFromPack(e) {
+        const id = e.target.getAttribute('id')
+        player.treasureCardContainer.splice(id, 1)
+        document.querySelector('.event-deck-container')
+        ew.updatePackCardsEW(player.treasureCardContainer)
+        // addScrolCardsEffect('.event-deck-container', (e)=> removeCardFromPack(e))
+    }
+
+    // while (condition) {
+        
+    // }
     
     
+
+
     // добавить возможность их листать
+
     // добавить возможность выьмпаит карту повторным нажатием
+    // cards.addEventListener('click', (e)=>{
+    //     let startX = 0;
+    //     let endX = 0;
+    //     console.log('cards.addEventListener')
+    //     if(e.target.closest('.active')){
+    //         const id = e.target.getAttribute('id')
+    //         player.treasureCardContainer.splice(id, 1)
+    //         console.log(id)
+    //         console.log(player.treasureCardContainer)
+    //         ew.updatePackCardsEW(player.treasureCardContainer)
+    //     }
+    // })
+
     // при выборе карты удалить ее из стопки и добавить в выбранную клетку
     // если одна клетка занята выбрать другую
     // ыозможность переключаться между клетками 

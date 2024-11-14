@@ -132,8 +132,9 @@ class EventWidows{
         element.insertAdjacentHTML('beforeend', `<div class="card-feld-section">${emptyFelds}</div>`);
     }
 
-    addPackCards(packCards){
+    addPackCards(packCards, className){
         const element = document.querySelector('.event-section');
+        
         let activeId = Math.round((packCards.length-1)/2)
         let cardDeckContainer ='';
 
@@ -141,11 +142,30 @@ class EventWidows{
             let active = ''
             if(idx === activeId) active = 'active'
             cardDeckContainer += `
-                <div id="${card.id-1}" class="card-deck ${active}" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>        
+                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>        
             `
         });
 
-        element.insertAdjacentHTML('beforeend', `<div class="card-deck-container">${cardDeckContainer}</div>`);
+
+        element.insertAdjacentHTML('beforeend', `<div class="card-deck-container ${className}">${cardDeckContainer}</div>`);
+    }
+
+    updatePackCardsEW(packCards){
+        const element = document.querySelector('.event-section');
+        const cardDeckContainer = element.querySelector('.card-deck-container');
+
+        let activeId = Math.round((packCards.length-1)/2)
+        let inner ='';
+
+        packCards.forEach((card, idx) => {
+            let active = ''
+            if(idx === activeId) active = 'active'
+            inner += `
+                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>        
+            `
+        });
+
+        cardDeckContainer.innerHTML = inner
     }
 
     drawTxtInEW(text){

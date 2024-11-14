@@ -1,42 +1,48 @@
-export function addScrolCardsEffect(container){
+export function addScrolCardsEffect(container, fn){
     let startX = 0;
     let endX = 0;
-    let clickDown = 'mousedown'
-    let clickMove = 'mousemove'
-    let clickUp = 'mouseup'
 
     const parentContainer = document.querySelector(container);
-    const cards = parentContainer.querySelectorAll('*');
 
-    parentContainer.addEventListener('mousedown', (e)=>{
+
+    function handleMouseDown(e){
         e.preventDefault()
         startX = e.clientX
-    })
+    }
     
-    parentContainer.addEventListener('mousemove', (e)=>{
+    function handleMouseUp(e){
         if (!startX) return
+
         endX = e.clientX
-    })
-    
-    parentContainer.addEventListener('mouseup', (e)=>{
-        if (startX - endX > 10) {
+
+        if (startX === endX) fn(e)
+
+        if (startX - endX > 50) {
             let elem = parentContainer.querySelector('.active')?.nextElementSibling
             if (!elem) return 
             removeActiveClasses();
             elem.classList.add('active')
         }
         
-        if (endX - startX > 10) { 
+        if (endX - startX > 50) { 
             let elem = parentContainer.querySelector('.active')?.previousElementSibling
             if (!elem) return 
             removeActiveClasses();
             elem.classList.add('active')
         }
-    });
+        return
+    };
 
     function removeActiveClasses() {
+        const cards = parentContainer.querySelectorAll('*');
         cards.forEach(card => {
             card.classList.remove('active');
         })
     }
+
+    parentContainer.removeEventListener('mousedown', handleMouseDown);
+    parentContainer.removeEventListener('mouseup', handleMouseUp);
+
+    parentContainer.addEventListener('mousedown', handleMouseDown);
+    parentContainer.addEventListener('mouseup', handleMouseUp);
 }

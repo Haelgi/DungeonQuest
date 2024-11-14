@@ -550,7 +550,7 @@ class Game {
             if (e.target.closest('.collapse-icon')) return;
             if (e.target.closest('.web-icon')) return;
             if (e.target.closest('.abyss-icon')) return;
-            if (e.target.closest('.bridge-icon')) return;
+            if (e.target.closest('.bridge-icon')) return; 
     
             if (e.target.closest('.available')) {
                 this.removeAllIcon();
