@@ -125,6 +125,7 @@ function undergroundNecropolis(){
     ew.removeRawBtnInEW('btn_ew')
     ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
 
+
     /*Вы нашли подземный некрополь. Вы можете вытянуть 3 Карты Склепа.*/
 }
 
@@ -140,10 +141,19 @@ function goblinExplorer(){
     ew.removeRawBtnInEW('btn_ew')
     ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{ew.removeAllEW()})
     ew.addEmptyFeldForCard(2)
-    ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{ew.removeAllEW()})
+    ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{
+        game.removeHighlightFields(game.nextCoordinates)
+        game.nextCoordinates = game.getCoordinatesWithoutRoom()
+        game.drawHeroMitl(player.position[0], player.position[1]);
+        game.removeAllIcon()
+
+        ew.removeAllEW()
+    })
     ew.addPackCards(player.treasureCardContainer, 'event-deck-container')
     
     const emptyFelds = []
+    const btnNext = document.getElementById('next')
+    btnNext.style.display = 'none'
 
     addScrolCardsEffect('.event-deck-container', (e)=> {
         
@@ -166,13 +176,15 @@ function goblinExplorer(){
     }
 
     function drawCardToFeld(count){
+        if(emptyFelds.length === 2) btnNext.style.display = 'block'
+        if(emptyFelds.length < 2) btnNext.style.display = 'none'
         
         for (let i = 0; i < count; i++) {
             const feld = document.getElementById(`card-feld-${i}`)
  
             if(emptyFelds[i]===undefined) return feld.innerHTML = ''
 
-            if(emptyFelds.length === 0) return
+            if(emptyFelds.length === 0) return 
 
             feld.innerHTML = `<div id="${i}" class="card" style="background-image: url('img/${emptyFelds[i].pack}_cards/${emptyFelds[i].pack}_${emptyFelds[i].id}.jpg')"></div>`
             
@@ -183,10 +195,7 @@ function goblinExplorer(){
                     player.treasureCardContainer.push(card)
 
                     ew.updatePackCardsEW(player.treasureCardContainer)
-                    drawCardToFeld(2)
-                    if(emptyFelds.length === 2) {
-                        btnColor = '#fae100'
-                    }
+                    drawCardToFeld(2)  
                 }
             })
         }
