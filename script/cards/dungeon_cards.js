@@ -153,7 +153,9 @@ function goblinExplorer(){
 
         const [card] = removeCardFromPack(e)
 
-        pushCardToFeld(card)
+        emptyFelds.push(card)
+
+        drawCardToFeld(2)
     });
     
     // при выборе карты удалить ее из стопки
@@ -168,15 +170,28 @@ function goblinExplorer(){
     }
 
     // при выборе добавить в выбранную клетку
-    function pushCardToFeld(card){
+    function drawCardToFeld(count){
+        for (let i = 0; i < count; i++) {
+            const feld = document.getElementById(`card-feld-${i}`)
+ 
+            if(emptyFelds[i]===undefined) return feld.innerHTML = ''
 
-        emptyFelds.push(card)
+            if(emptyFelds.length === 0) return
 
-        emptyFelds.forEach((card, id) => {
-            const feld = document.getElementById(`card-feld-${id}`)
-            feld.innerHTML = `<div id="${id}" class="card" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>`
-        });
+            feld.innerHTML = `<div id="${i}" class="card" style="background-image: url('img/${emptyFelds[i].pack}_cards/${emptyFelds[i].pack}_${emptyFelds[i].id}.jpg')"></div>`
+            
+            feld.addEventListener('click', ()=>{
+                const [card] = emptyFelds.splice(i, 1)
 
+                if(card) {
+                    player.treasureCardContainer.push(card)
+
+                    ew.updatePackCardsEW(player.treasureCardContainer)
+
+                    drawCardToFeld(2)
+                }
+            })
+        }
     }
 
 

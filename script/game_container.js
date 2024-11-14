@@ -14,7 +14,7 @@ player.name = 'Олег';
 player.hero = 'enchantress'; 
 player.authentication = true;
 // player.catacomb = true;
-player.treasureCardContainer = [treasure_cards[0],treasure_cards[1],treasure_cards[2],treasure_cards[3],treasure_cards[1],treasure_cards[2],treasure_cards[3]];
+player.treasureCardContainer = [treasure_cards[0],treasure_cards[1],treasure_cards[2]];
 player.catacombCardContainer = [1,2,3];
 // player.positionPrevious = [[1,2]];
 
