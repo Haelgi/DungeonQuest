@@ -129,8 +129,6 @@ function undergroundNecropolis(){
 }
 
 function goblinExplorer(){
-    let btnColor = 'gray'
-    let btnFn = false
 
     if(player.treasureCardContainer.length < 2) {
         ew.removeAllEW()
@@ -142,7 +140,7 @@ function goblinExplorer(){
     ew.removeRawBtnInEW('btn_ew')
     ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{ew.removeAllEW()})
     ew.addEmptyFeldForCard(2)
-    ew.addBtnInEW('next', 'Віддавати трофеї', btnFn, btnColor)
+    ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{ew.removeAllEW()})
     ew.addPackCards(player.treasureCardContainer, 'event-deck-container')
     
     const emptyFelds = []
@@ -168,6 +166,7 @@ function goblinExplorer(){
     }
 
     function drawCardToFeld(count){
+        
         for (let i = 0; i < count; i++) {
             const feld = document.getElementById(`card-feld-${i}`)
  
@@ -193,7 +192,6 @@ function goblinExplorer(){
         }
     }
 
-    // добавтььб кнопку отказа
     // добавить кнопку подвкрждения 
 
     /*Вы встретили гоблина-исследователя. 
