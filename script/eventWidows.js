@@ -125,7 +125,7 @@ class EventWidows{
 
         while (count <= feldCount - 1) {
             emptyFelds +=
-                `<div id="${count}" class="card-feld"></div>`;
+                `<div id="card-feld-${count}" class="card-feld"></div>`;
             count += 1;
         }
 

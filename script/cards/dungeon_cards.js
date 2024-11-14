@@ -129,6 +129,8 @@ function undergroundNecropolis(){
 }
 
 function goblinExplorer(){
+    
+
     if(player.treasureCardContainer.length < 2) {
         ew.removeAllEW()
         ew.drawEW('У вас недостатаня кількість трофеїв.')
@@ -139,46 +141,45 @@ function goblinExplorer(){
     // добавить два поля для карт
     ew.addEmptyFeldForCard(2)
 
+    const emptyFelds = []
+
     // добавить стопку карт и сокровищами
     ew.addPackCards(player.treasureCardContainer, 'event-deck-container')
-    
-    // while (condition) {
-        
-    // }
-    addScrolCardsEffect('.event-deck-container', (e)=> removeCardFromPack(e));
-
-    function removeCardFromPack(e) {
-        const id = e.target.getAttribute('id')
-        player.treasureCardContainer.splice(id, 1)
-        document.querySelector('.event-deck-container')
-        ew.updatePackCardsEW(player.treasureCardContainer)
-        // addScrolCardsEffect('.event-deck-container', (e)=> removeCardFromPack(e))
-    }
-
-    // while (condition) {
-        
-    // }
-    
-    
-
 
     // добавить возможность их листать
+    addScrolCardsEffect('.event-deck-container', (e)=> {
+        
+        if (emptyFelds.length >= 2) return
 
-    // добавить возможность выьмпаит карту повторным нажатием
-    // cards.addEventListener('click', (e)=>{
-    //     let startX = 0;
-    //     let endX = 0;
-    //     console.log('cards.addEventListener')
-    //     if(e.target.closest('.active')){
-    //         const id = e.target.getAttribute('id')
-    //         player.treasureCardContainer.splice(id, 1)
-    //         console.log(id)
-    //         console.log(player.treasureCardContainer)
-    //         ew.updatePackCardsEW(player.treasureCardContainer)
-    //     }
-    // })
+        const [card] = removeCardFromPack(e)
 
-    // при выборе карты удалить ее из стопки и добавить в выбранную клетку
+        pushCardToFeld(card)
+    });
+    
+    // при выборе карты удалить ее из стопки
+    function removeCardFromPack(e) {
+
+        const id = e.target.getAttribute('id')
+        const card = player.treasureCardContainer.splice(id, 1)
+
+        ew.updatePackCardsEW(player.treasureCardContainer)
+
+        return card
+    }
+
+    // при выборе добавить в выбранную клетку
+    function pushCardToFeld(card){
+
+        emptyFelds.push(card)
+
+        emptyFelds.forEach((card, id) => {
+            const feld = document.getElementById(`card-feld-${id}`)
+            feld.innerHTML = `<div id="${id}" class="card" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>`
+        });
+
+    }
+
+
     // если одна клетка занята выбрать другую
     // ыозможность переключаться между клетками 
     // если выбираем замену карты в клетке то добавляя клетку новую карту старую вернуть в колоду
