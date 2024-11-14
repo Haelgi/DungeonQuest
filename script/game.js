@@ -133,7 +133,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(dungeon_cards[33]);
+        this.drawCardEW(dungeon_cards[34]);
     }
 
     playCatacombEvent(){
@@ -785,6 +785,26 @@ class Game {
         }
 
 
+    }
+
+    drawMonsterToken(x, y){
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+
+        field.insertAdjacentHTML('afterbegin', `
+            <img class="token_monsters" src="img/monster_cards/token_monsters.png" alt="">
+        `);
+
+        this.gameFields[y][x]['m'] = true;
+    }
+
+    removeMonsterToken(x, y){
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+        
+        field.insertAdjacentHTML('afterbegin', `
+            <img class="token_monsters" src="img/monster_cards/token_monsters.png" alt="">
+        `);
+
+        delete this.gameFields[y][x]['m'];
     }
 
     drawIcon(x,y, icon, selectorName ,direction, drawPrevious){
