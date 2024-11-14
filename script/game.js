@@ -617,7 +617,7 @@ class Game {
 
         if (!player.catacomb) this.nextCoordinates = this.newCoordinate();
 
-        if (room_tiles[this.gameFields[y][x]['id']].dungeon && !this.activeEvent) this.playDungeonEvent();
+        if (room_tiles[this.gameFields[y][x]['id']].dungeon && this.gameFields[y][x]['m'] === undefined && !this.activeEvent) this.playDungeonEvent();
 
         if (room_tiles[this.gameFields[y][x]['id']].trap && !this.activeEvent) this.playTrapEvent();
         if (room_tiles[this.gameFields[y][x]['id']].special === 'pit' && !this.activeEvent && !player.catacomb) this.playPitEvent();
@@ -634,7 +634,8 @@ class Game {
 
         if (room_tiles[this.gameFields[y][x]['id']].search 
             && (this.gameFields[y][x]['s'] === undefined || this.gameFields[y][x]['s'] < 2)
-            && !player.catacomb) {
+            && !player.catacomb
+            && this.gameFields[y][x]['m'] === undefined) {
             this.drawIcon(x, y, 'fa-solid fa-magnifying-glass', 'search');
             this.clickSerchIcon();
         }
@@ -794,12 +795,12 @@ class Game {
             <img class="token_monsters" src="img/monster_cards/token_monsters.png" alt="">
         `);
 
-        this.gameFields[y][x]['m'] = true;
+        this.gameFields[y][x]['m'] = [];
     }
 
     removeMonsterToken(x, y){
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
-        
+
         field.insertAdjacentHTML('afterbegin', `
             <img class="token_monsters" src="img/monster_cards/token_monsters.png" alt="">
         `);

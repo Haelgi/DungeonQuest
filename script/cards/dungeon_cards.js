@@ -214,11 +214,24 @@ function ambushRoom(){
     const trueFn = ()=>{
         game.removeAllIcon()
         game.drawMonsterToken(player.position[0], player.position[1])
-        console.log('true')
     }
 
     const falseFn = ()=>{
-        console.log('false')
+        const cards = [game.getRundomElement(game.monster_cards, monster_cards),
+            game.getRundomElement(game.monster_cards, monster_cards)]
+
+            game.gameFields[player.position[1]][player.position[0]]['m'] = cards
+
+        console.log(game.gameFields[player.position[1]][player.position[0]]['m'])
+
+        distributionCards(cards)
+
+        game.drawCardEW(cards)
+        ew.removeTitile()
+        ew.addTitleToEW('Події підземелля')
+
+        ew.removeRawBtnInEW('btn_ew')
+        ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
     }
 
     game.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, trueFn, falseFn)
