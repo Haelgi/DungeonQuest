@@ -57,6 +57,7 @@
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+
 }
 
 .division-line{
@@ -75,6 +76,7 @@
     border-radius: 10px;
     height: 450px;
     width: 300px;
+    margin-bottom: 20px;
 }
 
 .event-container button{
@@ -92,11 +94,16 @@
     box-shadow: 0 0 5px #fae100, 0 0 25px #fae100, 0 0 50px #fae100, 0 0 100px #fae100;
 }
 
+.event-container .card-deck-container{
+    margin-top: 20px;
+}
+
 .card-feld-section{
     display:flex;
 }
 
 .card-feld{
+    
     height: 200px;
     width: 130px;
     margin: 20px;

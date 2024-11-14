@@ -114,6 +114,12 @@ class EventWidows{
         document.getElementById(id).addEventListener('click', () => fn(), {once: true});
     }
 
+    addBtnInEW(id, name, fn, bg){
+        const element = document.querySelector('.event-section');
+        element.insertAdjacentHTML('beforeend', `<div class="btn-section"><button id=${id} style="background:${bg}">${name}</button></div>`);
+        document.getElementById(id).addEventListener('click', () => fn(), {once: true});
+    }
+
     removeRawBtnInEW(id){
         document.getElementById(id).remove()
     }

@@ -129,7 +129,8 @@ function undergroundNecropolis(){
 }
 
 function goblinExplorer(){
-    
+    let btnColor = 'gray'
+    let btnFn = false
 
     if(player.treasureCardContainer.length < 2) {
         ew.removeAllEW()
@@ -137,16 +138,15 @@ function goblinExplorer(){
         ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
         return
     }
-
-    // добавить два поля для карт
+    
+    ew.removeRawBtnInEW('btn_ew')
+    ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{ew.removeAllEW()})
     ew.addEmptyFeldForCard(2)
-
+    ew.addBtnInEW('next', 'Віддавати трофеї', btnFn, btnColor)
+    ew.addPackCards(player.treasureCardContainer, 'event-deck-container')
+    
     const emptyFelds = []
 
-    // добавить стопку карт и сокровищами
-    ew.addPackCards(player.treasureCardContainer, 'event-deck-container')
-
-    // добавить возможность их листать
     addScrolCardsEffect('.event-deck-container', (e)=> {
         
         if (emptyFelds.length >= 2) return
@@ -154,11 +154,9 @@ function goblinExplorer(){
         const [card] = removeCardFromPack(e)
 
         emptyFelds.push(card)
-
         drawCardToFeld(2)
     });
     
-    // при выборе карты удалить ее из стопки
     function removeCardFromPack(e) {
 
         const id = e.target.getAttribute('id')
@@ -169,7 +167,6 @@ function goblinExplorer(){
         return card
     }
 
-    // при выборе добавить в выбранную клетку
     function drawCardToFeld(count){
         for (let i = 0; i < count; i++) {
             const feld = document.getElementById(`card-feld-${i}`)
@@ -187,18 +184,15 @@ function goblinExplorer(){
                     player.treasureCardContainer.push(card)
 
                     ew.updatePackCardsEW(player.treasureCardContainer)
-
                     drawCardToFeld(2)
+                    if(emptyFelds.length === 2) {
+                        btnColor = '#fae100'
+                    }
                 }
             })
         }
     }
 
-
-    // если одна клетка занята выбрать другую
-    // ыозможность переключаться между клетками 
-    // если выбираем замену карты в клетке то добавляя клетку новую карту старую вернуть в колоду
-    // выделить первое поле по умолчанию
     // добавтььб кнопку отказа
     // добавить кнопку подвкрждения 
 
