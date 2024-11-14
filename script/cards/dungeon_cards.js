@@ -130,6 +130,7 @@ function undergroundNecropolis(){
 }
 
 function goblinExplorer(){
+    
 
     if(player.treasureCardContainer.length < 2) {
         ew.removeAllEW()
@@ -137,7 +138,9 @@ function goblinExplorer(){
         ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
         return
     }
-    
+
+    const container = document.querySelector('.event-section')
+    container.style.flexDirection = 'column'
     ew.removeRawBtnInEW('btn_ew')
     ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{ew.removeAllEW()})
     ew.addEmptyFeldForCard(2)
@@ -166,7 +169,6 @@ function goblinExplorer(){
     });
     
     function removeCardFromPack(e) {
-
         const id = e.target.getAttribute('id')
         const card = player.treasureCardContainer.splice(id, 1)
 
@@ -200,8 +202,6 @@ function goblinExplorer(){
             })
         }
     }
-
-    // добавить кнопку подвкрждения 
 
     /*Вы встретили гоблина-исследователя. 
     В обмен на 2 Ваших Трофея он готов показать секретный проход. 
