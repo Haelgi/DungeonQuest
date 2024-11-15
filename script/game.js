@@ -133,7 +133,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(dungeon_cards[34]);
+        this.drawCardEW(dungeon_cards[35]);
     }
 
     playCatacombEvent(){
@@ -536,7 +536,7 @@ class Game {
             delete this.gameFields[player.position[1]][player.position[0]]['m']
             return
         }
-        
+
         const [card] = this.gameFields[player.position[1]][player.position[0]]['m'].splice(0, 1);
         this.drawCardEW(card)
     }
@@ -557,6 +557,7 @@ class Game {
     
         this.moveEventHandler = (e) => {
             player.positionPrevious = player.position;
+            player.escapeBattle = true
 
             if (e.target.closest('.door-icon')) return;
             if (e.target.closest('.grille-icon')) return;

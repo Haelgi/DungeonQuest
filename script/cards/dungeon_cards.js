@@ -217,6 +217,7 @@ function ambushRoom(){
     }
 
     const falseFn = ()=>{
+        player.escapeBattle = false
         const cards = [game.getRundomElement(game.monster_cards, monster_cards),
             game.getRundomElement(game.monster_cards, monster_cards)]
             game.gameFields[player.position[1]][player.position[0]]['m'] = cards
@@ -237,6 +238,58 @@ function ambushRoom(){
     Выполните проверку Ловкости. 
     В случае успеха Вам удалось убежать; разместите в текущей комнате жетон монстра и выполните еще одно перемещение, игнорируя двери и решетки. 
     В случае провала проверки (или если выполнить перемещение невозможно) вытяните две Карты Монстров и сразитесь поочередно с каждым из монстров. 
+    Вы не можете спастись бегством.*/
+}
+
+function surroundedByMonsters(){
+    player.escapeBattle = false
+
+    const trueFn = ()=>{
+        const cards = [game.getRundomElement(game.monster_cards, monster_cards)]
+
+        game.gameFields[player.position[1]][player.position[0]]['m'] = cards
+
+        distributionCards(cards)
+
+        game.drawCardEW(cards)
+        ew.removeTitile()
+        ew.addTitleToEW('Події підземелля')
+
+        ew.removeRawBtnInEW('btn_ew')
+        ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+    }
+
+    const falseFn = ()=>{
+        const cards = [game.getRundomElement(game.monster_cards, monster_cards),
+            game.getRundomElement(game.monster_cards, monster_cards)]
+
+        game.gameFields[player.position[1]][player.position[0]]['m'] = cards
+
+        distributionCards(cards)
+
+        game.drawCardEW(cards)
+        ew.removeTitile()
+        ew.addTitleToEW('Події підземелля')
+
+        ew.removeRawBtnInEW('btn_ew')
+        ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+    }
+
+    function check( nameValue, value) {
+        ew.removeRawBtnInEW('btn_strength')
+        ew.removeRawBtnInEW('btn_defense')
+
+        game.addDiceRollSection( `${nameValue}: ${value}`, value, false, 2, trueFn, falseFn)
+    }
+
+    ew.removeRawBtnInEW('btn_ew')
+    ew.drawBtnInEW('btn_strength', 'Перевірити Силу', ()=>{check('Ваша Сила',heroes[player.hero].strength)})
+    ew.drawBtnInEW('btn_defense', 'Перевірити Захист', ()=>{check('Ваш Захист',heroes[player.hero].defense)})
+
+    /*Вас окружили монстры. 
+    Выполните проверку Силы, или Защиты. 
+    В случае успеха вытяните одну Карту Монстра и проведите бой с монстром. 
+    В случае провала проверки вытяните две Карты Монстров и сразитесь поочередно с каждым из монстров. 
     Вы не можете спастись бегством.*/
 }
     
@@ -289,7 +342,7 @@ const dungeon_cards = [
     /*34*/new Card(10, 'Гоблин-Исследователь', ()=>{goblinExplorer()}, 'Далі'),
     
     /*35*/new Card(11, 'Комната с Засадой', ()=>{ambushRoom()}, 'Далі'),
-    /*36*/new Card(12, 'Окружение Монстрами', ()=>{return/*Вас окружили монстры. Выполните проверку Силы, или Защиты. В случае успеха вытяните одну Карту Монстра и проведите бой с монстром. В случае провала проверки вытяните две Карты Монстров и сразитесь поочередно с каждым из монстров. Вы не можете спастись бегством.*/}, 'Далі'),
+    /*36*/new Card(12, 'Окружение Монстрами', ()=>{surroundedByMonsters()}, 'Далі'),
     /*37*/new Card(13, 'Секретная Дверь', ()=>{return/*Исследуя комнату, Вы активировали механизм, после чего в стене показался секретный проход. Вы можете немедленно переместиться в любую соседнюю область. Если она не исследована, разместите тайл комнаты в обычном порядке. Если необходимо вступить в бой с монстром, Вы не можете спастись бегством.*/}, 'Далі'),
     /*38*/new Card(14, 'Спуск в Катакомбы', ()=>{return/*Вы получите спуск на нижние уровни подземелья. Положите маркер входа в Катакомбы в эту комнату.*/}, 'Далі'),
     /*39*/new Card(15, 'Гиганская Змея', ()=>{return/*Вы потревожили гигантскую змею. Бросьте 1d6, добавьте к выпавшему числу 2 и получите количество ранений, эквивалентное результату.*/}, 'Далі'),
