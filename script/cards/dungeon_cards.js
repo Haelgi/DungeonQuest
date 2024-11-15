@@ -219,10 +219,7 @@ function ambushRoom(){
     const falseFn = ()=>{
         const cards = [game.getRundomElement(game.monster_cards, monster_cards),
             game.getRundomElement(game.monster_cards, monster_cards)]
-
             game.gameFields[player.position[1]][player.position[0]]['m'] = cards
-
-        console.log(game.gameFields[player.position[1]][player.position[0]]['m'])
 
         distributionCards(cards)
 

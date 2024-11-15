@@ -529,12 +529,25 @@ class Game {
         this.drawCardEW(card)
     }
 
+    checkMonsterCards(){
+        if (!player.position) return
+        if (this.gameFields[player.position[1]][player.position[0]]['m'] === undefined || this.activeEvent) return
+        if (this.gameFields[player.position[1]][player.position[0]]['m'].length === 0) {
+            delete this.gameFields[player.position[1]][player.position[0]]['m']
+            return
+        }
+        
+        const [card] = this.gameFields[player.position[1]][player.position[0]]['m'].splice(0, 1);
+        this.drawCardEW(card)
+    }
+
     makeMove() {
         let array;
         if (!player.position) array = this.startFields;
         if (player.position ) array = this.nextCoordinates;
 
         this.checkEventCards()
+        this.checkMonsterCards()
     
         if (!document.querySelector(`.available-field`)) {
             this.highlightFields(array);    
