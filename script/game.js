@@ -133,7 +133,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(dungeon_cards[35]);
+        this.drawCardEW(dungeon_cards[25]);
     }
 
     playCatacombEvent(){
@@ -206,10 +206,12 @@ class Game {
 
     escapeCatacomb(){
         player.catacomb = false
+        this.gameFields[y][x]['c'] = true
         const x = player.position[0]
         const y = player.position[1]
         this.removeHighlightFields(this.nextCoordinates)
         this.drawHeroMitl(x, y);
+        this.drawCatacombToken(x, y)
         this.checkRoomEvents()
         this.endMove()
     }
@@ -654,7 +656,7 @@ class Game {
             this.clickSerchIcon();
         }
         
-        if (room_tiles[this.gameFields[y][x]['id']].catacomb) {
+        if (room_tiles[this.gameFields[y][x]['id']].catacomb|| this.gameFields[y][x]['c']) {
             this.drawIcon(x, y, 'fa-solid fa-person-through-window', 'catacomb');
             this.clickCatacombIcon();
         }
@@ -810,6 +812,16 @@ class Game {
         `);
 
         this.gameFields[y][x]['m'] = [];
+    }
+
+    drawCatacombToken(x, y){
+        const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+
+        field.insertAdjacentHTML('afterbegin', `
+            <img class="token_catacombs" src="img/catacomb_cards/token_catacombs.jpg" alt="">
+        `);
+
+        this.gameFields[y][x]['c'] = true;
     }
 
     removeMonsterToken(x, y){
