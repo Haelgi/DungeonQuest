@@ -133,7 +133,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(dungeon_cards[25]);
+        this.drawCardEW(dungeon_cards[40]);
     }
 
     playCatacombEvent(){
@@ -271,13 +271,13 @@ class Game {
         });
     }
     
-    addDiceRollSection(  txt, value, dexterity, diceCount, trueFn, falseFn) {
+    addDiceRollSection( txt, value, dexterity, resolve, diceCount, trueFn, falseFn, rolResult) {
         let newValue = value;
         let texts = txt;
         const resolvePlayer = heroes[player.hero].resolve;
         const treasure = player.treasureCardContainer.length;
     
-        if (resolvePlayer > 0) {
+        if (resolvePlayer > 0 && resolve) {
             texts += ` + ${resolvePlayer} Рішучості`;
         }
     
@@ -286,24 +286,31 @@ class Game {
             newValue -= treasure;
         }
     
-        ew.drawTxtInEW(texts);
+        if(txt) ew.drawTxtInEW(texts);
         ew.drawDiceInEW(diceCount);
         ew.drawBtnInEW('roll', 'Кинути Кубики', () => {
             ew.rollDiceFn();
             setTimeout(() => {
-                this.rolResultEW(newValue, trueFn, falseFn);
+                this.rolResultEW(newValue, trueFn, falseFn, rolResult);
             }, 1700);
         });
     }
     
 
-    rolResultEW (value, trueFn, falseFn){
+    rolResultEW (value, trueFn, falseFn, rolResult){
         if (this.diceRollResultGlobal <= (value)) {
-            ew.drawEW('Успіх!', 'green');
-            ew.drawBtnInEW('next','Далі', ()=>{
+            if (rolResult){
+                ew.drawEW('Успіх!', 'green');
+                ew.drawBtnInEW('next','Далі', ()=>{
+                    if (trueFn) trueFn();
+                    ew.removeAllEW()
+                });
+            }
+
+            if (!rolResult){
                 if (trueFn) trueFn();
                 ew.removeAllEW()
-            });
+            }
         }
 
         if (this.diceRollResultGlobal > value && this.diceRollResultGlobal <= (value + heroes[player.hero].resolve )) {
@@ -322,12 +329,19 @@ class Game {
         }
 
         if (this.diceRollResultGlobal > (value + heroes[player.hero].resolve)) {
-            ew.drawEW('Провал!', 'red');
-            ew.drawBtnInEW('next','Далі', ()=>{
+            if (rolResult){
+                ew.drawEW('Провал!', 'red');
+                ew.drawBtnInEW('next','Далі', ()=>{
+                    ew.removeAllEW()
+                    if (falseFn) falseFn();
+                });
+                heroes[player.hero].resolve +=1;
+            }
+            if (!rolResult){
                 ew.removeAllEW()
                 if (falseFn) falseFn();
-            });
-            heroes[player.hero].resolve +=1;
+                heroes[player.hero].resolve +=1;
+            }
         }
     }
 

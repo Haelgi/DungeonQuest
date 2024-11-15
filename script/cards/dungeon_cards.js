@@ -99,7 +99,7 @@ function wallCollapse(){
         game.removePreviousTileField = true
     }
 
-    game.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, false, falseFn)
+    game.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, false, falseFn)
 
     /*Комната рушится. 
     Выполните проверку Ловкости и, в случае неудачи, получите 2 ранения от летящих обломков. 
@@ -232,7 +232,7 @@ function ambushRoom(){
         ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
     }
 
-    game.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, trueFn, falseFn)
+    game.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
 
     /*В комнату вошли монстры, а на выходы начали опускаться решетки. 
     Выполните проверку Ловкости. 
@@ -279,7 +279,7 @@ function surroundedByMonsters(){
         ew.removeRawBtnInEW('btn_strength')
         ew.removeRawBtnInEW('btn_defense')
 
-        game.addDiceRollSection( `${nameValue}: ${value}`, value, false, 2, trueFn, falseFn)
+        game.addDiceRollSection( `${nameValue}: ${value}`, value, false, false, 2, trueFn, falseFn)
     }
 
     ew.removeRawBtnInEW('btn_ew')
@@ -320,6 +320,86 @@ function descentToCatacombs(){
 
     /*Вы получите спуск на нижние уровни подземелья. 
     Положите маркер входа в Катакомбы в эту комнату.*/
+}
+
+function giantSnake(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    const trueFn = ()=>{
+        heroes[player.hero].health -= game.diceRollResultGlobal + 2
+    }
+    
+    game.addDiceRollSection( false, 6, false, false,1, trueFn, false)
+
+    /*Вы потревожили гигантскую змею. 
+    Бросьте 1d6, добавьте к выпавшему числу 2 и получите количество ранений, эквивалентное результату.*/
+}
+
+function magicRoom(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    const trueFn = ()=>{
+        let angl = 0
+
+        if(game.diceRollResultGlobal<=2) angl = 90
+        if(3<=game.diceRollResultGlobal<=4) angl = 270
+        if(5<=game.diceRollResultGlobal) angl = 180
+        
+        game.rotateRoomTile(angl)
+        game.removeHighlightFields(game.nextCoordinates)
+        game.removeAllIcon()
+        game.nextCoordinates = game.newCoordinate()
+
+    }
+    
+    game.addDiceRollSection( false, 6, false, false,1, trueFn, false)
+
+    /*Когда Вы вошли в комнату, она начала изменяться. 
+    Бросьте 1d6: 1-2 - Поверните тайл комнаты на 90° по часовой стрелке; 
+    3-4 - Поверните тайл комнаты на 90° против часовой стрелки; 
+    5-6 Поверните тайл комнаты на 180°.*/
+}
+
+function deadCrowd(){
+    ew.removeRawBtnInEW('btn_ew')
+
+
+    
+    ew.drawBtnInEW('btn_luck', 'Перевірити Удачу', ()=>{
+        ew.removeRawBtnInEW('btn_luck')
+        ew.removeRawBtnInEW('btn_fight')
+
+        const trueFn1 = ()=>{
+            ew.removeAllEW()
+        }
+    
+        const falseFn1 = ()=>{
+            player.eventCardContainer.unshift(dungeon_cards[40])
+            ew.removeAllEW()
+            game.endMove()
+        }
+
+        game.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn1, falseFn1)
+    })
+    
+    ew.drawBtnInEW('btn_fight', 'Битись', ()=>{
+        ew.removeRawBtnInEW('btn_luck')
+        ew.removeRawBtnInEW('btn_fight')
+        const trueFn2 = ()=>{
+            heroes[player.hero].health -= game.diceRollResultGlobal
+            ew.removeAllEW()
+        }
+        game.addDiceRollSection(false, 12, false, true, 2, trueFn2)
+    })
+
+    /*Вы прячетесь от толпы мертвецов. 
+    Сохраните эту карту. 
+    Пока она у Вас, выполняйте проверку Удачи в начале каждого своего хода, ожидая ухода врагов. 
+    Если проверка успешна, сбросьте эту карту и продолжите свой ход в обычном порядке; 
+    иначе Ваш ход заканчивается. 
+    В начале своего хода вместо проверки Удачи Вы можете сразиться с мертвецами; 
+    Тогда бросьте 2d6, получите количество ранений, эквивалентное результату, 
+    сбросьте эту карту и вытяните Карту Сокровища как награду.*/
 }
     
 
@@ -374,9 +454,9 @@ const dungeon_cards = [
     /*36*/new Card(12, 'Окружение Монстрами', ()=>{surroundedByMonsters()}, 'Далі'),
     /*37*/new Card(13, 'Секретная Дверь', ()=>{secretDoor()}, 'Далі'),
     /*38*/new Card(14, 'Спуск в Катакомбы', ()=>{descentToCatacombs()}, 'Далі'),
-    /*39*/new Card(15, 'Гиганская Змея', ()=>{return/*Вы потревожили гигантскую змею. Бросьте 1d6, добавьте к выпавшему числу 2 и получите количество ранений, эквивалентное результату.*/}, 'Далі'),
-    /*40*/new Card(16, 'Волшебная комната', ()=>{return/*Когда Вы вошли в комнату, она начала изменяться. Бросьте 1d6: 1-2 - Поверните тайл комнаты на 90° по часовой стрелке; 3-4 - Поверните тайл комнаты на 90° против часовой стрелки; 5-6 Поверните тайл комнаты на 180°.*/}, 'Далі'),
-    /*41*/new Card(17, 'Толпа Мертвецов', ()=>{return/*Вы прячетесь от толпы мертвецов. Сохраните эту карту. Пока она у Вас, выполняйте проверку Удачи в начале каждого своего хода, ожидая ухода врагов. Если проверка успешна, сбросьте эту карту и продолжите свой ход в обычном порядке; иначе Ваш ход заканчивается. В начале своего хода вместо проверки Удачи Вы можете сразиться с мертвецами; Тогда бросьте 2d6, получите количество ранений, эквивалентное результату, сбросьте эту карту и вытяните Карту Сокровища как награду.*/}, 'Далі'),
+    /*39*/new Card(15, 'Гиганская Змея', ()=>{giantSnake()}, 'Далі'),
+    /*40*/new Card(16, 'Волшебная комната', ()=>{magicRoom()}, 'Далі'),
+    /*41*/new Card(17, 'Толпа Мертвецов', ()=>{deadCrowd()}, 'Далі'),
     /*42*/new Card(18, 'Мантикора', ()=>{return/*На Вас напала мантикора. Бросьте 1d6; выпавший результат будет количеством здоровья мантикоры. Выполните проверку Силы. В случае Успеха, мантикора получает 1 ранение. В случае провала 1 ранение получаете Вы. Продолжайте выполнять проверку Силы до тех пор, пока Вы или Ваш противник не погибнете.*/}, 'Далі'),
     /*43*/new Card(19, 'Гоблин с Сокровищем', ()=>{return/*В темноте Вы увидели силуэт гоблина. Судя по большому мешку за спиной, у него наверняка есть что-нибудь ценное. Выполните проверки Ловкости и Силы (если первая проверка провалена, вторую выполнять не нужно). Если обе проверки выполнены Успешно, Вы словили гоблина и отобрали у него сокровище; тяните Карту Сокровища.*/}, 'Далі'),
     
