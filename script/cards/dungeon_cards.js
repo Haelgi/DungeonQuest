@@ -539,7 +539,7 @@ function goblinWithTreasure() {
             const trueFn2 = ()=>{
                 const card = game.getRundomElement(game.treasure_cards, treasure_cards)
                 player.treasureCardContainer.push(card)
-                
+
                 ew.drawEW(`Ви змогли забрати у Гобліна скарб`)
                 ew.drawCardsInEW(card)
                 ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
@@ -574,6 +574,36 @@ function goblinWithTreasure() {
     Выполните проверки Ловкости и Силы (если первая проверка провалена, вторую выполнять не нужно). 
     Если обе проверки выполнены Успешно, Вы словили гоблина и отобрали у него сокровище; 
     тяните Карту Сокровища.*/
+}
+
+function healingSpring(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+        let healing
+        if (2 >=result) healing = 1
+        if (3 >= result >= 4) healing = 2
+        if (result >= 5) healing = 3
+        heroes[player.hero].health += healing
+        ew.drawEW(`Ви зцілили ${healing} здоров'я`)
+        setTimeout(() => {
+            ew.removeLastEW()
+            ew.removeRawBtnInEW('roll')
+            document.querySelectorAll('.dice-section').forEach((item)=>{
+                item.remove()
+            })
+            ew.removeAllEW()
+            
+        }, 1200);
+    }
+
+    game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+
+    /*Вы нашли целебный источник. 
+    Бросьте 1d6: 1-2 - У Вас исцеляется 1 ранение. 
+    3-4 - У Вас исцеляется 2 ранения. 
+    5-6 - У Вас исцеляется 3 ранения.*/
 }
 
 
@@ -632,7 +662,7 @@ const dungeon_cards = [
     /*42*/new Card(18, 'Мантикора', ()=>{manticore()}, 'Далі'),
     /*43*/new Card(19, 'Гоблин с Сокровищем', ()=>{goblinWithTreasure()}, 'Далі'),
     
-    /*44*/new Card(20, 'Целебный Источник', ()=>{return/*Вы нашли целебный источник. Бросьте 1d6: 1-2 - У Вас исцеляется 1 ранение. 3-4 - У Вас исцеляется 2 ранения. 5-6 - У Вас исцеляется 3 ранения.*/}, 'Далі'),
+    /*44*/new Card(20, 'Целебный Источник', ()=>{healingSpring()}, 'Далі'),
     /*45*/new Card(21, 'Армия Призраков', ()=>{return/*Вокруг Вас начинают появляться призраки павших воинов. Вы чувствуете потерю сил, страх и отчаяние. Бросьте 1d6: 1-2 - Вы преодолели свой страх и остались целы. 3-4 - Вы получаете 3 ранения. 5-6 - Вы получаете З ранения, сбрасываете 1 жетон решимости (если есть) и пропускаете следующий ход.*/}, 'Далі'),
     /*46*/new Card(22, 'Воин Бездны', ()=>{return/*На Вас напал воин бездны. В бою Вы были ранены. Бросьте 1d6 и нанесите количество ранений, соответствующее результату броска. Выполните проверку одной из характеристик по выбору: Ловкости, Защиты или Удачи. В случае неудачи получите 2 дополнительных раны от кровопотери.*/}, 'Далі'),
     /*47*/new Card(23, 'Кровожадный Ящер', ()=>{return/*Из темноты Вас атаковал кровожадный ящер. Выполните проверку Удачи. В случае успеха проверки получите 2 ранения. В противном случае получите 6 ранений.*/}, 'Далі'),
