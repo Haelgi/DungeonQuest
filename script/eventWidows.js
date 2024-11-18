@@ -13,7 +13,6 @@ class EventWidows{
             `<div id="ew_${EventWidows.zIndex}" class="event-container" style="z-index: ${EventWidows.zIndex};">
                 <div class="event-main">
                     <div class="title style="color:${color}""><h1>${title}</h1></div>
-                    <div class="event-section"></div>
                 </div>
             </div>`
         );
