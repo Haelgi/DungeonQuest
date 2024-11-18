@@ -18,6 +18,7 @@ class Player {
         this.eventCardContainer = [];
         this.attack = 1;
         this.extraMove = false
+        this.skipMove = 0
         this.escapeBattle = true
     }
 }
