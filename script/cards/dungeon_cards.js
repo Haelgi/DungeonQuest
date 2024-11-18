@@ -653,6 +653,70 @@ function armyOfGhosts(){
     5-6 - Вы получаете З ранения, сбрасываете 1 жетон решимости (если есть) и пропускаете следующий ход.*/
 }
 
+function warriorOfAbyss(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    const trueFn = ()=> {
+        ew.drawEW(`Ви не отримали додаткові поранення`)
+        setTimeout(() => {ew.removeAllEW()}, 1200);
+    }
+
+    const falseFn = ()=> {
+        ew.drawEW(`Ви отримали 2 додаткові рани від крововтечі`)
+        heroes[player.hero].health -= 2
+        setTimeout(() => {ew.removeAllEW()}, 1200);
+    }
+
+    function clear(){
+        ew.removeTxt()
+        document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
+    }
+
+    function dexterity(){
+        clear()
+        game.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+    }
+
+    function defense(){
+        clear()
+        game.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
+    }
+
+    function luck(){
+        clear()
+        game.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, falsem, true, 2, trueFn, falseFn)
+    }
+
+    const result = ()=>{ 
+        const damage = game.diceRollResultGlobal
+            
+        ew.drawEW(`Ви отримали ${damage} поранення`)
+        setTimeout(() => {
+            document.querySelector('.dice-container').remove()
+            ew.removeLastEW()
+            ew.removeRawBtnInEW('roll')
+            ew.removeTxt()
+            ew.addTxt('Пройти перевірку на:')
+
+            ew.drawBtnInEW('btn_dx','Спритність', dexterity)
+            ew.drawBtnInEW('btn_df','Захист',defense)
+            ew.drawBtnInEW('btn_luk','Удачу',luck)
+        }, 1200);
+
+        heroes[player.hero].health -= damage
+        
+    }
+
+    game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+
+
+    /*На Вас напал воин бездны. 
+    В бою Вы были ранены. 
+    Бросьте 1d6 и нанесите количество ранений, соответствующее результату броска. 
+    Выполните проверку одной из характеристик по выбору: Ловкости, Защиты или Удачи. 
+    В случае неудачи получите 2 дополнительных раны от кровопотери.*/
+}
+
 
 const dungeon_cards = [
     /*1*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
@@ -711,7 +775,7 @@ const dungeon_cards = [
     
     /*44*/new Card(20, 'Целебный Источник', ()=>{healingSpring()}, 'Далі'),
     /*45*/new Card(21, 'Армия Призраков', ()=>{armyOfGhosts()}, 'Далі'),
-    /*46*/new Card(22, 'Воин Бездны', ()=>{return/*На Вас напал воин бездны. В бою Вы были ранены. Бросьте 1d6 и нанесите количество ранений, соответствующее результату броска. Выполните проверку одной из характеристик по выбору: Ловкости, Защиты или Удачи. В случае неудачи получите 2 дополнительных раны от кровопотери.*/}, 'Далі'),
+    /*46*/new Card(22, 'Воин Бездны', ()=>{warriorOfAbyss()}, 'Далі'),
     /*47*/new Card(23, 'Кровожадный Ящер', ()=>{return/*Из темноты Вас атаковал кровожадный ящер. Выполните проверку Удачи. В случае успеха проверки получите 2 ранения. В противном случае получите 6 ранений.*/}, 'Далі'),
     /*48*/new Card(24, 'Летучие Мыши', ()=>{return/*На Вас налетела стая гигантских летучих мышей, желающих испить свеж ей крови. Бросьте 1d6: 1-2 - Вы остались целы и не получаете ранений; 3-6 - Получите 1 ранение.*/}, 'Далі'),
     /*49*/new Card(25, 'Злобный Гоблин', ()=>{return/*Вас атаковал злобный гоблин. Бросьте 1d6: 1-2 - Вы убили гоблина и остались невредимы. 3-4 - Вы убили гоблина и получили 3 ранения. 5-6 - Гоблин ранил Вас и сбежал: получите 3 ранения и выполните проверку Ловкости; в случае провала, сбросьте случайным образом 1 из своих Трофеев (если есть).*/}, 'Далі'),
