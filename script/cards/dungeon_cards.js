@@ -639,8 +639,6 @@ function armyOfGhosts(){
         }
 
         heroes[player.hero].health -= damage
-
-        
     }
 
     game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
@@ -722,13 +720,13 @@ function bloodthirstyLizard(){
 
     const trueFn = ()=> {
         heroes[player.hero].health -= 2
-        ew.drawEW(`Ви отримали 2 рани`)
+        ew.drawEW(`Ви отримали 2 поранення`)
         setTimeout(() => {ew.removeAllEW()}, 1200);
     }
 
     const falseFn = ()=> {
         heroes[player.hero].health -= 6
-        ew.drawEW(`Ви отримали 6 рани`)
+        ew.drawEW(`Ви отримали 6 поранень`)
         setTimeout(() => {ew.removeAllEW()}, 1200);
     }
 
@@ -738,6 +736,93 @@ function bloodthirstyLizard(){
     Выполните проверку Удачи. 
     В случае успеха проверки получите 2 ранения. 
     В противном случае получите 6 ранений.*/
+}
+
+function bats(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+        let damage
+
+        if (result<=2) {
+            ew.drawEW(`Ви залишилися цілими і не отримуєте поранень`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 1200);
+        }
+
+        if (3<= result) {
+            damage = 1
+            
+            ew.drawEW(`Ви отримали ${damage} поранення`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 1200);
+        }
+
+
+        heroes[player.hero].health -= damage
+    }
+
+    game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+
+    /*На Вас налетела стая гигантских летучих мышей, желающих испить свеж ей крови. 
+    Бросьте 1d6: 
+    1-2 - Вы остались целы и не получаете ранений; 
+    3-6 - Получите 1 ранение.*/
+}
+
+function evilGoblin(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+        let damage
+
+        if (result<=2) {
+            ew.drawEW(`Ви вбили гобліна і залишилися неушкодженими`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 1200);
+        }
+
+        if (3<= result <=4) {
+            damage = 3
+            
+            ew.drawEW(`Ви вбили гобліна але отримали ${damage} поранення`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 1200);
+
+        }
+
+        if (5<=result) {
+            damage = 3
+            console.log(player.treasureCardContainer)
+            const maxValue = player.treasureCardContainer.length-1
+            const randomId = Math.floor(Math.random() * maxValue)
+            
+            player.treasureCardContainer.splice(randomId, 1)
+            console.log(player.treasureCardContainer)
+            
+            ew.drawEW(`Гоблін поранив Вас (ви отримали ${damage} поранення), вкрав один із скарбів та втік`)
+            setTimeout(() => {
+
+            }, 2000);
+        }
+
+        heroes[player.hero].health -= damage
+    }
+
+    game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+
+    /*Вас атаковал злобный гоблин. 
+    Бросьте 1d6: 
+    1-2 - Вы убили гоблина и остались невредимы. 
+    3-4 - Вы убили гоблина и получили 3 ранения. 
+    5-6 - Гоблин ранил Вас и сбежал: получите 3 ранения и выполните проверку Ловкости; 
+    в случае провала, сбросьте случайным образом 1 из своих Трофеев (если есть).*/
 }
 
 
@@ -800,8 +885,8 @@ const dungeon_cards = [
     /*45*/new Card(21, 'Армия Призраков', ()=>{armyOfGhosts()}, 'Далі'),
     /*46*/new Card(22, 'Воин Бездны', ()=>{warriorOfAbyss()}, 'Далі'),
     /*47*/new Card(23, 'Кровожадный Ящер', ()=>{bloodthirstyLizard()}, 'Далі'),
-    /*48*/new Card(24, 'Летучие Мыши', ()=>{return/*На Вас налетела стая гигантских летучих мышей, желающих испить свеж ей крови. Бросьте 1d6: 1-2 - Вы остались целы и не получаете ранений; 3-6 - Получите 1 ранение.*/}, 'Далі'),
-    /*49*/new Card(25, 'Злобный Гоблин', ()=>{return/*Вас атаковал злобный гоблин. Бросьте 1d6: 1-2 - Вы убили гоблина и остались невредимы. 3-4 - Вы убили гоблина и получили 3 ранения. 5-6 - Гоблин ранил Вас и сбежал: получите 3 ранения и выполните проверку Ловкости; в случае провала, сбросьте случайным образом 1 из своих Трофеев (если есть).*/}, 'Далі'),
+    /*48*/new Card(24, 'Летучие Мыши', ()=>{bats()}, 'Далі'),
+    /*49*/new Card(25, 'Злобный Гоблин', ()=>{evilGoblin()}, 'Далі'),
     /*50*/new Card(26, 'Нападение Орка', ()=>{return/*Выполните проверку Ловкости или Удачи. В случае Успеха получите 2 ранения и выполните еще одно перемещение (если возможно, 'Далі'), игнорируя двери и решетки, иначе получите 5 ранений.*/}, 'Далі'),
     /*51*/new Card(27, 'Страж Сокровищ', ()=>{return/*На Вас напал страж сокровищ. Получите 2 ранения сразу, а также по 1 ранению за каждый свой Трофей. Вы можете сбросить любое количество своих Трофеев, чтобы не получать за них ранения.*/}, 'Далі'),
     /*52*/new Card(28, 'Каменный шар', ()=>{return/*На Вас катится огромный шар. Вы обязаны выполнить еще одно перемещение в соседнюю область, получив 1 ранение. Перемещаться можно только в исследованную область через проходы, которые не преграждают двери и решётки. Если этого сделать не удалось, получите 4 ранения и останьтесь в текущей комнате.*/}, 'Далі'),
