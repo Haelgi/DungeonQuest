@@ -521,6 +521,60 @@ function manticore(){
     Продолжайте выполнять проверку Силы до тех пор, пока Вы или Ваш противник не погибнете.*/
 }
 
+function goblinWithTreasure() {
+    ew.removeRawBtnInEW('btn_ew')
+
+    const trueFn1 = ()=>{
+        ew.drawEW(`Ви спіймали Гобліна`)
+
+        setTimeout(() => {
+            ew.removeLastEW()
+            ew.removeRawBtnInEW('roll')
+            ew.removeTxt()
+            
+            document.querySelectorAll('.dice-section').forEach((item)=>{
+                item.remove()
+            })
+
+            const trueFn2 = ()=>{
+                const card = game.getRundomElement(game.treasure_cards, treasure_cards)
+                player.treasureCardContainer.push(card)
+                
+                ew.drawEW(`Ви змогли забрати у Гобліна скарб`)
+                ew.drawCardsInEW(card)
+                ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
+            }
+
+            const falseFn2 = ()=>{
+                ew.drawEW(`Ви не змогли забрати у Гобліна жодного скарбу. Він утік.`)
+                setTimeout(() => {
+                    ew.removeAllEW()
+                }, 1200);
+            }
+
+            game.addDiceRollSection(`Ваша Сила : ${heroes[player.hero].strength}`, heroes[player.hero].strength, false,true, 2, trueFn2, falseFn2)
+
+
+        }, 1200);
+
+    }
+
+    const falseFn1 = ()=>{
+        ew.drawEW(`Ви не змогли спіймати Гобліна`)
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 1200);
+    }
+
+    game.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn1, falseFn1)
+
+
+    /*В темноте Вы увидели силуэт гоблина. 
+    Судя по большому мешку за спиной, у него наверняка есть что-нибудь ценное. 
+    Выполните проверки Ловкости и Силы (если первая проверка провалена, вторую выполнять не нужно). 
+    Если обе проверки выполнены Успешно, Вы словили гоблина и отобрали у него сокровище; 
+    тяните Карту Сокровища.*/
+}
 
 
 const dungeon_cards = [
@@ -576,7 +630,7 @@ const dungeon_cards = [
     /*40*/new Card(16, 'Волшебная комната', ()=>{magicRoom()}, 'Далі'),
     /*41*/new Card(17, 'Толпа Мертвецов', ()=>{deadCrowd()}, 'Далі'),
     /*42*/new Card(18, 'Мантикора', ()=>{manticore()}, 'Далі'),
-    /*43*/new Card(19, 'Гоблин с Сокровищем', ()=>{return/*В темноте Вы увидели силуэт гоблина. Судя по большому мешку за спиной, у него наверняка есть что-нибудь ценное. Выполните проверки Ловкости и Силы (если первая проверка провалена, вторую выполнять не нужно). Если обе проверки выполнены Успешно, Вы словили гоблина и отобрали у него сокровище; тяните Карту Сокровища.*/}, 'Далі'),
+    /*43*/new Card(19, 'Гоблин с Сокровищем', ()=>{goblinWithTreasure()}, 'Далі'),
     
     /*44*/new Card(20, 'Целебный Источник', ()=>{return/*Вы нашли целебный источник. Бросьте 1d6: 1-2 - У Вас исцеляется 1 ранение. 3-4 - У Вас исцеляется 2 ранения. 5-6 - У Вас исцеляется 3 ранения.*/}, 'Далі'),
     /*45*/new Card(21, 'Армия Призраков', ()=>{return/*Вокруг Вас начинают появляться призраки павших воинов. Вы чувствуете потерю сил, страх и отчаяние. Бросьте 1d6: 1-2 - Вы преодолели свой страх и остались целы. 3-4 - Вы получаете 3 ранения. 5-6 - Вы получаете З ранения, сбрасываете 1 жетон решимости (если есть) и пропускаете следующий ход.*/}, 'Далі'),
