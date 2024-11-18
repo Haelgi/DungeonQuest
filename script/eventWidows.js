@@ -72,7 +72,10 @@ class EventWidows{
         
         container = document.querySelector('.event-txt-container')
         container.insertAdjacentHTML('beforeend',`<p class="event-txt">${txt}</p>`)
+    }
 
+    removeTxt(){
+        document.querySelector('.event-txt-container')?.remove()
     }
 
     drawDiceInEW(diceCount){
