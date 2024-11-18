@@ -101,11 +101,12 @@
 
 .card-feld-section{
     display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .card-feld{
-    
-    height: 200px;
+    height: 180px;
     width: 130px;
     margin: 20px;
     border-radius: 10px;

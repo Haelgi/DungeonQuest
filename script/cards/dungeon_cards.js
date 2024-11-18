@@ -872,6 +872,82 @@ function orcAttack(){
 }
 
 function treasureGuard(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    heroes[player.hero].health -= 2
+    ew.drawEW(`Ви отримали 2 поранення`)
+    setTimeout(() => {
+        ew.removeLastEW()
+        if(player.treasureCardContainer.length === 0) {
+            ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+            return
+        }
+
+        const countCards = player.treasureCardContainer.length
+        const emptyFelds = []
+        let damage = countCards
+
+        ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{ew.removeAllEW()})
+        ew.addEmptyFeldForCard(countCards)
+        ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{
+            damage -= emptyFelds.length
+
+            heroes[player.hero].health -= damage
+            
+            ew.drawEW(`Ви отримали ${damage} додаткових пораненнь`)
+            setTimeout(() => {ew.removeAllEW()}, 2000);
+        })
+
+        ew.addPackCards(player.treasureCardContainer)
+        const btnNext = document.getElementById('next')
+        btnNext.style.display = 'none'
+
+        addScrolCardsEffect('.event-deck-container', (e)=> {
+            
+            if (emptyFelds.length >= countCards) return
+
+            const [card] = removeCardFromPack(e)
+
+            emptyFelds.push(card)
+            drawCardToFeld(countCards)
+        });
+
+        function removeCardFromPack(e) {
+            const id = e.target.getAttribute('id')
+            const card = player.treasureCardContainer.splice(id, 1)
+
+            ew.updatePackCardsEW(player.treasureCardContainer)
+
+            return card
+        }
+
+        function drawCardToFeld(count){
+            if(emptyFelds.length === count) btnNext.style.display = 'block'
+            if(emptyFelds.length < count) btnNext.style.display = 'none'
+            
+            for (let i = 0; i < count; i++) {
+                const feld = document.getElementById(`card-feld-${i}`)
+    
+                if(emptyFelds[i]===undefined) return feld.innerHTML = ''
+
+                if(emptyFelds.length === 0) return 
+
+                feld.innerHTML = `<div id="${i}" class="card" style="background-image: url('img/${emptyFelds[i].pack}_cards/${emptyFelds[i].pack}_${emptyFelds[i].id}.jpg')"></div>`
+                
+                feld.addEventListener('click', ()=>{
+                    const [card] = emptyFelds.splice(i, 1)
+
+                    if(card) {
+                        player.treasureCardContainer.push(card)
+
+                        ew.updatePackCardsEW(player.treasureCardContainer)
+                        drawCardToFeld(count)  
+                    }
+                })
+            }
+        }
+    }, 1200);
+
 
     /*На Вас напал страж сокровищ. 
     Получите 2 ранения сразу, а также по 1 ранению за каждый свой Трофей. 

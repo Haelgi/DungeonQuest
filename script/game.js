@@ -133,7 +133,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(dungeon_cards[44]);
+        this.drawCardEW(dungeon_cards[50]);
     }
 
     playCatacombEvent(){
@@ -1168,12 +1168,12 @@ class Game {
     }
 
     getRundomElement(idxArr, objArr){
-        const randomIdx = this.rundom(idxArr.length);
+        const randomIdx = this.random(idxArr.length);
         idxArr.splice(randomIdx, 1);
         return objArr[randomIdx]
     }
     
-    rundom(maxValue){
+    random(maxValue){
         return Math.floor(Math.random() * maxValue);
     }
 }
