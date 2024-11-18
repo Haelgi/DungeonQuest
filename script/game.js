@@ -133,7 +133,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(dungeon_cards[50]);
+        this.drawCardEW(dungeon_cards[51]);
     }
 
     playCatacombEvent(){
@@ -380,14 +380,14 @@ class Game {
         return this.treasuryFields.some(coord => coord[0] === x && coord[1] === y);
     }
 
-    newCoordinate() {
+    newCoordinate(withoutDoors) {
         const [x, y] = player.position;
         const coordinates = [];
 
-        if (x > 0 && this.checkOtherPlayer([x - 1, y]) && this.checkPermitWayNeighbour([x - 1, y], 'right', false)  && this.checkPermitWay([x, y],'left', true)) coordinates.push([x - 1, y]); 
-        if (y > 0 && this.checkOtherPlayer([x, y - 1]) && this.checkPermitWayNeighbour([x, y - 1], 'down', false)  && this.checkPermitWay([x, y], 'up', true)) coordinates.push([x, y - 1]);   
-        if (x < 14 && this.checkOtherPlayer([x + 1, y]) && this.checkPermitWayNeighbour([x + 1, y], 'left', false)  && this.checkPermitWay([x, y], 'right', true)) coordinates.push([x + 1, y]);  
-        if (y < 11  && this.checkOtherPlayer([x, y + 1]) && this.checkPermitWayNeighbour([x, y + 1], 'up', false)  && this.checkPermitWay([x, y], 'down', true))  coordinates.push([x, y + 1]);  
+        if (x > 0 && this.checkOtherPlayer([x - 1, y]) && this.checkPermitWayNeighbour([x - 1, y], 'right', false, withoutDoors)  && this.checkPermitWay([x, y],'left', true, withoutDoors)) coordinates.push([x - 1, y]); 
+        if (y > 0 && this.checkOtherPlayer([x, y - 1]) && this.checkPermitWayNeighbour([x, y - 1], 'down', false, withoutDoors)  && this.checkPermitWay([x, y], 'up', true, withoutDoors)) coordinates.push([x, y - 1]);   
+        if (x < 14 && this.checkOtherPlayer([x + 1, y]) && this.checkPermitWayNeighbour([x + 1, y], 'left', false, withoutDoors)  && this.checkPermitWay([x, y], 'right', true, withoutDoors)) coordinates.push([x + 1, y]);  
+        if (y < 11  && this.checkOtherPlayer([x, y + 1]) && this.checkPermitWayNeighbour([x, y + 1], 'up', false, withoutDoors)  && this.checkPermitWay([x, y], 'down', true, withoutDoors))  coordinates.push([x, y + 1]);  
         if (this.isPlayerInTower() && player.catacomb) coordinates.push(...this.startFields)
         return coordinates;
     }
@@ -397,11 +397,12 @@ class Game {
         if(!this.gameFields[y][x]['[id]']) return true
     }
 
-    checkPermitWayNeighbour(coordinat, direction , checkBarrier) {
+    checkPermitWayNeighbour(coordinat, direction , checkBarrier, withoutDoors) {
         const [x, y] = coordinat;
         const tileIdx = this.gameFields[y][x]['id'];
         const room = room_tiles[tileIdx];
     
+        if (!room && withoutDoors) return false;
         if (!room) return true;
 
         let permission = this.checkPermitWay(coordinat, direction , checkBarrier);
@@ -430,7 +431,7 @@ class Game {
         return permission;
     }
         
-    checkPermitWay(coordinat, direction, checkBarrier){
+    checkPermitWay(coordinat, direction, checkBarrier, withoutDoors){
         
         const [x, y] = coordinat;
         const tileIdx = this.gameFields[y][x]['id'];
@@ -468,6 +469,8 @@ class Game {
         
         const newDirection = directionMapping[this.gameFields[y][x]['r']][direction];
         const value = room[newDirection];
+        
+        if (typeof value !== 'boolean' && checkBarrier && withoutDoors && !player.catacomb) return false
         
         if (value && room.special === 'collapse' && checkBarrier=== true && !player.catacomb) this.drawIcon(x,y, 'fa-solid fa-road-barrier', room.special, direction, true);
         if (value && room.special === 'web' && checkBarrier=== true && !player.catacomb) this.drawIcon(x,y, 'fa-solid fa-kip-sign', room.special, direction, true);
