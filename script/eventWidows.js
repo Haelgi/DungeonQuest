@@ -141,7 +141,7 @@ class EventWidows{
     }
 
     removeRawBtnInEW(id){
-        document.getElementById(id).remove()
+        document.getElementById(id)?.remove()
     }
 
     addEmptyFeldForCard(feldCount){
