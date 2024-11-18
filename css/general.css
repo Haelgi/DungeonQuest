@@ -39,8 +39,7 @@ body {
     color: #fae100;
 }
 
-.title h1:after,
-p:after {
+.title h1:after{
     content: '';
     display: block;
 

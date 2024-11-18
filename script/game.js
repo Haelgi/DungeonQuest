@@ -338,10 +338,12 @@ class Game {
             ew.drawBtnInEW('add_resolve','Додати Рішучості', ()=>{
                 const diff = this.diceRollResultGlobal - value;
                 heroes[player.hero].resolve -= Math.abs(diff);
+                ew.removeLastEW()
                 if (closeEW) ew.removeAllEW()
                 if (trueFn) trueFn();  
             });
             ew.drawBtnInEW('next','Далі', ()=>{
+                ew.removeLastEW()
                 if (closeEW) ew.removeAllEW()
                 if (falseFn) falseFn();
                 heroes[player.hero].resolve +=1;
