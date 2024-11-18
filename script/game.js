@@ -133,7 +133,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(dungeon_cards[41]);
+        this.drawCardEW(dungeon_cards[44]);
     }
 
     playCatacombEvent(){
@@ -581,8 +581,18 @@ class Game {
 
     makeMove() {
         let array;
+
+        if(player.idx !== this.currentPlayerIndex) return
+
+        if (player.skipMove !== 0) {
+            player.skipMove -= 1
+            this.endMove()
+            return
+        }
+
         if (!player.position) array = this.startFields;
         if (player.position ) array = this.nextCoordinates;
+
 
         this.checkEventCards()
         this.checkMonsterCards()
