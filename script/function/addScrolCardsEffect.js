@@ -15,7 +15,7 @@ export function addScrolCardsEffect(container, fn){
 
         endX = e.clientX
 
-        if (startX === endX) fn(e)
+        if (startX === endX) if(fn) fn(e)
 
         if (startX - endX > 50) {
             let elem = parentContainer.querySelector('.active')?.nextElementSibling

@@ -5,18 +5,18 @@ class EventWidows{
     static zIndex = 100;
 
     drawEW(title, color) {
+        EventWidows.zIndex +=1;
+
         game.activeEvent = true
         const element = document.querySelector('body');
         element.insertAdjacentHTML('afterbegin', 
-            `<div class="event-container" style="z-index: ${EventWidows.zIndex};">
+            `<div id="ew_${EventWidows.zIndex}" class="event-container" style="z-index: ${EventWidows.zIndex};">
                 <div class="event-main">
                     <div class="title style="color:${color}""><h1>${title}</h1></div>
                     <div class="event-section"></div>
-                    <div class="btn-section"></div>
                 </div>
             </div>`
         );
-        EventWidows.zIndex +=1;
     }
 
     removeTitile(){
@@ -39,8 +39,14 @@ class EventWidows{
         });
     }
 
+    removeLastEW(){
+        const element = document.getElementById(`ew_${EventWidows.zIndex}`)
+        element.remove()
+        EventWidows.zIndex -= 1;
+    }
+
     drawCardsInEW(card) {
-        const element = document.querySelector('.event-section');
+        const element = document.querySelector('.event-main');
 
         let cards
         let eventSection = '';
@@ -58,8 +64,20 @@ class EventWidows{
         element.insertAdjacentHTML('beforeend', eventSection);
     }
 
+    addTxt(txt){
+        let container = document.querySelector('.event-main');
+
+        if (!container.querySelector('.event-txt-container')) {
+            container.innerHTML += `<div class="event-txt-container"></div>`
+        }
+        
+        container = document.querySelector('.event-txt-container')
+        container.insertAdjacentHTML('beforeend',`<p class="event-txt">${txt}</p>`)
+
+    }
+
     drawDiceInEW(diceCount){
-        const element = document.querySelector('.event-section');
+        const element = document.querySelector('.event-main');
         let diceContainers ='';
         let count = 1;
 
@@ -109,13 +127,13 @@ class EventWidows{
     }
 
     drawBtnInEW(id, name, fn, bg){
-        const element = document.querySelector('.btn-section');
+        const element = document.querySelector('.event-main');
         element.insertAdjacentHTML('beforeend', `<button id=${id} style="background:${bg}">${name}</button>`);
         document.getElementById(id).addEventListener('click', () => fn(), {once: true});
     }
 
     addBtnInEW(id, name, fn, bg){
-        const element = document.querySelector('.event-section');
+        const element = document.querySelector('.event-main');
         element.insertAdjacentHTML('beforeend', `<div class="btn-section"><button id=${id} style="background:${bg}">${name}</button></div>`);
         document.getElementById(id).addEventListener('click', () => fn(), {once: true});
     }
@@ -125,7 +143,7 @@ class EventWidows{
     }
 
     addEmptyFeldForCard(feldCount){
-        const element = document.querySelector('.event-section');
+        const element = document.querySelector('.event-main');
         let emptyFelds ='';
         let count = 0;
 
@@ -138,8 +156,8 @@ class EventWidows{
         element.insertAdjacentHTML('beforeend', `<div class="card-feld-section">${emptyFelds}</div>`);
     }
 
-    addPackCards(packCards, className){
-        const element = document.querySelector('.event-section');
+    addPackCards(packCards){
+        const element = document.querySelector('.event-main');
         
         let activeId = Math.round((packCards.length-1)/2)
         let cardDeckContainer ='';
@@ -152,12 +170,11 @@ class EventWidows{
             `
         });
 
-
-        element.insertAdjacentHTML('beforeend', `<div class="card-deck-container ${className}">${cardDeckContainer}</div>`);
+        element.insertAdjacentHTML('beforeend', `<div class="card-deck-container event-deck-container">${cardDeckContainer}</div>`);
     }
 
     updatePackCardsEW(packCards){
-        const element = document.querySelector('.event-section');
+        const element = document.querySelector('.event-main');
         const cardDeckContainer = element.querySelector('.card-deck-container');
 
         let activeId = Math.round((packCards.length-1)/2)
@@ -174,7 +191,7 @@ class EventWidows{
         cardDeckContainer.innerHTML = inner
     }
 
-    drawTxtInEW(text){
+    drawTitleInEW(text){
         const element = document.querySelector('.title');
         element.insertAdjacentHTML('beforeend', `<p>${text}</p>`);
     }

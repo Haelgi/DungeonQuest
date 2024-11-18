@@ -7,6 +7,7 @@ import  {monster_cards}  from './monster_cards.js';
 import  {trap_cards}  from './trap_cards.js';
 import  {deadman_cards}  from './deadman_cards.js';
 import  {сrypt_cards}  from './сrypt_cards.js';
+import  {treasure_cards}  from './treasure_cards.js';
 
 
 class Card {
@@ -66,7 +67,10 @@ function crypt(){
 
 function collapse(){
     ew.removeAllEW();
-    game.rotateRoomTile(90) 
+    game.rotateRoomTile(90)
+    game.removeHighlightFields(game.nextCoordinates)
+    game.removeAllIcon()
+    game.nextCoordinates = game.newCoordinate()
     /*Случился обвал! Хотя часть пути и завалило обломками, другая часть пути освободилась. 
     Поверните тайл комнаты, где Вы находитесь, на 90° по часовой стрелке.*/
 }
@@ -80,11 +84,9 @@ function burial(){
 
     distributionCards(cards)
 
-    game.drawCardEW(cards)
-    ew.removeTitile()
-    ew.addTitleToEW('Події підземелля')
-
-    ew.removeRawBtnInEW('btn_ew')
+    ew.drawEW('Карти мерців')
+    ew.addPackCards(cards)
+    addScrolCardsEffect('.event-deck-container', false)
     ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
     /*Вы нашли захоронение. Вы можете вытянуть сразу 3 Карты Мертвеца.*/
 }
@@ -92,14 +94,25 @@ function burial(){
 function wallCollapse(){
     ew.removeRawBtnInEW('btn_ew')
 
+    const trueFn = ()=>{
+        if (game.nextCoordinates.length === 0) game.endGame()
+        player.extraMove = true
+        game.removePreviousTileField = true
+        game.removeAllIcon()
+
+    }
+
     const falseFn = ()=>{
         if (game.nextCoordinates.length === 0) game.endGame()
         heroes[player.hero].health -= 2
         player.extraMove = true
         game.removePreviousTileField = true
+        game.removeAllIcon()
+        ew.drawEW('Ви отримали 2 поранення');
+        ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
     }
 
-    game.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, false, falseFn)
+    game.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, false, true)
 
     /*Комната рушится. 
     Выполните проверку Ловкости и, в случае неудачи, получите 2 ранения от летящих обломков. 
@@ -118,13 +131,10 @@ function undergroundNecropolis(){
     
     distributionCards(cards)
 
-    game.drawCardEW(cards)
-    ew.removeTitile()
-    ew.addTitleToEW('Події підземелля')
-
-    ew.removeRawBtnInEW('btn_ew')
+    ew.drawEW('Події підземелля')
+    ew.addPackCards(cards)
+    addScrolCardsEffect('.event-deck-container', false)
     ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
-
 
     /*Вы нашли подземный некрополь. Вы можете вытянуть 3 Карты Склепа.*/
 }
@@ -151,7 +161,8 @@ function goblinExplorer(){
 
         ew.removeAllEW()
     })
-    ew.addPackCards(player.treasureCardContainer, 'event-deck-container')
+
+    ew.addPackCards(player.treasureCardContainer)
     
     const emptyFelds = []
     const btnNext = document.getElementById('next')
@@ -217,6 +228,7 @@ function ambushRoom(){
     }
 
     const falseFn = ()=>{
+        ew.removeAllEW()
         player.escapeBattle = false
         const cards = [game.getRundomElement(game.monster_cards, monster_cards),
             game.getRundomElement(game.monster_cards, monster_cards)]
@@ -224,15 +236,14 @@ function ambushRoom(){
 
         distributionCards(cards)
 
-        game.drawCardEW(cards)
-        ew.removeTitile()
-        ew.addTitleToEW('Події підземелля')
+        ew.drawEW('Події підземелля')
+        ew.addPackCards(cards)
+        addScrolCardsEffect('.event-deck-container', false)
 
-        ew.removeRawBtnInEW('btn_ew')
         ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
     }
 
-    game.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+    game.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, false, true)
 
     /*В комнату вошли монстры, а на выходы начали опускаться решетки. 
     Выполните проверку Ловкости. 
@@ -260,6 +271,7 @@ function surroundedByMonsters(){
     }
 
     const falseFn = ()=>{
+        ew.removeAllEW()
         const cards = [game.getRundomElement(game.monster_cards, monster_cards),
             game.getRundomElement(game.monster_cards, monster_cards)]
 
@@ -267,11 +279,10 @@ function surroundedByMonsters(){
 
         distributionCards(cards)
 
-        game.drawCardEW(cards)
-        ew.removeTitile()
-        ew.addTitleToEW('Події підземелля')
+        ew.drawEW('Події підземелля')
+        ew.addPackCards(cards)
+        addScrolCardsEffect('.event-deck-container', false)
 
-        ew.removeRawBtnInEW('btn_ew')
         ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
     }
 
@@ -279,7 +290,7 @@ function surroundedByMonsters(){
         ew.removeRawBtnInEW('btn_strength')
         ew.removeRawBtnInEW('btn_defense')
 
-        game.addDiceRollSection( `${nameValue}: ${value}`, value, false, false, 2, trueFn, falseFn)
+        game.addDiceRollSection( `${nameValue}: ${value}`, value, false, false, 2, trueFn, falseFn, false, true)
     }
 
     ew.removeRawBtnInEW('btn_ew')
@@ -326,10 +337,13 @@ function giantSnake(){
     ew.removeRawBtnInEW('btn_ew')
 
     const trueFn = ()=>{
-        heroes[player.hero].health -= game.diceRollResultGlobal + 2
+        const damage = game.diceRollResultGlobal + 2
+        heroes[player.hero].health -= damage
+        ew.drawEW(`Ви отримали ${damage} поранення`);
+        ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
     }
     
-    game.addDiceRollSection( false, 6, false, false,1, trueFn, false)
+    game.addDiceRollSection( false, 6, false, false,1, trueFn, false, false, false)
 
     /*Вы потревожили гигантскую змею. 
     Бросьте 1d6, добавьте к выпавшему числу 2 и получите количество ранений, эквивалентное результату.*/
@@ -349,10 +363,9 @@ function magicRoom(){
         game.removeHighlightFields(game.nextCoordinates)
         game.removeAllIcon()
         game.nextCoordinates = game.newCoordinate()
-
     }
     
-    game.addDiceRollSection( false, 6, false, false,1, trueFn, false)
+    game.addDiceRollSection( false, 6, false, false,1, trueFn, false, false, true)
 
     /*Когда Вы вошли в комнату, она начала изменяться. 
     Бросьте 1d6: 1-2 - Поверните тайл комнаты на 90° по часовой стрелке; 
@@ -363,8 +376,6 @@ function magicRoom(){
 function deadCrowd(){
     ew.removeRawBtnInEW('btn_ew')
 
-
-    
     ew.drawBtnInEW('btn_luck', 'Перевірити Удачу', ()=>{
         ew.removeRawBtnInEW('btn_luck')
         ew.removeRawBtnInEW('btn_fight')
@@ -379,17 +390,28 @@ function deadCrowd(){
             game.endMove()
         }
 
-        game.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn1, falseFn1)
+        game.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn1, falseFn1, false, false)
     })
     
     ew.drawBtnInEW('btn_fight', 'Битись', ()=>{
         ew.removeRawBtnInEW('btn_luck')
         ew.removeRawBtnInEW('btn_fight')
+
         const trueFn2 = ()=>{
+            console.log('trueFn2')
             heroes[player.hero].health -= game.diceRollResultGlobal
-            ew.removeAllEW()
+            const card = game.getRundomElement(game.treasure_cards, treasure_cards)
+            player.treasureCardContainer.push()
+            ew.drawEW('Ви отримали 2 поранення');
+            ew.drawBtnInEW('btn_next', 'Отримати бонус за бій', ()=>{
+                ew.removeAllEW()
+                game.drawCardEW(card)
+                ew.removeRawBtnInEW('btn_ew')
+                ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
+            });
         }
-        game.addDiceRollSection(false, 12, false, true, 2, trueFn2)
+
+        game.addDiceRollSection(false, 12, false, true, 2, trueFn2, false, false, false)
     })
 
     /*Вы прячетесь от толпы мертвецов. 
@@ -401,7 +423,75 @@ function deadCrowd(){
     Тогда бросьте 2d6, получите количество ранений, эквивалентное результату, 
     сбросьте эту карту и вытяните Карту Сокровища как награду.*/
 }
+
     
+function manticore(){
+    ew.removeRawBtnInEW('btn_ew')
+    ew.removeTitile()
+    ew.addTitleToEW(`Оцінка Здоров'я Мантикори`)
+
+    const enterBattle = ()=>{
+        document.querySelector('.dice-container').remove()
+        document.getElementById('roll').remove()
+        ew.removeTitile()
+        ew.addTitleToEW(`Бій з Мантикорою`)
+
+        ew.addTxt(`
+            ${player.hero.toUpperCase()}<br>
+            <i style="font-size: 5px"></i><br>
+            <i id="pl_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px">${heroes[player.hero].health}</i><br>
+            <i style="font-size: 1px"></i><br>
+            <i id="pl_str" class="fa-solid fa-hand-fist" style="color:#00BFFF; font-size: 25px">${heroes[player.hero].strength}</i>
+        `)
+
+        ew.addTxt(`
+            ${'мантикора'.toUpperCase()}<br>
+            <i style="font-size: 5px"></i><br>
+            <i id="em_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px">${game.diceRollResultGlobal}</i><br>
+        `)
+
+        const pl_str = heroes[player.hero].strength
+        const pl_hp = document.getElementById('pl_hp')
+        const em_hp = document.getElementById('em_hp')
+
+        function endBattle(){
+
+        }
+
+        function reroll(){
+            const trueFn = ()=>{ 
+                const new_em_hp = Number(em_hp.innerHTML) - player.attack
+                if (new_em_hp === 0) return endBattle()
+                em_hp.innerHTML = new_em_hp
+                ew.removeRawBtnInEW('roll')
+                reroll()
+            }
+            
+            const falseFn = ()=>{
+                heroes[player.hero].health -= 1
+                pl_hp.innerHTML = heroes[player.hero].health
+                if (heroes[player.hero].health === 0) game.endGame()
+                ew.removeRawBtnInEW('roll')
+                reroll()
+            }
+    
+            game.addDiceRollSection(false, heroes[player.hero].strength, false, true, 2, trueFn, falseFn, false, false)
+        }
+
+        reroll()
+        
+    }
+
+    game.addDiceRollSection(false, 6, false, true, 1, enterBattle, false, false, false)
+
+
+    /*На Вас напала мантикора. 
+    Бросьте 1d6; выпавший результат будет количеством здоровья мантикоры. 
+    Выполните проверку Силы. 
+    В случае Успеха, мантикора получает 1 ранение. 
+    В случае провала 1 ранение получаете Вы. 
+    Продолжайте выполнять проверку Силы до тех пор, пока Вы или Ваш противник не погибнете.*/
+}
 
 
 
@@ -457,7 +547,7 @@ const dungeon_cards = [
     /*39*/new Card(15, 'Гиганская Змея', ()=>{giantSnake()}, 'Далі'),
     /*40*/new Card(16, 'Волшебная комната', ()=>{magicRoom()}, 'Далі'),
     /*41*/new Card(17, 'Толпа Мертвецов', ()=>{deadCrowd()}, 'Далі'),
-    /*42*/new Card(18, 'Мантикора', ()=>{return/*На Вас напала мантикора. Бросьте 1d6; выпавший результат будет количеством здоровья мантикоры. Выполните проверку Силы. В случае Успеха, мантикора получает 1 ранение. В случае провала 1 ранение получаете Вы. Продолжайте выполнять проверку Силы до тех пор, пока Вы или Ваш противник не погибнете.*/}, 'Далі'),
+    /*42*/new Card(18, 'Мантикора', ()=>{manticore()}, 'Далі'),
     /*43*/new Card(19, 'Гоблин с Сокровищем', ()=>{return/*В темноте Вы увидели силуэт гоблина. Судя по большому мешку за спиной, у него наверняка есть что-нибудь ценное. Выполните проверки Ловкости и Силы (если первая проверка провалена, вторую выполнять не нужно). Если обе проверки выполнены Успешно, Вы словили гоблина и отобрали у него сокровище; тяните Карту Сокровища.*/}, 'Далі'),
     
     /*44*/new Card(20, 'Целебный Источник', ()=>{return/*Вы нашли целебный источник. Бросьте 1d6: 1-2 - У Вас исцеляется 1 ранение. 3-4 - У Вас исцеляется 2 ранения. 5-6 - У Вас исцеляется 3 ранения.*/}, 'Далі'),

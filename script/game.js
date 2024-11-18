@@ -133,14 +133,12 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(dungeon_cards[40]);
+        this.drawCardEW(dungeon_cards[41]);
     }
 
     playCatacombEvent(){
         const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
-        // this.drawCardEW(card);
-        // TODO убрать хардкод с карт катакомб
-        this.drawCardEW(catacomb_cards[25]);
+        this.drawCardEW(card);
     }
     
     playTreasuryEvent(){
@@ -261,7 +259,7 @@ class Game {
         }
     
         ew.drawEW(title);
-        ew.drawTxtInEW(texts);
+        ew.drawTitleInEW(texts);
         ew.drawDiceInEW(diceCount);
         ew.drawBtnInEW('roll', 'Кинути Кубики', () => {
             ew.rollDiceFn();
@@ -271,45 +269,67 @@ class Game {
         });
     }
     
-    addDiceRollSection( txt, value, dexterity, resolve, diceCount, trueFn, falseFn, rolResult) {
+    addDiceRollSection( txt, value, dexterity, resolve, diceCount, trueFn, falseFn, rolResult, closeEW) {
         let newValue = value;
         let texts = txt;
         const resolvePlayer = heroes[player.hero].resolve;
         const treasure = player.treasureCardContainer.length;
     
         if (resolvePlayer > 0 && resolve) {
-            texts += ` + ${resolvePlayer} Рішучості`;
+            texts += `<br> + ${resolvePlayer} Рішучості`;
         }
     
         if (treasure > 0 && dexterity) {
-            texts += ` - ${treasure} Спритності`;
+            texts += `<br> - ${treasure} за трофеї`;
             newValue -= treasure;
         }
     
-        if(txt) ew.drawTxtInEW(texts);
+        if(txt) ew.addTxt(texts);
         ew.drawDiceInEW(diceCount);
         ew.drawBtnInEW('roll', 'Кинути Кубики', () => {
             ew.rollDiceFn();
             setTimeout(() => {
-                this.rolResultEW(newValue, trueFn, falseFn, rolResult);
+                this.rolResultEW(newValue, trueFn, falseFn, rolResult, closeEW);
+            }, 1700);
+        });
+    }
+
+    addBattleDiceRollSection(trueValue, resolve, diceCount, trueFn, falseFn) {
+        let newValue = trueValue;
+        const resolvePlayer = heroes[player.hero].resolve;
+    
+        if (resolvePlayer > 0 && resolve) {
+            texts += `<br> + ${resolvePlayer} Рішучості`;
+        }
+    
+        if (treasure > 0 && dexterity) {
+            texts += `<br> - ${treasure} за трофеї`;
+            newValue -= treasure;
+        }
+    
+        ew.drawDiceInEW(diceCount);
+        ew.drawBtnInEW('roll', 'Кинути Кубики', () => {
+            ew.rollDiceFn();
+            setTimeout(() => {
+                this.rolResultEW(newValue, trueFn, falseFn, rolResult, closeEW);
             }, 1700);
         });
     }
     
 
-    rolResultEW (value, trueFn, falseFn, rolResult){
+    rolResultEW (value, trueFn, falseFn, rolResult, closeEW){
         if (this.diceRollResultGlobal <= (value)) {
             if (rolResult){
                 ew.drawEW('Успіх!', 'green');
                 ew.drawBtnInEW('next','Далі', ()=>{
                     if (trueFn) trueFn();
-                    ew.removeAllEW()
+                    if (closeEW) ew.removeAllEW()
                 });
             }
 
             if (!rolResult){
                 if (trueFn) trueFn();
-                ew.removeAllEW()
+                if (closeEW) ew.removeAllEW()
             }
         }
 
@@ -318,11 +338,11 @@ class Game {
             ew.drawBtnInEW('add_resolve','Додати Рішучості', ()=>{
                 const diff = this.diceRollResultGlobal - value;
                 heroes[player.hero].resolve -= Math.abs(diff);
-                ew.removeAllEW()
+                if (closeEW) ew.removeAllEW()
                 if (trueFn) trueFn();  
             });
             ew.drawBtnInEW('next','Далі', ()=>{
-                ew.removeAllEW()
+                if (closeEW) ew.removeAllEW()
                 if (falseFn) falseFn();
                 heroes[player.hero].resolve +=1;
             });
@@ -332,13 +352,13 @@ class Game {
             if (rolResult){
                 ew.drawEW('Провал!', 'red');
                 ew.drawBtnInEW('next','Далі', ()=>{
-                    ew.removeAllEW()
+                    if (closeEW) ew.removeAllEW()
                     if (falseFn) falseFn();
                 });
                 heroes[player.hero].resolve +=1;
             }
             if (!rolResult){
-                ew.removeAllEW()
+                if (closeEW) ew.removeAllEW()
                 if (falseFn) falseFn();
                 heroes[player.hero].resolve +=1;
             }
@@ -443,7 +463,7 @@ class Game {
                 'down': 'left',
             }
         };
-
+        
         const newDirection = directionMapping[this.gameFields[y][x]['r']][direction];
         const value = room[newDirection];
         
@@ -724,8 +744,8 @@ class Game {
         let rotate = this.gameFields[y][x]['r'];
 
         rotate = rotate + angl;
-
-        if (rotate > 270) rotate = angl - 270;
+        
+        if (rotate > 270) rotate -= 360;
 
         this.gameFields[y][x]['r'] = Number(rotate);
     
@@ -941,7 +961,7 @@ class Game {
             this.removeAllIcon()
     
             ew.drawEW('Виберіть напрямок руху у катакакомбах.')
-            ew.drawTxtInEW('Змінити напрямок руху буде неможливо.')
+            ew.drawTitleInEW('Змінити напрямок руху буде неможливо.')
             ew.drawBtnInEW('close', 'Далі', ()=>{
                 ew.removeAllEW()
             })
