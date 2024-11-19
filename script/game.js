@@ -133,7 +133,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(dungeon_cards[51]);
+        this.drawCardEW(dungeon_cards[52]);
     }
 
     playCatacombEvent(){
@@ -564,6 +564,14 @@ class Game {
         });
     };
 
+    checkCurseOfTheSorcerer(){
+        if(player.curseResolve && heroes[player.hero].resolve > player.oldResolve) {
+            const diff = heroes[player.hero].resolve - player.oldResolve  
+            heroes[player.hero].health -= diff
+            player.oldResolve = heroes[player.hero].resolve
+        }
+    }
+
     checkEventCards(){
         if (player.eventCardContainer.length === 0 || this.activeEvent) return
         const [card] = player.eventCardContainer.splice(0, 1);
@@ -596,7 +604,7 @@ class Game {
         if (!player.position) array = this.startFields;
         if (player.position ) array = this.nextCoordinates;
 
-
+        this.checkCurseOfTheSorcerer()
         this.checkEventCards()
         this.checkMonsterCards()
     

@@ -20,6 +20,9 @@ class Player {
         this.extraMove = false
         this.skipMove = 0
         this.escapeBattle = true
+        this.curseOfTheSorcerer = false
+        this.oldResolve = 0;
+        this.curseResolve = false;
     }
 }
 
