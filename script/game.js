@@ -133,7 +133,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(dungeon_cards[52]);
+        this.drawCardEW(dungeon_cards[43]);
     }
 
     playCatacombEvent(){
@@ -573,8 +573,9 @@ class Game {
     }
 
     checkEventCards(){
-        if (player.eventCardContainer.length === 0 || this.activeEvent) return
+        if (player.eventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
         const [card] = player.eventCardContainer.splice(0, 1);
+        if (player.eventCardContainer.length === 0) player.checkEventCards = false
         this.drawCardEW(card)
     }
 
@@ -753,6 +754,7 @@ class Game {
         this.toggleCurrentPlayer()
         this.queueEW()
         this.activeEvent = false
+        player.checkEventCards = true
     }
 
     endGame(){

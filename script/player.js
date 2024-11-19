@@ -23,6 +23,7 @@ class Player {
         this.curseOfTheSorcerer = false
         this.oldResolve = 0;
         this.curseResolve = false;
+        this.checkEventCards = true
     }
 }
 

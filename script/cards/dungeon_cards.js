@@ -589,10 +589,14 @@ function healingSpring(){
         heroes[player.hero].health += healing
         ew.drawEW(`Ви зцілили ${healing} здоров'я`)
         setTimeout(() => {
-            ew.removeLastEW()
-            ew.removeRawBtnInEW('roll')
             ew.removeAllEW()
         }, 1200);
+        if(player.curseOfTheSorcerer){
+            player.curseOfTheSorcerer = false
+            player.eventCardContainer.forEach((card, id)=>{
+                if(card.name === 'Проклятие Колдуна') player.eventCardContainer.splice(id, 1);
+            })
+        }
     }
 
     game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
@@ -994,6 +998,7 @@ function curseOfTheSorcerer(){
     ew.drawBtnInEW('next', 'Далі', ()=>{
         const card = dungeon_cards[52]
         player.eventCardContainer.push(card)
+        if (player.curseOfTheSorcerer) ew.removeAllEW()
         if (!player.curseOfTheSorcerer) {
             player.curseOfTheSorcerer = true
             const damage = 1 + resolve
@@ -1009,9 +1014,6 @@ function curseOfTheSorcerer(){
     if (resolve >= 3){
         ew.drawBtnInEW('btn_next', 'Зняти прокляття<br>за 3 рішучості', ()=>{ew.removeAllEW()})
     }
-    
-    
-    
     
     /*Колдун навел на Вас проклятие. 
     Вы чувствуете боль и слабость. 

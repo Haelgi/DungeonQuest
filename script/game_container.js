@@ -9,6 +9,7 @@ import  {ew}  from './eventWidows.js';
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
 
 import  {treasure_cards}  from './cards/treasure_cards.js';
+import  {dungeon_cards}  from './cards/dungeon_cards.js';
 player.idx = 0; 
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
