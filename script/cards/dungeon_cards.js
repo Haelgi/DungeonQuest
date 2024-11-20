@@ -699,7 +699,7 @@ function warriorOfAbyss(){
             ew.removeLastEW()
             ew.removeRawBtnInEW('roll')
             ew.removeTxt()
-            ew.addTxt('Пройти перевірку на:')
+            
 
             ew.drawBtnInEW('btn_dx','Спритність', dexterity)
             ew.drawBtnInEW('btn_df','Захист',defense)
@@ -1024,6 +1024,86 @@ function curseOfTheSorcerer(){
     либо разыграть эффект карты Целебный Источник.*/
 }
 
+function darkPortal(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    function result(){ 
+        const result = game.diceRollResultGlobal
+        const damage = result * 2
+
+        ew.drawEW(`Ви отримете ${damage} поранення`)
+        ew.drawBtnInEW('btn_reRoll','Перекинути (+1 поранення)', ()=>{
+            ew.removeLastEW()
+            
+            heroes[player.hero].health -= 1
+            diceDamage()
+        })
+
+        ew.drawBtnInEW('btn_next','Далі', ()=>{
+            ew.removeLastEW()
+
+            heroes[player.hero].health -= damage
+
+            ew.drawEW(`Ви отримали ${damage} поранення`)
+            setTimeout(() => {ew.removeAllEW()}, 1200);
+        })
+    }
+
+    function diceDamage(){
+        clear()
+        game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+
+    }
+
+    const trueFn = ()=> {
+        ew.drawEW(`Вам вдалося пробитися до порталу<br>та зруйнувати його`)
+        setTimeout(() => {ew.removeAllEW()}, 1200);
+    }
+
+    const falseFn = ()=> {
+        ew.drawEW(`Вам не вдалося пробитися до порталу`)
+        setTimeout(() => {
+            ew.removeLastEW(); 
+            diceDamage()
+        }, 1200);
+    }
+    
+    function clear(){
+        ew.removeTxt()
+        document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
+        document.querySelectorAll('.dice-section')?.forEach((item)=>{
+            item.remove()
+        })
+    }
+
+    function dexterity(){
+        clear()
+        game.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+    }
+
+    function defense(){
+        clear()
+        game.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
+    }
+
+    function luck(){
+        clear()
+        game.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+    }
+
+    ew.addTxt('Пройти перевірку на:')
+    ew.drawBtnInEW('btn_dx','Спритність', dexterity)
+    ew.drawBtnInEW('btn_df','Захист',defense)
+    ew.drawBtnInEW('btn_luk','Удачу',luck)
+
+    /*Вы увидели выходящего из портала монстра. 
+    Выполните проверку одной из характеристик: Ловкости, Защиты, или Удачи. 
+    В случае успеха Вам удалось пробиться к порталу и разрушить его. 
+    В случае провала монстр Вам помешал; 
+    бросьте 116, умножьте выпавшее число на 2 и получите количество ранений, эквивалентное результату. 
+    Если результат броска Вас не устроил, Вы можете выполнить повторный бросок, получив при этом 1 ранение.*/
+}
+
 const dungeon_cards = [
     /*1*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
     /*2*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
@@ -1090,7 +1170,7 @@ const dungeon_cards = [
     /*52*/new Card(28, 'Каменный шар', ()=>{stoneBall()}, 'Далі'),
     /*53*/new Card(29, 'Проклятие Колдуна', ()=>{curseOfTheSorcerer()}, 'Далі'),
     
-    /*54*/new Card(30, 'Темный портал', ()=>{return/*Вы увидели выходящего из портала монстра. Выполните проверку одной из характеристик: Ловкости, Защиты, или Удачи. В случае успеха Вам удалось пробиться к порталу и разрушить его. В случае провала монстр Вам помешал; бросьте 116, умножьте выпавшее число на 2 и получите количество ранений, эквивалентное результату. Если результат броска Вас не устроил, Вы можете выполнить повторный бросок, получив при этом 1 ранение.*/}, 'Далі'),
+    /*54*/new Card(30, 'Темный портал', ()=>{darkPortal()}, 'Далі'),
     /*55*/new Card(31, 'Ожившие Доспехи', ()=>{return/*Вас атаковали ожившие доспехи. Бросьте 1d6: 1-2- Получите 1 ранение; 3-4 – Получите 2 ранения; 5-6 - Получите 3 ранения.*/}, 'Далі'),
     /*56*/new Card(32, 'Свирепый Головорез', ()=>{return/*Ваш путь преградил головорез с количеством здоровья 5. Вы можете сбросить случайным образом 2 своих Трофея (если есть) в качестве взятки и закончить свой ход без боя, сбросив эту карту, иначе головорез Вас атакует. Бросьте 1d6. Если выпало 1-3, головорез получает 1 ранение, иначе 1 ранение получаете Вы. Бросайте 116 до тех пор, пока Вы или Ваш противник не погибнете.*/}, 'Далі'),
     /*57*/new Card(33, 'Рухнувшая Балка', ()=>{return/*Небольшая часть кладки потолка вместе с балкоОЙ рухнула прямо на Вас. Выполните проверку Ловкости. Если проверка провалена, получите 1 ранение и пропустите 1 ход.*/}, 'Далі'),
