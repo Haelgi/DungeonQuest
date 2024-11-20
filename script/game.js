@@ -97,11 +97,9 @@ class Game {
     startPosition(){
         this.body = document.querySelector(`body`);
         this.playingField = document.querySelector(`.playing-field`);            
-        this.drawAbilitieCard(player.hero);
-        this.drawEffectCard(player);
-        addScrolCardsEffect('.abilitie-card-container');
-        addScrolCardsEffect('.effect-card-container');
-        addScrolCardsEffect('.treasure-card-container');
+        this.drawAbilitiePackCards();
+        this.drawEffectPackCards();
+        this.drawTreasurePackCards()
     
         this.clickDoorIcon()
         this.clickGrilleIcon()
@@ -542,26 +540,64 @@ class Game {
         `;
     };
 
-    drawAbilitieCard(heroName){
+    drawAbilitiePackCards(){
         const abilitieCardContainer = document.querySelector(`.abilitie-card-container`);
-        let activeId = Math.round((heroes[heroName].abilities.length-1)/2)
+        let activeId = Math.round((heroes[player.hero].abilities.length-1)/2)
 
-        heroes[heroName].abilities.forEach((item, idx) => {
+        heroes[player.hero].abilities.forEach((item, idx) => {
             let active = ''
             if(idx === activeId) active = 'active'
             abilitieCardContainer.innerHTML+=`
-                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/abilitie_cards/abilitie_${heroName}_${item.id}.jpg')"></div>        
+                <div id="${item.id}" class="card-deck ${active}" style="background-image: url('img/abilitie_cards/abilitie_${player.hero}_${item.id}.jpg')"></div>        
             `
         });
+
+        addScrolCardsEffect('.abilitie-card-container');
     };
 
-    drawEffectCard(player){
-        const abilitieCardContainer = document.querySelector(`.effect-card-container`);
-        player.effectCardContainer.forEach((card) => {
-            abilitieCardContainer.innerHTML+=`
-                <div id="${card.id}" class="card-deck " style="background-image: url('img/${card.getPack}_cards/${card.getPack}_${card.id}.jpg')"></div>        
+    drawEffectPackCards(){
+        const effectCardContainer = document.querySelector(`.effect-card-container`);
+        let activeId = Math.round((player.effectCardContainer.length-1)/2) 
+
+        player.effectCardContainer.forEach((item, idx) => {
+            let active = ''
+            if(idx === activeId) active = 'active'
+            effectCardContainer.innerHTML+=`
+                <div id="${item.id}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
             `
         });
+
+        addScrolCardsEffect('.effect-card-container');
+    };
+
+    drawTreasurePackCards(){
+        const treasureCardContainer = document.querySelector(`.treasure-card-container`);
+        let activeId = Math.round((player.treasureCardContainer.length-1)/2)
+
+        player.treasureCardContainer.forEach((item, idx) => {
+            let active = ''
+            if(idx === activeId) active = 'active'
+            treasureCardContainer.innerHTML+=`
+                <div id="${item.id}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
+            `
+        });
+
+        addScrolCardsEffect('.treasure-card-container');
+    };
+
+    drawCatacombPackCards(){
+        const catacombCardContainer = document.querySelector(`.catacomb-card-container`);
+        let activeId = Math.round((player.catacombCardContainer.length-1)/2)
+
+        player.catacombCardContainer.forEach((item, idx) => {
+            let active = ''
+            if(idx === activeId) active = 'active'
+            catacombCardContainer.innerHTML+=`
+                <div id="${item.id}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
+            `
+        });
+
+        addScrolCardsEffect('.treasure-card-container');
     };
 
     checkCurseOfTheSorcerer(){
