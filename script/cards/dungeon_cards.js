@@ -811,9 +811,7 @@ function evilGoblin(){
             player.treasureCardContainer.splice(randomId, 1)
             
             ew.drawEW(`Гоблін поранив Вас (ви отримали ${damage} поранення), вкрав один із скарбів та втік`)
-            setTimeout(() => {
-
-            }, 2000);
+            setTimeout(() => {ew.removeAllEW()}, 2000);
         }
 
         heroes[player.hero].health -= damage
@@ -1070,9 +1068,7 @@ function darkPortal(){
     function clear(){
         ew.removeTxt()
         document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
-        document.querySelectorAll('.dice-section')?.forEach((item)=>{
-            item.remove()
-        })
+        document.querySelectorAll('.dice-section')?.forEach((item)=>{item.remove()})
     }
 
     function dexterity(){
@@ -1149,6 +1145,135 @@ function livingArmor(){
     5-6 - Получите 3 ранения.*/
 }
 
+function fierceCutthroat(){
+    ew.removeRawBtnInEW('btn_ew')
+    
+    function clear(){
+        ew.removeTxt()
+        document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
+        document.querySelectorAll('.dice-section')?.forEach((item)=>{item.remove()})
+    }
+
+    function bribe(){
+        const countCards = player.treasureCardContainer.length
+
+        if(countCards<2) {
+            ew.drawEW(`У вас не достатньо трофеїв`)
+            setTimeout(() => {
+                ew.removeLastEW()
+                return battle()
+            }, 2000);
+        }
+
+        if(countCards >=2 ) {
+            const card1 = Math.floor(Math.random() * (player.treasureCardContainer.length-1))
+            player.treasureCardContainer.splice(card1, 1)
+            
+            const card2 = Math.floor(Math.random() * (player.treasureCardContainer.length-1))
+            player.treasureCardContainer.splice(card2, 1)
+
+            ew.drawEW(`Ви втратили 2 трофеї`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 2000);
+        }
+    }
+
+    function clear(){
+        ew.removeTxt()
+        document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
+        document.querySelectorAll('.dice-section')?.forEach((item)=>{item.remove()})
+    }
+
+    function endBattle(txt){
+        ew.drawEW(txt)
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 1200);
+    }
+
+    function battle(){
+        clear()
+        
+        ew.addTxt(`
+            ${player.hero.toUpperCase()}<br>
+            <i id="pl_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px; margin: 10px auto;">${heroes[player.hero].health}</i><br>
+        `)
+
+        ew.addTxt(`
+            <i style="font-size: 30px;"> </i><br>
+            <i style="font-size: 25px;">VS</i><br>
+        `)
+
+        ew.addTxt(`
+            ${'Головоріз'.toUpperCase()}<br>
+            <i id="em_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px; margin: 20px auto;">5</i><br>
+        `)
+
+        const pl_hp = document.getElementById('pl_hp')
+        const em_hp = document.getElementById('em_hp')
+
+        function reroll(){
+
+            const trueFn = ()=>{ 
+                const new_em_hp = Number(em_hp.innerHTML) - player.attack
+                
+
+                if(game.diceRollResultGlobal<=3){
+                    em_hp.innerHTML = new_em_hp
+                    ew.drawEW(`Ви поранили Головоріза`)
+                    setTimeout(() => {
+                        ew.removeLastEW()
+                        document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
+                        document.querySelectorAll('.dice-section')?.forEach((item)=>{item.remove()})
+                        reroll()
+                    }, 1200);
+                }
+
+                if(game.diceRollResultGlobal>3){
+                    
+                    pl_hp.innerHTML = heroes[player.hero].health -= 1
+                    ew.drawEW(`Ви отримали поранення`)
+                    setTimeout(() => {
+                        ew.removeLastEW()
+                        document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
+                        document.querySelectorAll('.dice-section')?.forEach((item)=>{item.remove()})
+                        reroll()
+                    }, 1200);
+                }
+
+
+                
+                if (new_em_hp <= 0) return endBattle(`Ви перемогли Головоріза`)
+                if (heroes[player.hero].health === 0) {
+                    endBattle(`Ви загинули(`)
+                    setTimeout(() => {
+                        ew.removeAllEW()
+                        game.endGame()
+                    }, 2000);
+                }
+            }
+    
+            game.addDiceRollSection(false, 6, false, true, 1, trueFn, false, false, false)
+        }
+
+        reroll()
+
+    }
+
+    ew.drawBtnInEW('btn_br','Дати хабар', bribe)
+    ew.drawBtnInEW('btn_df','Битись', battle)
+
+    /*Ваш путь преградил головорез с количеством здоровья 5. 
+    Вы можете сбросить случайным образом 2 своих Трофея 
+    (если есть) в качестве взятки и закончить свой ход без боя, сбросив эту карту, 
+    иначе головорез Вас атакует. 
+    Бросьте 1d6. 
+    Если выпало 1-3, головорез получает 1 ранение, 
+    иначе 1 ранение получаете Вы. 
+    Бросайте 116 до тех пор, пока Вы или Ваш противник не погибнете.*/
+}
+
 const dungeon_cards = [
     /*1*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
     /*2*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
@@ -1217,7 +1342,7 @@ const dungeon_cards = [
     
     /*54*/new Card(30, 'Темный портал', ()=>{darkPortal()}, 'Далі'),
     /*55*/new Card(31, 'Ожившие Доспехи', ()=>{livingArmor()}, 'Далі'),
-    /*56*/new Card(32, 'Свирепый Головорез', ()=>{return/*Ваш путь преградил головорез с количеством здоровья 5. Вы можете сбросить случайным образом 2 своих Трофея (если есть) в качестве взятки и закончить свой ход без боя, сбросив эту карту, иначе головорез Вас атакует. Бросьте 1d6. Если выпало 1-3, головорез получает 1 ранение, иначе 1 ранение получаете Вы. Бросайте 116 до тех пор, пока Вы или Ваш противник не погибнете.*/}, 'Далі'),
+    /*56*/new Card(32, 'Свирепый Головорез', ()=>{fierceCutthroat()}, 'Далі'),
     /*57*/new Card(33, 'Рухнувшая Балка', ()=>{return/*Небольшая часть кладки потолка вместе с балкоОЙ рухнула прямо на Вас. Выполните проверку Ловкости. Если проверка провалена, получите 1 ранение и пропустите 1 ход.*/}, 'Далі'),
     /*58*/new Card(34, 'Золотые Монеты', ()=>{return/* "трофей" Комната пуста, однако на полу Вы заметили небольшой кошелёк. Внутри него Вы нашли золотые монеты.*/}, 'Далі'),
     /*59*/new Card(35, 'Драгоценный Камень', ()=>{return/* "трофей" Комната пуста, однако Вы заметили как под ногами что-то свернуло. Вы наклонились и подняли красивый камень, за который торговцы дадут не один десяток золотых.*/}, 'Далі'),
