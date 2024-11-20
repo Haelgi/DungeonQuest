@@ -11,9 +11,11 @@ import  {treasure_cards}  from './treasure_cards.js';
 
 
 class Card {
-    constructor(id, name, effect, btnName) {
+    constructor(id, name, type, cost, effect, btnName) {
         this.id = id;  
-        this.name = name;  
+        this.name = name;
+        this.type = type;
+        this.cost = cost;
         this.effect = effect;  
         this.btnName = btnName;  
         this.title = 'Події підземелля';  
@@ -1274,81 +1276,138 @@ function fierceCutthroat(){
     Бросайте 116 до тех пор, пока Вы или Ваш противник не погибнете.*/
 }
 
+function collapsedBeam(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    const trueFn = ()=> {
+        ew.drawEW(`Вам вдалося ухилитися`)
+        setTimeout(() => {ew.removeAllEW()}, 1200);
+    }
+
+    const falseFn = ()=> {
+        heroes[player.hero].health -= 1
+        ew.drawEW(`Ви отримали 1 поранення. Та пропустите хід`)
+        setTimeout(() => {
+            ew.removeAllEW(); 
+            game.endMove()
+        }, 1200);
+    }
+
+    game.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+
+
+    /*Небольшая часть кладки потолка вместе с балкоОЙ рухнула прямо на Вас. 
+    Выполните проверку Ловкости. 
+    Если проверка провалена, получите 1 ранение и пропустите 1 ход.*/
+}
+
+function goldCoins(){
+    if (!player.treasureCardContainer.some(card => card.id === 34)) {
+        player.treasureCardContainer.push(dungeon_cards[57])
+    }
+    
+    ew.removeAllEW()
+
+    /* "трофей" Комната пуста, однако на полу Вы заметили небольшой кошелёк. 
+    Внутри него Вы нашли золотые монеты.*/
+}
+
+function preciousStone(){
+    if (!player.treasureCardContainer.some(card => card.id === 34)) {
+        player.treasureCardContainer.push(dungeon_cards[58])
+    }
+    
+    ew.removeAllEW()
+
+    /* "трофей" Комната пуста, однако Вы заметили как под ногами что-то свернуло. 
+    Вы наклонились и подняли красивый камень, за который торговцы дадут не один десяток золотых.*/
+}
+
+function cardShuffling(){
+    game.refreshDungeonCards()
+    ew.removeAllEW()
+    const card = game.getRundomElement(game.dungeon_cards, dungeon_cards)
+
+    game.drawCardEW(card);
+
+    /*Сбросьте эту карту. 
+    Затем перемешайте сброшенные и неиспользованные Карты Подземелья. 
+    Вытяните еще одну карту из этой колоды и продолжайте свой ход в обычном порядке.*/
+}
+
 const dungeon_cards = [
-    /*1*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
-    /*2*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
-    /*3*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
-    /*4*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
-    /*5*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
-    /*6*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
-    /*7*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
-    /*8*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
+    /*1*/new Card(1, 'Нападение', false, false, ()=>{attack()}, 'Далі'),
+    /*2*/new Card(1, 'Нападение', false, false, ()=>{attack()}, 'Далі'),
+    /*3*/new Card(1, 'Нападение', false, false, ()=>{attack()}, 'Далі'),
+    /*4*/new Card(1, 'Нападение', false, false, ()=>{attack()}, 'Далі'),
+    /*5*/new Card(1, 'Нападение', false, false, ()=>{attack()}, 'Далі'),
+    /*6*/new Card(1, 'Нападение', false, false, ()=>{attack()}, 'Далі'),
+    /*7*/new Card(1, 'Нападение', false, false, ()=>{attack()}, 'Далі'),
+    /*8*/new Card(1, 'Нападение', false, false, ()=>{attack()}, 'Далі'),
     
-    /*9*/new Card(2, 'Скрытая Ловушка', ()=>{trap()}, 'Далі'),
-    /*10*/new Card(2, 'Скрытая Ловушка', ()=>{trap()}, 'Далі'),
-    /*11*/new Card(2, 'Скрытая Ловушка', ()=>{trap()}, 'Далі'),
-    /*12*/new Card(2, 'Скрытая Ловушка', ()=>{trap()}, 'Далі'),
-    /*13*/new Card(2, 'Скрытая Ловушка', ()=>{trap()}, 'Далі'),
-    /*14*/new Card(2, 'Скрытая Ловушка', ()=>{trap()}, 'Далі'),
-    /*15*/new Card(2, 'Скрытая Ловушка', ()=>{trap()}, 'Далі'),
+    /*9*/new Card(2, 'Скрытая Ловушка', false, false, ()=>{trap()}, 'Далі'),
+    /*10*/new Card(2, 'Скрытая Ловушка', false, false, ()=>{trap()}, 'Далі'),
+    /*11*/new Card(2, 'Скрытая Ловушка', false, false, ()=>{trap()}, 'Далі'),
+    /*12*/new Card(2, 'Скрытая Ловушка', false, false, ()=>{trap()}, 'Далі'),
+    /*13*/new Card(2, 'Скрытая Ловушка', false, false, ()=>{trap()}, 'Далі'),
+    /*14*/new Card(2, 'Скрытая Ловушка', false, false, ()=>{trap()}, 'Далі'),
+    /*15*/new Card(2, 'Скрытая Ловушка', false, false, ()=>{trap()}, 'Далі'),
     
-    /*16*/new Card(3, 'Мертвый Приключенец', ()=>{deadAdventurer()}, 'Далі'),
-    /*17*/new Card(3, 'Мертвый Приключенец', ()=>{deadAdventurer()}, 'Далі'),
-    /*18*/new Card(3, 'Мертвый Приключенец', ()=>{deadAdventurer()}, 'Далі'),
+    /*16*/new Card(3, 'Мертвый Приключенец', false, false, ()=>{deadAdventurer()}, 'Далі'),
+    /*17*/new Card(3, 'Мертвый Приключенец', false, false, ()=>{deadAdventurer()}, 'Далі'),
+    /*18*/new Card(3, 'Мертвый Приключенец', false, false, ()=>{deadAdventurer()}, 'Далі'),
     
-    /*19*/new Card(4, 'Склеп', ()=>{crypt()}, 'Далі'),
-    /*20*/new Card(4, 'Склеп', ()=>{crypt()}, 'Далі'),
-    /*21*/new Card(4, 'Склеп', ()=>{crypt()}, 'Далі'),
+    /*19*/new Card(4, 'Склеп', false, false, ()=>{crypt()}, 'Далі'),
+    /*20*/new Card(4, 'Склеп', false, false, ()=>{crypt()}, 'Далі'),
+    /*21*/new Card(4, 'Склеп', false, false, ()=>{crypt()}, 'Далі'),
     
-    /*22*/new Card(5, 'Обвал', ()=>{collapse()}, 'Далі'),
-    /*23*/new Card(5, 'Обвал', ()=>{collapse()}, 'Далі'),
-    /*24*/new Card(5, 'Обвал', ()=>{collapse()}, 'Далі'),
+    /*22*/new Card(5, 'Обвал', false, false, ()=>{collapse()}, 'Далі'),
+    /*23*/new Card(5, 'Обвал', false, false, ()=>{collapse()}, 'Далі'),
+    /*24*/new Card(5, 'Обвал', false, false, ()=>{collapse()}, 'Далі'),
     
-    /*25*/new Card(6, 'Пусто', ()=>{ew.removeAllEW()}, 'Далі'),
-    /*26*/new Card(6, 'Пусто', ()=>{ew.removeAllEW()}, 'Далі'),
+    /*25*/new Card(6, 'Пусто', false, false, ()=>{ew.removeAllEW()}, 'Далі'),
+    /*26*/new Card(6, 'Пусто', false, false, ()=>{ew.removeAllEW()}, 'Далі'),
     
-    /*27*/new Card(7, 'Захоронение', ()=>{burial()}, 'Далі'),
-    /*28*/new Card(7, 'Захоронение', ()=>{burial()}, 'Далі'),
+    /*27*/new Card(7, 'Захоронение', false, false, ()=>{burial()}, 'Далі'),
+    /*28*/new Card(7, 'Захоронение', false, false, ()=>{burial()}, 'Далі'),
     
-    /*29*/new Card(8, 'Обрушение Стен', ()=>{wallCollapse()}, 'Далі'),
-    /*30*/new Card(8, 'Обрушение Стен', ()=>{wallCollapse()}, 'Далі'),
+    /*29*/new Card(8, 'Обрушение Стен', false, false, ()=>{wallCollapse()}, 'Далі'),
+    /*30*/new Card(8, 'Обрушение Стен', false, false, ()=>{wallCollapse()}, 'Далі'),
     
-    /*31*/new Card(9, 'Подземный Некрополь', ()=>{undergroundNecropolis()}, 'Далі'),
-    /*32*/new Card(9, 'Подземный Некрополь', ()=>{undergroundNecropolis()}, 'Далі'),
+    /*31*/new Card(9, 'Подземный Некрополь', false, false, ()=>{undergroundNecropolis()}, 'Далі'),
+    /*32*/new Card(9, 'Подземный Некрополь', false, false, ()=>{undergroundNecropolis()}, 'Далі'),
     
-    /*33*/new Card(10, 'Гоблин-Исследователь', ()=>{goblinExplorer()}, 'Далі'),
-    /*34*/new Card(10, 'Гоблин-Исследователь', ()=>{goblinExplorer()}, 'Далі'),
+    /*33*/new Card(10, 'Гоблин-Исследователь', false, false, ()=>{goblinExplorer()}, 'Далі'),
+    /*34*/new Card(10, 'Гоблин-Исследователь', false, false, ()=>{goblinExplorer()}, 'Далі'),
     
-    /*35*/new Card(11, 'Комната с Засадой', ()=>{ambushRoom()}, 'Далі'),
-    /*36*/new Card(12, 'Окружение Монстрами', ()=>{surroundedByMonsters()}, 'Далі'),
-    /*37*/new Card(13, 'Секретная Дверь', ()=>{secretDoor()}, 'Далі'),
-    /*38*/new Card(14, 'Спуск в Катакомбы', ()=>{descentToCatacombs()}, 'Далі'),
-    /*39*/new Card(15, 'Гиганская Змея', ()=>{giantSnake()}, 'Далі'),
-    /*40*/new Card(16, 'Волшебная комната', ()=>{magicRoom()}, 'Далі'),
-    /*41*/new Card(17, 'Толпа Мертвецов', ()=>{deadCrowd()}, 'Далі'),
-    /*42*/new Card(18, 'Мантикора', ()=>{manticore()}, 'Далі'),
-    /*43*/new Card(19, 'Гоблин с Сокровищем', ()=>{goblinWithTreasure()}, 'Далі'),
+    /*35*/new Card(11, 'Комната с Засадой', false, false, ()=>{ambushRoom()}, 'Далі'),
+    /*36*/new Card(12, 'Окружение Монстрами', false, false, ()=>{surroundedByMonsters()}, 'Далі'),
+    /*37*/new Card(13, 'Секретная Дверь', false, false, ()=>{secretDoor()}, 'Далі'),
+    /*38*/new Card(14, 'Спуск в Катакомбы', false, false, ()=>{descentToCatacombs()}, 'Далі'),
+    /*39*/new Card(15, 'Гиганская Змея', false, false, ()=>{giantSnake()}, 'Далі'),
+    /*40*/new Card(16, 'Волшебная комната', false, false, ()=>{magicRoom()}, 'Далі'),
+    /*41*/new Card(17, 'Толпа Мертвецов', false, false, ()=>{deadCrowd()}, 'Далі'),
+    /*42*/new Card(18, 'Мантикора', false, false, ()=>{manticore()}, 'Далі'),
+    /*43*/new Card(19, 'Гоблин с Сокровищем', false, false, ()=>{goblinWithTreasure()}, 'Далі'),
     
-    /*44*/new Card(20, 'Целебный Источник', ()=>{healingSpring()}, 'Далі'),
-    /*45*/new Card(21, 'Армия Призраков', ()=>{armyOfGhosts()}, 'Далі'),
-    /*46*/new Card(22, 'Воин Бездны', ()=>{warriorOfAbyss()}, 'Далі'),
-    /*47*/new Card(23, 'Кровожадный Ящер', ()=>{bloodthirstyLizard()}, 'Далі'),
-    /*48*/new Card(24, 'Летучие Мыши', ()=>{bats()}, 'Далі'),
-    /*49*/new Card(25, 'Злобный Гоблин', ()=>{evilGoblin()}, 'Далі'),
-    /*50*/new Card(26, 'Нападение Орка', ()=>{orcAttack()}, 'Далі'),
-    /*51*/new Card(27, 'Страж Сокровищ', ()=>{treasureGuard()}, 'Далі'),
-    /*52*/new Card(28, 'Каменный шар', ()=>{stoneBall()}, 'Далі'),
-    /*53*/new Card(29, 'Проклятие Колдуна', ()=>{curseOfTheSorcerer()}, 'Далі'),
+    /*44*/new Card(20, 'Целебный Источник', false, false, ()=>{healingSpring()}, 'Далі'),
+    /*45*/new Card(21, 'Армия Призраков', false, false, ()=>{armyOfGhosts()}, 'Далі'),
+    /*46*/new Card(22, 'Воин Бездны', false, false, ()=>{warriorOfAbyss()}, 'Далі'),
+    /*47*/new Card(23, 'Кровожадный Ящер', false, false, ()=>{bloodthirstyLizard()}, 'Далі'),
+    /*48*/new Card(24, 'Летучие Мыши', false, false, ()=>{bats()}, 'Далі'),
+    /*49*/new Card(25, 'Злобный Гоблин', false, false, ()=>{evilGoblin()}, 'Далі'),
+    /*50*/new Card(26, 'Нападение Орка', false, false, ()=>{orcAttack()}, 'Далі'),
+    /*51*/new Card(27, 'Страж Сокровищ', false, false, ()=>{treasureGuard()}, 'Далі'),
+    /*52*/new Card(28, 'Каменный шар', false, false, ()=>{stoneBall()}, 'Далі'),
+    /*53*/new Card(29, 'Проклятие Колдуна', false, false, ()=>{curseOfTheSorcerer()}, 'Далі'),
     
-    /*54*/new Card(30, 'Темный портал', ()=>{darkPortal()}, 'Далі'),
-    /*55*/new Card(31, 'Ожившие Доспехи', ()=>{livingArmor()}, 'Далі'),
-    /*56*/new Card(32, 'Свирепый Головорез', ()=>{fierceCutthroat()}, 'Далі'),
-    /*57*/new Card(33, 'Рухнувшая Балка', ()=>{return/*Небольшая часть кладки потолка вместе с балкоОЙ рухнула прямо на Вас. Выполните проверку Ловкости. Если проверка провалена, получите 1 ранение и пропустите 1 ход.*/}, 'Далі'),
-    /*58*/new Card(34, 'Золотые Монеты', ()=>{return/* "трофей" Комната пуста, однако на полу Вы заметили небольшой кошелёк. Внутри него Вы нашли золотые монеты.*/}, 'Далі'),
-    /*59*/new Card(35, 'Драгоценный Камень', ()=>{return/* "трофей" Комната пуста, однако Вы заметили как под ногами что-то свернуло. Вы наклонились и подняли красивый камень, за который торговцы дадут не один десяток золотых.*/}, 'Далі'),
-    /*60*/new Card(36, 'Перемешивание Карт', ()=>{return/*Сбросьте эту карту. Затем перемешайте сброшенные и неиспользованные Карты Подземелья. Вытяните еще одну карту из этой колоды и продолжайте свой ход в обычном порядке.*/}, 'Далі'),
+    /*54*/new Card(30, 'Темный портал', false, false, ()=>{darkPortal()}, 'Далі'),
+    /*55*/new Card(31, 'Ожившие Доспехи', false, false, ()=>{livingArmor()}, 'Далі'),
+    /*56*/new Card(32, 'Свирепый Головорез', false, false, ()=>{fierceCutthroat()}, 'Далі'),
+    /*57*/new Card(33, 'Рухнувшая Балка', false, false, ()=>{collapsedBeam()}, 'Далі'),
+    /*58*/new Card(34, 'Золотые Монеты', 'treasure', 40, ()=>{goldCoins()}, 'Далі'),
+    /*59*/new Card(35, 'Драгоценный Камень', 'treasure', 60, ()=>{preciousStone()}, 'Далі'),
+    /*60*/new Card(36, 'Перемешивание Карт', false, false, ()=>{cardShuffling()}, 'Далі'),
 ]
 
 export {dungeon_cards}
-
-// TODO закодировать функции карт подземелий
