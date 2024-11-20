@@ -804,12 +804,11 @@ function evilGoblin(){
 
         if (5<=result) {
             damage = 3
-            console.log(player.treasureCardContainer)
+
             const maxValue = player.treasureCardContainer.length-1
             const randomId = Math.floor(Math.random() * maxValue)
             
             player.treasureCardContainer.splice(randomId, 1)
-            console.log(player.treasureCardContainer)
             
             ew.drawEW(`Гоблін поранив Вас (ви отримали ${damage} поранення), вкрав один із скарбів та втік`)
             setTimeout(() => {
@@ -1104,6 +1103,52 @@ function darkPortal(){
     Если результат броска Вас не устроил, Вы можете выполнить повторный бросок, получив при этом 1 ранение.*/
 }
 
+function livingArmor(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+        let damage
+
+        if (result<=2) {
+            damage = 1
+            ew.drawEW(`Ви отримали ${damage} поранення`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 1200);
+        }
+
+        if (3<= result <=4) {
+            damage = 2
+            
+            ew.drawEW(`Ви отримали ${damage} поранення`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 1200);
+
+        }
+
+        if (5<=result) {
+            damage = 3
+
+            ew.drawEW(`Ви отримали ${damage} поранення`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 1200);
+        }
+
+        heroes[player.hero].health -= damage
+    }
+
+    game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+
+    /*Вас атаковали ожившие доспехи. 
+    Бросьте 1d6: 
+    1-2- Получите 1 ранение; 
+    3-4 – Получите 2 ранения; 
+    5-6 - Получите 3 ранения.*/
+}
+
 const dungeon_cards = [
     /*1*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
     /*2*/new Card(1, 'Нападение', ()=>{attack()}, 'Далі'),
@@ -1171,7 +1216,7 @@ const dungeon_cards = [
     /*53*/new Card(29, 'Проклятие Колдуна', ()=>{curseOfTheSorcerer()}, 'Далі'),
     
     /*54*/new Card(30, 'Темный портал', ()=>{darkPortal()}, 'Далі'),
-    /*55*/new Card(31, 'Ожившие Доспехи', ()=>{return/*Вас атаковали ожившие доспехи. Бросьте 1d6: 1-2- Получите 1 ранение; 3-4 – Получите 2 ранения; 5-6 - Получите 3 ранения.*/}, 'Далі'),
+    /*55*/new Card(31, 'Ожившие Доспехи', ()=>{livingArmor()}, 'Далі'),
     /*56*/new Card(32, 'Свирепый Головорез', ()=>{return/*Ваш путь преградил головорез с количеством здоровья 5. Вы можете сбросить случайным образом 2 своих Трофея (если есть) в качестве взятки и закончить свой ход без боя, сбросив эту карту, иначе головорез Вас атакует. Бросьте 1d6. Если выпало 1-3, головорез получает 1 ранение, иначе 1 ранение получаете Вы. Бросайте 116 до тех пор, пока Вы или Ваш противник не погибнете.*/}, 'Далі'),
     /*57*/new Card(33, 'Рухнувшая Балка', ()=>{return/*Небольшая часть кладки потолка вместе с балкоОЙ рухнула прямо на Вас. Выполните проверку Ловкости. Если проверка провалена, получите 1 ранение и пропустите 1 ход.*/}, 'Далі'),
     /*58*/new Card(34, 'Золотые Монеты', ()=>{return/* "трофей" Комната пуста, однако на полу Вы заметили небольшой кошелёк. Внутри него Вы нашли золотые монеты.*/}, 'Далі'),
