@@ -131,12 +131,14 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        this.drawCardEW(dungeon_cards[59]);
+        // this.drawCardEW(card);
+        // this.drawCardEW(dungeon_cards[0]);
     }
 
     playCatacombEvent(){
         const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
-        this.drawCardEW(card);
+        this.drawCardEW(catacomb_cards[9]);
+        // this.drawCardEW(card);
     }
     
     playTreasuryEvent(){
@@ -185,31 +187,6 @@ class Game {
         ew.drawBtnInEW('btn_no', 'Ні', ()=>{
             ew.removeAllEW()
         }, 'red');
-    }
-
-    escapeCatacombEW(){
-        ew.drawEW('Бажаєте покинути катакомби?')
-
-        ew.drawBtnInEW('next', 'Так', ()=>{
-            ew.removeAllEW()
-            this.escapeCatacomb()
-        }, 'green')
-
-        ew.drawBtnInEW('close', 'Ні', ()=>{
-            ew.removeAllEW()
-        }, 'red')
-    }
-
-    escapeCatacomb(){
-        player.catacomb = false
-        this.gameFields[y][x]['c'] = true
-        const x = player.position[0]
-        const y = player.position[1]
-        this.removeHighlightFields(this.nextCoordinates)
-        this.drawHeroMitl(x, y);
-        this.drawCatacombToken(x, y)
-        this.checkRoomEvents()
-        this.endMove()
     }
 
     diceRollDarkRoomEW() {

@@ -1,5 +1,6 @@
 import  {game}  from '../game.js';
 import  {ew}  from '../eventWidows.js';
+import  {player}  from '../player.js';
 import { trap_cards } from './trap_cards.js';
 
 class Card {
@@ -15,6 +16,31 @@ class Card {
     };
 };
 
+function escapeCatacombEW(){
+    ew.drawEW('Бажаєте покинути катакомби?')
+
+    ew.drawBtnInEW('next', 'Так', ()=>{
+        ew.removeAllEW()
+        escapeCatacomb()
+    }, 'green')
+
+    ew.drawBtnInEW('close', 'Ні', ()=>{
+        ew.removeAllEW()
+    }, 'red')
+}
+
+function escapeCatacomb(){
+    const x = player.position[0]
+    const y = player.position[1]
+    player.catacomb = false
+    game.gameFields[y][x]['c'] = true
+    game.removeHighlightFields(game.nextCoordinates)
+    game.drawHeroMitl(x, y);
+    game.drawCatacombToken(x, y)
+    game.checkRoomEvents()
+    game.endMove()
+}
+
 
 const catacomb_cards = [
     /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }, 'Далі'),
@@ -26,12 +52,12 @@ const catacomb_cards = [
     /*6*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }, 'Далі'),
     /*7*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }, 'Далі'),
     
-    /*8*/new Card(2, 'Выход', false, false, ()=>{ game.escapeCatacombEW()}, 'Далі'),
-    /*9*/new Card(2, 'Выход', false, false, ()=>{ game.escapeCatacombEW()}, 'Далі'),
-    /*10*/new Card(2, 'Выход', false, false, ()=>{ game.escapeCatacombEW()}, 'Далі'),
-    /*11*/new Card(2, 'Выход', false, false, ()=>{ game.escapeCatacombEW()}, 'Далі'),
-    /*12*/new Card(2, 'Выход', false, false, ()=>{ game.escapeCatacombEW()}, 'Далі'),
-    /*13*/new Card(2, 'Выход', false, false, ()=>{ game.escapeCatacombEW()}, 'Далі'),
+    /*8*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}, 'Далі'),
+    /*9*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}, 'Далі'),
+    /*10*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}, 'Далі'),
+    /*11*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}, 'Далі'),
+    /*12*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}, 'Далі'),
+    /*13*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}, 'Далі'),
     
     /*14*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{ game.drawCardEW(game.getRundomElement(game.trap_cards, trap_cards))/*По своей неосторожности Вы активировали ловушку. Тяните Карту Ловушки.*/}, 'Далі'),
     /*15*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{ game.drawCardEW(game.getRundomElement(game.trap_cards, trap_cards))/*По своей неосторожности Вы активировали ловушку. Тяните Карту Ловушки.*/}, 'Далі'),
