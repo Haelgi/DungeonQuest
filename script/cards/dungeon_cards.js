@@ -37,7 +37,7 @@ function attack(){
     distributionCards([card])
 
     ew.removeAllEW();
-    game.drawCardEW(card)
+    ew.drawCardEW(card)
     /*На Вас напали! Вам предстоит вступить в бой с монстром. Тяните Карту Монстра.*/
 }
 
@@ -46,7 +46,7 @@ function trap(){
     distributionCards([card])
 
     ew.removeAllEW(); 
-    game.drawCardEW(card)
+    ew.drawCardEW(card)
     /*Своим неосторожным движением Вы активировали ловушку. Тяните Карту Ловушки.*/
 }
 
@@ -55,7 +55,7 @@ function deadAdventurer(){
     distributionCards([card])
 
     ew.removeAllEW(); 
-    game.drawCardEW(card)
+    ew.drawCardEW(card)
     /*Вы увидели мертвого приключенца. Чтобы обыскать его тяните Карту Мертвеца.*/
 }
 
@@ -64,7 +64,7 @@ function crypt(){
     distributionCards([card])
 
     ew.removeAllEW(); 
-    game.drawCardEW(card)
+    ew.drawCardEW(card)
     /*Вы можете обыскать склеп в надежде найти что-нибудь ценное. Если Вы решили это сделать, тяните Карту Склепа.*/
 }
 
@@ -115,7 +115,7 @@ function wallCollapse(){
         ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
     }
 
-    game.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, false, true)
+    ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, false, true)
 
     /*Комната рушится. 
     Выполните проверку Ловкости и, в случае неудачи, получите 2 ранения от летящих обломков. 
@@ -246,7 +246,7 @@ function ambushRoom(){
         ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
     }
 
-    game.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, false, true)
+    ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, false, true)
 
     /*В комнату вошли монстры, а на выходы начали опускаться решетки. 
     Выполните проверку Ловкости. 
@@ -265,7 +265,7 @@ function surroundedByMonsters(){
 
         distributionCards(cards)
 
-        game.drawCardEW(cards)
+        ew.drawCardEW(cards)
         ew.removeTitile()
         ew.addTitleToEW('Події підземелля')
 
@@ -293,7 +293,7 @@ function surroundedByMonsters(){
         ew.removeRawBtnInEW('btn_strength')
         ew.removeRawBtnInEW('btn_defense')
 
-        game.addDiceRollSection( `${nameValue}: ${value}`, value, false, false, 2, trueFn, falseFn, false, true)
+        ew.addDiceRollSection( `${nameValue}: ${value}`, value, false, false, 2, trueFn, falseFn, false, true)
     }
 
     ew.removeRawBtnInEW('btn_ew')
@@ -346,7 +346,7 @@ function giantSnake(){
         ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
     }
     
-    game.addDiceRollSection( false, 6, false, false,1, trueFn, false, false, false)
+    ew.addDiceRollSection( false, 6, false, false,1, trueFn, false, false, false)
 
     /*Вы потревожили гигантскую змею. 
     Бросьте 1d6, добавьте к выпавшему числу 2 и получите количество ранений, эквивалентное результату.*/
@@ -368,7 +368,7 @@ function magicRoom(){
         game.nextCoordinates = game.newCoordinate()
     }
     
-    game.addDiceRollSection( false, 6, false, false,1, trueFn, false, false, true)
+    ew.addDiceRollSection( false, 6, false, false,1, trueFn, false, false, true)
 
     /*Когда Вы вошли в комнату, она начала изменяться. 
     Бросьте 1d6: 1-2 - Поверните тайл комнаты на 90° по часовой стрелке; 
@@ -393,7 +393,7 @@ function deadCrowd(){
             game.endMove()
         }
 
-        game.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn1, falseFn1, false, false)
+        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn1, falseFn1, false, false)
     })
     
     ew.drawBtnInEW('btn_fight', 'Битись', ()=>{
@@ -408,13 +408,13 @@ function deadCrowd(){
             ew.drawEW('Ви отримали 2 поранення');
             ew.drawBtnInEW('btn_next', 'Отримати бонус за бій', ()=>{
                 ew.removeAllEW()
-                game.drawCardEW(card)
+                ew.drawCardEW(card)
                 ew.removeRawBtnInEW('btn_ew')
                 ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
             });
         }
 
-        game.addDiceRollSection(false, 12, false, true, 2, trueFn2, false, false, false)
+        ew.addDiceRollSection(false, 12, false, true, 2, trueFn2, false, false, false)
     })
 
     /*Вы прячетесь от толпы мертвецов. 
@@ -506,14 +506,14 @@ function manticore(){
                 }
             }
     
-            game.addDiceRollSection(false, heroes[player.hero].strength, false, true, 2, trueFn, falseFn, false, false)
+            ew.addDiceRollSection(false, heroes[player.hero].strength, false, true, 2, trueFn, falseFn, false, false)
         }
 
         reroll()
         
     }
 
-    game.addDiceRollSection(false, 6, false, true, 1, enterBattle, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, enterBattle, false, false, false)
 
 
     /*На Вас напала мантикора. 
@@ -555,7 +555,7 @@ function goblinWithTreasure() {
                 }, 1200);
             }
 
-            game.addDiceRollSection(`Ваша Сила : ${heroes[player.hero].strength}`, heroes[player.hero].strength, false,true, 2, trueFn2, falseFn2)
+            ew.addDiceRollSection(`Ваша Сила : ${heroes[player.hero].strength}`, heroes[player.hero].strength, false,true, 2, trueFn2, falseFn2)
 
 
         }, 1200);
@@ -569,7 +569,7 @@ function goblinWithTreasure() {
         }, 1200);
     }
 
-    game.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn1, falseFn1)
+    ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn1, falseFn1)
 
 
     /*В темноте Вы увидели силуэт гоблина. 
@@ -601,7 +601,7 @@ function healingSpring(){
         }
     }
 
-    game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
 
     /*Вы нашли целебный источник. 
     Бросьте 1d6: 1-2 - У Вас исцеляется 1 ранение. 
@@ -648,7 +648,7 @@ function armyOfGhosts(){
         heroes[player.hero].health -= damage
     }
 
-    game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
 
     /*Вокруг Вас начинают появляться призраки павших воинов. 
     Вы чувствуете потерю сил, страх и отчаяние. 
@@ -679,17 +679,17 @@ function warriorOfAbyss(){
 
     function dexterity(){
         clear()
-        game.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
     }
 
     function defense(){
         clear()
-        game.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
     }
 
     function luck(){
         clear()
-        game.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
     }
 
     const result = ()=>{ 
@@ -712,7 +712,7 @@ function warriorOfAbyss(){
         
     }
 
-    game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
 
 
     /*На Вас напал воин бездны. 
@@ -737,7 +737,7 @@ function bloodthirstyLizard(){
         setTimeout(() => {ew.removeAllEW()}, 1200);
     }
 
-    game.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
 
     /*Из темноты Вас атаковал кровожадный ящер. 
     Выполните проверку Удачи. 
@@ -772,7 +772,7 @@ function bats(){
         heroes[player.hero].health -= damage
     }
 
-    game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
 
     /*На Вас налетела стая гигантских летучих мышей, желающих испить свеж ей крови. 
     Бросьте 1d6: 
@@ -819,7 +819,7 @@ function evilGoblin(){
         heroes[player.hero].health -= damage
     }
 
-    game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
 
     /*Вас атаковал злобный гоблин. 
     Бросьте 1d6: 
@@ -859,12 +859,12 @@ function orcAttack(){
 
     function dexterity(){
         clear()
-        game.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
     }
 
     function luck(){
         clear()
-        game.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
     }
 
     ew.drawBtnInEW('btn_dx','Спритність', dexterity)
@@ -1050,7 +1050,7 @@ function darkPortal(){
 
     function diceDamage(){
         clear()
-        game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
 
     }
 
@@ -1075,17 +1075,17 @@ function darkPortal(){
 
     function dexterity(){
         clear()
-        game.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
     }
 
     function defense(){
         clear()
-        game.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
     }
 
     function luck(){
         clear()
-        game.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
     }
 
     ew.addTxt('Пройти перевірку на:')
@@ -1138,7 +1138,7 @@ function livingArmor(){
         heroes[player.hero].health -= damage
     }
 
-    game.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
 
     /*Вас атаковали ожившие доспехи. 
     Бросьте 1d6: 
@@ -1256,7 +1256,7 @@ function fierceCutthroat(){
                 }
             }
     
-            game.addDiceRollSection(false, 6, false, true, 1, trueFn, false, false, false)
+            ew.addDiceRollSection(false, 6, false, true, 1, trueFn, false, false, false)
         }
 
         reroll()
@@ -1293,7 +1293,7 @@ function collapsedBeam(){
         }, 1200);
     }
 
-    game.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+    ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
 
 
     /*Небольшая часть кладки потолка вместе с балкоОЙ рухнула прямо на Вас. 
@@ -1328,7 +1328,7 @@ function cardShuffling(){
     ew.removeAllEW()
     const card = game.getRundomElement(game.dungeon_cards, dungeon_cards)
 
-    game.drawCardEW(card);
+    ew.drawCardEW(card);
 
     /*Сбросьте эту карту. 
     Затем перемешайте сброшенные и неиспользованные Карты Подземелья. 

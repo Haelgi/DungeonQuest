@@ -1,16 +1,17 @@
 import  {game}  from '../game.js';
 import  {ew}  from '../eventWidows.js';
 import  {player}  from '../player.js';
-import { trap_cards } from './trap_cards.js';
+import  {heroes}  from '../cards/heroes.js';
+import {trap_cards} from './trap_cards.js';
 
 class Card {
-    constructor(id, name, type, cost, effect, btnName) {
+    constructor(id, name, type, cost, effect) {
         this.id = id;  
         this.name = name;  
         this.type = type;
         this.cost = cost;
         this.effect = effect;
-        this.btnName = btnName;
+        this.btnName = 'Далі';
         this.title = 'Події Катакомб';  
         this.pack = 'catacomb';    
     };
@@ -41,38 +42,108 @@ function escapeCatacomb(){
     game.endMove()
 }
 
+function hiddenTrap(){
+    ew.removeAllEW()
+
+    ew.drawCardEW(game.getRundomElement(game.trap_cards, trap_cards))
+
+    /*По своей неосторожности Вы активировали ловушку. 
+    Тяните Карту Ловушки.*/
+}
+
+function holeInCeiling(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    
+
+    function trueFn(){
+        player.holeInCeiling = false
+        escapeCatacombEW()
+    }
+
+    function falseFn(){
+        player.catacombCardContainer.push(catacomb_cards[20])
+        player.holeInCeiling = true
+        ew.drawEW(`Ви не пройшли перевірку`)
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 2000);
+    }
+
+    ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, false, false)
+
+
+
+    player.treasureCardContainer.forEach((card, id) => {
+
+        if(card.pack === 'deadman' && card.id === 2 ){
+            
+            const rope = ()=>{
+                ew.drawCardEW(card)
+                ew.removeTitile()
+                ew.removeRawBtnInEW('btn_ew')
+    
+                ew.drawBtnInEW('btn_next','Використати Мотузку', ()=>{
+                    player.treasureCardContainer.pop(id,1)
+                    ew.removeAllEW()
+                    escapeCatacombEW()
+                })
+    
+                ew.drawBtnInEW('btn_close','Назад', ()=>{
+                    ew.removeLastEW()
+                    ew.removeRawBtnInEW('btn_rope')
+                    ew.drawBtnInEW('btn_rope','Використати Мотузку', rope)
+                })
+            }
+    
+            ew.drawBtnInEW('btn_rope','Використати Мотузку', rope)
+
+        }
+    });
+
+    /*Выполните проверку Ловкости. 
+    Если проверка Успешна, то Вы можете покинуть Катакомбы. 
+    Если проверка провалена, можете повторить проверку в свой следующий ход вместо того, чтобы взять новую Карту Катакомб. 
+    Если у Вас есть Верёвка, то можете сбросить её и автоматически Успешно пройти проверку.*/
+}
+
+function doorWithRiddle(){
+    /*Вы стоите перед закрытой дверью. 
+    Чтобы открыть замок, необходимо решить головоломку. 
+    Проведите проверку Удачи. 
+    В случае успеха Вы можете покинуть Катакомбы, иначе Ваш ход заканчивается. 
+    В свой следующий ход Вы можете провести проверку Удачи еще раз, вместо того, чтобы тянуть Карту Катакомб.*/
+
+}
 
 const catacomb_cards = [
-    /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }, 'Далі'),
-    /*1*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }, 'Далі'),
-    /*2*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }, 'Далі'),
-    /*3*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }, 'Далі'),
-    /*4*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }, 'Далі'),
-    /*5*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }, 'Далі'),
-    /*6*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }, 'Далі'),
-    /*7*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }, 'Далі'),
+    /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
+    /*1*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
+    /*2*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
+    /*3*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
+    /*4*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
+    /*5*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
+    /*6*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
+    /*7*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     
-    /*8*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}, 'Далі'),
-    /*9*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}, 'Далі'),
-    /*10*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}, 'Далі'),
-    /*11*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}, 'Далі'),
-    /*12*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}, 'Далі'),
-    /*13*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}, 'Далі'),
+    /*8*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}),
+    /*9*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}),
+    /*10*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}),
+    /*11*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}),
+    /*12*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}),
+    /*13*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}),
     
-    /*14*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{ game.drawCardEW(game.getRundomElement(game.trap_cards, trap_cards))/*По своей неосторожности Вы активировали ловушку. Тяните Карту Ловушки.*/}, 'Далі'),
-    /*15*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{ game.drawCardEW(game.getRundomElement(game.trap_cards, trap_cards))/*По своей неосторожности Вы активировали ловушку. Тяните Карту Ловушки.*/}, 'Далі'),
-    /*16*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{ game.drawCardEW(game.getRundomElement(game.trap_cards, trap_cards))/*По своей неосторожности Вы активировали ловушку. Тяните Карту Ловушки.*/}, 'Далі'),
-    /*17*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{ game.drawCardEW(game.getRundomElement(game.trap_cards, trap_cards))/*По своей неосторожности Вы активировали ловушку. Тяните Карту Ловушки.*/}, 'Далі'),
-    /*18*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{ game.drawCardEW(game.getRundomElement(game.trap_cards, trap_cards))/*По своей неосторожности Вы активировали ловушку. Тяните Карту Ловушки.*/}, 'Далі'),
-    /*19*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{ game.drawCardEW(game.getRundomElement(game.trap_cards, trap_cards))/*По своей неосторожности Вы активировали ловушку. Тяните Карту Ловушки.*/}, 'Далі'),
+    /*14*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{hiddenTrap()}),
+    /*15*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{hiddenTrap()}),
+    /*16*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{hiddenTrap()}),
+    /*17*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{hiddenTrap()}),
+    /*18*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{hiddenTrap()}),
+    /*19*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{hiddenTrap()}),
     
-    /*20*/new Card(4, 'Дыра в Потолке', false, false, ()=>{
-        game.drawCardEW(catacomb_cards[20])
-        // ew.drawTxtInEW('lhjkbflieahjboruvbipaurv')
-        /*Выполните проверку Ловкости. Если проверка Успешна, то Вы можете покинуть Катакомбы. Если проверка провалена, можете повторить проверку в свой следующий ход вместо того, чтобы взять новую Карту Катакомб. Если у Вас есть Верёвка, то можете сбросить её и автоматически Успешно пройти проверку.*/}, 'Далі'),
-    /*21*/new Card(4, 'Дыра в Потолке', false, false, ()=>{ew.removeAllEW() /*Выполните проверку Ловкости. Если проверка Успешна, то Вы можете покинуть Катакомбы. Если проверка провалена, можете повторить проверку в свой следующий ход вместо того, чтобы взять новую Карту Катакомб. Если у Вас есть Верёвка, то можете сбросить её и автоматически Успешно пройти проверку.*/}),
+    /*20*/new Card(4, 'Дыра в Потолке', false, false, ()=>{holeInCeiling()}),
+    /*21*/new Card(4, 'Дыра в Потолке', false, false, ()=>{holeInCeiling()}),
     
-    /*22*/new Card(5, 'Дверь с Загадкой', false, false, ()=>{ew.removeAllEW() /*Вы стоите перед закрытой дверью. Чтобы открыть замок, необходимо решить головоломку. Проведите проверку Удачи. В случае успеха Вы можете покинуть Катакомбы, иначе Ваш ход заканчивается. В свой следующий ход Вы можете провести проверку Удачи еще раз, вместо того, чтобы тянуть Карту Катакомб.*/}),
+    /*22*/new Card(5, 'Дверь с Загадкой', false, false, ()=>{doorWithRiddle()}),
     /*23*/new Card(6, 'Заколдованные Корни', false, false, ()=>{ew.removeAllEW() /*Вас опутали заколдованные корни. Чтобы вырваться, выполните 3 проверки Силы подряд. Получите по 2 ранению за каждую проваленную проверку. Если все 3 проверки были провалены, продолжайте выполнять проверку Силы и получать по 1 ранению за ее провал до первого Успеха. Потом сбросьте эту карту.*/}),
     /*24*/new Card(7, 'Град Стрел', false, false, ()=>{ew.removeAllEW() /*Монстр атакует Вас из лука. Выполните проверку Удачи. В случае успеха Вы защитились и убили нападавшего; Ваш ход заканчивается. Если проверка провалена, вытащите две Карты Монстра и получите количество ранений, эквивалентное сумме штрафоф за побег на каждой из них. Потом сбросьте их.*/}),
     /*25*/new Card(8, 'Гигантская Крыса', false, false, ()=>{ew.removeAllEW() /*На Вас напала гигантская крыса с количеством здоровья 3. Выполните проверку Защиты. Если проверка пройдена, Ваш противник получает 1 ранение, иначе 1 ранение получаете Вы. Продолжайте выполнять проверку Защиты до тех пор, пока Вы или гигантская крыса не погибнете.*/}),

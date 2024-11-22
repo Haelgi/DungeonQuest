@@ -24,6 +24,7 @@ class Player {
         this.oldResolve = 0;
         this.curseResolve = false;
         this.checkEventCards = true
+        this.holeInCeiling = false
     }
 }
 

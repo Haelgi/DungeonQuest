@@ -10,12 +10,13 @@ import  {ew}  from './eventWidows.js';
 
 import  {treasure_cards}  from './cards/treasure_cards.js';
 import  {dungeon_cards}  from './cards/dungeon_cards.js';
+import  {deadman_cards}  from './cards/deadman_cards.js';
 player.idx = 0; 
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
 player.authentication = true;
-player.treasureCardContainer = [treasure_cards[0],treasure_cards[1],treasure_cards[2]];
-player.catacombCardContainer = [1,2,3];
+player.treasureCardContainer = [treasure_cards[0],treasure_cards[1],deadman_cards[3]];
+
 
 
 heroes[player.hero].resolve = 5

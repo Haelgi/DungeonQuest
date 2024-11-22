@@ -1,4 +1,6 @@
 import  {game}  from './game.js';
+import  {heroes}  from './cards/heroes.js';
+import { player } from './player.js';
 
 class EventWidows{
 
@@ -16,6 +18,152 @@ class EventWidows{
                 </div>
             </div>`
         );
+    }
+
+    drawCardEW(card) {
+        this.drawEW(card.title);
+        this.drawCardsInEW(card);
+        this.drawBtnInEW('btn_ew', card.btnName, ()=>{
+            game.activeEvent = false
+            if (card.effect() === undefined) return
+            card.effect()
+        });
+    }
+
+    diceRollEW(title, txt, value, dexterity, diceCount, trueFn, falseFn) {
+        let newValue = value;
+        let texts = txt;
+        const resolvePlayer = heroes[player.hero].resolve;
+        const treasure = player.treasureCardContainer.length;
+    
+        if (resolvePlayer > 0) {
+            texts += ` + ${resolvePlayer} Рішучості`;
+        }
+    
+        if (treasure > 0 && dexterity) {
+            texts += ` - ${treasure} Спритності`;
+            newValue -= treasure;
+        }
+    
+        this.drawEW(title);
+        this.drawTitleInEW(texts);
+        this.drawDiceInEW(diceCount);
+        this.drawBtnInEW('roll', 'Кинути Кубики', () => {
+            this.rollDiceFn();
+            setTimeout(() => {
+                this.rolResultEW(newValue, trueFn, falseFn);
+            }, 1700);
+        });
+    }
+
+    addDiceRollSection( txt, value, dexterity, resolve, diceCount, trueFn, falseFn, rolResult, closeEW) {
+        let newValue = value;
+        let texts = txt;
+        const resolvePlayer = heroes[player.hero].resolve;
+        const treasure = player.treasureCardContainer.length;
+    
+        if (resolvePlayer > 0 && resolve) {
+            texts += `<br> + ${resolvePlayer} Рішучості`;
+        }
+    
+        if (treasure > 0 && dexterity) {
+            texts += `<br> - ${treasure} за трофеї`;
+            newValue -= treasure;
+        }
+    
+        if(txt) ew.addTxt(texts);
+        this.drawDiceInEW(diceCount);
+        this.drawBtnInEW('roll', 'Кинути Кубики', () => {
+            this.rollDiceFn();
+            setTimeout(() => {
+                this.rolResultEW(newValue, trueFn, falseFn, rolResult, closeEW);
+            }, 1700);
+        });
+    }
+
+    
+    addBattleDiceRollSection(trueValue, resolve, diceCount, trueFn, falseFn) {
+        let newValue = trueValue;
+        const resolvePlayer = heroes[player.hero].resolve;
+    
+        if (resolvePlayer > 0 && resolve) {
+            texts += `<br> + ${resolvePlayer} Рішучості`;
+        }
+    
+        if (treasure > 0 && dexterity) {
+            texts += `<br> - ${treasure} за трофеї`;
+            newValue -= treasure;
+        }
+    
+        this.drawDiceInEW(diceCount);
+        this.drawBtnInEW('roll', 'Кинути Кубики', () => {
+            this.rollDiceFn();
+            setTimeout(() => {
+                this.rolResultEW(newValue, trueFn, falseFn, rolResult, closeEW);
+            }, 1700);
+        });
+    }
+
+    rolResultEW (value, trueFn, falseFn, rolResult, closeEW){
+        if (this.diceRollResultGlobal <= (value)) {
+            if (rolResult){
+                this.drawEW('Успіх!', 'green');
+                this.drawBtnInEW('next','Далі', ()=>{
+                    if (trueFn) trueFn();
+                    if (closeEW) this.removeAllEW()
+                });
+            }
+
+            if (!rolResult){
+                if (trueFn) trueFn();
+                if (closeEW) this.removeAllEW()
+            }
+        }
+
+        if (this.diceRollResultGlobal > value && this.diceRollResultGlobal <= (value + heroes[player.hero].resolve )) {
+            this.drawEW('Провал....?');
+            this.drawBtnInEW('add_resolve','Додати Рішучості', ()=>{
+                const diff = this.diceRollResultGlobal - value;
+                heroes[player.hero].resolve -= Math.abs(diff);
+                this.removeLastEW()
+                if (closeEW) this.removeAllEW()
+                if (trueFn) trueFn();  
+            });
+            this.drawBtnInEW('next','Далі', ()=>{
+                this.removeLastEW()
+                if (closeEW) this.removeAllEW()
+                if (falseFn) falseFn();
+                heroes[player.hero].resolve +=1;
+            });
+        }
+
+        if (this.diceRollResultGlobal > (value + heroes[player.hero].resolve)) {
+            if (rolResult){
+                this.drawEW('Провал!', 'red');
+                this.drawBtnInEW('next','Далі', ()=>{
+                    if (closeEW) this.removeAllEW()
+                    if (falseFn) falseFn();
+                });
+                heroes[player.hero].resolve +=1;
+            }
+            if (!rolResult){
+                if (closeEW) this.removeAllEW()
+                if (falseFn) falseFn();
+                heroes[player.hero].resolve +=1;
+            }
+        }
+    }
+
+    endMoveEW() {
+        this.drawEW('Завершити свій хід?');
+        this.drawBtnInEW('btn_yes', 'Так', ()=>{
+            this.removeAllEW()
+            game.endMove()
+        }, 'green');
+
+        this.drawBtnInEW('btn_no', 'Ні', ()=>{
+            this.removeAllEW()
+        }, 'red');
     }
 
     removeTitile(){
