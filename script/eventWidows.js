@@ -20,6 +20,12 @@ class EventWidows{
         );
     }
 
+    clear(){
+        ew.removeTxt()
+        document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
+        document.querySelectorAll('.dice-section')?.forEach((item)=>{item.remove()})
+    }
+
     drawCardEW(card) {
         this.drawEW(card.title);
         this.drawCardsInEW(card);
@@ -364,6 +370,8 @@ class EventWidows{
 
         game.diceRollResultGlobal = diceResult;
     }
+
+    
 
 }
 

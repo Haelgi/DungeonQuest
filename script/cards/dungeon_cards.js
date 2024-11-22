@@ -672,23 +672,18 @@ function warriorOfAbyss(){
         setTimeout(() => {ew.removeAllEW()}, 1200);
     }
 
-    function clear(){
-        ew.removeTxt()
-        document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
-    }
-
     function dexterity(){
-        clear()
+        ew.clear()
         ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
     }
 
     function defense(){
-        clear()
+        ew.clear()
         ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
     }
 
     function luck(){
-        clear()
+        ew.clear()
         ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
     }
 
@@ -851,19 +846,14 @@ function orcAttack(){
         heroes[player.hero].health -= 2
         setTimeout(() => {ew.removeAllEW()}, 1200);
     }
-    
-    function clear(){
-        ew.removeTxt()
-        document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
-    }
 
     function dexterity(){
-        clear()
+        ew.clear()
         ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
     }
 
     function luck(){
-        clear()
+        ew.clear()
         ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
     }
 
@@ -1049,7 +1039,7 @@ function darkPortal(){
     }
 
     function diceDamage(){
-        clear()
+        ew.clear()
         ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
 
     }
@@ -1066,25 +1056,19 @@ function darkPortal(){
             diceDamage()
         }, 1200);
     }
-    
-    function clear(){
-        ew.removeTxt()
-        document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
-        document.querySelectorAll('.dice-section')?.forEach((item)=>{item.remove()})
-    }
 
     function dexterity(){
-        clear()
+        ew.clear()
         ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
     }
 
     function defense(){
-        clear()
+        ew.clear()
         ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
     }
 
     function luck(){
-        clear()
+        ew.clear()
         ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
     }
 
@@ -1149,12 +1133,7 @@ function livingArmor(){
 
 function fierceCutthroat(){
     ew.removeRawBtnInEW('btn_ew')
-    
-    function clear(){
-        ew.removeTxt()
-        document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
-        document.querySelectorAll('.dice-section')?.forEach((item)=>{item.remove()})
-    }
+    ew.clear()
 
     function bribe(){
         const countCards = player.treasureCardContainer.length
@@ -1181,12 +1160,6 @@ function fierceCutthroat(){
         }
     }
 
-    function clear(){
-        ew.removeTxt()
-        document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
-        document.querySelectorAll('.dice-section')?.forEach((item)=>{item.remove()})
-    }
-
     function endBattle(txt){
         ew.drawEW(txt)
         setTimeout(() => {
@@ -1195,7 +1168,7 @@ function fierceCutthroat(){
     }
 
     function battle(){
-        clear()
+        ew.clear()
         
         ew.addTxt(`
             ${player.hero.toUpperCase()}<br>
@@ -1220,7 +1193,6 @@ function fierceCutthroat(){
             const trueFn = ()=>{ 
                 const new_em_hp = Number(em_hp.innerHTML) - player.attack
                 
-
                 if(game.diceRollResultGlobal<=3){
                     em_hp.innerHTML = new_em_hp
                     ew.drawEW(`Ви поранили Головоріза`)
@@ -1244,9 +1216,8 @@ function fierceCutthroat(){
                     }, 1200);
                 }
 
-
-                
                 if (new_em_hp <= 0) return endBattle(`Ви перемогли Головоріза`)
+
                 if (heroes[player.hero].health === 0) {
                     endBattle(`Ви загинули(`)
                     setTimeout(() => {
@@ -1260,7 +1231,6 @@ function fierceCutthroat(){
         }
 
         reroll()
-
     }
 
     ew.drawBtnInEW('btn_br','Дати хабар', bribe)
@@ -1295,17 +1265,13 @@ function collapsedBeam(){
 
     ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
 
-
     /*Небольшая часть кладки потолка вместе с балкоОЙ рухнула прямо на Вас. 
     Выполните проверку Ловкости. 
     Если проверка провалена, получите 1 ранение и пропустите 1 ход.*/
 }
 
 function goldCoins(){
-    if (!player.treasureCardContainer.some(card => card.id === 34)) {
-        player.treasureCardContainer.push(dungeon_cards[57])
-    }
-    
+    player.treasureCardContainer.push(dungeon_cards[57])
     ew.removeAllEW()
 
     /* "трофей" Комната пуста, однако на полу Вы заметили небольшой кошелёк. 
@@ -1313,10 +1279,7 @@ function goldCoins(){
 }
 
 function preciousStone(){
-    if (!player.treasureCardContainer.some(card => card.id === 34)) {
-        player.treasureCardContainer.push(dungeon_cards[58])
-    }
-    
+    player.treasureCardContainer.push(dungeon_cards[58])
     ew.removeAllEW()
 
     /* "трофей" Комната пуста, однако Вы заметили как под ногами что-то свернуло. 
