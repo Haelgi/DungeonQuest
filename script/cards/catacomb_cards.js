@@ -17,31 +17,6 @@ class Card {
     };
 };
 
-function escapeCatacombEW(){
-    ew.drawEW('Бажаєте покинути катакомби?')
-
-    ew.drawBtnInEW('next', 'Так', ()=>{
-        ew.removeAllEW()
-        escapeCatacomb()
-    }, 'green')
-
-    ew.drawBtnInEW('close', 'Ні', ()=>{
-        ew.removeAllEW()
-    }, 'red')
-}
-
-function escapeCatacomb(){
-    const x = player.position[0]
-    const y = player.position[1]
-    player.catacomb = false
-    game.gameFields[y][x]['c'] = true
-    game.removeHighlightFields(game.nextCoordinates)
-    game.drawHeroMitl(x, y);
-    game.drawCatacombToken(x, y)
-    game.checkRoomEvents()
-    game.endMove()
-}
-
 function hiddenTrap(){
     ew.removeAllEW()
 
@@ -54,11 +29,9 @@ function hiddenTrap(){
 function holeInCeiling(){
     ew.removeRawBtnInEW('btn_ew')
 
-    
-
     function trueFn(){
         player.holeInCeiling = false
-        escapeCatacombEW()
+        ew.escapeCatacombEW()
     }
 
     function falseFn(){
@@ -72,8 +45,6 @@ function holeInCeiling(){
 
     ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, false, false)
 
-
-
     player.treasureCardContainer.forEach((card, id) => {
 
         if(card.pack === 'deadman' && card.id === 2 ){
@@ -86,7 +57,7 @@ function holeInCeiling(){
                 ew.drawBtnInEW('btn_next','Використати Мотузку', ()=>{
                     player.treasureCardContainer.pop(id,1)
                     ew.removeAllEW()
-                    escapeCatacombEW()
+                    ew.escapeCatacombEW()
                 })
     
                 ew.drawBtnInEW('btn_close','Назад', ()=>{
@@ -97,7 +68,6 @@ function holeInCeiling(){
             }
     
             ew.drawBtnInEW('btn_rope','Використати Мотузку', rope)
-
         }
     });
 
@@ -126,12 +96,12 @@ const catacomb_cards = [
     /*6*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     /*7*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     
-    /*8*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}),
-    /*9*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}),
-    /*10*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}),
-    /*11*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}),
-    /*12*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}),
-    /*13*/new Card(2, 'Выход', false, false, ()=>{ escapeCatacombEW()}),
+    /*8*/new Card(2, 'Выход', false, false, ()=>{ ew.escapeCatacombEW()}),
+    /*9*/new Card(2, 'Выход', false, false, ()=>{ ew.escapeCatacombEW()}),
+    /*10*/new Card(2, 'Выход', false, false, ()=>{ ew.escapeCatacombEW()}),
+    /*11*/new Card(2, 'Выход', false, false, ()=>{ ew.escapeCatacombEW()}),
+    /*12*/new Card(2, 'Выход', false, false, ()=>{ ew.escapeCatacombEW()}),
+    /*13*/new Card(2, 'Выход', false, false, ()=>{ ew.escapeCatacombEW()}),
     
     /*14*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{hiddenTrap()}),
     /*15*/new Card(3, 'Скрытая Ловушка', false, false, ()=>{hiddenTrap()}),

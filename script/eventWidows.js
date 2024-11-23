@@ -111,7 +111,7 @@ class EventWidows{
     }
 
     rolResultEW (value, trueFn, falseFn, rolResult, closeEW){
-        if (this.diceRollResultGlobal <= (value)) {
+        if (game.diceRollResultGlobal <= (value)) {
             if (rolResult){
                 this.drawEW('Успіх!', 'green');
                 this.drawBtnInEW('next','Далі', ()=>{
@@ -126,11 +126,11 @@ class EventWidows{
             }
         }
 
-        if (this.diceRollResultGlobal > value && this.diceRollResultGlobal <= (value + heroes[player.hero].resolve )) {
+        if (game.diceRollResultGlobal > value && game.diceRollResultGlobal <= (value + heroes[player.hero].resolve )) {
             this.drawEW('Провал....?');
             this.drawBtnInEW('add_resolve','Додати Рішучості', ()=>{
                 const diff = this.diceRollResultGlobal - value;
-                heroes[player.hero].resolve -= Math.abs(diff);
+                game.changeResolve(-Math.abs(diff)) ;
                 this.removeLastEW()
                 if (closeEW) this.removeAllEW()
                 if (trueFn) trueFn();  
@@ -139,23 +139,23 @@ class EventWidows{
                 this.removeLastEW()
                 if (closeEW) this.removeAllEW()
                 if (falseFn) falseFn();
-                heroes[player.hero].resolve +=1;
+                game.changeResolve(+1);
             });
         }
 
-        if (this.diceRollResultGlobal > (value + heroes[player.hero].resolve)) {
+        if (game.diceRollResultGlobal > (value + heroes[player.hero].resolve)) {
             if (rolResult){
                 this.drawEW('Провал!', 'red');
                 this.drawBtnInEW('next','Далі', ()=>{
                     if (closeEW) this.removeAllEW()
                     if (falseFn) falseFn();
                 });
-                heroes[player.hero].resolve +=1;
+                game.changeResolve(+1);
             }
             if (!rolResult){
                 if (closeEW) this.removeAllEW()
                 if (falseFn) falseFn();
-                heroes[player.hero].resolve +=1;
+                game.changeResolve(+1);
             }
         }
     }
@@ -230,6 +230,22 @@ class EventWidows{
 
     removeTxt(){
         document.querySelector('.event-txt-container')?.remove()
+    }
+
+    diceRollDarkRoomEW() {
+        game.nextCoordinates = []
+        this.drawEW('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.');
+        this.drawDiceInEW(1)
+        const trueFn = ()=>{
+            this.rollDiceFn()  
+            setTimeout(() => {
+                this.removeAllEW();
+                if (!game.darkRoomCoordinates[game.diceRollResultGlobal]) return this.diceRollDarkRoomEW();
+                game.nextCoordinates = [game.darkRoomCoordinates[game.diceRollResultGlobal]];
+                game.activeEvent = false
+            }, 1700);
+        }
+        this.drawBtnInEW('roll', 'Кинути Кубики', trueFn)
     }
 
     drawDiceInEW(diceCount){
@@ -371,8 +387,31 @@ class EventWidows{
         game.diceRollResultGlobal = diceResult;
     }
 
+    escapeCatacombEW(){
+        this.drawEW('Бажаєте покинути катакомби?')
     
-
+        this.drawBtnInEW('next', 'Так', ()=>{
+            this.removeAllEW()
+            this.escapeCatacomb()
+        }, 'green')
+    
+        this.drawBtnInEW('close', 'Ні', ()=>{
+            this.removeAllEW()
+        }, 'red')
+    }
+    
+    escapeCatacomb(){
+        const x = player.position[0]
+        const y = player.position[1]
+        player.catacomb = false
+        game.gameFields[y][x]['c'] = true
+        game.removeHighlightFields(game.nextCoordinates)
+        game.drawHeroMitl(x, y);
+        game.drawCatacombToken(x, y)
+        game.checkRoomEvents()
+        game.endMove()
+    }
+    
 }
 
 export const ew = new EventWidows();

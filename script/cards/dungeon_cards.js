@@ -107,7 +107,7 @@ function wallCollapse(){
 
     const falseFn = ()=>{
         if (game.nextCoordinates.length === 0) game.endGame()
-        heroes[player.hero].health -= 2
+        game.changeHealth(-2)
         player.extraMove = true
         game.removePreviousTileField = true
         game.removeAllIcon()
@@ -341,7 +341,7 @@ function giantSnake(){
 
     const trueFn = ()=>{
         const damage = game.diceRollResultGlobal + 2
-        heroes[player.hero].health -= damage
+        game.changeHealth(-damage) 
         ew.drawEW(`Ви отримали ${damage} поранення`);
         ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
     }
@@ -402,7 +402,7 @@ function deadCrowd(){
 
         const trueFn2 = ()=>{
             console.log('trueFn2')
-            heroes[player.hero].health -= game.diceRollResultGlobal
+            game.changeHealth(-game.diceRollResultGlobal) 
             const card = game.getRundomElement(game.treasure_cards, treasure_cards)
             player.treasureCardContainer.push()
             ew.drawEW('Ви отримали 2 поранення');
@@ -485,7 +485,7 @@ function manticore(){
             }
             
             const falseFn = ()=>{
-                heroes[player.hero].health -= 1
+                game.changeHealth(-1)
                 pl_hp.innerHTML = heroes[player.hero].health
                 
                 ew.drawEW(`Ви троимали поранення(`)
@@ -588,7 +588,7 @@ function healingSpring(){
         if (2 >=result) healing = 1
         if (3 >= result >= 4) healing = 2
         if (result >= 5) healing = 3
-        heroes[player.hero].health += healing
+        game.changeHealth(healing) 
         ew.drawEW(`Ви зцілили ${healing} здоров'я`)
         setTimeout(() => {
             ew.removeAllEW()
@@ -635,7 +635,7 @@ function armyOfGhosts(){
 
         if (5<=result) {
             damage = 3
-            if (heroes[player.hero].resolve !== 0 ) heroes[player.hero].resolve -= 1
+            if (heroes[player.hero].resolve !== 0 ) changeResolve(-1)
             
 
             ew.drawEW(`Ви отримали ${damage} поранення`)
@@ -645,7 +645,7 @@ function armyOfGhosts(){
             }, 1200);
         }
 
-        heroes[player.hero].health -= damage
+        game.changeHealth(-damage)
     }
 
     ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
@@ -668,7 +668,7 @@ function warriorOfAbyss(){
 
     const falseFn = ()=> {
         ew.drawEW(`Ви отримали 2 додаткові рани від крововтечі`)
-        heroes[player.hero].health -= 2
+        game.changeHealth(-2)
         setTimeout(() => {ew.removeAllEW()}, 1200);
     }
 
@@ -703,7 +703,7 @@ function warriorOfAbyss(){
             ew.drawBtnInEW('btn_luk','Удачу',luck)
         }, 1200);
 
-        heroes[player.hero].health -= damage
+        game.changeHealth(-damage)
         
     }
 
@@ -721,13 +721,13 @@ function bloodthirstyLizard(){
     ew.removeRawBtnInEW('btn_ew')
 
     const trueFn = ()=> {
-        heroes[player.hero].health -= 2
+        game.changeHealth(-2)
         ew.drawEW(`Ви отримали 2 поранення`)
         setTimeout(() => {ew.removeAllEW()}, 1200);
     }
 
     const falseFn = ()=> {
-        heroes[player.hero].health -= 6
+        game.changeHealth(-6)
         ew.drawEW(`Ви отримали 6 поранень`)
         setTimeout(() => {ew.removeAllEW()}, 1200);
     }
@@ -764,7 +764,7 @@ function bats(){
         }
 
 
-        heroes[player.hero].health -= damage
+        game.changeHealth(-damage)
     }
 
     ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
@@ -811,7 +811,7 @@ function evilGoblin(){
             setTimeout(() => {ew.removeAllEW()}, 2000);
         }
 
-        heroes[player.hero].health -= damage
+        game.changeHealth(-damage)
     }
 
     ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
@@ -829,11 +829,11 @@ function orcAttack(){
 
     const trueFn = ()=> {
         ew.drawEW(`Ви отримали 2 поранення`)
-        heroes[player.hero].health -= 2
+        game.changeHealth(-2)
         if (game.nextCoordinates.length === 0) {
             ew.removeAllEW()
-            heroes[player.hero].health -= 5
-            ew.drawEW(`Dам нікуди бігти, отримайте 5 поранень`)
+            game.changeHealth(-5)
+            ew.drawEW(`Вам нікуди бігти, отримайте 5 поранень`)
             setTimeout(() => {ew.removeAllEW()}, 1200);
             return  
         }
@@ -843,7 +843,7 @@ function orcAttack(){
 
     const falseFn = ()=> {
         ew.drawEW(`Ви отримали 2 поранення`)
-        heroes[player.hero].health -= 2
+        game.changeHealth(-2)
         setTimeout(() => {ew.removeAllEW()}, 1200);
     }
 
@@ -868,7 +868,7 @@ function orcAttack(){
 function treasureGuard(){
     ew.removeRawBtnInEW('btn_ew')
 
-    heroes[player.hero].health -= 2
+    game.changeHealth(-2)
     ew.drawEW(`Ви отримали 2 поранення`)
     setTimeout(() => {
         ew.removeLastEW()
@@ -886,7 +886,7 @@ function treasureGuard(){
         ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{
             damage -= emptyFelds.length
 
-            heroes[player.hero].health -= damage
+            game.changeHealth(-damage)
             
             ew.drawEW(`Ви отримали ${damage} додаткових пораненнь`)
             setTimeout(() => {ew.removeAllEW()}, 2000);
@@ -953,7 +953,7 @@ function stoneBall(){
     const coord = game.newCoordinate(true)
 
     if (coord.length > 0){
-        heroes[player.hero].health -= 1
+        game.changeHealth(-1)
         ew.drawEW(`Ви отримали 1 поранення`)
         player.extraMove = true
         game.removeHighlightFields(game.nextCoordinates)
@@ -965,7 +965,7 @@ function stoneBall(){
     }
 
     if (coord.length === 0){
-        heroes[player.hero].health -= 4
+        game.changeHealth(-4)
         ew.drawEW(`Ви отримали 4 поранення`)
         setTimeout(() => {
             ew.removeAllEW()
@@ -991,7 +991,7 @@ function curseOfTheSorcerer(){
         if (!player.curseOfTheSorcerer) {
             player.curseOfTheSorcerer = true
             const damage = 1 + resolve
-            heroes[player.hero].health -= damage
+            game.changeHealth(-damage)
             
             ew.drawEW(`Ви отримали ${damage} поранення`)
             setTimeout(() => {
@@ -1024,14 +1024,14 @@ function darkPortal(){
         ew.drawBtnInEW('btn_reRoll','Перекинути (+1 поранення)', ()=>{
             ew.removeLastEW()
             
-            heroes[player.hero].health -= 1
+            game.changeHealth(-1)
             diceDamage()
         })
 
         ew.drawBtnInEW('btn_next','Далі', ()=>{
             ew.removeLastEW()
 
-            heroes[player.hero].health -= damage
+            game.changeHealth(-damage)
 
             ew.drawEW(`Ви отримали ${damage} поранення`)
             setTimeout(() => {ew.removeAllEW()}, 1200);
@@ -1119,7 +1119,7 @@ function livingArmor(){
             }, 1200);
         }
 
-        heroes[player.hero].health -= damage
+        game.changeHealth(-damage)
     }
 
     ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
@@ -1205,8 +1205,8 @@ function fierceCutthroat(){
                 }
 
                 if(game.diceRollResultGlobal>3){
-                    
-                    pl_hp.innerHTML = heroes[player.hero].health -= 1
+                    game.changeHealth(-1)
+                    pl_hp.innerHTML = heroes[player.hero].health
                     ew.drawEW(`Ви отримали поранення`)
                     setTimeout(() => {
                         ew.removeLastEW()
@@ -1255,7 +1255,7 @@ function collapsedBeam(){
     }
 
     const falseFn = ()=> {
-        heroes[player.hero].health -= 1
+        game.changeHealth(-1)
         ew.drawEW(`Ви отримали 1 поранення. Та пропустите хід`)
         setTimeout(() => {
             ew.removeAllEW(); 

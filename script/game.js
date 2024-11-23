@@ -96,7 +96,8 @@ class Game {
 
     startPosition(){
         this.body = document.querySelector(`body`);
-        this.playingField = document.querySelector(`.playing-field`);            
+        this.playingField = document.querySelector(`.playing-field`);    
+        this.addCharacterTablet(player.hero);        
         this.drawAbilitiePackCards();
         this.drawEffectPackCards();
         this.drawTreasurePackCards()
@@ -110,8 +111,16 @@ class Game {
         this.clickArrowIcon()
     };
 
-    // Custom Event /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+    changeHealth(damage){
+        heroes[player.hero].health += damage
+        this.addCharacterTablet(player.hero);
+    }
+
+    changeResolve(value){
+        heroes[player.hero].resolve += value
+        this.addCharacterTablet(player.hero);
+    }
+
     playTrapEvent(){
         const card = this.getRundomElement(this.trap_cards, trap_cards)   
         ew.drawCardEW(card);
@@ -120,7 +129,7 @@ class Game {
     playPitEvent(){
         const trueFn =()=> this.endMove()
         const falseFn =()=>{
-            heroes[player.hero].health -=6           
+            this.changeHealth(-6)       
             this.getDirectionCatacomb()
             this.drawHeroMitl(player.position[0], player.position[1]);
             this.endMove()
@@ -131,14 +140,14 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        // ew.drawCardEW(card);
+        ew.drawCardEW(card);
         // ew.drawCardEW(dungeon_cards[0]);
     }
 
     playCatacombEvent(){
         if (player.holeInCeiling) return
         const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
-        ew.drawCardEW(catacomb_cards[20]);
+        ew.drawCardEW(catacomb_cards[22]);
         // this.drawCardEW(card);
     }
     
@@ -146,11 +155,7 @@ class Game {
         const card = this.getRundomElement(this.dragon_cards, dragon_cards)   
         ew.drawCardEW(card);
     }
-
-    // End Custom Event /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Draw Interface Elements /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-           
+     
     drawFieldTileTests(roomNumber, rotate, x, y){
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)  
         
@@ -162,27 +167,6 @@ class Game {
         this.gameFields[y][x]['id'] = roomNumber-1;
         this.gameFields[y][x]['r'] = Number(rotate);
     };
-
-    // End Draw Interface Elements /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    
-    // Template EventWindows /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    diceRollDarkRoomEW() {
-        this.nextCoordinates = []
-        ew.drawEW('Ви потрапили у Темну Кімнату і намагаєтесь покинути її на дотик. Удача визначить ваш напрямок.');
-        ew.drawDiceInEW(1)
-        const trueFn = ()=>{
-            ew.rollDiceFn()  
-            setTimeout(() => {
-                ew.removeAllEW();
-                if (!this.darkRoomCoordinates[this.diceRollResultGlobal]) return this.diceRollDarkRoomEW();
-                this.nextCoordinates = [this.darkRoomCoordinates[this.diceRollResultGlobal]];
-                this.activeEvent = false
-            }, 1700);
-        }
-        ew.drawBtnInEW('roll', 'Кинути Кубики', trueFn)
-    }
     
     removeAllIcon(){
         this.removeIcon('.search-icon');
@@ -452,7 +436,7 @@ class Game {
     checkCurseOfTheSorcerer(){
         if(player.curseResolve && heroes[player.hero].resolve > player.oldResolve) {
             const diff = heroes[player.hero].resolve - player.oldResolve  
-            heroes[player.hero].health -= diff
+            this.changeHealth(-diff) 
             player.oldResolve = heroes[player.hero].resolve
         }
     }
@@ -596,7 +580,7 @@ class Game {
         };
 
         if (room_tiles[this.gameFields[y][x]['id']].special === 'dark' && !player.catacomb) {
-            this.diceRollDarkRoomEW()  
+            ew.diceRollDarkRoomEW()  
         }
 
         if (room_tiles[this.gameFields[y][x]['id']].search 
@@ -1040,7 +1024,7 @@ class Game {
                 const falseFn = ()=>{
                     this.removeIcon('.bridge-icon');
                     const trueFn = ()=>  {
-                        heroes[player.hero].health -= this.diceRollResultGlobal;
+                        this.changeHealth(-this.diceRollResultGlobal);
                         this.endMove()
                     };
                     
@@ -1058,7 +1042,7 @@ class Game {
             if (e.target.closest('.abyss-icon')) {
                 const trueFn = ()=> e.target.remove()
                 const falseFn =()=>{
-                    heroes[player.hero].health -=5
+                    this.changeHealth(-5)
                     this.getDirectionCatacomb()
                     this.drawHeroMitl(player.position[0], player.position[1]);
                     this.endMove()
