@@ -78,6 +78,38 @@ function holeInCeiling(){
 }
 
 function doorWithRiddle(){
+    ew.removeRawBtnInEW('btn_ew')
+    
+    const trueFn = ()=> {
+        player.catacombCardContainer.forEach((card, id)=>{
+            if(card.pack === 'catacomb' && card.id === 5 ) {
+                player.catacombCardContainer.splice(id,1)
+            }
+        })
+
+        ew.removeAllEW()
+        ew.escapeCatacombEW()
+    }
+
+    const falseFn = ()=> {
+        ew.removeAllEW()
+        player.catacombCardContainer.push(catacomb_cards[22])
+        game.endMove()
+    }
+
+    function luck(){
+        ew.clear()
+        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+    }
+
+    player.catacombCardContainer.forEach((card)=>{
+        if(card.pack === 'catacomb' && card.id === 5 ) {
+            ew.drawBtnInEW('btn_close','Далі', ()=>{ew.removeAllEW()})
+        }
+    })
+
+    ew.drawBtnInEW('btn_luk','Перевірити Удачу',luck)
+
     /*Вы стоите перед закрытой дверью. 
     Чтобы открыть замок, необходимо решить головоломку. 
     Проведите проверку Удачи. 
