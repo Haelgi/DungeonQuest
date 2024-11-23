@@ -129,8 +129,8 @@ class EventWidows{
         if (game.diceRollResultGlobal > value && game.diceRollResultGlobal <= (value + heroes[player.hero].resolve )) {
             this.drawEW('Провал....?');
             this.drawBtnInEW('add_resolve','Додати Рішучості', ()=>{
-                const diff = this.diceRollResultGlobal - value;
-                game.changeResolve(-Math.abs(diff)) ;
+                const diff = game.diceRollResultGlobal - value;
+                game.changeResolve(-diff) ;
                 this.removeLastEW()
                 if (closeEW) this.removeAllEW()
                 if (trueFn) trueFn();  
