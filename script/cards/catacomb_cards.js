@@ -1,8 +1,10 @@
+import  {addScrolCardsEffect}  from '../function/addScrolCardsEffect.js';
 import  {game}  from '../game.js';
 import  {ew}  from '../eventWidows.js';
 import  {player}  from '../player.js';
 import  {heroes}  from '../cards/heroes.js';
 import {trap_cards} from './trap_cards.js';
+import  {monster_cards}  from './monster_cards.js';
 
 class Card {
     constructor(id, name, type, cost, effect) {
@@ -167,6 +169,44 @@ function enchantedRoots(){
      Потом сбросьте эту карту.*/
 }
 
+function hailOfArrows(){
+
+    const trueFn = ()=> {
+        ew.drawEW('Ви захистилися та вбили нападника')
+        setTimeout(() => {
+            ew.removeAllEW()
+            game.endMove()
+        }, 1200);
+
+    }
+
+    const falseFn = ()=> {
+        ew.removeAllEW()
+        const cards = [game.getRundomElement(game.monster_cards, monster_cards),
+            game.getRundomElement(game.monster_cards, monster_cards)]
+        const sumPenalty = cards[0].penalty + cards[1].penalty
+
+        game.changeHealth(-sumPenalty)
+        
+        ew.drawEW('Напад монстрів')
+        ew.addPackCards(cards)
+        ew.addTxt(`Ви ухилилися від стріл і за вами погналися монстри.<br>Вам вдалося втекти, але ви отримали ${sumPenalty} поранення`)
+        ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
+        addScrolCardsEffect('.event-deck-container', false)
+    }
+
+    ew.removeRawBtnInEW('btn_ew')
+    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, false, false)
+
+
+    /*Монстр атакует Вас из лука. 
+    Выполните проверку Удачи. 
+    В случае успеха Вы защитились и убили нападавшего; Ваш ход заканчивается. 
+    Если проверка провалена, вытащите две Карты Монстра 
+    и получите количество ранений, эквивалентное сумме штрафоф за побег на каждой из них. 
+    Потом сбросьте их.*/
+}
+
 const catacomb_cards = [
     /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     /*1*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
@@ -196,7 +236,7 @@ const catacomb_cards = [
     
     /*22*/new Card(5, 'Дверь с Загадкой', false, false, ()=>{doorWithRiddle()}),
     /*23*/new Card(6, 'Заколдованные Корни', false, false, ()=>{enchantedRoots()}),
-    /*24*/new Card(7, 'Град Стрел', false, false, ()=>{ew.removeAllEW() /*Монстр атакует Вас из лука. Выполните проверку Удачи. В случае успеха Вы защитились и убили нападавшего; Ваш ход заканчивается. Если проверка провалена, вытащите две Карты Монстра и получите количество ранений, эквивалентное сумме штрафоф за побег на каждой из них. Потом сбросьте их.*/}),
+    /*24*/new Card(7, 'Град Стрел', false, false, ()=>{ hailOfArrows()}),
     /*25*/new Card(8, 'Гигантская Крыса', false, false, ()=>{ew.removeAllEW() /*На Вас напала гигантская крыса с количеством здоровья 3. Выполните проверку Защиты. Если проверка пройдена, Ваш противник получает 1 ранение, иначе 1 ранение получаете Вы. Продолжайте выполнять проверку Защиты до тех пор, пока Вы или гигантская крыса не погибнете.*/}),
     /*26*/new Card(9, 'Восставшие Мертвецы', false, false, ()=>{ew.removeAllEW() /*Вас начали предпринимать восстания из гробов мертвецов. Выполните проверку Силы. Если проверка не удалась, найдите количество ранений, эквивалентное количество оставшихся в Вас очках жизни, деленному на 2 (округлите результат деления, если необходимо, в большую сторону).*/}),
     
