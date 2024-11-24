@@ -177,7 +177,6 @@ function hailOfArrows(){
             ew.removeAllEW()
             game.endMove()
         }, 1200);
-
     }
 
     const falseFn = ()=> {
@@ -198,13 +197,61 @@ function hailOfArrows(){
     ew.removeRawBtnInEW('btn_ew')
     ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, false, false)
 
-
     /*Монстр атакует Вас из лука. 
     Выполните проверку Удачи. 
     В случае успеха Вы защитились и убили нападавшего; Ваш ход заканчивается. 
     Если проверка провалена, вытащите две Карты Монстра 
     и получите количество ранений, эквивалентное сумме штрафоф за побег на каждой из них. 
     Потом сбросьте их.*/
+}
+
+function giantRat(){
+    let ratHealth = 3
+
+    const trueFn = ()=> {
+        ratHealth -= 1
+
+        defense()
+
+        ew.drawEW(`Ви нанесли поранення Гігантському Щуру`)
+        setTimeout(() => {
+            ew.removeLastEW()
+            if(ratHealth < 1) {
+                ew.drawEW(`Ви вбили Гігантського Щура`)
+                setTimeout(() => {ew.removeAllEW()}, 1200);
+            }
+        }, 1200);
+    }
+
+    const falseFn = ()=> {
+        defense()
+        ew.drawEW(`Ви отримали 1 поранення`)
+        game.changeHealth(-1)
+        setTimeout(() => {
+            ew.removeLastEW()
+            if(heroes[player.hero].health<1){
+                ew.removeAllEW()
+                game.endGame()
+            }
+        }, 1200);
+    }
+
+    function defense(){
+        ew.clear()
+        ew.addTxt(`
+            Гігантський<br>Щур<br><i id="pl_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px; margin: 10px auto;">${ratHealth}</i>
+        `)
+        ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
+    }
+
+    ew.removeRawBtnInEW('btn_ew')
+
+    defense()
+    
+    /*На Вас напала гигантская крыса с количеством здоровья 3. 
+    Выполните проверку Защиты. 
+    Если проверка пройдена, Ваш противник получает 1 ранение, иначе 1 ранение получаете Вы. 
+    Продолжайте выполнять проверку Защиты до тех пор, пока Вы или гигантская крыса не погибнете.*/
 }
 
 const catacomb_cards = [
@@ -237,7 +284,7 @@ const catacomb_cards = [
     /*22*/new Card(5, 'Дверь с Загадкой', false, false, ()=>{doorWithRiddle()}),
     /*23*/new Card(6, 'Заколдованные Корни', false, false, ()=>{enchantedRoots()}),
     /*24*/new Card(7, 'Град Стрел', false, false, ()=>{ hailOfArrows()}),
-    /*25*/new Card(8, 'Гигантская Крыса', false, false, ()=>{ew.removeAllEW() /*На Вас напала гигантская крыса с количеством здоровья 3. Выполните проверку Защиты. Если проверка пройдена, Ваш противник получает 1 ранение, иначе 1 ранение получаете Вы. Продолжайте выполнять проверку Защиты до тех пор, пока Вы или гигантская крыса не погибнете.*/}),
+    /*25*/new Card(8, 'Гигантская Крыса', false, false, ()=>{giantRat()}),
     /*26*/new Card(9, 'Восставшие Мертвецы', false, false, ()=>{ew.removeAllEW() /*Вас начали предпринимать восстания из гробов мертвецов. Выполните проверку Силы. Если проверка не удалась, найдите количество ранений, эквивалентное количество оставшихся в Вас очках жизни, деленному на 2 (округлите результат деления, если необходимо, в большую сторону).*/}),
     
     /*27*/new Card(10, 'Теневой Убийца', false, false, ()=>{ew.removeAllEW() /*Сохраните эту карту. Пока она у Вас, в конце каждого своего хода (этого включительно) бросьте 1d6: 1-2 - Вы получаете 2 ранения; 3-4 - Вы получаете 1 ранение; 5-6 - Вы убиваете теневого убийцу и сбрасываете эту карту.*/}),
