@@ -82,7 +82,7 @@ class EventWidows{
         this.drawBtnInEW('roll', 'Кинути Кубики', () => {
             this.rollDiceFn();
             setTimeout(() => {
-                this.rolResultEW(newValue, trueFn, falseFn, rolResult, closeEW);
+                this.rolResultEW(resolve, newValue, trueFn, falseFn, rolResult, closeEW);
             }, 1700);
         });
     }
@@ -105,12 +105,16 @@ class EventWidows{
         this.drawBtnInEW('roll', 'Кинути Кубики', () => {
             this.rollDiceFn();
             setTimeout(() => {
-                this.rolResultEW(newValue, trueFn, falseFn, rolResult, closeEW);
+                this.rolResultEW(resolve, newValue, trueFn, falseFn, rolResult, closeEW);
             }, 1700);
         });
     }
 
-    rolResultEW (value, trueFn, falseFn, rolResult, closeEW){
+    rolResultEW (resolve, valueIn, trueFn, falseFn, rolResult, closeEW){
+        let value = valueIn
+
+        if (resolve) value += heroes[player.hero].resolve
+
         if (game.diceRollResultGlobal <= (value)) {
             if (rolResult){
                 this.drawEW('Успіх!', 'green');
@@ -126,15 +130,16 @@ class EventWidows{
             }
         }
 
-        if (game.diceRollResultGlobal > value && game.diceRollResultGlobal <= (value + heroes[player.hero].resolve )) {
+        if (game.diceRollResultGlobal > valueIn && game.diceRollResultGlobal <= value) {
             this.drawEW('Провал....?');
             this.drawBtnInEW('add_resolve','Додати Рішучості', ()=>{
-                const diff = game.diceRollResultGlobal - value;
+                const diff = game.diceRollResultGlobal - valueIn;
                 game.changeResolve(-diff) ;
                 this.removeLastEW()
                 if (closeEW) this.removeAllEW()
                 if (trueFn) trueFn();  
             });
+
             this.drawBtnInEW('next','Далі', ()=>{
                 this.removeLastEW()
                 if (closeEW) this.removeAllEW()
@@ -143,7 +148,7 @@ class EventWidows{
             });
         }
 
-        if (game.diceRollResultGlobal > (value + heroes[player.hero].resolve)) {
+        if (game.diceRollResultGlobal > value) {
             if (rolResult){
                 this.drawEW('Провал!', 'red');
                 this.drawBtnInEW('next','Далі', ()=>{

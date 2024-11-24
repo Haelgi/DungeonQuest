@@ -147,7 +147,7 @@ class Game {
     playCatacombEvent(){
         if (player.holeInCeiling) return
         const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
-        ew.drawCardEW(catacomb_cards[27]);
+        ew.drawCardEW(catacomb_cards[28]);
         // this.drawCardEW(card);
     }
     
@@ -448,8 +448,6 @@ class Game {
     }
 
     checkEndMoveEventCardContainer(){
-        console.log('checkEndMoveEventCardContainer')
-        console.log(player.endMoveEventCardContainer)
         if (player.endMoveEventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
         const [card] = player.endMoveEventCardContainer.splice(0, 1);
         ew.drawCardEW(card)
