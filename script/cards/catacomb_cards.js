@@ -254,6 +254,86 @@ function giantRat(){
     Продолжайте выполнять проверку Защиты до тех пор, пока Вы или гигантская крыса не погибнете.*/
 }
 
+function risingDead(){
+    const damage = Math.floor(heroes[player.hero].health / 2)
+
+    const trueFn = ()=> {
+        ew.drawEW('Ви змогли втекти')
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 1200);
+    }
+
+    const falseFn = ()=> {
+        game.changeHealth(-damage)
+        ew.drawEW(`Ви отримали ${damage} поранення`)
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 1200);
+    }
+
+    ew.removeRawBtnInEW('btn_ew')
+    ew.addDiceRollSection(`Ваша Сила : ${heroes[player.hero].strength}`, heroes[player.hero].strength, false,true, 2, trueFn, falseFn, false, false)
+
+    /*Вас начали предпринимать восстания из гробов мертвецов. 
+    Выполните проверку Силы. 
+    Если проверка не удалась, найдите количество ранений, эквивалентное количество оставшихся в Вас очках жизни, 
+    деленному на 2 (округлите результат деления, если необходимо, в большую сторону).*/
+}
+
+function shadowKiller(){
+
+    if(!player.endMoveEventCardContainer.some((card) => (card.id === 10 && card.pack === 'catacomb'))) {
+        player.endMoveEventCardContainer.push(catacomb_cards[27])
+        ew.removeAllEW()
+        return 
+    }
+
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+        let damage
+
+        if (result<=2) {
+            damage = 2
+
+            ew.drawEW(`Ви отримали ${damage} поранення`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 1200);
+        }
+
+        if (3<= result <=4) {
+            damage = 1
+            
+            ew.drawEW(`Ви отримали ${damage} поранення`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 1200);
+        }
+
+        if (5<=result) {
+            damage = 0
+            player.endMoveEventCardContainer.splice(0,1)
+            ew.drawEW(`Ви вбили Тіньового Вбивцю`)
+            setTimeout(() => {ew.removeAllEW()}, 2000);
+        }
+
+        game.changeHealth(-damage)
+    }
+
+    ew.removeRawBtnInEW('btn_ew')
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+
+    /*Сохраните эту карту. 
+    Пока она у Вас, в конце каждого своего хода (этого включительно) 
+    бросьте 1d6: 
+    1-2 - Вы получаете 2 ранения; 
+    3-4 - Вы получаете 1 ранение; 
+    5-6 - Вы убиваете теневого убийцу и сбрасываете эту карту.*/
+}
+
+
+
 const catacomb_cards = [
     /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     /*1*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
@@ -285,9 +365,9 @@ const catacomb_cards = [
     /*23*/new Card(6, 'Заколдованные Корни', false, false, ()=>{enchantedRoots()}),
     /*24*/new Card(7, 'Град Стрел', false, false, ()=>{ hailOfArrows()}),
     /*25*/new Card(8, 'Гигантская Крыса', false, false, ()=>{giantRat()}),
-    /*26*/new Card(9, 'Восставшие Мертвецы', false, false, ()=>{ew.removeAllEW() /*Вас начали предпринимать восстания из гробов мертвецов. Выполните проверку Силы. Если проверка не удалась, найдите количество ранений, эквивалентное количество оставшихся в Вас очках жизни, деленному на 2 (округлите результат деления, если необходимо, в большую сторону).*/}),
+    /*26*/new Card(9, 'Восставшие Мертвецы', false, false, ()=>{risingDead()}),
     
-    /*27*/new Card(10, 'Теневой Убийца', false, false, ()=>{ew.removeAllEW() /*Сохраните эту карту. Пока она у Вас, в конце каждого своего хода (этого включительно) бросьте 1d6: 1-2 - Вы получаете 2 ранения; 3-4 - Вы получаете 1 ранение; 5-6 - Вы убиваете теневого убийцу и сбрасываете эту карту.*/}),
+    /*27*/new Card(10, 'Теневой Убийца', false, false, ()=>{shadowKiller()}),
     /*28*/new Card(11, 'Монстр из Темноты', false, false, ()=>{ew.removeAllEW() /*Из темноты на Вас напал монстр, начался бой. Проведите проверку Удачи, не используя жетоны решимости. В случае успеха получите 1 ранение. В случае провала получите 6 ранений.*/}),
     /*29*/new Card(12, 'Капкан', false, false, ()=>{ew.removeAllEW() /*Выполните проверку Удачи. В случае успеха Вас защитили доспехи и Вы получаете 1 ранение. Если проверка провалена, получите 4 ранения от попадания в капкан и пропустите свой следующий ход. Чтобы не пропускать следующий ход, Вы можете сбросить один из своих Трофеев.*/}),
     /*30*/new Card(13, 'Скорпион', false, false, ()=>{ew.removeAllEW() /*Вас ужалил скорпион. Бросьте 1d6 и получите коичество ранений, эквивалентное результату.*/}),
