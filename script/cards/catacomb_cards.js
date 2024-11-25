@@ -359,6 +359,104 @@ function monsterFromDarkness(){
     В случае провала получите 6 ранений.*/
 }
 
+function trap(){
+    const trueFn = ()=> {
+        game.changeHealth(-1)
+        ew.drawEW(`Вас захистили обладунки та Ви отримуєте 1 поранення`)
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 1200);
+    }
+
+    const falseFn = ()=> {
+        game.changeHealth(-4)
+        player.skipMove = 1
+
+        ew.clear()
+
+        ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{
+            player.skipMove = 1
+            ew.removeAllEW()
+        })
+
+        ew.addEmptyFeldForCard(1)
+
+        ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{
+            player.skipMove = 0
+            ew.drawEW(`Ви не пропускаете свій наступний хід`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 1200);
+        })
+        
+        ew.addPackCards(player.treasureCardContainer)
+    
+        const emptyFelds = []
+        const btnNext = document.getElementById('next')
+        btnNext.style.display = 'none'
+
+        addScrolCardsEffect('.event-deck-container', (e)=> {
+        
+            if (emptyFelds.length >= 1) return
+    
+            const [card] = removeCardFromPack(e)
+    
+            emptyFelds.push(card)
+            drawCardToFeld(1)
+        }); 
+
+        function removeCardFromPack(e) {
+            const id = e.target.getAttribute('id')
+            const card = player.treasureCardContainer.splice(id, 1)
+    
+            ew.updatePackCardsEW(player.treasureCardContainer)
+    
+            return card
+        }
+    
+        function drawCardToFeld(count){
+            if(emptyFelds.length === 1) btnNext.style.display = 'block'
+            if(emptyFelds.length < 1) btnNext.style.display = 'none'
+            
+            for (let i = 0; i < count; i++) {
+                const feld = document.getElementById(`card-feld-${i}`)
+     
+                if(emptyFelds[i]===undefined) return feld.innerHTML = ''
+    
+                if(emptyFelds.length === 0) return 
+    
+                feld.innerHTML = `<div id="${i}" class="card" style="background-image: url('img/${emptyFelds[i].pack}_cards/${emptyFelds[i].pack}_${emptyFelds[i].id}.jpg')"></div>`
+                
+                feld.addEventListener('click', ()=>{
+                    const [card] = emptyFelds.splice(i, 1)
+    
+                    if(card) {
+                        player.treasureCardContainer.push(card)
+    
+                        ew.updatePackCardsEW(player.treasureCardContainer)
+                        drawCardToFeld(2)  
+                    }
+                })
+            }
+        }
+
+        ew.drawEW(`Ви отримали 4 поранення від попадання в капкан.<br>Пропустіть свій наступний хід`)
+        setTimeout(() => {
+            ew.removeLastEW()
+        }, 1200);
+
+
+    }
+
+    ew.removeRawBtnInEW('btn_ew')
+    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, false, false)
+
+    /*Выполните проверку Удачи. 
+    В случае успеха Вас защитили доспехи и Вы получаете 1 ранение. 
+    Если проверка провалена, получите 4 ранения от попадания в капкан и пропустите свой следующий ход. 
+    Чтобы не пропускать следующий ход, Вы можете сбросить один из своих Трофеев.*/
+}
+
 
 const catacomb_cards = [
     /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
@@ -395,7 +493,7 @@ const catacomb_cards = [
     
     /*27*/new Card(10, 'Теневой Убийца', false, false, ()=>{shadowKiller()}),
     /*28*/new Card(11, 'Монстр из Темноты', false, false, ()=>{monsterFromDarkness()}),
-    /*29*/new Card(12, 'Капкан', false, false, ()=>{ew.removeAllEW() /*Выполните проверку Удачи. В случае успеха Вас защитили доспехи и Вы получаете 1 ранение. Если проверка провалена, получите 4 ранения от попадания в капкан и пропустите свой следующий ход. Чтобы не пропускать следующий ход, Вы можете сбросить один из своих Трофеев.*/}),
+    /*29*/new Card(12, 'Капкан', false, false, ()=>{trap()}),
     /*30*/new Card(13, 'Скорпион', false, false, ()=>{ew.removeAllEW() /*Вас ужалил скорпион. Бросьте 1d6 и получите коичество ранений, эквивалентное результату.*/}),
     /*31*/new Card(14, 'Липкая Паутина', false, false, ()=>{ew.removeAllEW() /*Сохраните эту карту. Вы попали в липкую паўтину и пытаетесь освободиться, не потревожив паука. Пока карта у Вас, в начале каждого своего хода выполняйте проверку Удачи. Если проверка Успешна, сбросьте эта карту, продолжив свой ХОД в обычном порядке, иначе получите 1 ранение и закончите свой ход. Вы также можете вырваться из паўтины, потревожив паука и сбросив эту карту, не выполняя проверку Удачи. Тогда Вы получаете 4 ранения от паўчьего укуса.*/}),
     /*32*/new Card(15, 'Бритвокрыл', false, false, ()=>{ew.removeAllEW() /*На Вас внезапно напал бритвокрыл. Бросьте 1d6, добавьте к выпавшему числу 1 и получите количество ранений, эквивалентное результату.*/}),
