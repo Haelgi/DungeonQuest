@@ -115,7 +115,7 @@ class EventWidows{
 
         if (resolve) value += heroes[player.hero].resolve
 
-        if (game.diceRollResultGlobal <= (value)) {
+        if (game.diceRollResultGlobal <= (valueIn)) {
             if (rolResult){
                 this.drawEW('Успіх!', 'green');
                 this.drawBtnInEW('next','Далі', ()=>{
