@@ -375,6 +375,7 @@ function trap(){
         ew.clear()
 
         ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{
+            emptyFelds.forEach(card=>{player.treasureCardContainer.push(card)})
             player.skipMove = 1
             ew.removeAllEW()
         })
@@ -550,22 +551,31 @@ function razorwing(){
 
 function darkElf(){
     ew.removeRawBtnInEW('btn_ew')
-
-    let cardTr
     
-    const result = ()=>{
-        const diceRes = game.diceRollResultGlobal * 100
-        const price = cardTr.
-        if ()
-
-    }
-
-    ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{
+    const falfeFn = ()=>{
+        emptyFelds.forEach(card=>{player.treasureCardContainer.push(card)})
         game.changeHealth(-4)
         ew.drawEW(`Tемний ельф Вас атакує і Ви отримаєте 4 поранення`)
         setTimeout(() => {
             ew.removeAllEW()
         }, 2000);
+    }
+    
+    const result = ()=>{
+        const diceRes = game.diceRollResultGlobal * 100
+        const price = emptyFelds.cost
+
+        if (price > diceRes) return falfeFn()
+             
+        ew.drawEW(`Вам удалость підкупити Tемного ельфа.`)
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 2000);
+    }
+    
+
+    ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{
+        falfeFn()
     })
 
     ew.addEmptyFeldForCard(1)
@@ -587,9 +597,9 @@ function darkElf(){
     
         if (emptyFelds.length >= 1) return
 
-        [cardTr] = removeCardFromPack(e)
+        const [card] = removeCardFromPack(e)
 
-        emptyFelds.push(cardTr)
+        emptyFelds.push(card)
         drawCardToFeld(1)
     }); 
 

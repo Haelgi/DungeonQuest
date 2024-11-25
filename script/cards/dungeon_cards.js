@@ -154,7 +154,10 @@ function goblinExplorer(){
     const container = document.querySelector('.event-section')
     container.style.flexDirection = 'column'
     ew.removeRawBtnInEW('btn_ew')
-    ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{ew.removeAllEW()})
+    ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{
+        emptyFelds.forEach(card=>{player.treasureCardContainer.push(card)})
+        ew.removeAllEW()
+    })
     ew.addEmptyFeldForCard(2)
     ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{
         game.removeHighlightFields(game.nextCoordinates)
@@ -881,7 +884,10 @@ function treasureGuard(){
         const emptyFelds = []
         let damage = countCards
 
-        ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{ew.removeAllEW()})
+        ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{
+            emptyFelds.forEach(card=>{player.treasureCardContainer.push(card)})
+            ew.removeAllEW()
+        })
         ew.addEmptyFeldForCard(countCards)
         ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{
             damage -= emptyFelds.length
