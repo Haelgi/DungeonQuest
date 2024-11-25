@@ -302,7 +302,7 @@ function shadowKiller(){
             }, 1200);
         }
 
-        if (3<= result <=4) {
+        if (3<= result && result <=4) {
             damage = 1
             
             ew.drawEW(`Ви отримали ${damage} поранення`)
@@ -773,6 +773,53 @@ function tentacles(){
     Чтобы выжить и освободиться, Вы должны сбросить 1 свой Трофей на выбор (если есть) и получить 4 ранения.*/
 }
 
+function roguesAttack(){
+
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+
+        let damage
+
+        if (result<=2) {
+            damage = 4
+
+            game.removeRandomCardFromPack(player.treasureCardContainer)
+            game.removeRandomCardFromPack(player.treasureCardContainer)
+
+            ew.drawEW(`Від удару Ви знепритомніли, отримаєте 4 поранення і втратили кілька трофеїв`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 2000);
+        }
+
+        if (3 <= result && result <= 4) {
+            damage = 3
+
+            ew.drawEW(`Ви отримали ${damage} поранення`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 1200);
+        }
+
+        if (5<=result) {
+            damage = 0
+            player.endMoveEventCardContainer.splice(0,1)
+            ew.drawEW(`Ви вбили ворога`)
+            setTimeout(() => {ew.removeAllEW()}, 2000);
+        }
+
+        game.changeHealth(-damage)
+    }
+
+    ew.removeRawBtnInEW('btn_ew')
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    /*Вы попали в засаду разбойника. 
+    Бросьте 1d6: 
+    1-2 - От удара Вы потеряли сознание, получите 4 ранения, случайным образом выберете 2 своих трофея (если нет 2, то сколько осталось) и сбросьте их; 
+    3-4 - Вас ранили, но Вы сумели отогнать грабителя; получите 3 ранения. 
+    5-6 - Вы убили врага и остались целы.*/
+}
+
 const catacomb_cards = [
     /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     /*1*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
@@ -815,7 +862,7 @@ const catacomb_cards = [
     /*33*/new Card(16, 'Темный Эльф', false, false, ()=>{darkElf()}),
     /*34*/new Card(17, 'Удар из Тени', false, false, ()=>{strikeFromShadow()}),
     /*35*/new Card(18, 'Щупальца', false, false, ()=>{tentacles()}),
-    /*36*/new Card(19, 'Нападение Разбойника', false, false, ()=>{ew.removeAllEW() /*Вы попали в засаду разбойника. Бросьте 1d6: 1-2 - От удара Вы потеряли сознание, получите 4 ранения, случайным образом выберете 2 своих трофея (если нет 2, то сколько осталось) и сбросьте их; 3-4 - Вас ранили, но Вы сумели отогнать грабителя; получите 3 ранения. 5-6 - Вы убили врага и остались целы.*/}),
+    /*36*/new Card(19, 'Нападение Разбойника', false, false, ()=>{roguesAttack()}),
     
     /*37*/new Card(20, 'Ужасный Паук', false, false, ()=>{ew.removeAllEW() /*На Вас напал ужасный паўқ. Бросьте 1d6: 1-3 - Вы получаете 2 ранения и продолжаете бой; 4-6 - Вы получаете 2 ранения и убиваете паўка. Продолжайте бросать 1d6, пока, в течении Вашего хода, Вы или паўқ не погибнете. Сбросьте эту карту если паук убит.*/}),
     /*38*/new Card(21, 'Вампир', false, false, ()=>{ew.removeAllEW() /*Выполните проверку Ловкости или Защиты (в зависимости от того, что меньше). В случае провала, получите 1 ранение и сохраните эту карту. Пока эта карта у Вас, в начале каждого своего хода получите 1 ранение и продолжайте ход в обычном порядке. Сбросьте эту карту, если Вы покинули Катакомбы.*/}),

@@ -362,7 +362,7 @@ function magicRoom(){
         let angl = 0
 
         if(game.diceRollResultGlobal<=2) angl = 90
-        if(3<=game.diceRollResultGlobal<=4) angl = 270
+        if(3<=game.diceRollResultGlobal && game.diceRollResultGlobal<=4) angl = 270
         if(5<=game.diceRollResultGlobal) angl = 180
         
         game.rotateRoomTile(angl)
@@ -626,7 +626,7 @@ function armyOfGhosts(){
             }, 1200);
         }
 
-        if (3<= result <=4) {
+        if (3<= result && result <=4) {
             damage = 3
             
             ew.drawEW(`Ви отримали ${damage} поранення`)
@@ -792,7 +792,7 @@ function evilGoblin(){
             }, 1200);
         }
 
-        if (3<= result <=4) {
+        if (3<= result && result <=4) {
             damage = 3
             
             ew.drawEW(`Ви вбили гобліна але отримали ${damage} поранення`)
@@ -1106,7 +1106,7 @@ function livingArmor(){
             }, 1200);
         }
 
-        if (3<= result <=4) {
+        if (3<= result && result <=4) {
             damage = 2
             
             ew.drawEW(`Ви отримали ${damage} поранення`)
