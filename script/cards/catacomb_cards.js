@@ -445,7 +445,6 @@ function trap(){
             ew.removeLastEW()
         }, 1200);
 
-
     }
 
     ew.removeRawBtnInEW('btn_ew')
@@ -461,7 +460,7 @@ function scorpion(){
     ew.removeRawBtnInEW('btn_ew')
 
     const result = ()=>{
-        
+
         const damage = game.diceRollResultGlobal
 
         game.changeHealth(-damage)
@@ -475,6 +474,58 @@ function scorpion(){
     ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
     /*Вас ужалил скорпион. 
     Бросьте 1d6 и получите коичество ранений, эквивалентное результату.*/
+}
+
+function stickyWeb(){
+
+    if(!player.eventCardContainer.some((card) => (card.id === 14 && card.pack === 'catacomb'))) {
+        player.eventCardContainer.push(catacomb_cards[31])
+        ew.removeAllEW()
+        return 
+    }
+
+    const trueFn = ()=> {
+        ew.drawEW(`Ви змогли втекти`)
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 1200);
+    }
+
+    const falseFn = ()=> {
+        game.changeHealth(-1)
+        ew.drawEW(`Ви застрягли, та отримали 1 поранення`)
+        setTimeout(() => {
+            ew.removeAllEW()
+            game.endMove()
+        }, 1200);
+
+    }
+
+    function luck(){
+        ew.clear()
+        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, false, false)
+    }
+
+    function wake(){
+        game.changeHealth(-4)
+        ew.drawEW(`Ви змогли втекти, але отримали 4 поранення`)
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 1200);
+    }
+
+
+    ew.removeRawBtnInEW('btn_ew')
+
+    ew.drawBtnInEW('btn_luk','Перевірити Удачу',luck)
+    ew.drawBtnInEW('btn_wake','Розбудити Павука',wake)
+
+    /*Сохраните эту карту. 
+    Вы попали в липкую паўтину и пытаетесь освободиться, не потревожив паука. 
+    Пока карта у Вас, в начале каждого своего хода выполняйте проверку Удачи. 
+    Если проверка Успешна, сбросьте эта карту, продолжив свой ХОД в обычном порядке, иначе получите 1 ранение и закончите свой ход. 
+    Вы также можете вырваться из паўтины, потревожив паука и сбросив эту карту, не выполняя проверку Удачи. 
+    Тогда Вы получаете 4 ранения от паўчьего укуса.*/
 }
 
 
@@ -515,7 +566,7 @@ const catacomb_cards = [
     /*28*/new Card(11, 'Монстр из Темноты', false, false, ()=>{monsterFromDarkness()}),
     /*29*/new Card(12, 'Капкан', false, false, ()=>{trap()}),
     /*30*/new Card(13, 'Скорпион', false, false, ()=>{scorpion()}),
-    /*31*/new Card(14, 'Липкая Паутина', false, false, ()=>{ew.removeAllEW() /*Сохраните эту карту. Вы попали в липкую паўтину и пытаетесь освободиться, не потревожив паука. Пока карта у Вас, в начале каждого своего хода выполняйте проверку Удачи. Если проверка Успешна, сбросьте эта карту, продолжив свой ХОД в обычном порядке, иначе получите 1 ранение и закончите свой ход. Вы также можете вырваться из паўтины, потревожив паука и сбросив эту карту, не выполняя проверку Удачи. Тогда Вы получаете 4 ранения от паўчьего укуса.*/}),
+    /*31*/new Card(14, 'Липкая Паутина', false, false, ()=>{stickyWeb()}),
     /*32*/new Card(15, 'Бритвокрыл', false, false, ()=>{ew.removeAllEW() /*На Вас внезапно напал бритвокрыл. Бросьте 1d6, добавьте к выпавшему числу 1 и получите количество ранений, эквивалентное результату.*/}),
     /*33*/new Card(16, 'Темный Эльф', false, false, ()=>{ew.removeAllEW() /*Вы можете сбросить любой из Ваших Трофеев в качестве взятки и бросить 1d6, умножив результат броска на 100. Если полученное число меньше стоимости сброшенного Трофея, Вы можете покинуть Катакомбы. Иначе темный эльф Вас атакует и Вы получите 4 ранения.*/}),
     /*34*/new Card(17, 'Удар из Тени', false, false, ()=>{ew.removeAllEW() /*Вас атаковал поджидавший в тени убийца. Выполните проверку Удачи. В случае успеха, Вы Убиваете врага и заканчиваете свой ход. В противном случае, отнимите от 10 количество Вашей Защиты и получите число ранений, эквивалентное результату.*/}),
