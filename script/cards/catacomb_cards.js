@@ -548,6 +548,93 @@ function razorwing(){
     Бросьте 1d6, добавьте к выпавшему числу 1 и получите количество ранений, эквивалентное результату.*/
 }
 
+function darkElf(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    let cardTr
+    
+    const result = ()=>{
+        const diceRes = game.diceRollResultGlobal * 100
+        const price = cardTr.
+        if ()
+
+    }
+
+    ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{
+        game.changeHealth(-4)
+        ew.drawEW(`Tемний ельф Вас атакує і Ви отримаєте 4 поранення`)
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 2000);
+    })
+
+    ew.addEmptyFeldForCard(1)
+
+    ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{
+        ew.clear()
+        ew.removePackCardsInEW()
+
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    })
+    
+    ew.addPackCards(player.treasureCardContainer)
+
+    const emptyFelds = []
+    const btnNext = document.getElementById('next')
+    btnNext.style.display = 'none'
+
+    addScrolCardsEffect('.event-deck-container', (e)=> {
+    
+        if (emptyFelds.length >= 1) return
+
+        [cardTr] = removeCardFromPack(e)
+
+        emptyFelds.push(cardTr)
+        drawCardToFeld(1)
+    }); 
+
+    function removeCardFromPack(e) {
+        const id = e.target.getAttribute('id')
+        const card = player.treasureCardContainer.splice(id, 1)
+
+        ew.updatePackCardsEW(player.treasureCardContainer)
+
+        return card
+    }
+
+    function drawCardToFeld(count){
+        if(emptyFelds.length === 1) btnNext.style.display = 'block'
+        if(emptyFelds.length < 1) btnNext.style.display = 'none'
+        
+        for (let i = 0; i < count; i++) {
+            const feld = document.getElementById(`card-feld-${i}`)
+ 
+            if(emptyFelds[i]===undefined) return feld.innerHTML = ''
+
+            if(emptyFelds.length === 0) return 
+
+            feld.innerHTML = `<div id="${i}" class="card" style="background-image: url('img/${emptyFelds[i].pack}_cards/${emptyFelds[i].pack}_${emptyFelds[i].id}.jpg')"></div>`
+            
+            feld.addEventListener('click', ()=>{
+                const [card] = emptyFelds.splice(i, 1)
+
+                if(card) {
+                    player.treasureCardContainer.push(card)
+
+                    ew.updatePackCardsEW(player.treasureCardContainer)
+                    drawCardToFeld(2)  
+                }
+            })
+        }
+    }
+
+    /*Вы можете сбросить любой из Ваших Трофеев в качестве взятки 
+    и бросить 1d6, умножив результат броска на 100. 
+    Если полученное число меньше стоимости сброшенного Трофея, 
+    Вы можете покинуть Катакомбы. 
+    Иначе темный эльф Вас атакует и Вы получите 4 ранения.*/
+}
+
 const catacomb_cards = [
     /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     /*1*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
@@ -587,7 +674,7 @@ const catacomb_cards = [
     /*30*/new Card(13, 'Скорпион', false, false, ()=>{scorpion()}),
     /*31*/new Card(14, 'Липкая Паутина', false, false, ()=>{stickyWeb()}),
     /*32*/new Card(15, 'Бритвокрыл', false, false, ()=>{razorwing()}),
-    /*33*/new Card(16, 'Темный Эльф', false, false, ()=>{ew.removeAllEW() /*Вы можете сбросить любой из Ваших Трофеев в качестве взятки и бросить 1d6, умножив результат броска на 100. Если полученное число меньше стоимости сброшенного Трофея, Вы можете покинуть Катакомбы. Иначе темный эльф Вас атакует и Вы получите 4 ранения.*/}),
+    /*33*/new Card(16, 'Темный Эльф', false, false, ()=>{darkElf()}),
     /*34*/new Card(17, 'Удар из Тени', false, false, ()=>{ew.removeAllEW() /*Вас атаковал поджидавший в тени убийца. Выполните проверку Удачи. В случае успеха, Вы Убиваете врага и заканчиваете свой ход. В противном случае, отнимите от 10 количество Вашей Защиты и получите число ранений, эквивалентное результату.*/}),
     /*35*/new Card(18, 'Щупальца', false, false, ()=>{ew.removeAllEW() /*Вас атаковали гигантские щупальца. Выполните проверку Удачи. В случае успеха Вы смогли Увернуться и остаться невредимым; Ваш ход заканчивается. В противном случае щупальца хватают Вас. Чтобы выжить и освободиться, Вы должны сбросить 1 свой Трофей на выбор (если есть) и получить 4 ранения.*/}),
     /*36*/new Card(19, 'Нападение Разбойника', false, false, ()=>{ew.removeAllEW() /*Вы попали в засаду разбойника. Бросьте 1d6: 1-2 - От удара Вы потеряли сознание, получите 4 ранения, случайным образом выберете 2 своих трофея (если нет 2, то сколько осталось) и сбросьте их; 3-4 - Вас ранили, но Вы сумели отогнать грабителя; получите 3 ранения. 5-6 - Вы убили врага и остались целы.*/}),
@@ -601,10 +688,10 @@ const catacomb_cards = [
     /*43*/new Card(26, 'Нага', false, false, ()=>{ew.removeAllEW() /*Проход блокирован гигантским Нагом. Рассчитайте точку выхода из Катакомб и поместите Маркер Путешествия в эту область, развернув его на 180°. Сбросьте Нагу и все собранные Карты Катакомб (кроме Трофеев). В свой следующий ход тяните Карту Катакомб в обычном порядке.*/}),
     /*44*/new Card(27, 'Факел Гаснет', false, false, ()=>{ew.removeAllEW() /*Сохраните эту карту. Факел погас. В начале каждого своего последующего хода выполните проверку Удачи, чтобы снова зажечь его. Если проверка прошла успешно, то сбросьте эту карту и продолжайте ход в обычном порядке. Если Вы провалили проверку, то Ваш ход тут же заканчивается.*/}),
     /*45*/new Card(28, 'Алхимик', false, false, ()=>{ew.removeAllEW() /*Вы набрели на лабораторию Алхимика. С ним можно заключить одну из сделок: 1) Обменять 4 очка жизни на сокровище (получите 4 ранения и тяните Карту Сокровища). 2) Обменять одно из своих сокровищ на очки здоровья. (Разделите нацело стоимость выбранного сокровища на 400, округлив в меньшую сторону, и исцелите количество ранений, эквивалентное результату. Сокровище сбрасывается и замешивается в Колоду Сокровищ).*/}),
-    /*46*/new Card(29, 'Гигантский Алмаз', false, false, ()=>{ew.removeAllEW() /*"трофей" +4000 золотых*/}),
+    /*46*/new Card(29, 'Гигантский Алмаз', 'treasure', 4000, ()=>{ew.removeAllEW() /*"трофей" +4000 золотых*/}),
     
-    /*47*/new Card(30, 'Шкатылка с Золотом', false, false, ()=>{ew.removeAllEW() /* "трофей" Когда Вы покинули Подземелье Дракона, бросьте 1d6. Вы находите в шкатулке количество золота, эквивалентное результату броска, умноженному на 100.*/}),
-    /*48*/new Card(31, 'Молот Мощи', false, false, ()=>{ew.removeAllEW() /* "трофей" Пока эта карта у Вас, в бою с големом, каждая Ваша успешная атака наносит 2 ранения вместо 1.*/}),
+    /*47*/new Card(30, 'Шкатылка с Золотом', 'treasure', false, ()=>{ew.removeAllEW() /* "трофей" Когда Вы покинули Подземелье Дракона, бросьте 1d6. Вы находите в шкатулке количество золота, эквивалентное результату броска, умноженному на 100.*/}),
+    /*48*/new Card(31, 'Молот Мощи', 'treasure', false, ()=>{ew.removeAllEW() /* "трофей" Пока эта карта у Вас, в бою с големом, каждая Ваша успешная атака наносит 2 ранения вместо 1.*/}),
     /*49*/new Card(32, 'Перемешивание Карт', false, false, ()=>{ew.removeAllEW() /*Сбросьте эту карту. Затем перемешайте сброшенные и неиспользованные Карты Катакомб. Вытяните еще одну карту из этой колоды и продолжайте свой ход в обычном порядке.*/}),
 ]
 

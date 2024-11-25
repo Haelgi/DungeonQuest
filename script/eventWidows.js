@@ -349,6 +349,11 @@ class EventWidows{
 
         element.insertAdjacentHTML('beforeend', `<div class="card-deck-container event-deck-container">${cardDeckContainer}</div>`);
     }
+    
+    removePackCardsInEW(){
+        document.querySelectorAll('.event-deck-container')?.forEach(item => {item.remove()});
+    }
+
 
     updatePackCardsEW(packCards){
         const element = document.querySelector('.event-main');
