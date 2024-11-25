@@ -632,7 +632,7 @@ function darkElf(){
                     player.treasureCardContainer.push(card)
 
                     ew.updatePackCardsEW(player.treasureCardContainer)
-                    drawCardToFeld(2)  
+                    drawCardToFeld(1)  
                 }
             })
         }
@@ -663,7 +663,6 @@ function strikeFromShadow(){
         setTimeout(() => {
             ew.removeAllEW()
         }, 1200);
-
     }
 
     ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
@@ -672,6 +671,106 @@ function strikeFromShadow(){
     Выполните проверку Удачи. 
     В случае успеха, Вы Убиваете врага и заканчиваете свой ход. 
     В противном случае, отнимите от 10 количество Вашей Защиты и получите число ранений, эквивалентное результату.*/
+}
+
+function tentacles(){
+
+    ew.removeRawBtnInEW('btn_ew')
+
+    const trueFn = ()=> {
+        ew.drawEW(`Ви змогли увернутися і залишитися неушкодженим`)
+        setTimeout(() => {
+            ew.removeAllEW()
+            game.endMove()
+        }, 1200);
+    }
+
+    const falfeFn = ()=>{
+        game.changeHealth(-4)
+        ew.drawEW(`Ви отримаєте 4 поранення`)
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 2000);
+    }
+
+    const falseFn = ()=> {
+        ew.drawEW(`Щупальця хапають Вас`)
+        setTimeout(() => {
+            ew.removeLastEW()
+            ew.clear()
+
+            if (player.treasureCardContainer.length < 1){
+                falfeFn()
+                return
+            }
+            
+            ew.addEmptyFeldForCard(1)
+        
+            ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{
+                falfeFn()
+            })
+            
+            ew.addPackCards(player.treasureCardContainer)
+        
+            const emptyFelds = []
+            const btnNext = document.getElementById('next')
+            btnNext.style.display = 'none'
+        
+            addScrolCardsEffect('.event-deck-container', (e)=> {
+            
+                if (emptyFelds.length >= 1) return
+        
+                const [card] = removeCardFromPack(e)
+        
+                emptyFelds.push(card)
+                drawCardToFeld(1)
+            }); 
+        
+            function removeCardFromPack(e) {
+                const id = e.target.getAttribute('id')
+                const card = player.treasureCardContainer.splice(id, 1)
+        
+                ew.updatePackCardsEW(player.treasureCardContainer)
+        
+                return card
+            }
+        
+            function drawCardToFeld(count){
+                if(emptyFelds.length === 1) btnNext.style.display = 'block'
+                if(emptyFelds.length < 1) btnNext.style.display = 'none'
+                
+                for (let i = 0; i < count; i++) {
+                    const feld = document.getElementById(`card-feld-${i}`)
+        
+                    if(emptyFelds[i]===undefined) return feld.innerHTML = ''
+        
+                    if(emptyFelds.length === 0) return 
+        
+                    feld.innerHTML = `<div id="${i}" class="card" style="background-image: url('img/${emptyFelds[i].pack}_cards/${emptyFelds[i].pack}_${emptyFelds[i].id}.jpg')"></div>`
+                    
+                    feld.addEventListener('click', ()=>{
+                        const [card] = emptyFelds.splice(i, 1)
+        
+                        if(card) {
+                            player.treasureCardContainer.push(card)
+        
+                            ew.updatePackCardsEW(player.treasureCardContainer)
+                            drawCardToFeld(1)  
+                        }
+                    })
+                }
+            }
+        }, 2000);
+        
+    }
+
+    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+
+    /*Вас атаковали гигантские щупальца. 
+    Выполните проверку Удачи. 
+    В случае успеха Вы смогли Увернуться и остаться невредимым; Ваш ход заканчивается. 
+    В противном случае щупальца хватают Вас. 
+    Чтобы выжить и освободиться, Вы должны сбросить 1 свой Трофей на выбор (если есть) и получить 4 ранения.*/
 }
 
 const catacomb_cards = [
@@ -715,7 +814,7 @@ const catacomb_cards = [
     /*32*/new Card(15, 'Бритвокрыл', false, false, ()=>{razorwing()}),
     /*33*/new Card(16, 'Темный Эльф', false, false, ()=>{darkElf()}),
     /*34*/new Card(17, 'Удар из Тени', false, false, ()=>{strikeFromShadow()}),
-    /*35*/new Card(18, 'Щупальца', false, false, ()=>{ew.removeAllEW() /*Вас атаковали гигантские щупальца. Выполните проверку Удачи. В случае успеха Вы смогли Увернуться и остаться невредимым; Ваш ход заканчивается. В противном случае щупальца хватают Вас. Чтобы выжить и освободиться, Вы должны сбросить 1 свой Трофей на выбор (если есть) и получить 4 ранения.*/}),
+    /*35*/new Card(18, 'Щупальца', false, false, ()=>{tentacles()}),
     /*36*/new Card(19, 'Нападение Разбойника', false, false, ()=>{ew.removeAllEW() /*Вы попали в засаду разбойника. Бросьте 1d6: 1-2 - От удара Вы потеряли сознание, получите 4 ранения, случайным образом выберете 2 своих трофея (если нет 2, то сколько осталось) и сбросьте их; 3-4 - Вас ранили, но Вы сумели отогнать грабителя; получите 3 ранения. 5-6 - Вы убили врага и остались целы.*/}),
     
     /*37*/new Card(20, 'Ужасный Паук', false, false, ()=>{ew.removeAllEW() /*На Вас напал ужасный паўқ. Бросьте 1d6: 1-3 - Вы получаете 2 ранения и продолжаете бой; 4-6 - Вы получаете 2 ранения и убиваете паўка. Продолжайте бросать 1d6, пока, в течении Вашего хода, Вы или паўқ не погибнете. Сбросьте эту карту если паук убит.*/}),
