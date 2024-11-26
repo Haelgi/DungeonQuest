@@ -1245,7 +1245,8 @@ function boxOfGold(){
 }
 
 function hammerOfPower(){
-
+    player.treasureCardContainer.push(catacomb_cards[48])
+    ew.removeAllEW()
     /* "трофей" Пока эта карта у Вас, в бою с големом, каждая Ваша успешная атака наносит 2 ранения вместо 1.*/
 }
 
@@ -1323,4 +1324,4 @@ const catacomb_cards = [
 
 export {catacomb_cards}
 
-// TODO закодировать функции карт катакомб
+// TODO під час бою з големами перевіряти чи є карта Молот Мощи catacomb_cards[48]
