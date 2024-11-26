@@ -1244,6 +1244,23 @@ function boxOfGold(){
     Вы находите в шкатулке количество золота, эквивалентное результату броска, умноженному на 100.*/
 }
 
+function hammerOfPower(){
+
+    /* "трофей" Пока эта карта у Вас, в бою с големом, каждая Ваша успешная атака наносит 2 ранения вместо 1.*/
+}
+
+function cardShuffling(){
+    game.refreshCatacombCards()
+    ew.removeAllEW()
+    const card = game.getRundomElement(game.catacomb_cards, catacomb_cards)
+
+    ew.drawCardEW(card);
+
+    /*Сбросьте эту карту. 
+    Затем перемешайте сброшенные и неиспользованные . 
+    Вытяните еще одну карту из этой колоды и продолжайте свой ход в обычном порядке.*/
+}
+
 const catacomb_cards = [
     /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     /*1*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
@@ -1300,8 +1317,8 @@ const catacomb_cards = [
     /*46*/new Card(29, 'Гигантский Алмаз', 'treasure', 4000, ()=>{giantDiamond()}),
     
     /*47*/new Card(30, 'Шкатулка с Золотом', 'treasure', false, ()=>{boxOfGold()}),
-    /*48*/new Card(31, 'Молот Мощи', 'treasure', false, ()=>{ew.removeAllEW() /* "трофей" Пока эта карта у Вас, в бою с големом, каждая Ваша успешная атака наносит 2 ранения вместо 1.*/}),
-    /*49*/new Card(32, 'Перемешивание Карт', false, false, ()=>{ew.removeAllEW() /*Сбросьте эту карту. Затем перемешайте сброшенные и неиспользованные Карты Катакомб. Вытяните еще одну карту из этой колоды и продолжайте свой ход в обычном порядке.*/}),
+    /*48*/new Card(31, 'Молот Мощи', 'treasure', false, ()=>{hammerOfPower()}),
+    /*49*/new Card(32, 'Перемешивание Карт', false, false, ()=>{cardShuffling()}),
 ]
 
 export {catacomb_cards}
