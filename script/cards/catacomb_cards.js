@@ -5,6 +5,7 @@ import  {player}  from '../player.js';
 import  {heroes}  from '../cards/heroes.js';
 import {trap_cards} from './trap_cards.js';
 import  {monster_cards}  from './monster_cards.js';
+import  {treasure_cards}  from './treasure_cards.js';
 
 class Card {
     constructor(id, name, type, cost, effect) {
@@ -1110,6 +1111,110 @@ function torchGoesOut(){
     Если Вы провалили проверку, то Ваш ход тут же заканчивается.*/
 }
 
+function alchemist(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    const hpForTr = ()=>{
+        const cards = [game.getRundomElement(game.treasure_cards, treasure_cards)]
+            game.distributionCards(cards)
+
+        ew.drawEW(`Ви отримали 4 поранення`)
+        game.changeHealth(-4)
+        setTimeout(() => {
+            ew.removeAllEW()
+            ew.drawEW('Карти мерців')
+            ew.addPackCards(cards)
+            addScrolCardsEffect('.event-deck-container', false)
+            ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+        }, 2000);
+    }
+
+    const trForHp = ()=>{
+        ew.clear()
+
+        ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{
+            emptyFelds.forEach(card=>{player.treasureCardContainer.push(card)})
+            ew.removeAllEW()
+        })
+
+        ew.addEmptyFeldForCard(1)
+
+        ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{
+            const hp = Math.floor(emptyFelds[0].cost / 400)
+
+            game.changeHealth(hp)
+
+            ew.drawEW(`Ви відновили ${hp} здоров'я`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 2000);
+        })
+
+        ew.addPackCards(player.treasureCardContainer)
+    
+        const emptyFelds = []
+        const btnNext = document.getElementById('next')
+        btnNext.style.display = 'none'
+
+        addScrolCardsEffect('.event-deck-container', (e)=> {
+        
+            if (emptyFelds.length >= 1) return
+    
+            const [card] = removeCardFromPack(e)
+    
+            emptyFelds.push(card)
+            drawCardToFeld(1)
+        }); 
+
+        function removeCardFromPack(e) {
+            const id = e.target.getAttribute('id')
+            const card = player.treasureCardContainer.splice(id, 1)
+    
+            ew.updatePackCardsEW(player.treasureCardContainer)
+    
+            return card
+        }
+    
+        function drawCardToFeld(count){
+            if(emptyFelds.length === 1 ) btnNext.style.display = 'block'
+            if(emptyFelds.length < 1 ) btnNext.style.display = 'none'
+            if(!emptyFelds[0]?.cost ) btnNext.style.display = 'none'
+            
+            for (let i = 0; i < count; i++) {
+                const feld = document.getElementById(`card-feld-${i}`)
+     
+                if(emptyFelds[i]===undefined) return feld.innerHTML = ''
+    
+                if(emptyFelds.length === 0) return 
+    
+                feld.innerHTML = `<div id="${i}" class="card" style="background-image: url('img/${emptyFelds[i].pack}_cards/${emptyFelds[i].pack}_${emptyFelds[i].id}.jpg')"></div>`
+                
+                feld.addEventListener('click', ()=>{
+                    const [card] = emptyFelds.splice(i, 1)
+    
+                    if(card) {
+                        player.treasureCardContainer.push(card)
+    
+                        ew.updatePackCardsEW(player.treasureCardContainer)
+                        drawCardToFeld(1)  
+                    }
+                })
+            }
+        }
+    }
+
+    ew.drawBtnInEW('btn_hpForTr',`Життя за скарби`, hpForTr)
+    ew.drawBtnInEW('btn_trForHp',`Скарби за життя`, trForHp)
+    /*Вы набрели на лабораторию Алхимика. 
+    С ним можно заключить одну из сделок: 
+    1) Обменять 4 очка жизни на сокровище (получите 4 ранения и тяните Карту Сокровища). 
+    2) Обменять одно из своих сокровищ на очки здоровья. 
+    (Разделите нацело стоимость выбранного сокровища на 400, 
+    округлив в меньшую сторону, 
+    и исцелите количество ранений, эквивалентное результату. 
+    Сокровище сбрасывается и замешивается в Колоду Сокровищ).*/
+}
+
 const catacomb_cards = [
     /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     /*1*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
@@ -1162,7 +1267,7 @@ const catacomb_cards = [
     /*42*/new Card(25, 'Яд Паука', false, false, ()=>{spiderPoison()}),
     /*43*/new Card(26, 'Нага', false, false, ()=>{naga()}),
     /*44*/new Card(27, 'Факел Гаснет', false, false, ()=>{torchGoesOut()}),
-    /*45*/new Card(28, 'Алхимик', false, false, ()=>{ew.removeAllEW() /*Вы набрели на лабораторию Алхимика. С ним можно заключить одну из сделок: 1) Обменять 4 очка жизни на сокровище (получите 4 ранения и тяните Карту Сокровища). 2) Обменять одно из своих сокровищ на очки здоровья. (Разделите нацело стоимость выбранного сокровища на 400, округлив в меньшую сторону, и исцелите количество ранений, эквивалентное результату. Сокровище сбрасывается и замешивается в Колоду Сокровищ).*/}),
+    /*45*/new Card(28, 'Алхимик', false, false, ()=>{alchemist()}),
     /*46*/new Card(29, 'Гигантский Алмаз', 'treasure', 4000, ()=>{ew.removeAllEW() /*"трофей" +4000 золотых*/}),
     
     /*47*/new Card(30, 'Шкатылка с Золотом', 'treasure', false, ()=>{ew.removeAllEW() /* "трофей" Когда Вы покинули Подземелье Дракона, бросьте 1d6. Вы находите в шкатулке количество золота, эквивалентное результату броска, умноженному на 100.*/}),

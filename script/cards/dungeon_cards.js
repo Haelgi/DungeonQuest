@@ -25,16 +25,9 @@ class Card {
 
 };
 
-function distributionCards(arr){
-    arr.forEach(card => {
-        if (card.type === 'treasure') player.treasureCardContainer.push(card)
-        if (card.type === 'event') player.eventCardContainer.push(card)
-    });
-}
-
 function attack(){
     const card = game.getRundomElement(game.monster_cards, monster_cards)
-    distributionCards([card])
+    game.distributionCards([card])
 
     ew.removeAllEW();
     ew.drawCardEW(card)
@@ -43,7 +36,7 @@ function attack(){
 
 function trap(){
     const card = game.getRundomElement(game.trap_cards, trap_cards)
-    distributionCards([card])
+    game.distributionCards([card])
 
     ew.removeAllEW(); 
     ew.drawCardEW(card)
@@ -52,7 +45,7 @@ function trap(){
 
 function deadAdventurer(){
     const card = game.getRundomElement(game.deadman_cards, deadman_cards)
-    distributionCards([card])
+    game.distributionCards([card])
 
     ew.removeAllEW(); 
     ew.drawCardEW(card)
@@ -61,7 +54,7 @@ function deadAdventurer(){
 
 function crypt(){
     const card = game.getRundomElement(game.сrypt_cards, сrypt_cards)
-    distributionCards([card])
+    game.distributionCards([card])
 
     ew.removeAllEW(); 
     ew.drawCardEW(card)
@@ -85,7 +78,7 @@ function burial(){
                    game.getRundomElement(game.deadman_cards, deadman_cards),
                    game.getRundomElement(game.deadman_cards, deadman_cards)]
 
-    distributionCards(cards)
+                   game.distributionCards(cards)
 
     ew.drawEW('Карти мерців')
     ew.addPackCards(cards)
@@ -132,7 +125,7 @@ function undergroundNecropolis(){
                     game.getRundomElement(game.сrypt_cards, сrypt_cards),
                     game.getRundomElement(game.сrypt_cards, сrypt_cards)]
     
-    distributionCards(cards)
+                    game.distributionCards(cards)
 
     ew.drawEW('Події підземелля')
     ew.addPackCards(cards)
@@ -240,7 +233,7 @@ function ambushRoom(){
             game.getRundomElement(game.monster_cards, monster_cards)]
             game.gameFields[player.position[1]][player.position[0]]['m'] = cards
 
-        distributionCards(cards)
+            game.distributionCards(cards)
 
         ew.drawEW('Події підземелля')
         ew.addPackCards(cards)
@@ -266,7 +259,7 @@ function surroundedByMonsters(){
 
         game.gameFields[player.position[1]][player.position[0]]['m'] = cards
 
-        distributionCards(cards)
+        game.distributionCards(cards)
 
         ew.drawCardEW(cards)
         ew.removeTitile()
@@ -283,7 +276,7 @@ function surroundedByMonsters(){
 
         game.gameFields[player.position[1]][player.position[0]]['m'] = cards
 
-        distributionCards(cards)
+        game.distributionCards(cards)
 
         ew.drawEW('Події підземелля')
         ew.addPackCards(cards)

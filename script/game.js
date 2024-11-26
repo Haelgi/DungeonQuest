@@ -148,7 +148,7 @@ class Game {
     playCatacombEvent(){
         if (player.holeInCeiling) return
         const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
-        ew.drawCardEW(catacomb_cards[44]);
+        ew.drawCardEW(catacomb_cards[45]);
         // this.drawCardEW(card);
     }
     
@@ -1082,6 +1082,13 @@ class Game {
         if (maxValue < 1) return
         const randomId = Math.floor(Math.random() * maxValue)
         pack.splice(randomId, 1)
+    }
+
+    distributionCards(arr){
+        arr.forEach(card => {
+            if (card.type === 'treasure') player.treasureCardContainer.push(card)
+            if (card.type === 'event') player.eventCardContainer.push(card)
+        });
     }
 }
 
