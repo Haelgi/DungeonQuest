@@ -129,7 +129,7 @@ function enchantedRoots(){
             ew.drawEW('Ви змогли виплутатись')
             setTimeout(() => {
                 ew.removeAllEW()
-            }, 1200);
+            }, 2000);
             return
         }
 
@@ -139,7 +139,7 @@ function enchantedRoots(){
         setTimeout(() => {
             ew.removeLastEW()
             strength()
-        }, 1200);
+        }, 2000);
     }
 
     const falseFn = ()=> {
@@ -152,7 +152,7 @@ function enchantedRoots(){
         setTimeout(() => {
             ew.removeLastEW()
             strength()
-        }, 1200);
+        }, 2000);
     }
 
     function strength(){
@@ -176,7 +176,7 @@ function hailOfArrows(){
         setTimeout(() => {
             ew.removeAllEW()
             game.endMove()
-        }, 1200);
+        }, 2000);
     }
 
     const falseFn = ()=> {
@@ -218,9 +218,9 @@ function giantRat(){
             ew.removeLastEW()
             if(ratHealth < 1) {
                 ew.drawEW(`Ви вбили Гігантського Щура`)
-                setTimeout(() => {ew.removeAllEW()}, 1200);
+                setTimeout(() => {ew.removeAllEW()}, 2000);
             }
-        }, 1200);
+        }, 2000);
     }
 
     const falseFn = ()=> {
@@ -233,7 +233,7 @@ function giantRat(){
                 ew.removeAllEW()
                 game.endGame()
             }
-        }, 1200);
+        }, 2000);
     }
 
     function defense(){
@@ -261,7 +261,7 @@ function risingDead(){
         ew.drawEW('Ви змогли втекти')
         setTimeout(() => {
             ew.removeAllEW()
-        }, 1200);
+        }, 2000);
     }
 
     const falseFn = ()=> {
@@ -269,7 +269,7 @@ function risingDead(){
         ew.drawEW(`Ви отримали ${damage} поранення`)
         setTimeout(() => {
             ew.removeAllEW()
-        }, 1200);
+        }, 2000);
     }
 
     ew.removeRawBtnInEW('btn_ew')
@@ -299,7 +299,7 @@ function shadowKiller(){
             ew.drawEW(`Ви отримали ${damage} поранення`)
             setTimeout(() => {
                 ew.removeAllEW()
-            }, 1200);
+            }, 2000);
         }
 
         if (3<= result && result <=4) {
@@ -308,7 +308,7 @@ function shadowKiller(){
             ew.drawEW(`Ви отримали ${damage} поранення`)
             setTimeout(() => {
                 ew.removeAllEW()
-            }, 1200);
+            }, 2000);
         }
 
         if (5<=result) {
@@ -339,7 +339,7 @@ function monsterFromDarkness(){
         ew.drawEW(`Ви перемогли монстра, але отримали 1 поранення`)
         setTimeout(() => {
             ew.removeAllEW()
-        }, 1200);
+        }, 2000);
     }
 
     const falseFn = ()=> {
@@ -347,7 +347,7 @@ function monsterFromDarkness(){
         ew.drawEW(`Ви перемогли монстра, але отримали 6 пораненнь`)
         setTimeout(() => {
             ew.removeAllEW()
-        }, 1200);
+        }, 2000);
     }
 
     ew.removeRawBtnInEW('btn_ew')
@@ -365,7 +365,7 @@ function trap(){
         ew.drawEW(`Вас захистили обладунки та Ви отримуєте 1 поранення`)
         setTimeout(() => {
             ew.removeAllEW()
-        }, 1200);
+        }, 2000);
     }
 
     const falseFn = ()=> {
@@ -387,7 +387,7 @@ function trap(){
             ew.drawEW(`Ви не пропускаете свій наступний хід`)
             setTimeout(() => {
                 ew.removeAllEW()
-            }, 1200);
+            }, 2000);
         })
         
         ew.addPackCards(player.treasureCardContainer)
@@ -444,7 +444,7 @@ function trap(){
         ew.drawEW(`Ви отримали 4 поранення від попадання в капкан.<br>Пропустіть свій наступний хід`)
         setTimeout(() => {
             ew.removeLastEW()
-        }, 1200);
+        }, 2000);
 
     }
 
@@ -469,7 +469,7 @@ function scorpion(){
         ew.drawEW(`Ви отримали ${damage} поранення`)
         setTimeout(() => {
             ew.removeAllEW()
-        }, 1200);
+        }, 2000);
     }
 
     ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
@@ -489,7 +489,7 @@ function stickyWeb(){
         ew.drawEW(`Ви змогли втекти`)
         setTimeout(() => {
             ew.removeAllEW()
-        }, 1200);
+        }, 2000);
     }
 
     const falseFn = ()=> {
@@ -498,7 +498,7 @@ function stickyWeb(){
         setTimeout(() => {
             ew.removeAllEW()
             game.endMove()
-        }, 1200);
+        }, 2000);
 
     }
 
@@ -512,7 +512,7 @@ function stickyWeb(){
         ew.drawEW(`Ви змогли втекти, але отримали 4 поранення`)
         setTimeout(() => {
             ew.removeAllEW()
-        }, 1200);
+        }, 2000);
     }
 
 
@@ -541,7 +541,7 @@ function razorwing(){
         ew.drawEW(`Ви отримали ${damage} поранення`)
         setTimeout(() => {
             ew.removeAllEW()
-        }, 1200);
+        }, 2000);
     }
 
     ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
@@ -653,7 +653,7 @@ function strikeFromShadow(){
         setTimeout(() => {
             ew.removeAllEW()
             game.endMove()
-        }, 1200);
+        }, 2000);
     }
 
     const falseFn = ()=> {
@@ -662,7 +662,7 @@ function strikeFromShadow(){
         ew.drawEW(`Ви отримали ${damage} поранення`)
         setTimeout(() => {
             ew.removeAllEW()
-        }, 1200);
+        }, 2000);
     }
 
     ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
@@ -682,7 +682,7 @@ function tentacles(){
         setTimeout(() => {
             ew.removeAllEW()
             game.endMove()
-        }, 1200);
+        }, 2000);
     }
 
     const falfeFn = ()=>{
@@ -798,7 +798,7 @@ function roguesAttack(){
             ew.drawEW(`Ви отримали ${damage} поранення`)
             setTimeout(() => {
                 ew.removeAllEW()
-            }, 1200);
+            }, 2000);
         }
 
         if (5<=result) {
@@ -831,7 +831,7 @@ function horribleSpider(){
             setTimeout(() => {
                 ew.removeLastEW()
                 battle()
-            }, 1200);
+            }, 2000);
 
         }
 
@@ -840,7 +840,7 @@ function horribleSpider(){
             ew.drawEW(`Ви отримали 2 поранення, та вбили Павука`)
             setTimeout(() => {
                 ew.removeAllEW()
-            }, 1200);
+            }, 2000);
         }
     }
 
@@ -870,7 +870,7 @@ function vampire(){
         ew.drawEW(`Ви отримали 1 поранення, та вбили Павука`)
         setTimeout(() => {
             ew.removeAllEW()
-        }, 1200);
+        }, 2000);
         game.changeHealth(-1)
         return 
     }
@@ -900,6 +900,74 @@ function vampire(){
     В случае провала, получите 1 ранение и сохраните эту карту. 
     Пока эта карта у Вас, в начале каждого своего хода получите 1 ранение и продолжайте ход в обычном порядке. 
     Сбросьте эту карту, если Вы покинули Катакомбы.*/
+}
+
+function poisonousSnake(){
+    ew.removeRawBtnInEW('btn_ew')
+
+    const strength = heroes[player.hero].strength
+    const dexterity = heroes[player.hero].dexterity
+    const defense = heroes[player.hero].defense
+    const luck = heroes[player.hero].luck
+
+    let count
+    let reroll
+
+    function checkCount(){
+        if (count > 0) return count-=1
+        ew.removeAllEW()
+    }
+
+    const trueFn = ()=> {
+        ew.drawEW(`Ви не отримали поранення`)
+        setTimeout(() => {
+            ew.removeLastEW()
+            checkCount()
+            reroll()
+        }, 2000);
+    }
+
+    const falseFn = ()=> {
+        ew.drawEW(`Ви отримали 1 поранення`)
+        game.changeHealth(-1)
+        setTimeout(() => {
+            ew.removeLastEW()
+            checkCount()
+            reroll()
+        }, 2000);
+    }
+
+    function strengthFn(){
+        ew.clear()
+        ew.addDiceRollSection(`Ваша Cила: ${strength}`, strength, true, true,2, trueFn, falseFn)
+    }
+
+    function dexterityFn(){
+        ew.clear()
+        ew.addDiceRollSection(`Ваша Спритність: ${dexterity}`, dexterity, true, true,2, trueFn, falseFn)
+    }
+
+    function defenseFn(){
+        ew.clear()
+        ew.addDiceRollSection(`Ваш Захист: ${defense}`, defense, false, true,2, trueFn, falseFn)
+    }
+
+    function luckFn(){
+        ew.clear()
+        ew.addDiceRollSection(`Ваша Удача: ${luck}`, luck, false, true, 2, trueFn, falseFn)
+    }
+
+    ew.drawBtnInEW('btn_dx',`Ваша Сила: ${strength}`, ()=>{ count = dexterity; reroll = strengthFn; strengthFn()})
+    ew.drawBtnInEW('btn_dx',`Ваша Спритність: ${dexterity}`,()=>{ count = dexterity; reroll = dexterityFn; dexterityFn()})
+    ew.drawBtnInEW('btn_df',`Ваш Захист: ${defense}`,()=>{ count = defense; reroll = defenseFn; defenseFn()})
+    ew.drawBtnInEW('btn_luk',`Ваша Удача: ${luck}`,()=>{ count = luck; reroll = luckFn; luckFn()})
+
+    /*Вы потревожили ядовитую змею. 
+    Она попыталась Вас укусить. 
+    Чтобы определить количество ранений, 
+    Выберите одну из характеристик Вашего героя 
+    и выполните столько ее проверок, какова величина самой характеристики. 
+    Получите по 1 ранению за каждую проваленную проверку.*/
 }
 
 const catacomb_cards = [
@@ -948,7 +1016,7 @@ const catacomb_cards = [
     
     /*37*/new Card(20, 'Ужасный Паук', false, false, ()=>{horribleSpider()}),
     /*38*/new Card(21, 'Вампир', false, false, ()=>{vampire()}),
-    /*39*/new Card(22, 'Ядовитая Змея', false, false, ()=>{ew.removeAllEW() /*Вы потревожили ядовитую змею. Она попыталась Вас укусить. Чтобы определить количество ранений, Выберите одну из характеристик Вашего героя и выполните столько ее проверок, какова величина самой характеристики. Получите по 1 ранению за каждую проваленную проверку.*/}),
+    /*39*/new Card(22, 'Ядовитая Змея', false, false, ()=>{poisonousSnake()}),
     /*40*/new Card(23, 'Атака Колдуна', false, false, ()=>{ew.removeAllEW() /*Колдун запустил в Вас магический огненный шар и сбежал. Выполните проверку Удачи. В случае успеха Вы смогли защититься; завершите свой ход. В случае неудачи добавьте 1 к числу, на которое была провалена проверка и полуите количество ранений, эквивалентное результату сложения.*/}),
     /*41*/new Card(24, 'Орда Крыс', false, false, ()=>{ew.removeAllEW() /*Вы натолкнулись на огромную стаю отвратительных крыс. Выполните проверку Защиты. Если Вы провалили проверку, то добавьте 1 к числу, на которое была провалена проверка и получите колочество ранений, эквивалентное результату.*/}),
     /*42*/new Card(25, 'Яд Паука', false, false, ()=>{ew.removeAllEW() /*Вас укусил ядовитый паўқ. Пока Вы находитесь в Катакомбах, в начале каждого своего хода бросьте 1d6: 1-3 - Вы получаете 2 ранение; 4-6 - Ничего не происходит, продолжайте свой ход в обычном порядке.*/}),
