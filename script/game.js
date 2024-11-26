@@ -148,7 +148,7 @@ class Game {
     playCatacombEvent(){
         if (player.holeInCeiling) return
         const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
-        ew.drawCardEW(catacomb_cards[42]);
+        ew.drawCardEW(catacomb_cards[43]);
         // this.drawCardEW(card);
     }
     
@@ -325,6 +325,7 @@ class Game {
     
     getElementsByData(array){
         const fields = [];
+        if (array === undefined) return
         array.forEach( _ => {
             const field = document.querySelector(`[data-y="${_[1]}"][data-x="${_[0]}"]`);
             fields.push(field)
@@ -662,6 +663,16 @@ class Game {
             childTileField.style.rotate = `${rotate}deg`;
         }
     }
+
+    rotateCatacombDirection(angl) {
+        let rotate = player.catacombDirection
+
+        rotate = rotate + angl;
+        
+        if (rotate > 270) rotate -= 360;
+
+        player.catacombDirection = rotate
+    }
     
     drawTileField(x, y){
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
@@ -707,6 +718,7 @@ class Game {
 
     removeHighlightFields(array){
         const fields = this.getElementsByData(array);
+        if (fields === undefined) return
         fields.forEach(field => {
             field.classList.remove('available')
             const highlight = field.querySelector(`.available-field`);
@@ -733,7 +745,6 @@ class Game {
             this.drawIcon(x, y, 'fa-regular fa-circle-xmark', 'end');
             this.clickEndIcon(x, y);
         }
-        
                     
         player.position = [x, y];
 
@@ -743,8 +754,6 @@ class Game {
             && !player.catacomb) {
             this.drawTileField(x, y);
         }
-
-
     }
 
     drawMonsterToken(x, y){
@@ -840,7 +849,6 @@ class Game {
                 this.gameFields[y][x]['s'] += 1
             }
             this.endMove()
-
         });
     };
 
@@ -915,17 +923,14 @@ class Game {
 
         if (x === 0 && direction === 270) {
             return this.getTunrDirectionCatacomb()
-            
         }
 
         if (y === 0 && direction === 0){
             return this.getTunrDirectionCatacomb()
-            
         }
 
         if (x === 14 && direction === 90) {
             return this.getTunrDirectionCatacomb()
-            
         }
 
         if (y ===  11 && direction === 180) {
@@ -970,7 +975,6 @@ class Game {
 
     clickArrowIcon(){   
         this.playingField.addEventListener('click', (e) => {
-            const hero_token_catacomb = this.playingField.querySelector(`.hero_token_catacomb.${player.hero}`);
 
             let rotate
 
@@ -985,7 +989,6 @@ class Game {
                 if (y > player.position[1]) rotate = 180 
                 if (y < player.position[1]) rotate = 0
 
-                
                 player.catacombDirection = Number(rotate)
                 this.drawHeroMitl(player.position[0], player.position[1]);
 
