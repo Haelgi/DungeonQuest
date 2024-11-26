@@ -1022,6 +1022,51 @@ function hordeOfRats(){
     Если Вы провалили проверку, то добавьте 1 к числу, на которое была провалена проверка и получите колочество ранений, эквивалентное результату.*/
 }
 
+function spiderPoison(){
+    if (!player.catacomb) return player.eventCardContainer.forEach((card, idx) => {
+        if (card.id === 25 && card.pack === 'catacomb') {
+            player.eventCardContainer.splice(idx, 1)
+            ew.removeAllEW()
+        }
+    })
+
+    if (!player.eventCardContainer.some((card) => (card.id === 25 && card.pack === 'catacomb'))) player.eventCardContainer.push(catacomb_cards[38])
+
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+
+        if (result<=3) {
+            game.changeHealth(-2)
+            ew.drawEW(`Ви отримали 2 поранення`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 2000);
+
+        }
+
+        if (4<=result) {
+            ew.drawEW(`Нічого не відбувається`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 2000);
+        }
+    }
+
+    function battle() {
+        ew.clear()
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    }
+
+    ew.removeRawBtnInEW('btn_ew')
+    battle()
+    
+    /*Вас укусил ядовитый паўқ. 
+    Пока Вы находитесь в Катакомбах, 
+    в начале каждого своего хода бросьте 1d6: 
+    1-3 - Вы получаете 2 ранение; 
+    4-6 - Ничего не происходит, продолжайте свой ход в обычном порядке.*/
+}
+
 const catacomb_cards = [
     /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     /*1*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
@@ -1071,7 +1116,7 @@ const catacomb_cards = [
     /*39*/new Card(22, 'Ядовитая Змея', false, false, ()=>{poisonousSnake()}),
     /*40*/new Card(23, 'Атака Колдуна', false, false, ()=>{sorcererAttack()}),
     /*41*/new Card(24, 'Орда Крыс', false, false, ()=>{hordeOfRats()}),
-    /*42*/new Card(25, 'Яд Паука', false, false, ()=>{ew.removeAllEW() /*Вас укусил ядовитый паўқ. Пока Вы находитесь в Катакомбах, в начале каждого своего хода бросьте 1d6: 1-3 - Вы получаете 2 ранение; 4-6 - Ничего не происходит, продолжайте свой ход в обычном порядке.*/}),
+    /*42*/new Card(25, 'Яд Паука', false, false, ()=>{spiderPoison()}),
     /*43*/new Card(26, 'Нага', false, false, ()=>{ew.removeAllEW() /*Проход блокирован гигантским Нагом. Рассчитайте точку выхода из Катакомб и поместите Маркер Путешествия в эту область, развернув его на 180°. Сбросьте Нагу и все собранные Карты Катакомб (кроме Трофеев). В свой следующий ход тяните Карту Катакомб в обычном порядке.*/}),
     /*44*/new Card(27, 'Факел Гаснет', false, false, ()=>{ew.removeAllEW() /*Сохраните эту карту. Факел погас. В начале каждого своего последующего хода выполните проверку Удачи, чтобы снова зажечь его. Если проверка прошла успешно, то сбросьте эту карту и продолжайте ход в обычном порядке. Если Вы провалили проверку, то Ваш ход тут же заканчивается.*/}),
     /*45*/new Card(28, 'Алхимик', false, false, ()=>{ew.removeAllEW() /*Вы набрели на лабораторию Алхимика. С ним можно заключить одну из сделок: 1) Обменять 4 очка жизни на сокровище (получите 4 ранения и тяните Карту Сокровища). 2) Обменять одно из своих сокровищ на очки здоровья. (Разделите нацело стоимость выбранного сокровища на 400, округлив в меньшую сторону, и исцелите количество ранений, эквивалентное результату. Сокровище сбрасывается и замешивается в Колоду Сокровищ).*/}),
