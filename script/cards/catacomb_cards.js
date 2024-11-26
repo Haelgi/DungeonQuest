@@ -1222,6 +1222,28 @@ function giantDiamond(){
     /*"трофей" +4000 золотых*/
 }
 
+function boxOfGold(){
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal * 100
+        const card = catacomb_cards[47]
+
+        card.cost = Number(result)
+        player.treasureCardContainer.push(card)
+        console.log(player.treasureCardContainer)
+
+        ew.drawEW(`Ви знайшли у шкатулці ${result} золота`)
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 2000);
+    }
+
+    ew.removeRawBtnInEW('btn_ew')
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+
+    /* "трофей" Когда Вы покинули Подземелье Дракона, бросьте 1d6. 
+    Вы находите в шкатулке количество золота, эквивалентное результату броска, умноженному на 100.*/
+}
+
 const catacomb_cards = [
     /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     /*1*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
@@ -1277,7 +1299,7 @@ const catacomb_cards = [
     /*45*/new Card(28, 'Алхимик', false, false, ()=>{alchemist()}),
     /*46*/new Card(29, 'Гигантский Алмаз', 'treasure', 4000, ()=>{giantDiamond()}),
     
-    /*47*/new Card(30, 'Шкатылка с Золотом', 'treasure', false, ()=>{ew.removeAllEW() /* "трофей" Когда Вы покинули Подземелье Дракона, бросьте 1d6. Вы находите в шкатулке количество золота, эквивалентное результату броска, умноженному на 100.*/}),
+    /*47*/new Card(30, 'Шкатулка с Золотом', 'treasure', false, ()=>{boxOfGold()}),
     /*48*/new Card(31, 'Молот Мощи', 'treasure', false, ()=>{ew.removeAllEW() /* "трофей" Пока эта карта у Вас, в бою с големом, каждая Ваша успешная атака наносит 2 ранения вместо 1.*/}),
     /*49*/new Card(32, 'Перемешивание Карт', false, false, ()=>{ew.removeAllEW() /*Сбросьте эту карту. Затем перемешайте сброшенные и неиспользованные Карты Катакомб. Вытяните еще одну карту из этой колоды и продолжайте свой ход в обычном порядке.*/}),
 ]
