@@ -112,6 +112,7 @@ class Game {
     };
 
     changeHealth(damage){
+        if (heroes[player.hero].health < 1) return this.endGame()
         heroes[player.hero].health += damage
         this.addCharacterTablet(player.hero);
     }
@@ -147,7 +148,7 @@ class Game {
     playCatacombEvent(){
         if (player.holeInCeiling) return
         const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
-        ew.drawCardEW(catacomb_cards[36]);
+        ew.drawCardEW(catacomb_cards[38]);
         // this.drawCardEW(card);
     }
     
@@ -640,6 +641,7 @@ class Game {
     }
 
     endGame(){
+        ew.removeAllEW()
         console.log('Game Over')
     }
 

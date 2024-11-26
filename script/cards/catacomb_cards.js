@@ -820,6 +820,88 @@ function roguesAttack(){
     5-6 - Вы убили врага и остались целы.*/
 }
 
+function horribleSpider(){
+
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+
+        if (result<=3) {
+            game.changeHealth(-2)
+            ew.drawEW(`Ви отримали 2 поранення`)
+            setTimeout(() => {
+                ew.removeLastEW()
+                battle()
+            }, 1200);
+
+        }
+
+        if (4<=result) {
+            game.changeHealth(-2)
+            ew.drawEW(`Ви отримали 2 поранення, та вбили Павука`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 1200);
+        }
+    }
+
+    function battle() {
+        ew.clear()
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    }
+
+    battle()
+    /*На Вас напал ужасный паўқ. 
+    Бросьте 1d6: 
+    1-3 - Вы получаете 2 ранения и продолжаете бой; 
+    4-6 - Вы получаете 2 ранения и убиваете паўка. 
+    Продолжайте бросать 1d6, пока, в течении Вашего хода, Вы или паўқ не погибнете. 
+    Сбросьте эту карту если паук убит.*/
+}
+
+function vampire(){
+    if (!player.catacomb) return player.eventCardContainer.forEach((card, idx) => {
+         if (card.id === 21 && card.pack === 'catacomb') {
+            player.eventCardContainer.splice(idx, 1)
+            ew.removeAllEW()
+        }
+    })
+
+    if (player.eventCardContainer.some((card) => (card.id === 21 && card.pack === 'catacomb'))) {
+        ew.drawEW(`Ви отримали 1 поранення, та вбили Павука`)
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 1200);
+        game.changeHealth(-1)
+        return 
+    }
+
+    const dexterity = heroes[player.hero].dexterity
+    const defense = heroes[player.hero].defense
+
+    const trueFn = ()=> {
+        ew.drawEW(`Вамрір вами не зацікавився`)
+        setTimeout(() => {ew.removeAllEW()}, 2000);
+    }
+
+    const falseFn = ()=> {
+        player.eventCardContainer.push(catacomb_cards[38])
+        ew.drawEW(`Ви отримали 1 поранення`)
+        game.changeHealth(-1)
+        setTimeout(() => {ew.removeAllEW()}, 2000);
+    }
+
+    ew.removeRawBtnInEW('btn_ew')
+
+    if (dexterity > defense) ew.addDiceRollSection(`Ваш Захист: ${defense}`, defense, false, true, 2, trueFn, falseFn)
+    if (dexterity < defense) ew.addDiceRollSection(`Ваша Спритність: ${dexterity}`, dexterity, true, true, 2, trueFn, falseFn)
+
+
+    /*Выполните проверку Ловкости или Защиты (в зависимости от того, что меньше). 
+    В случае провала, получите 1 ранение и сохраните эту карту. 
+    Пока эта карта у Вас, в начале каждого своего хода получите 1 ранение и продолжайте ход в обычном порядке. 
+    Сбросьте эту карту, если Вы покинули Катакомбы.*/
+}
+
 const catacomb_cards = [
     /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     /*1*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
@@ -864,8 +946,8 @@ const catacomb_cards = [
     /*35*/new Card(18, 'Щупальца', false, false, ()=>{tentacles()}),
     /*36*/new Card(19, 'Нападение Разбойника', false, false, ()=>{roguesAttack()}),
     
-    /*37*/new Card(20, 'Ужасный Паук', false, false, ()=>{ew.removeAllEW() /*На Вас напал ужасный паўқ. Бросьте 1d6: 1-3 - Вы получаете 2 ранения и продолжаете бой; 4-6 - Вы получаете 2 ранения и убиваете паўка. Продолжайте бросать 1d6, пока, в течении Вашего хода, Вы или паўқ не погибнете. Сбросьте эту карту если паук убит.*/}),
-    /*38*/new Card(21, 'Вампир', false, false, ()=>{ew.removeAllEW() /*Выполните проверку Ловкости или Защиты (в зависимости от того, что меньше). В случае провала, получите 1 ранение и сохраните эту карту. Пока эта карта у Вас, в начале каждого своего хода получите 1 ранение и продолжайте ход в обычном порядке. Сбросьте эту карту, если Вы покинули Катакомбы.*/}),
+    /*37*/new Card(20, 'Ужасный Паук', false, false, ()=>{horribleSpider()}),
+    /*38*/new Card(21, 'Вампир', false, false, ()=>{vampire()}),
     /*39*/new Card(22, 'Ядовитая Змея', false, false, ()=>{ew.removeAllEW() /*Вы потревожили ядовитую змею. Она попыталась Вас укусить. Чтобы определить количество ранений, Выберите одну из характеристик Вашего героя и выполните столько ее проверок, какова величина самой характеристики. Получите по 1 ранению за каждую проваленную проверку.*/}),
     /*40*/new Card(23, 'Атака Колдуна', false, false, ()=>{ew.removeAllEW() /*Колдун запустил в Вас магический огненный шар и сбежал. Выполните проверку Удачи. В случае успеха Вы смогли защититься; завершите свой ход. В случае неудачи добавьте 1 к числу, на которое была провалена проверка и полуите количество ранений, эквивалентное результату сложения.*/}),
     /*41*/new Card(24, 'Орда Крыс', false, false, ()=>{ew.removeAllEW() /*Вы натолкнулись на огромную стаю отвратительных крыс. Выполните проверку Защиты. Если Вы провалили проверку, то добавьте 1 к числу, на которое была провалена проверка и получите колочество ранений, эквивалентное результату.*/}),
