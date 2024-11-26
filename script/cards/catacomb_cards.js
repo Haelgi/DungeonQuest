@@ -1215,6 +1215,13 @@ function alchemist(){
     Сокровище сбрасывается и замешивается в Колоду Сокровищ).*/
 }
 
+function giantDiamond(){
+    player.treasureCardContainer.push(catacomb_cards[46])
+    ew.removeAllEW()
+
+    /*"трофей" +4000 золотых*/
+}
+
 const catacomb_cards = [
     /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     /*1*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
@@ -1268,7 +1275,7 @@ const catacomb_cards = [
     /*43*/new Card(26, 'Нага', false, false, ()=>{naga()}),
     /*44*/new Card(27, 'Факел Гаснет', false, false, ()=>{torchGoesOut()}),
     /*45*/new Card(28, 'Алхимик', false, false, ()=>{alchemist()}),
-    /*46*/new Card(29, 'Гигантский Алмаз', 'treasure', 4000, ()=>{ew.removeAllEW() /*"трофей" +4000 золотых*/}),
+    /*46*/new Card(29, 'Гигантский Алмаз', 'treasure', 4000, ()=>{giantDiamond()}),
     
     /*47*/new Card(30, 'Шкатылка с Золотом', 'treasure', false, ()=>{ew.removeAllEW() /* "трофей" Когда Вы покинули Подземелье Дракона, бросьте 1d6. Вы находите в шкатулке количество золота, эквивалентное результату броска, умноженному на 100.*/}),
     /*48*/new Card(31, 'Молот Мощи', 'treasure', false, ()=>{ew.removeAllEW() /* "трофей" Пока эта карта у Вас, в бою с големом, каждая Ваша успешная атака наносит 2 ранения вместо 1.*/}),
