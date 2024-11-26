@@ -1080,6 +1080,36 @@ function naga(){
     В свой следующий ход тяните Карту Катакомб в обычном порядке.*/
 }
 
+function torchGoesOut(){ 
+    if (!player.eventCardContainer.some((card) => (card.id === 27 && card.pack === 'catacomb'))) player.eventCardContainer.push(catacomb_cards[44])
+
+    const trueFn = ()=> {
+        player.eventCardContainer.forEach((card, idx) => {
+            if (card.id === 27 && card.pack === 'catacomb') player.eventCardContainer.splice(idx, 1)
+        })
+        ew.drawEW(`Ви змогли запалити Смолоскип`)
+        setTimeout(() => {
+            ew.removeAllEW()
+        }, 2000);
+    }
+
+    const falseFn = ()=> {
+        ew.drawEW(`Ви не змогли запалити Смолоскип`)
+        setTimeout(() => {
+            ew.removeAllEW()
+            game.endMove()
+        }, 2000);
+    }
+
+    ew.removeRawBtnInEW('btn_ew')
+    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+    /*Сохраните эту карту. 
+    Факел погас. 
+    В начале каждого своего последующего хода выполните проверку Удачи, чтобы снова зажечь его. 
+    Если проверка прошла успешно, то сбросьте эту карту и продолжайте ход в обычном порядке. 
+    Если Вы провалили проверку, то Ваш ход тут же заканчивается.*/
+}
+
 const catacomb_cards = [
     /*0*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
     /*1*/new Card(1, 'Пусто', false, false, ()=>{ ew.removeAllEW() }),
@@ -1131,7 +1161,7 @@ const catacomb_cards = [
     /*41*/new Card(24, 'Орда Крыс', false, false, ()=>{hordeOfRats()}),
     /*42*/new Card(25, 'Яд Паука', false, false, ()=>{spiderPoison()}),
     /*43*/new Card(26, 'Нага', false, false, ()=>{naga()}),
-    /*44*/new Card(27, 'Факел Гаснет', false, false, ()=>{ew.removeAllEW() /*Сохраните эту карту. Факел погас. В начале каждого своего последующего хода выполните проверку Удачи, чтобы снова зажечь его. Если проверка прошла успешно, то сбросьте эту карту и продолжайте ход в обычном порядке. Если Вы провалили проверку, то Ваш ход тут же заканчивается.*/}),
+    /*44*/new Card(27, 'Факел Гаснет', false, false, ()=>{torchGoesOut()}),
     /*45*/new Card(28, 'Алхимик', false, false, ()=>{ew.removeAllEW() /*Вы набрели на лабораторию Алхимика. С ним можно заключить одну из сделок: 1) Обменять 4 очка жизни на сокровище (получите 4 ранения и тяните Карту Сокровища). 2) Обменять одно из своих сокровищ на очки здоровья. (Разделите нацело стоимость выбранного сокровища на 400, округлив в меньшую сторону, и исцелите количество ранений, эквивалентное результату. Сокровище сбрасывается и замешивается в Колоду Сокровищ).*/}),
     /*46*/new Card(29, 'Гигантский Алмаз', 'treasure', 4000, ()=>{ew.removeAllEW() /*"трофей" +4000 золотых*/}),
     
