@@ -8,24 +8,17 @@ import  {ew}  from './eventWidows.js';
 
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
 
-import  {treasure_cards}  from './cards/treasure_cards.js';
-import  {dungeon_cards}  from './cards/dungeon_cards.js';
-import  {deadman_cards}  from './cards/deadman_cards.js';
 player.idx = 0; 
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
 player.authentication = true;
-player.treasureCardContainer = [treasure_cards[0],treasure_cards[1],deadman_cards[3]];
-
-
+player.treasureCardContainer = [];
 
 heroes[player.hero].resolve = 5
 
 game.gameIdx = 0;
 game.playerList = [player];
 game.authentication = true; 
-// game.startFields = [[2,2]]; 
-
 
 //////////////////////////////////////////////////////////////////////////////////////
 
