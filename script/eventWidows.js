@@ -36,14 +36,16 @@ class EventWidows{
         });
     }
 
-    diceRollEW(title, txt, value, dexterity, diceCount, trueFn, falseFn) {
+    diceRollEW(title, txt, value, dexterity, diceCount, trueFn, falseFn, rolResult, closeEW) {
         let newValue = value;
         let texts = txt;
+        let resolve = false;
         const resolvePlayer = heroes[player.hero].resolve;
         const treasure = player.treasureCardContainer.length;
     
         if (resolvePlayer > 0) {
             texts += ` + ${resolvePlayer} Рішучості`;
+            resolve = true;
         }
     
         if (treasure > 0 && dexterity) {
@@ -57,7 +59,7 @@ class EventWidows{
         this.drawBtnInEW('roll', 'Кинути Кубики', () => {
             this.rollDiceFn();
             setTimeout(() => {
-                this.rolResultEW(newValue, trueFn, falseFn);
+                this.rolResultEW(resolve, newValue, trueFn, falseFn, rolResult, closeEW);
             }, 1700);
         });
     }
