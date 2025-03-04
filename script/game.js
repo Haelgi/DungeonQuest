@@ -195,7 +195,6 @@ class Game {
     }
 
     newCoordinate(withoutDoors) {
-        console.log('newCoordinate withoutDoors')
         const [x, y] = player.position;
         const coordinates = [];
 
@@ -247,7 +246,7 @@ class Game {
     }
         
     checkPermitWay(coordinat, direction, checkBarrier, withoutDoors){
-        
+
         const [x, y] = coordinat;
         const tileIdx = this.gameFields[y][x]['id'];
         const room = room_tiles[tileIdx];
@@ -502,7 +501,6 @@ class Game {
         this.playingField.removeEventListener('click', this.moveEventHandler); 
     
         this.moveEventHandler = (e) => {
-            console.log('moveEventHandler')
             player.positionPrevious = player.position;
             player.escapeBattle = true
 
@@ -545,7 +543,8 @@ class Game {
                 this.removeHighlightFields(array);
                 this.drawHeroMitl(x, y);
 
-                if (!player.catacomb) this.nextCoordinates = this.newCoordinate(false);
+                if (!player.catacomb) this.nextCoordinates = this.newCoordinate();
+                
                 if (player.catacomb) this.nextCoordinates = this.newCoordinateInCatacomb();
     
                 if (!room_tiles[this.gameFields[y][x]['id']]) return;
@@ -562,7 +561,6 @@ class Game {
                     this.endMove()      
                 }
                 
-
                 player.extraMove = false
             }
     
@@ -576,10 +574,6 @@ class Game {
         const x = player.position[0]
         const y = player.position[1]
 
-        if (!player.catacomb) {this.nextCoordinates = this.newCoordinate(false)
-            console.log('checkRoomEvents()')
-        };
-
         if (room_tiles[this.gameFields[y][x]['id']].dungeon && this.gameFields[y][x]['m'] === undefined && !this.activeEvent) this.playDungeonEvent();
 
         if (room_tiles[this.gameFields[y][x]['id']].trap && !this.activeEvent) this.playTrapEvent();
@@ -587,7 +581,7 @@ class Game {
 
         if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate' && !player.catacomb) {
             this.rotateRoomTile(180)
-            this.nextCoordinates = this.newCoordinate(false);
+            this.nextCoordinates = this.newCoordinate();
             this.endMove()
         };
 
