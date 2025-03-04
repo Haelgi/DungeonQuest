@@ -1,5 +1,6 @@
 import  {ew}  from '../eventWidows.js';
 import  {game}  from '../game.js';
+import  {player}  from '../player.js';
 
 class Card {
     constructor(id, name, effect) {
@@ -13,12 +14,38 @@ class Card {
 };
 
 function lockedDoor(){
-    ew.removeAllEW()      
-    game.endMove()
+    ew.removeAllEW();
+    game.endMove();
     /*Дверь не открывается; оставайтесь в Вашей текущей комнате.*/
 }
 
 function greedyGoblin(){
+    ew.removeRawBtnInEW('btn_ew');
+
+    function discardTheCard(){
+        const randomId = Math.floor(Math.random() * maxValue);
+                    
+        player.treasureCardContainer.splice(randomId, 1);
+        
+        ew.drawEW(`Гоблін поранив Вас (ви отримали ${damage} поранення), вкрав один із скарбів та втік`);
+        setTimeout(() => {ew.removeAllEW()}, 2000);
+    };
+
+    if(player.treasureCardContainer.length > 0){
+        ew.addBtnInEW('discard', 'Віддати Трофей', discardTheCard);
+
+        ew.addBtnInEW('stay', 'НЕ віддавати Трофей', ()=>{
+            ew.removeAllEW();
+            game.endMove();
+        });
+    }
+
+    if(player.treasureCardContainer.length === 0){
+        ew.addBtnInEW('stay', 'Ти не маєш Трофеїв', ()=>{
+            ew.removeAllEW();
+            game.endMove();
+        });
+    }
 
     /*С противоположной стороны дверь заблокировал гоблин. 
     Он готов открыть дверь в обмен на Трофей. 
