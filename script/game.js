@@ -293,9 +293,7 @@ class Game {
 
         if (typeof value === 'string' && checkBarrier=== true && !player.catacomb ) {
             if (value === 'door') this.drawIcon(x,y, 'fa-solid fa-door-closed', 'door', direction);
-            if (value === 'grille') {this.drawIcon(x,y, 'fa-solid fa-dungeon', 'grille', direction)
-                console.log('grille', coordinat)
-            };
+            if (value === 'grille') this.drawIcon(x,y, 'fa-solid fa-dungeon', 'grille', direction);
             if (value === 'abyss') this.drawIcon(x,y, 'fa-solid fa-arrow-up-from-ground-water', 'abyss', direction);
 
         };
@@ -967,7 +965,8 @@ class Game {
         this.playingField.addEventListener('click', (e) => {
             if(e.target.closest('.door-icon')) {
                 const card = this.getRundomElement(this.door_cards, door_cards)
-                ew.drawCardEW(card)
+                // ew.drawCardEW(card)
+                ew.drawCardEW(door_cards[9])
                 e.target.remove()
             }
         });
