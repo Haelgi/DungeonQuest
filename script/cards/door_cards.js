@@ -1,6 +1,7 @@
 import  {ew}  from '../eventWidows.js';
 import  {game}  from '../game.js';
 import  {player}  from '../player.js';
+import  {heroes}  from '../cards/heroes.js';
 
 class Card {
     constructor(id, name, effect) {
@@ -113,6 +114,50 @@ function jetOfFire(){
     Оставайтесь в текущей комнате и завершите свой ход.*/
 }
 
+function thornsFromTheFloor(){
+    ew.removeRawBtnInEW('btn_ew');
+
+    let damage = 0;
+
+    const trueFn = ()=>{
+        ew.drawEW(`Ви змогли ухилитись!`)
+        setTimeout(() => {
+            ew.removeAllEW();
+            game.endMove();
+        }, 2000);
+    }
+
+    const falseFn = ()=>{
+        game.changeHealth(-damage)
+        ew.drawEW(`Ви отримали ${damage} поранення!`)
+            setTimeout(() => {
+                ew.removeAllEW();
+                game.endMove();
+            }, 2000);  
+    }
+
+    function check( nameValue, value) {
+        damage = value;
+        ew.removeRawBtnInEW('btn_strength')
+        ew.removeRawBtnInEW('btn_dexterity')
+        ew.removeRawBtnInEW('btn_defense')
+        ew.removeRawBtnInEW('btn_luck')
+
+        ew.addDiceRollSection( `${nameValue}: ${value}`, value, false, true, 2, trueFn, falseFn, false, true)
+    }
+
+    ew.removeRawBtnInEW('btn_ew')
+    ew.drawBtnInEW('btn_strength', 'Перевірити Силу', ()=>{check('Ваша Сила',heroes[player.hero].strength)})
+    ew.drawBtnInEW('btn_dexterity', 'Перевірити Спритність', ()=>{check('Ваша Спритність',heroes[player.hero].dexterity)})
+    ew.drawBtnInEW('btn_defense', 'Перевірити Захист', ()=>{check('Ваш Захист',heroes[player.hero].defense)})
+    ew.drawBtnInEW('btn_luck', 'Перевірити Удачу', ()=>{check('Ваш Удача',heroes[player.hero].luck)})
+
+    /*Когда Вы попытались открыть дверь, с отверстий в полу выдвинулись шипы. 
+    Выберите любую характеристику своего персонажа и выполните ее проверку. 
+    Если проверка провалена, получите количество ранений, эквивалентное величине выбранной характеристики. 
+    Не зависимо от успеха проверки, оставайтесь в текущей комнате и завершите свой ход.*/
+}
+
 const door_cards = [
     /*0*/new Card(1, 'Дверь Открылась', ()=>{ew.removeAllEW()}),
     /*1*/new Card(1, 'Дверь Открылась', ()=>{ew.removeAllEW()}),
@@ -130,7 +175,7 @@ const door_cards = [
     
     /*11*/new Card(4, 'Заколдованная дверь', ()=>{enchantedDoor()}),
     /*12*/new Card(5, 'Струя Огня', ()=>{jetOfFire()}),
-    /*13*/new Card(6, 'Шипы из Пола', ()=>{ew.removeAllEW()/*Когда Вы попытались открыть дверь, с отверстий в полу выдвинулись шипы. Выберите любую характеристику своего персонажа и выполните ее проверку. Если проверка провалена, получите количество ранений, эквивалентное величине выбранной характеристики. Не зависимо от успеха проверки, оставайтесь в текущей комнате и завершите свой ход.*/}),
+    /*13*/new Card(6, 'Шипы из Пола', ()=>{thornsFromTheFloor()}),
     /*14*/new Card(7, 'Смертоностные Стрелы', ()=>{ew.removeAllEW()/*Когда Вы открывали дверь, с отверстий в стене полетели стрелы. Бросьте 1d6 и получите количество ранений, эквивалентное результату; оставайтесь в текущей комнате и завершите свой ход.*/}),
     /*15*/new Card(8, 'Перемешивание Карт', ()=>{ew.removeAllEW()/*Сбросьте эту карту. Затем перемешайте сброшенные и неиспользованные Карты Дверей. Вытяните еще одну карту из этой колоды и продолжайте свой ход в обычном порядке.*/}),
 ]
