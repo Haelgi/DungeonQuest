@@ -966,7 +966,7 @@ class Game {
             if(e.target.closest('.door-icon')) {
                 const card = this.getRundomElement(this.door_cards, door_cards)
                 // ew.drawCardEW(card)
-                ew.drawCardEW(door_cards[11])
+                ew.drawCardEW(door_cards[12])
                 e.target.remove()
             }
         });

@@ -131,3 +131,25 @@
 .event-txt{
     margin-right: 20px;
 }
+
+.number-for-choice-section{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0px;
+}
+
+.number-for-choice{
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    margin: 5px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.number-for-choice.active{
+    background: #fae100;
+    color: #000000;
+}

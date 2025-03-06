@@ -29,6 +29,8 @@ class Player {
         this.checkEventCards = true
         this.checkEndMoveEventCardContainer = true
         this.holeInCeiling = false
+
+        this.choiceNumber= [];
     }
 }
 

@@ -89,6 +89,46 @@ class EventWidows{
         });
     }
 
+    addNumberSectionForChoice() {
+        const element = document.querySelector('.event-main');
+        element.insertAdjacentHTML('beforeend', 
+            `<div class="number-for-choice-section">
+                <div class="number-for-choice">1</div>
+                <div class="number-for-choice">2</div>
+                <div class="number-for-choice">3</div>
+                <div class="number-for-choice">4</div>
+                <div class="number-for-choice">5</div>
+                <div class="number-for-choice">6</div>
+            </div>`);
+        
+        const numberForChoiceSection = document.querySelector('.number-for-choice-section');
+        
+        numberForChoiceSection.addEventListener('click', (e) => {
+            e.target.classList.toggle('active');
+            this.toggleNumber(player.choiceNumber, +e.target.innerText);
+            
+            const btnChoice = document.getElementById('btnChoice')
+            btnChoice.style.display = 'none'
+
+            if(player.choiceNumber.length === 2) btnChoice.style.display = 'block'
+            if(player.choiceNumber.length !== 2) btnChoice.style.display = 'none'
+        });
+    }
+
+    removeNumberSectionForChoice(){
+        document.querySelector('.number-for-choice-section')?.remove()
+    }
+
+    toggleNumber(arr, num) {
+        const index = arr.indexOf(num);
+        if (index === -1) {
+            arr.push(num);
+        } else {
+            arr.splice(index, 1);
+        }
+        return arr;
+    }
+
     
     addBattleDiceRollSection(trueValue, resolve, diceCount, trueFn, falseFn) {
         let newValue = trueValue;
@@ -311,7 +351,7 @@ class EventWidows{
         document.getElementById(id).addEventListener('click', () => fn(), {once: true});
     }
 
-    addBtnInEW(id, name, fn, bg){
+    addBtnInEW(id, name, fn, bg, ){
         const element = document.querySelector('.event-main');
         element.insertAdjacentHTML('beforeend', `<div class="btn-section"><button id=${id} style="background:${bg}">${name}</button></div>`);
         document.getElementById(id).addEventListener('click', () => fn(), {once: true});
