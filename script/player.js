@@ -7,6 +7,7 @@ class Player {
         this.authentication = false;
         this.positionPrevious = false;
         this.positionTreasury=false;
+        this.positionTreasuryCards=[];
         this.position = false;
         this.finish = false;
         this.catacomb = false;

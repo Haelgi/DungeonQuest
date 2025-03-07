@@ -141,7 +141,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        ew.drawCardEW(dragon_cards[0]);
+        ew.drawCardEW(dragon_cards[7]);
         // ew.drawCardEW(card);
         // TODO включить собітия 
     }
@@ -563,6 +563,7 @@ class Game {
                    && !player.positionTreasury
                    && !player.catacomb
                    && !player.extraMove) {
+                    player.positionTreasury = false
                     player.extraMove = false
                     this.endMove()      
                 }
@@ -1095,10 +1096,13 @@ class Game {
             if (card.type === 'treasure') player.treasureCardContainer.push(card)
             if (card.type === 'event') player.eventCardContainer.push(card)
         });
-    
+
         this.drawEffectPackCards();
         this.drawTreasurePackCards()
+    }
 
+    subtractArrays(arr1, arr2, key) {
+        return arr1.filter(obj1 => !arr2.some(obj2 => obj1[key] === obj2[key]));
     }
 }
 

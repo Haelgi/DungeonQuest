@@ -3,6 +3,7 @@ import  {heroes}  from './cards/heroes.js';
 import  {game}  from './game.js';
 import  {player}  from './player.js';
 import  {ew}  from './eventWidows.js';
+import  {treasure_cards}  from './cards/treasure_cards.js';
 
 
 
@@ -12,7 +13,8 @@ player.idx = 0;
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
 player.authentication = true;
-player.treasureCardContainer = [];
+player.treasureCardContainer = [treasure_cards[1],treasure_cards[2],treasure_cards[3],treasure_cards[4]];
+player.positionTreasuryCards = [treasure_cards[1],treasure_cards[4]];
 
 heroes[player.hero].resolve = 5
 
