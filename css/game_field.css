@@ -57,10 +57,12 @@
 }
 
 .tile-field i.door-icon,
+.tile-field i.catacomb-icon,
 .tile-field i.collapse-icon,
 .tile-field i.web-icon,
 .tile-field i.abyss-icon,
 .tile-field i.bridge-icon,
+.tile-field i.arrow-icon,
 .tile-field i.grille-icon{
     padding: 20px;
     z-index: 30;
@@ -124,6 +126,34 @@
     left: 12px;
     width: 50px;
     z-index: 1;
+}
+
+.token_monsters{
+    position: absolute;
+    top: 15px;
+    left: 12px;
+    z-index: 1;
+
+    background-size: cover; 
+    background-position: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px #000;
+}
+
+.token_catacombs{
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 1;
+
+    background-size: cover; 
+    background-position: center;
+    width: 50px;
+    height: 30px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px #000;
 }
 
 /* End Game field --------------------------------------------------*/

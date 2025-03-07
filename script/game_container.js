@@ -8,23 +8,24 @@ import  {ew}  from './eventWidows.js';
 
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
 
-
 player.idx = 0; 
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
 player.authentication = true;
-player.treasureCardContainer = [1,2,3];
+player.treasureCardContainer = [];
 
-heroes[player.hero].resolve = 10
+heroes[player.hero].resolve = 5
 
 game.gameIdx = 0;
 game.playerList = [player];
 game.authentication = true; 
+
 //////////////////////////////////////////////////////////////////////////////////////
 
 
 export function game_container() {
-    // game.drawFieldTileTests(11, '90', 1,  0);
+    game.drawFieldTileTests(6, 90, 1,  0);
+    // game.drawFieldTileTests(58, 0, 1,  1);
     // game.drawFieldTileTests(11, '90', 2,  0);
     // game.drawFieldTileTests(11, '180', 1,  1);
     // game.drawFieldTileTests(113, '0', 1,  0);
@@ -39,11 +40,9 @@ export function game_container() {
 
     function gameLoop() {
         game.sunTokenPosition(game.day);
-        game.addCharacterTablet(player.hero);
-        
-        
+
         game.makeMove();
-        
+
         requestAnimationFrame(gameLoop);
     };
 
