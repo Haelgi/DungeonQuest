@@ -21,9 +21,7 @@ class Card {
         this.title = 'Події підземелля';  
         this.pack = 'dungeon';  
         this.btnName = 'Далі';
-          
     };
-
 };
 
 function attack(){
