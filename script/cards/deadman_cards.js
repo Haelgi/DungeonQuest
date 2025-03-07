@@ -83,6 +83,52 @@ function deadmanCurse(){
     Получите 2 ранения и сбросьте 1 жетон решимости (если есть).*/
 }
 
+function thunderstormOfSorcerers(){
+    player.treasureCardContainer.push(deadman_cards[11])
+    game.drawTreasurePackCards()
+    ew.removeAllEW();
+    /* "трофей" В бою с колдуном, 
+    каждая Ваша успешная атака наносит не 1, а 2 ранения. 
+    По желанию Вы можете проигнорировать любой эффект Карты Колдуна. +570 золота*/
+}
+
+function medicalBook(){
+    player.treasureCardContainer.push(deadman_cards[12])
+    game.drawTreasurePackCards()
+    ew.removeAllEW();
+    /* "трофей" В этой книге собрано множество редких медицинских рецептов, 
+    ее наверняка можно хорошо продать. +200 золота*/
+}
+
+function goldenChain(){
+    player.treasureCardContainer.push(deadman_cards[13])
+    game.drawTreasurePackCards()
+    ew.removeAllEW();
+    /* "трофей" На шее у скелета Вы нашли золотую цепочку. +50 золота*/
+}
+
+function poisonousAcid(){
+    player.treasureCardContainer.push(deadman_cards[14])
+    game.drawTreasurePackCards()
+    ew.removeAllEW();
+    /* "трофей" Сбросьте эту карту непосредственно перед началом, 
+    или во время боя с монстром, чтобы смазать ядом свое оружие. 
+    В этом бою Ваши атаки наносят не 1, а 2 ранения противнику. +180 золота*/
+}
+
+function cardShuffling(){
+    game.refreshCatacombCards()
+    ew.removeAllEW()
+    const card = game.getRundomElement(game.deadman_cards, deadman_cards)
+
+    ew.drawCardEW(card);
+
+    /*Сбросьте эту карту. 
+    Затем перемешайте сброшенные и неиспользованные Карты Подземелья. 
+    Вытяните еще одну карту из этой колоды и продолжайте свой ход в обычном порядке.*/
+}
+
+
 
 const deadman_cards = [
     /*0*/new Card(1, 'Пусто', 'empty', false, ()=>{ ew.removeAllEW() /*Вы не нашли у мертвеца ничего ценного; ничего не происходит.*/}),
@@ -99,14 +145,12 @@ const deadman_cards = [
     /*8*/new Card(4, 'Свиток Проворства', 'treasure', false, ()=>{scrollOfAgility()}),
     /*9*/new Card(5, 'Свиток Света', 'treasure', false, ()=>{scrollOfLight()}),
     /*10*/new Card(6, 'Проклятие Мертвеца', 'event', false, ()=>{deadmanCurse()}),
-    /*11*/new Card(7, 'Гроза Колдунов', 'treasure', 570, ()=>{ ew.removeAllEW() /* "трофей" В бою с колдуном, каждая Ваша успешная атака наносит не 1, а 2 ранения. По желанию Вы можете проигнорировать любой эффект Карты Колдуна. +570 золота*/}),
-    /*12*/new Card(8, 'Медицинская Книга', 'treasure', 200, ()=>{ ew.removeAllEW() /* "трофей" В этой книге собрано множество редких медицинских рецептов, ее наверняка можно хорошо продать. +200 золота*/}),
-    /*13*/new Card(9, 'Золотая Цепочка', 'treasure', 50, ()=>{ ew.removeAllEW() /* "трофей" На шее у скелета Вы нашли золотую цепочку. +50 золота*/}),
+    /*11*/new Card(7, 'Гроза Колдунов', 'treasure', 570, ()=>{thunderstormOfSorcerers()}),
+    /*12*/new Card(8, 'Медицинская Книга', 'treasure', 200, ()=>{medicalBook()}),
+    /*13*/new Card(9, 'Золотая Цепочка', 'treasure', 50, ()=>{goldenChain()}),
     
-    /*14*/new Card(10, 'Ядовитая Кислота', 'treasure', 180, ()=>{ ew.removeAllEW() /* "трофей" Сбросьте эту карту непосредственно перед началом, или во время боя с монстром, чтобы смазать ядом свое оружие. В этом бою Ваши атаки наносят не 1, а 2 ранения противнику. +180 золота*/}),
-    /*15*/new Card(11, 'Перемешивание Карт', 'event', false, ()=>{ ew.removeAllEW() /*Сбросьте эту карту. Затем перемешайте сброшенные и неиспользованные Карты Подземелья. Вытяните еще одну карту из этой колоды и продолжайте свой ход в обычном порядке.*/}),
+    /*14*/new Card(10, 'Ядовитая Кислота', 'treasure', 180, ()=>{poisonousAcid()}),
+    /*15*/new Card(11, 'Перемешивание Карт', 'event', false, ()=>{cardShuffling()}),
 ]
 
 export {deadman_cards}
-
-// TODO закодировать функции карт мертвецов
