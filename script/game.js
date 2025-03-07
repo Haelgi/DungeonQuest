@@ -141,7 +141,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        ew.drawCardEW(deadman_cards[12]);
+        ew.drawCardEW(dragon_cards[0]);
         // ew.drawCardEW(card);
         // TODO включить собітия 
     }
@@ -1095,6 +1095,10 @@ class Game {
             if (card.type === 'treasure') player.treasureCardContainer.push(card)
             if (card.type === 'event') player.eventCardContainer.push(card)
         });
+    
+        this.drawEffectPackCards();
+        this.drawTreasurePackCards()
+
     }
 }
 
