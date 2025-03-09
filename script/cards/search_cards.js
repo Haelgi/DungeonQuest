@@ -36,11 +36,19 @@ function healingPotion(){
     ew.removeAllEW()
     game.drawTreasurePackCards()
     
-
     /* "трофей" Во время своего хода, Вы можете сбросить эту карту, 
     исцелив при этом 3 ранения Вашего героя. 
     Вы не можете использовать эту карту после смерти своего героя. 
     +250 золота*/
+}
+
+function descentToCatacombs(){
+    game.drawCatacombToken(player.position[0], player.position[1])
+    game.drawIcon(player.position[0], player.position[1], 'fa-solid fa-person-through-window', 'catacomb');
+    game.clickCatacombIcon();
+    ew.removeAllEW()
+    /* Вы заметили в углу комнаты небольшую дверцу, за которой находится спуск вниз. 
+    Разместите маркер входа в Катакомбы в этой комнате.*/
 }
 
 const search_cards = [
@@ -59,10 +67,10 @@ const search_cards = [
     /*11*/new Card(2, 'Зелье Лечения', 'treasure', false, ()=>{healingPotion()}),
     /*12*/new Card(2, 'Зелье Лечения', 'treasure', false, ()=>{healingPotion()}),
         
-    /*13*/new Card(3, 'Спуск в Катакомбы', false, false, ()=>{ew.removeAllEW() /* Вы заметили в углу комнаты небольшую дверцу, за которой находится спуск вниз. Разместите маркер входа в Катакомбы в этой комнате.*/}),
-    /*14*/new Card(3, 'Спуск в Катакомбы', false, false, ()=>{ew.removeAllEW() /* Вы заметили в углу комнаты небольшую дверцу, за которой находится спуск вниз. Разместите маркер входа в Катакомбы в этой комнате.*/}),
-    /*15*/new Card(3, 'Спуск в Катакомбы', false, false, ()=>{ew.removeAllEW() /* Вы заметили в углу комнаты небольшую дверцу, за которой находится спуск вниз. Разместите маркер входа в Катакомбы в этой комнате.*/}),
-    /*16*/new Card(3, 'Спуск в Катакомбы', false, false, ()=>{ew.removeAllEW() /* Вы заметили в углу комнаты небольшую дверцу, за которой находится спуск вниз. Разместите маркер входа в Катакомбы в этой комнате.*/}),
+    /*13*/new Card(3, 'Спуск в Катакомбы', false, false, ()=>{descentToCatacombs()}),
+    /*14*/new Card(3, 'Спуск в Катакомбы', false, false, ()=>{descentToCatacombs()}),
+    /*15*/new Card(3, 'Спуск в Катакомбы', false, false, ()=>{descentToCatacombs()}),
+    /*16*/new Card(3, 'Спуск в Катакомбы', false, false, ()=>{descentToCatacombs()}),
     
     /*17*/new Card(4, 'Пусто', false, false, ()=>{ew.removeAllEW() /* Вы внимательно осмотрели комнату. Комната пуста; ничего не происходит.*/}),
     /*18*/new Card(4, 'Пусто', false, false, ()=>{ew.removeAllEW() /* Вы внимательно осмотрели комнату. Комната пуста; ничего не происходит.*/}),
