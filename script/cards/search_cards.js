@@ -1,6 +1,7 @@
 import  {ew}  from '../eventWidows.js';
 import  {player}  from '../player.js';
 import  {game}  from '../game.js';
+import  {сrypt_cards}  from './сrypt_cards.js';
 
 class Card {
     constructor(id, name, type, cost, effect) {
@@ -61,6 +62,17 @@ function masterKey(){
     // TODO при нажатии на иконку двери добавить проверку на наличие это карты в контейнере игрока
 }
 
+function passageToTheCrypt(){
+    const card = game.getRundomElement(game.сrypt_cards, сrypt_cards)
+    game.distributionCards([card])
+
+    ew.removeAllEW(); 
+    ew.drawCardEW(card)
+
+    /* Обыскивая комнату, Вы нашли скрытый проход в склеп. 
+    Тяните Карту Склепа.*/
+}
+
 const search_cards = [
     /*0*/new Card(1, 'Секретный проход', false, false, ()=>{secretPass()}),
     /*1*/new Card(1, 'Секретный проход', false, false, ()=>{secretPass()}),
@@ -89,7 +101,7 @@ const search_cards = [
     /*20*/new Card(5, 'Отмычка', 'treasure', false, ()=>{masterKey()}),
     /*21*/new Card(5, 'Отмычка', 'treasure', false, ()=>{masterKey()}),
     
-    /*22*/new Card(6, 'Проход в Склеп', false, false, ()=>{ew.removeAllEW() /* Обыскивая комнату, Вы нашли скрытый проход в склеп. Тяните Карту Склепа.*/}),
+    /*22*/new Card(6, 'Проход в Склеп', false, false, ()=>{passageToTheCrypt()}),
     /*23*/new Card(7, 'Секретный Рычаг', false, false, ()=>{ew.removeAllEW() /* Вы нашли секретный рычаг, с помощью которого можно изменять положение комнаты. Если хотите, можете повернуть тайл комнаты, в котором Вы находитесь, на 180°, или на 90° в любом направлении.*/}),
     /*24*/new Card(8, 'Малое Зелье Лечения', 'treasure', 150, ()=>{ew.removeAllEW() /* "трофей" Во время своего хода, Вы можете сбросить эту карту, исцелив при этом 2 ранения Вашего героя. Вы не можете использовать эту карту после смерти своего героя. +150 золота*/}),
     /*25*/new Card(9, 'Свиток Прохода', false, false, ()=>{ew.removeAllEW() /* "трофей"  Вы нашли магический свиток. Вы можете сбросить эту карту вместо того, чтобы совершить поиск в комнате. Тогда Вы получите возможность выполнить перемещение в любою соседнюю исследованную область, игнорируя решётки, двери или стены.*/}),
