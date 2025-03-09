@@ -95,6 +95,81 @@ function secretLever(){
     или на 90° в любом направлении.*/
 }
 
+function smallHealingPotion(){
+    player.treasureCardContainer.push(search_cards[24])
+    game.drawTreasurePackCards()
+    ew.removeAllEW();
+    /* "трофей" Во время своего хода, 
+    TODO Вы можете сбросить эту карту, 
+    исцелив при этом 2 ранения Вашего героя. 
+    Вы не можете использовать эту карту после смерти своего героя. 
+    +150 золота*/
+}
+
+function scrollOfPassage(){
+    player.treasureCardContainer.push(search_cards[25])
+    game.drawTreasurePackCards()
+    ew.removeAllEW();
+    /* "трофей"  Вы нашли магический свиток. 
+    TODO Вы можете сбросить эту карту вместо того, чтобы совершить поиск в комнате. 
+    Тогда Вы получите возможность выполнить перемещение в любою соседнюю исследованную область, 
+    игнорируя решётки, двери или стены.*/
+}
+
+function hitFromBehind(){
+    game.changeHealth(-1)
+    player.skipMove = 1
+    game.endMove()
+    ew.removeAllEW()
+
+    /* Пока Вы осматривали комнату, сзади подкрался мелкий гоблин и ударил Вас по голове большой палкой. 
+    Получите 1 ранение и пропустите следующий ход.*/
+}
+
+function goldenEarring(){
+    player.treasureCardContainer.push(search_cards[27])
+    game.drawTreasurePackCards()
+    ew.removeAllEW();
+    /* "трофей" У входа в комнату Вы нашли золотую серьгу, 
+    которую можно будет неплохо продать. 
+    +150 золота*/
+}
+
+function smallGoldenIngots(){
+    player.treasureCardContainer.push(search_cards[28])
+    game.drawTreasurePackCards()
+    ew.removeAllEW();
+    /* "трофей" На каменной плите у комнатной стены Вы нашли небольшую сумку с множетсвом мелких золотых слитков. 
+    +70 золота*/
+}
+
+function goldenIngots(){
+    player.treasureCardContainer.push(search_cards[29])
+    game.drawTreasurePackCards()
+    ew.removeAllEW();
+    /* "трофей" В старой паутине Вы нашли большой золотой слиток. +60 золота*/
+}
+
+function goldCoins(){
+    player.treasureCardContainer.push(search_cards[30])
+    game.drawTreasurePackCards()
+    ew.removeAllEW();
+     /* "трофей" На полу комнаты вы увидели 
+     полтора десятка разбросанных золотых монет и решили их собрать. +15 золота*/
+}
+
+function cardShuffling(){
+    game.refreshCatacombCards()
+    ew.removeAllEW()
+    const card = game.getRundomElement(game.search_cards, search_cards)
+
+    ew.drawCardEW(card);
+
+    /* Сбросьте эту карту. 
+    Затем перемешайте сброшенные и неиспользованные Карты Поиска. 
+    Вытяните еще одну карту из этой колоды и продолжайте свой ход в обычном порядке.*/
+}
+
 const search_cards = [
     /*0*/new Card(1, 'Секретный проход', false, false, ()=>{secretPass()}),
     /*1*/new Card(1, 'Секретный проход', false, false, ()=>{secretPass()}),
@@ -125,14 +200,14 @@ const search_cards = [
     
     /*22*/new Card(6, 'Проход в Склеп', false, false, ()=>{passageToTheCrypt()}),
     /*23*/new Card(7, 'Секретный Рычаг', false, false, ()=>{secretLever()}),
-    /*24*/new Card(8, 'Малое Зелье Лечения', 'treasure', 150, ()=>{ew.removeAllEW() /* "трофей" Во время своего хода, Вы можете сбросить эту карту, исцелив при этом 2 ранения Вашего героя. Вы не можете использовать эту карту после смерти своего героя. +150 золота*/}),
-    /*25*/new Card(9, 'Свиток Прохода', false, false, ()=>{ew.removeAllEW() /* "трофей"  Вы нашли магический свиток. Вы можете сбросить эту карту вместо того, чтобы совершить поиск в комнате. Тогда Вы получите возможность выполнить перемещение в любою соседнюю исследованную область, игнорируя решётки, двери или стены.*/}),
-    /*26*/new Card(10, 'Удар Сзади', false, false, ()=>{ew.removeAllEW() /* Пока Вы осматривали комнату, сзади подкрался мелкий гоблин и ударил Вас по голове большой палкой. Получите 1 ранение и пропустите следующий ход.*/}),
-    /*27*/new Card(11, 'Золотая Серьга', 'treasure', 150, ()=>{ew.removeAllEW() /* "трофей" У входа в комнату Вы нашли золотую серьгу, которую можно будет неплохо продать. +150 золота*/}),
-    /*28*/new Card(12, 'Мелкие Золотые Слитка', 'treasure', 70, ()=>{ew.removeAllEW() /* "трофей" На каменной плите у комнатной стены Вы нашли небольшую сумку с множетсвом мелких золотых слитков. +70 золота*/}),
-    /*29*/new Card(13, 'Золотой Слиток', 'treasure', 60, ()=>{ew.removeAllEW() /* "трофей" В старой паутине Вы нашли большой золотой слиток. +60 золота*/}),
-    /*30*/new Card(14, 'Золотые Монеты', 'treasure', 15, ()=>{ew.removeAllEW() /* "трофей" На полу комнаты вы увидели полтора десятка разбросанных золотых монет и решили их собрать. +15 золота*/}),
-    /*31*/new Card(15, 'Перемешивание карт', false, false, ()=>{ew.removeAllEW() /* Сбросьте эту карту. Затем перемешайте сброшенные и неиспользованные Карты Поиска. Вытяните еще одну карту из этой колоды и продолжайте свой ход в обычном порядке.*/}),
+    /*24*/new Card(8, 'Малое Зелье Лечения', 'treasure', 150, ()=>{smallHealingPotion()}),
+    /*25*/new Card(9, 'Свиток Прохода', false, false, ()=>{scrollOfPassage()}),
+    /*26*/new Card(10, 'Удар Сзади', false, false, ()=>{hitFromBehind()}),
+    /*27*/new Card(11, 'Золотая Серьга', 'treasure', 150, ()=>{goldenEarring()}),
+    /*28*/new Card(12, 'Мелкие Золотые Слитки', 'treasure', 70, ()=>{smallGoldenIngots()}),
+    /*29*/new Card(13, 'Золотой Слиток', 'treasure', 60, ()=>{goldenIngots()}),
+    /*30*/new Card(14, 'Золотые Монеты', 'treasure', 15, ()=>{goldCoins()}),
+    /*31*/new Card(15, 'Перемешивание карт', false, false, ()=>{cardShuffling()}),
 ]
 
 export {search_cards}
