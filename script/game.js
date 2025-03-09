@@ -141,7 +141,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        ew.drawCardEW(search_cards[1]);
+        ew.drawCardEW(search_cards[8]);
         // ew.drawCardEW(card);
         // TODO включить собітия 
     }
@@ -384,7 +384,7 @@ class Game {
             let active = ''
             if(idx === activeId) active = 'active'
             inner+=`
-                <div id="${item.id}" class="card-deck ${active}" style="background-image: url('img/abilitie_cards/abilitie_${player.hero}_${item.id}.jpg')"></div>        
+                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/abilitie_cards/abilitie_${player.hero}_${item.id}.jpg')"></div>        
             `
         });
         abilitieCardContainer.innerHTML=inner;
@@ -401,7 +401,7 @@ class Game {
             let active = ''
             if(idx === activeId) active = 'active'
             inner+=`
-                <div id="${item.id}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
+                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
             `
         });
         effectCardContainer.innerHTML=inner;
@@ -418,7 +418,7 @@ class Game {
             let active = ''
             if(idx === activeId) active = 'active'
             inner+=`
-                <div id="${item.id}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
+                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
             `
         });
         treasureCardContainer.innerHTML=inner;
@@ -435,7 +435,7 @@ class Game {
             let active = ''
             if(idx === activeId) active = 'active'
             inner+=`
-                <div id="${item.id}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
+                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
             `
         });
         catacombCardContainer.innerHTML=inner;
