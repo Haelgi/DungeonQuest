@@ -141,7 +141,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        ew.drawCardEW(search_cards[13]);
+        ew.drawCardEW(search_cards[20]);
         // ew.drawCardEW(card);
         // TODO включить собітия 
     }
