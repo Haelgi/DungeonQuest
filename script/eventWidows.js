@@ -89,6 +89,12 @@ class EventWidows{
         });
     }
 
+    removeDiceRollSection(){
+        this.removeTxt()
+        this.removeDiceInEW()
+        this.removeRawBtnInEW('roll')
+    }
+
     addNumberSectionForChoice() {
         const element = document.querySelector('.event-main');
         element.insertAdjacentHTML('beforeend', 
@@ -293,6 +299,10 @@ class EventWidows{
             }, 1700);
         }
         this.drawBtnInEW('roll', 'Кинути Кубики', trueFn)
+    }
+
+    removeDiceInEW(){
+        document.querySelector('.dice-section')?.remove()
     }
 
     drawDiceInEW(diceCount){

@@ -15,6 +15,7 @@ player.hero = 'enchantress';
 player.authentication = true;
 player.treasureCardContainer = [treasure_cards[1],treasure_cards[2],treasure_cards[3],treasure_cards[4]];
 player.positionTreasuryCards = [treasure_cards[1],treasure_cards[4]];
+player.catacombCardContainer = [treasure_cards[1],treasure_cards[4]];
 
 heroes[player.hero].resolve = 5
 

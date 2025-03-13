@@ -117,7 +117,7 @@ function poisonousAcid(){
 }
 
 function cardShuffling(){
-    game.refreshCatacombCards()
+    game.refreshDeadmanCards()
     ew.removeAllEW()
     const card = game.getRundomElement(game.deadman_cards, deadman_cards)
 

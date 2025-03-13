@@ -396,7 +396,6 @@ function deadCrowd(){
         ew.removeRawBtnInEW('btn_fight')
 
         const trueFn2 = ()=>{
-            console.log('trueFn2')
             game.changeHealth(-game.diceRollResultGlobal) 
             const card = game.getRundomElement(game.treasure_cards, treasure_cards)
             player.treasureCardContainer.push()

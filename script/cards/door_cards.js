@@ -176,7 +176,7 @@ function deadlyArrows(){
 }
 
 function cardShuffling(){
-    game.refreshDungeonCards()
+    game.refreshDoorCards()
     ew.removeAllEW()
     const card = game.getRundomElement(game.door_cards, door_cards)
     

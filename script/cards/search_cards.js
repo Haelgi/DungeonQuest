@@ -159,7 +159,7 @@ function goldCoins(){
 }
 
 function cardShuffling(){
-    game.refreshCatacombCards()
+    game.refreshSearchCards()
     ew.removeAllEW()
     const card = game.getRundomElement(game.search_cards, search_cards)
 
