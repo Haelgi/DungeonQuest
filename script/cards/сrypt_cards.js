@@ -193,5 +193,3 @@ const сrypt_cards = [
 ]
 
 export {сrypt_cards}
-
-// TODO закодировать функции карт Склепа
