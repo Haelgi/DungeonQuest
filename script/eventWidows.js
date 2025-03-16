@@ -282,7 +282,7 @@ class EventWidows{
     }
 
     removeTxt(){
-        document.querySelector('.event-txt-container')?.remove()
+        document.querySelectorAll('.event-txt-container')?.forEach((item)=>{item.remove()})
     }
 
     diceRollDarkRoomEW() {
@@ -473,7 +473,100 @@ class EventWidows{
         game.checkRoomEvents()
         game.endMove()
     }
-    
+
+    addBattleSection(card, endBattleFn){
+        this.clear()
+        this.addTxt(`
+            ${player.hero.toUpperCase()}<br>
+            <i id="pl_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px; margin: 10px auto;">${heroes[player.hero].health}</i><br>
+        `)
+
+        this.addTxt(`
+            <i style="font-size: 30px;"> </i><br>
+            <i style="font-size: 25px;">VS</i><br>
+        `)
+
+        this.addTxt(`
+            ${card.name.toUpperCase()}<br>
+            <i id="em_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px; margin: 20px auto;">${card.health}</i><br>
+        `)
+
+        const trueFn = ()=>{ 
+            if(game.diceRollResultGlobal<=3){
+                let damage = player.attack
+                card.health -= damage
+                this.drawEW(`${card.name} отримав ${damage} поранення`)
+                setTimeout(() => {
+                    this.removeLastEW()
+                    this.clear()
+                    this.addBattleSection(card, endBattleFn)
+                }, 1200);
+            }
+
+            if(game.diceRollResultGlobal>3){
+                let damage = 1
+                game.changeHealth(-damage)
+                this.drawEW(`Ви отримали ${damage} поранення`)
+                setTimeout(() => {
+                    this.removeLastEW()
+                    this.clear()
+                    this.addBattleSection(card, endBattleFn)
+                }, 1200);
+            }
+
+        }
+
+        this.addDiceRollSection(false, 6, false, true, 1, trueFn, false, false, false)
+        
+        if (player.escapeBattle) this.drawBtnInEW('btn_esc','Втекти', ()=>this.escapeBattle(card))
+
+        if (card.health < 1) {
+            this.drawEW(`${card.name} переможений!`)
+            setTimeout(() => {
+                this.removeAllEW()
+                endBattleFn()
+            }, 2000);
+            return
+        }
+
+        if (heroes[player.hero].health === 0) {
+            this.drawEW(`Ви загинули(`)
+            setTimeout(() => {
+                this.removeAllEW()
+                game.endGame()
+            }, 2000);
+            return
+        }
+    }
+
+    escapeBattle(card, endBattleFn){
+        const trueFn = ()=>{
+            let damage = card.penalty
+            game.changeHealth(-damage)
+            this.drawEW(`Ви змогли втекти, але отримали ${damage} поранень`)
+            setTimeout(() => {
+                game.drawMonsterToken(player.position[0], player.position[1], card)
+                player.extraMove = true
+                game.removeAllIcon()
+                this.removeAllEW()
+            }, 2000);
+
+        }
+
+        const falseFn = ()=>{
+            this.drawEW(`Ви НЕ змогли втекти`)
+            player.escapeBattle = false
+            setTimeout(() => {
+                this.removeLastEW()
+                this.addBattleSection(card, endBattleFn)
+            }, 1200);
+            
+        }
+
+        this.clear()
+        this.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, false, false)
+    }
+
 }
 
 export const ew = new EventWidows();

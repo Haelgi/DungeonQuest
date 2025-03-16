@@ -141,7 +141,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        ew.drawCardEW(сrypt_cards[7]);
+        ew.drawCardEW(monster_cards[0]);
         // ew.drawCardEW(card);
         // TODO включить собітия 
     }
@@ -471,6 +471,7 @@ class Game {
 
     checkMonsterCards(){
         if (!player.position) return
+        if (player.extraMove) return
         if (this.gameFields[player.position[1]][player.position[0]]['m'] === undefined || this.activeEvent) return
         if (this.gameFields[player.position[1]][player.position[0]]['m'].length === 0) {
             delete this.gameFields[player.position[1]][player.position[0]]['m']
@@ -763,7 +764,7 @@ class Game {
         }
     }
 
-    drawMonsterToken(x, y){
+    drawMonsterToken(x, y, card){
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
 
         field.insertAdjacentHTML('afterbegin', `
@@ -771,6 +772,7 @@ class Game {
         `);
 
         this.gameFields[y][x]['m'] = [];
+        if (card) this.gameFields[y][x]['m'].push(card)
     }
 
     drawCatacombToken(x, y){
@@ -1103,6 +1105,15 @@ class Game {
 
     subtractArrays(arr1, arr2, key) {
         return arr1.filter(obj1 => !arr2.some(obj2 => obj1[key] === obj2[key]));
+    }
+
+    getSomeCards(arr1, arr2, count){
+        const cards = [];
+        for (let i = 0; i < count; i++) {
+            cards.push(game.getRundomElement(arr1, arr2));
+        }
+        game.distributionCards(cards)
+        return cards
     }
 }
 
