@@ -6,6 +6,7 @@ import  {heroes}  from '../cards/heroes.js';
 import  {trap_cards}  from './trap_cards.js';
 import  {deadman_cards}  from './deadman_cards.js';
 import  {сrypt_cards}  from './сrypt_cards.js';
+import  {search_cards}  from './search_cards.js';
 import  {treasure_cards}  from './treasure_cards.js';
 
 class Card {
@@ -25,13 +26,23 @@ class Card {
 function ironGolem() {
     ew.removeRawBtnInEW('btn_ew')
 
-    function endBattleFn(){
+    function getCards(){
         const cards = game.getSomeCards(game.сrypt_cards, сrypt_cards, 3)
         ew.drawEW('Карти Склепу')
-        console.log(cards)
         ew.addPackCards(cards)
         addScrolCardsEffect('.event-deck-container', false)
         ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+    }
+
+    function endBattleFn(){
+        ew.drawCardEW(monster_cards[0])
+        ew.clear()
+        ew.drawBtnInEW('next', 'Витягнути 3 Карти Склепу', ()=>{
+            ew.removeAllEW()
+            getCards()
+        })
+        ew.drawBtnInEW('skip', 'НЕ витягувати', ()=>{ew.removeAllEW()})
+
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[0], endBattleFn))
@@ -42,17 +53,79 @@ function ironGolem() {
 }
 
 function iceGolem() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+
+    function endBattleFn(){
+        if (player.ambushRoom && player.surroundedMonsters) {
+            player.ambushRoom = false
+            player.surroundedMonsters = false
+            ew.removeAllEW()
+            return
+        }
+
+        player.skipMove = 1
+        game.endMove()
+        ew.removeAllEW()
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[1], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[1], endBattleFn))
+    
     /*Это голем льда. 
     Когда голем погибает, все вокруг замерзает. 
     Если Вы победили его в бою, пропустите свой следующий ход. 
     Если эта карта была вытянута вследствие разыгрывания эффекта карт 
-    TODO Комната с Засадой, 
-    TODO Окружение Монстрами, ее эффект не применяется.*/
+    Комната с Засадой, 
+    Окружение Монстрами, ее эффект не применяется.*/
 }
 
 function magmaGolem() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+
+    const trueFn = ()=> {
+        ew.drawEW(`Ви не отримали поранення`)
+        setTimeout(() => {
+            ew.removeLastEW()
+            ew.clear()
+            ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[2], endBattleFn))
+            ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[2], endBattleFn))
+        }, 1200);
+    }
+
+    const falseFn = ()=> {
+        ew.drawEW(`Ви отримали 2 поранення`)
+        game.changeHealth(-2)
+        setTimeout(() => {
+            ew.removeLastEW()
+            ew.clear()
+            ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[2], endBattleFn))
+            ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[2], endBattleFn))
+        }, 1200);
+    }
+
+    function dexterity(){
+        ew.clear()
+        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+    }
+
+    function defense(){
+        ew.clear()
+        ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
+    }
+
+    function luck(){
+        ew.clear()
+        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+    }
+
+    function endBattleFn(){
+        ew.removeAllEW() 
+    }
+
+    ew.drawBtnInEW('btn_dx','Спритність', dexterity)
+    ew.drawBtnInEW('btn_df','Захист',defense)
+    ew.drawBtnInEW('btn_luk','Удачу',luck)
+
     /*Это голем огня. 
     Он может обжечь Вас пламенем. 
     Перед началом боя выполните проверку одной из характеристик: Удачи, Ловкости, или Защиты. 
@@ -60,133 +133,592 @@ function magmaGolem() {
 }
 
 function stoneGolem() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+
+    function endBattleFn(){
+        if (player.ambushRoom && player.surroundedMonsters) {
+            player.ambushRoom = false
+            player.surroundedMonsters = false
+            ew.removeAllEW()
+            return
+        }
+
+        player.extraMove = true
+        ew.removeAllEW()
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[3], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[3], endBattleFn))
+
     /*Этот голем хранит в себе дающую силы энергию природы. 
     Если Вы победили его в бою, то можете немедленно выполнить еще одно перемещение. 
     Если эта карта была вытянута вследствие разыгрывания эффекта карт 
-    TODO Комната с Засадой, 
-    TODO Окружение Монстрами, ее эффект не применяется.*/
+    Комната с Засадой, 
+    Окружение Монстрами, ее эффект не применяется.*/
 }
 
 function demonOfSuffering() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+
+    function getCards(){
+        const card = this.getRundomElement(this.search_cards, search_cards)   
+        ew.drawCardEW(card);
+    }
+
+    function endBattleFn(){
+        if (player.ambushRoom && player.surroundedMonsters) {
+            player.ambushRoom = false
+            player.surroundedMonsters = false
+            ew.removeAllEW()
+            return
+        }
+
+        ew.drawCardEW(monster_cards[4])
+        ew.clear()
+        ew.drawBtnInEW('next', 'Обшукати кімнату', ()=>{
+            ew.removeAllEW()
+            getCards()
+        })
+        ew.drawBtnInEW('skip', 'НЕ обшукувати', ()=>{ew.removeAllEW()})
+
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[4], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[4], endBattleFn))
+
     /*Победив этого демона в бою, 
     Вы можете немедленно выполнить поиск в комнате, в которой Вы находитесь, если это возможно. 
     Если эта карта была вытянута вследствие разыгрывания эффекта карт 
-    TODO Комната с Засадой, 
-    TODO Окружение Монстрами, ее эффект не применяется.*/
+    Комната с Засадой, 
+    Окружение Монстрами, ее эффект не применяется.*/
 }
 
 function demonOfPain() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+
+    const trueFn = ()=> {
+        ew.drawEW(`Ви не отримали поранення`)
+        setTimeout(() => {
+            ew.removeLastEW()
+            ew.clear()
+            ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[5], endBattleFn))
+            ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[5], endBattleFn))
+        }, 1200);
+    }
+
+    const falseFn = ()=> {
+        ew.drawEW(`Ви отримали 1 поранення`)
+        game.changeHealth(-1)
+        setTimeout(() => {
+            ew.removeLastEW()
+            ew.clear()
+            ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[5], endBattleFn))
+            ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[5], endBattleFn))
+        }, 1200);
+    }
+
+    function dexterity(){
+        ew.clear()
+        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+    }
+
+    function endBattleFn(){
+        ew.removeAllEW() 
+    }
+
+    ew.drawBtnInEW('btn_dx','Спритність', dexterity)
+
     /*Этот демон страмительно Вас атаковал. 
     Перед началом боя выполните проверку Ловкости. 
     В случае провала получите 1 ранение.*/
 }
 
 function demonOfFear() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+    heroes[player.hero].resolve = 0
+    game.addCharacterTablet(player.hero)
+
+    function endBattleFn(){
+        ew.removeAllEW()
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[6], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[6], endBattleFn))
+
     /*Вы были напуганы жутким видом этого демона. 
     Перед началом боя сбросьте все свои жетоны решимости.*/
 }
 
 function demonOfRage() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+
+    function getCards(){
+        const card = this.getRundomElement(this.treasure_cards, treasure_cards)   
+        ew.drawCardEW(card);
+    }
+
+    function endBattleFn(){
+
+        ew.drawCardEW(monster_cards[7])
+        ew.clear()
+        ew.drawBtnInEW('next', 'Витягнути Карту Скарбів', ()=>{
+            ew.removeAllEW()
+            getCards()
+        })
+        ew.drawBtnInEW('skip', 'НЕ витягувати', ()=>{ew.removeAllEW()})
+
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[7], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[7], endBattleFn))
     /*Этот демон обладает сокровищем. 
     Если Вы победили в бою с этим демоном, возьмите Карту Сокровища.*/
 }
 
 function possessedBySpirits() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+    if (player.ambushRoom && player.surroundedMonsters) {
+        player.ambushRoom = false
+        player.surroundedMonsters = false
+        ew.removeAllEW()
+        return
+    }
+    
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+
+        function endBattleFn(){ew.removeAllEW()}
+
+        if (result<=2) {
+            ew.drawEW(`Нічого не відбувається`)
+            setTimeout(() => {
+                ew.removeLastEW()
+                ew.clear
+                ew.addBattleSection(monster_cards[8], endBattleFn)
+            }, 1200);
+        }
+
+        if (3<= result ) {
+            game.rotateRoomTile(180)
+            game.removeHighlightFields(game.nextCoordinates)
+            game.removeAllIcon()
+            game.nextCoordinates = game.newCoordinate()
+            
+            ew.drawEW(`Кімната розвернулася`)
+            setTimeout(() => {
+                ew.removeLastEW()
+                ew.clear
+                ew.addBattleSection(monster_cards[8], endBattleFn)
+            }, 1200);
+        }
+
+    }
+
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+
     /*Перед началом боя бросьте 1d6: 
     1-2 - Ничего не происходит; 
     3-6 Поверните тайл комнаты, в которой Вы находитесь, на 180°. 
     Если эта карта была вытянута вследствие разыгрывания эффекта карт 
-    TODO Комната с Засадой, 
-    TODO Окружение Монстрами, ее эффект не применяется.*/
+    Комната с Засадой, 
+    Окружение Монстрами, ее эффект не применяется.*/
 }
 
 function servantOfTheUnderworld() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+
+        if (result<=3) {
+            ew.drawEW(`Ви пропускаєте свій наступний хід`)
+            setTimeout(() => {
+                ew.removeAllEW()
+                player.skipMove = 1
+            }, 1200);
+        }
+
+        if (4<= result ) {
+            ew.drawEW(`Ви негайно входите до Катакомби`)
+            setTimeout(() => {
+                ew.removeAllEW()
+                game.drawCatacombToken(player.position[0], player.position[1])
+                game.getDirectionCatacomb()
+            }, 1200);
+        }
+
+    }
+
+    function endBattleFn(){
+        ew.drawCardEW(monster_cards[9])
+        ew.clear()
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[9], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[9], endBattleFn))
+
     /*Победив этого колдуна в бою, бросьте 1d6: 
     1-3 - Вы пропускаете свой следующий ход; 
     4-6 - Вы немедленно входите в Катакомбы. 
     Если эта карта была вытянута вследствие разыгрывания эффекта карт 
-    TODO Комната с Засадой, 
-    TODO Окружение Монстрами, ее эффект не применяется.*/
+    Комната с Засадой, 
+    Окружение Монстрами, ее эффект не применяется.*/
 }
 
 function servantOfChaos() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+
+    function getCards(){
+        const card = this.getRundomElement(this.search_cards, search_cards)   
+        ew.drawCardEW(card);
+    }
+
+    function endBattleFn(){
+        ew.drawCardEW(monster_cards[10])
+        ew.clear()
+        ew.drawBtnInEW('next', 'Обшукати', ()=>{
+            ew.removeAllEW()
+            getCards()
+        })
+        ew.drawBtnInEW('skip', 'НЕ обшукувати', ()=>{ew.removeAllEW()})
+
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[10], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[10], endBattleFn))
     /*Победив этого колдуна в бою, Вы можете обыскать его тело. 
     Тяните Карту Мертвеца.*/
 }
 
 function cultAdept() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+
+    const maxValue = player.treasureCardContainer.length-1
+
+    if (maxValue>0) {
+        const randomId = Math.floor(Math.random() * maxValue)
+
+        player.treasureCardContainer.splice(randomId, 1)
+    
+        ew.drawEW(`Ви втратили один з своїх тофеїв`)
+        setTimeout(() => {ew.removeLastEW()}, 2000);
+    }
+
+    function endBattleFn(){
+        ew.removeAllEW()
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[11], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[11], endBattleFn))
+
     /*Этот колдун таким образом наложил проклятие на один из ваших Трофеев, что он стал для Вас неподъёмным. 
     Перед началом боя с этим колдуном случайным образом сбросьте один из своих Трофеев.*/
 }
 
 function skeletonWarrior() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+    
+    function getCards(){
+        const card = this.getRundomElement(this.deadman_cards, deadman_cards)   
+        ew.drawCardEW(card);
+    }
+
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+
+        if (result<=4) {
+            ew.removeAllEW()
+            ew.drawCardEW(monster_cards[12])
+            ew.clear()
+            ew.drawBtnInEW('next', 'Обшукати', ()=>{
+                ew.removeAllEW()
+                getCards()
+            })
+            ew.drawBtnInEW('skip', 'НЕ обшукувати', ()=>{ew.removeAllEW()})
+
+        }
+
+        if (5<= result ) {
+            ew.drawEW(`Скелет зцілюється від усіх поранень`)
+            setTimeout(() => {
+                ew.removeAllEW()
+                ew.drawCardEW(monster_cards[12])
+                ew.clear()
+                ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[12], endBattleFn))
+                ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[12], endBattleFn))
+            }, 1200);
+        }
+
+    }
+
+    function endBattleFn(){
+        ew.drawCardEW(monster_cards[12])
+        ew.clear()
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[12], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[12], endBattleFn))
+
     /*Победив этого скелета в бою, бросьте 1d6: 
     1-4 - Скелет побежден и его можно обыскать; тяните Карту Мертвеца; 
     5-6 - Скелет исцеляется от всех ранений и Вам необходимо снова провести с ним бой, после чего снова разыграть этот эффект, бросив 1d6.*/
 }
 
 function decrepitSkeleton() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+    
+    function getCards(){
+        const card = this.getRundomElement(this.deadman_cards, deadman_cards)   
+        ew.drawCardEW(card);
+    }
+
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+
+        if (result<=2) {
+            ew.removeAllEW()
+            ew.drawCardEW(monster_cards[13])
+            ew.clear()
+            ew.drawBtnInEW('next', 'Обшукати', ()=>{
+                ew.removeAllEW()
+                getCards()
+            })
+            ew.drawBtnInEW('skip', 'НЕ обшукувати', ()=>{ew.removeAllEW()})
+
+        }
+
+        if (3<= result ) {
+            ew.drawEW(`Скелет зцілюється від усіх поранень`)
+            setTimeout(() => {
+                ew.removeAllEW()
+                ew.drawCardEW(monster_cards[13])
+                ew.clear()
+                ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[12], endBattleFn))
+                ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[12], endBattleFn))
+            }, 1200);
+        }
+
+    }
+
+    function endBattleFn(){
+        ew.drawCardEW(monster_cards[13])
+        ew.clear()
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[13], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[13], endBattleFn))
+
     /*Победив этого скелета в бою, бросьте 1d6: 
     1-2 - Скелет побежден и его можно обыскать; тяните Карту Мертвеца; 
     3-6 - Скелет исцеляется от всех ранений и Вам необходимо снова провести с ним бой, после чего снова разыграть этот эффект, бросив 1d6.*/
 }
 
 function skeletonKiller() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+    
+    function getCards(){
+        const card = this.getRundomElement(this.deadman_cards, deadman_cards)   
+        ew.drawCardEW(card);
+    }
+
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+
+        if (result<=4) {
+            ew.removeAllEW()
+            ew.drawCardEW(monster_cards[14])
+            ew.clear()
+            ew.drawBtnInEW('next', 'Обшукати', ()=>{
+                ew.removeAllEW()
+                getCards()
+            })
+            ew.drawBtnInEW('skip', 'НЕ обшукувати', ()=>{ew.removeAllEW()})
+
+        }
+
+        if (5<= result ) {
+            ew.drawEW(`Скелет зцілюється від усіх поранень`)
+            setTimeout(() => {
+                ew.removeAllEW()
+                ew.drawCardEW(monster_cards[14])
+                ew.clear()
+                ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[14], endBattleFn))
+                ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[14], endBattleFn))
+            }, 1200);
+        }
+
+    }
+
+    function endBattleFn(){
+        ew.drawCardEW(monster_cards[12])
+        ew.clear()
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[14], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[14], endBattleFn))
+
     /*Победив этот скелет в бою, бросьте 1d6: 
     1-4 - Скелет побежден и его можно обыскать; тянуть Карту Мертвеца; 
     5-6 - Скелет исцеляется от всех ранений и Вам необходимо снова провести с ним бойца, после чего снова разыграть этот эффект, бросив 1d6.*/
 }
 
 function skeletonArcher() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+    
+    function getCards(){
+        const card = this.getRundomElement(this.deadman_cards, deadman_cards)   
+        ew.drawCardEW(card);
+    }
+
+    const result = ()=>{ 
+        const result = game.diceRollResultGlobal
+
+        if (result<=4) {
+            ew.removeAllEW()
+            ew.drawCardEW(monster_cards[15])
+            ew.clear()
+            ew.drawBtnInEW('next', 'Обшукати', ()=>{
+                ew.removeAllEW()
+                getCards()
+            })
+            ew.drawBtnInEW('skip', 'НЕ обшукувати', ()=>{ew.removeAllEW()})
+
+        }
+
+        if (5<= result ) {
+            ew.drawEW(`Скелет зцілюється від усіх поранень`)
+            setTimeout(() => {
+                ew.removeAllEW()
+                ew.drawCardEW(monster_cards[15])
+                ew.clear()
+                ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[15], endBattleFn))
+                ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[15], endBattleFn))
+            }, 1200);
+        }
+
+    }
+
+    function endBattleFn(){
+        ew.drawCardEW(monster_cards[15])
+        ew.clear()
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[15], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[15], endBattleFn))
     /*Победив этого скелета в бою, бросьте 1d6: 
     1-4 - Скелет побежден и его можно обыскать; тяните Карту Мертвеца; 
     5-6 - Скелет исцеляется от всех ранений и Вам необходимо снова провести с ним бой, после чего снова разыграть этот эффект, бросив 1d6.*/
 }
 
 function trollDestroyer() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+
+    function getCards(){
+        const cards = game.getSomeCards(game.сrypt_cards, сrypt_cards, 3)
+        ew.drawEW('Карти Склепу')
+        ew.addPackCards(cards)
+        addScrolCardsEffect('.event-deck-container', false)
+        ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+    }
+
+    function endBattleFn(){
+        ew.drawCardEW(monster_cards[16])
+        ew.clear()
+        ew.drawBtnInEW('next', 'Витягнути 3 Карти Склепу', ()=>{
+            ew.removeAllEW()
+            getCards()
+        })
+        ew.drawBtnInEW('skip', 'НЕ витягувати', ()=>{ew.removeAllEW()})
+
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[16], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[16], endBattleFn))
+
     /*Во время боя с этим троллем была повреждена стена подземелья, за которой находился некрополь. 
     Победив в бою с этим троллем, Вы можете немедленно вытянуть 3 Карты Склепа.*/
 }
 
 function madTroll() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+
+    function endBattleFn(){
+        if (player.ambushRoom && player.surroundedMonsters) {
+            player.ambushRoom = false
+            player.surroundedMonsters = false
+            ew.removeAllEW()
+            return
+        }
+
+        player.extraMove = true
+        game.removeAllIcon()
+        ew.removeAllEW()
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[17], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[17], endBattleFn))
+
     /*Тролль крушит все вокруг. 
     Победив его в бою, Вы можете немедленно выполнить перемещение в любую соседнюю область, игнорируя решетки, двери и стены. 
     Если эта карта была вытянута вследствие разыгрывания эффекта карт 
-    TODO Комната с Засадой, 
-    TODO Окружение Монстрами, ее эффект не применяется.*/
+    Комната с Засадой, 
+    Окружение Монстрами, ее эффект не применяется.*/
 }
 
 function trollBrute() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+
+    function endBattleFn(){
+        if (player.ambushRoom && player.surroundedMonsters) {
+            player.ambushRoom = false
+            player.surroundedMonsters = false
+            ew.removeAllEW()
+            return
+        }
+
+        player.skipMove = 1
+        game.endMove()
+        ew.removeAllEW()
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[18], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[18], endBattleFn))
+    
     /*После боя с этим огромным троллем Вы были сильно истощены. 
     Победив его в бою, пропустите свой следующий ход. 
     Если эта карта была вытянута вследствие разыгрывания эффекта карт 
-    TODO Комната с Засадой, 
-    TODO Окружение Монстрами, ее эффект не применяется.*/
+    Комната с Засадой, 
+    Окружение Монстрами, ее эффект не применяется.*/
 }
 
 function trollCannibal() {
-    ew.removeAllEW();
+    ew.removeRawBtnInEW('btn_ew')
+
+    function endBattleFn(){
+        if (player.ambushRoom && player.surroundedMonsters) {
+            player.ambushRoom = false
+            player.surroundedMonsters = false
+            ew.removeAllEW()
+            return
+        }
+
+        player.extraMove = true
+        ew.removeAllEW()
+    }
+
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[17], endBattleFn))
+    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[17], endBattleFn))
+
     /*Убийство этого кровожадного тролля-людоеда воодушевит Вас. 
     Победив его в бою, Вы можете немедленно выполнить еще одно перемещение. 
     Если эта карта была вытянута вследствие разыгрывания эффекта карт 
-    TODO Комната с Засадой, 
-    TODO Окружение Монстрами, ее эффект не применяется.*/
+    Комната с Засадой, 
+    Окружение Монстрами, ее эффект не применяется.*/
 }
 
 const monster_cards = [
@@ -213,5 +745,3 @@ const monster_cards = [
 ];
 
 export { monster_cards };
-
-// TODO закодировать функции карт Дверей

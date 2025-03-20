@@ -228,6 +228,7 @@ function ambushRoom(){
     const falseFn = ()=>{
         ew.removeAllEW()
         player.escapeBattle = false
+        player.ambushRoom = true
         const cards = [game.getRundomElement(game.monster_cards, monster_cards),
             game.getRundomElement(game.monster_cards, monster_cards)]
             game.gameFields[player.position[1]][player.position[0]]['m'] = cards
@@ -252,6 +253,7 @@ function ambushRoom(){
 
 function surroundedByMonsters(){
     player.escapeBattle = false
+    player.surroundedMonsters = true
 
     const trueFn = ()=>{
         const cards = [game.getRundomElement(game.monster_cards, monster_cards)]

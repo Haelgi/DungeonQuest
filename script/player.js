@@ -32,6 +32,8 @@ class Player {
         this.holeInCeiling = false
 
         this.choiceNumber= [];
+        this.ambushRoom = false
+        this.surroundedMonsters = false
     }
 }
 

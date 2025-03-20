@@ -141,7 +141,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        ew.drawCardEW(monster_cards[0]);
+        ew.drawCardEW(monster_cards[17]);
         // ew.drawCardEW(card);
         // TODO включить собітия 
     }
