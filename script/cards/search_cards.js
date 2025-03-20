@@ -211,5 +211,3 @@ const search_cards = [
 ]
 
 export {search_cards}
-
-// TODO закодировать функции карт Поиска

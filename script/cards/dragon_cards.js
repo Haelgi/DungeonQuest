@@ -79,6 +79,3 @@ const dragon_cards = [
 ]
 
 export {dragon_cards}
-
-
-// TODO закодировать функции карт Дверей

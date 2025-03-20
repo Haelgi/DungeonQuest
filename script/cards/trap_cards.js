@@ -711,5 +711,3 @@ const trap_cards = [
 ]
 
 export {trap_cards}
-
-// TODO закодировать функции карт ловушек
