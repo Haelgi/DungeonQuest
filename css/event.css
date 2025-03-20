@@ -56,6 +56,8 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: center;
+
 }
 
 .division-line{
@@ -74,6 +76,8 @@
     border-radius: 10px;
     height: 450px;
     width: 300px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
 }
 
 .event-container button{
@@ -89,4 +93,63 @@
     background: #fae100;
     color: #fff;
     box-shadow: 0 0 5px #fae100, 0 0 25px #fae100, 0 0 50px #fae100, 0 0 100px #fae100;
+}
+
+.event-container .card-deck-container{
+    margin-top: 20px;
+}
+
+.card-feld-section{
+    display:flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card-feld{
+    height: 180px;
+    width: 130px;
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(255, 255, 255, 0.849) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+
+.card-feld .card{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 200px;
+    width: 130px;
+
+}
+
+.event-txt-container{
+    display: flex;
+    text-align: center;
+    
+}
+
+.event-txt{
+    margin-right: 20px;
+}
+
+.number-for-choice-section{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0px;
+}
+
+.number-for-choice{
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    margin: 5px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.number-for-choice.active{
+    background: #fae100;
+    color: #000000;
 }
