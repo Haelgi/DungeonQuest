@@ -119,6 +119,14 @@
     font-size: 35px;
     color: #c71c0f;
 }
+
+.gold-value{
+    top: -235px;
+    left: 130px;
+    width: 140px;
+    font-size: 30px;
+    color: #fae100;
+}
 /* End Hero Container ------*/
 
 
