@@ -7,15 +7,15 @@ export function addScrolCardsEffect(container, fn) {
     const parentContainer = document.querySelector(container);
     if (!parentContainer) return;
 
-    function handleMouseDown(e) {
+    function handleStart(e) {
         e.preventDefault();
-        startX = e.clientX;
+        startX = e.touches ? e.touches[0].clientX : e.clientX;
     }
 
-    function handleMouseUp(e) {
+    function handleEnd(e) {
         if (!startX) return;
 
-        endX = e.clientX;
+        endX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
 
         if (startX === endX && fn) fn(e);
 
@@ -39,18 +39,20 @@ export function addScrolCardsEffect(container, fn) {
         if (activeCard) activeCard.classList.remove('active');
     }
 
-    // **Удаляем старые обработчики, если они есть**
+    // Удаляем старые обработчики
     if (handlersMap.has(parentContainer)) {
-        const { down, up } = handlersMap.get(parentContainer);
-        parentContainer.removeEventListener('mousedown', down);
-        parentContainer.removeEventListener('mouseup', up);
+        const { start, end } = handlersMap.get(parentContainer);
+        parentContainer.removeEventListener('mousedown', start);
+        parentContainer.removeEventListener('mouseup', end);
+        parentContainer.removeEventListener('touchstart', start);
+        parentContainer.removeEventListener('touchend', end);
     }
 
-    // **Добавляем новые обработчики и сохраняем их в Map**
-    parentContainer.addEventListener('mousedown', handleMouseDown);
-    parentContainer.addEventListener('mouseup', handleMouseUp);
-    parentContainer.addEventListener('touchstart', handleMouseDown);
-    parentContainer.addEventListener('touchend', handleMouseUp);
+    // Добавляем новые обработчики
+    parentContainer.addEventListener('mousedown', handleStart);
+    parentContainer.addEventListener('mouseup', handleEnd);
+    parentContainer.addEventListener('touchstart', handleStart, { passive: false });
+    parentContainer.addEventListener('touchend', handleEnd);
 
-    handlersMap.set(parentContainer, { down: handleMouseDown, up: handleMouseUp });
+    handlersMap.set(parentContainer, { start: handleStart, end: handleEnd });
 }
