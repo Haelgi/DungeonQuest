@@ -482,6 +482,7 @@ function spinningBlade() {
         ew.addEmptyFeldForCard(countCards);
         ew.addPackCards(player.treasureCardContainer);
         ew.addBtnInEW('next', 'Віддавати трофеї', () => {
+            game.drawTreasurePackCards()
             game.changeHealth(-damage);
             ew.drawEW(`Ви отримали ${damage} поранення`);
             setTimeout(() => {

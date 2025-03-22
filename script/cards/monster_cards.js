@@ -402,6 +402,7 @@ function cultAdept() {
         player.treasureCardContainer.splice(randomId, 1)
     
         ew.drawEW(`Ви втратили один з своїх тофеїв`)
+        game.drawTreasurePackCards()
         setTimeout(() => {ew.removeLastEW()}, 2000);
     }
 

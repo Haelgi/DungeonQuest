@@ -59,6 +59,7 @@ function holeInCeiling(){
     
                 ew.drawBtnInEW('btn_next','Використати Мотузку', ()=>{
                     player.treasureCardContainer.pop(id,1)
+                    game.drawTreasurePackCards()
                     ew.removeAllEW()
                     ew.escapeCatacombEW()
                 })
@@ -377,6 +378,7 @@ function trap(){
 
         ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{
             emptyFelds.forEach(card=>{player.treasureCardContainer.push(card)})
+            game.drawTreasurePackCards()
             player.skipMove = 1
             ew.removeAllEW()
         })
@@ -786,6 +788,7 @@ function roguesAttack(){
 
             game.removeRandomCardFromPack(player.treasureCardContainer)
             game.removeRandomCardFromPack(player.treasureCardContainer)
+            game.drawTreasurePackCards()
 
             ew.drawEW(`Від удару Ви знепритомніли, отримаєте 4 поранення і втратили кілька трофеїв`)
             setTimeout(() => {
@@ -1151,6 +1154,7 @@ function alchemist(){
         })
 
         ew.addPackCards(player.treasureCardContainer)
+        
     
         const emptyFelds = []
         const btnNext = document.getElementById('next')
@@ -1169,6 +1173,7 @@ function alchemist(){
         function removeCardFromPack(e) {
             const id = e.target.getAttribute('id')
             const card = player.treasureCardContainer.splice(id, 1)
+            game.drawTreasurePackCards()
     
             ew.updatePackCardsEW(player.treasureCardContainer)
     
@@ -1217,6 +1222,7 @@ function alchemist(){
 
 function giantDiamond(){
     player.treasureCardContainer.push(catacomb_cards[46])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
 
     /*"трофей" +4000 золотых*/
@@ -1229,7 +1235,7 @@ function boxOfGold(){
 
         card.cost = Number(result)
         player.treasureCardContainer.push(card)
-        console.log(player.treasureCardContainer)
+        game.drawTreasurePackCards()
 
         ew.drawEW(`Ви знайшли у шкатулці ${result} золота`)
         setTimeout(() => {
@@ -1246,6 +1252,7 @@ function boxOfGold(){
 
 function hammerOfPower(){
     player.treasureCardContainer.push(catacomb_cards[48])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
     /* "трофей" Пока эта карта у Вас, в бою с големом, каждая Ваша успешная атака наносит 2 ранения вместо 1.*/
 }

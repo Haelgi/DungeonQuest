@@ -400,6 +400,7 @@ class EventWidows{
         });
 
         element.insertAdjacentHTML('beforeend', `<div class="card-deck-container event-deck-container">${cardDeckContainer}</div>`);
+        game.updateGoldValue()
     }
     
     removePackCardsInEW(){

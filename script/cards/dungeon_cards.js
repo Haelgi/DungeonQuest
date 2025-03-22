@@ -148,6 +148,7 @@ function goblinExplorer(){
     ew.removeRawBtnInEW('btn_ew')
     ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{
         emptyFelds.forEach(card=>{player.treasureCardContainer.push(card)})
+        game.drawTreasurePackCards()
         ew.removeAllEW()
     })
     ew.addEmptyFeldForCard(2)
@@ -401,6 +402,7 @@ function deadCrowd(){
             game.changeHealth(-game.diceRollResultGlobal) 
             const card = game.getRundomElement(game.treasure_cards, treasure_cards)
             player.treasureCardContainer.push()
+            game.drawTreasurePackCards()
             ew.drawEW('Ви отримали 2 поранення');
             ew.drawBtnInEW('btn_next', 'Отримати бонус за бій', ()=>{
                 ew.removeAllEW()
@@ -538,6 +540,7 @@ function goblinWithTreasure() {
             const trueFn2 = ()=>{
                 const card = game.getRundomElement(game.treasure_cards, treasure_cards)
                 player.treasureCardContainer.push(card)
+                game.drawTreasurePackCards()
 
                 ew.drawEW(`Ви змогли забрати у Гобліна скарб`)
                 ew.drawCardsInEW(card)
@@ -802,6 +805,7 @@ function evilGoblin(){
             const randomId = Math.floor(Math.random() * maxValue)
             
             player.treasureCardContainer.splice(randomId, 1)
+            game.drawTreasurePackCards()
             
             ew.drawEW(`Гоблін поранив Вас (ви отримали ${damage} поранення), вкрав один із скарбів та втік`)
             setTimeout(() => {ew.removeAllEW()}, 2000);
@@ -881,6 +885,7 @@ function treasureGuard(){
 
         ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{
             emptyFelds.forEach(card=>{player.treasureCardContainer.push(card)})
+            game.drawTreasurePackCards()
             ew.removeAllEW()
         })
         ew.addEmptyFeldForCard(countCards)
@@ -888,6 +893,7 @@ function treasureGuard(){
             damage -= emptyFelds.length
 
             game.changeHealth(-damage)
+            game.drawTreasurePackCards()
             
             ew.drawEW(`Ви отримали ${damage} додаткових пораненнь`)
             setTimeout(() => {ew.removeAllEW()}, 2000);
@@ -1155,6 +1161,7 @@ function fierceCutthroat(){
             player.treasureCardContainer.splice(card2, 1)
 
             ew.drawEW(`Ви втратили 2 трофеї`)
+            game.drawTreasurePackCards()
             setTimeout(() => {
                 ew.removeAllEW()
             }, 2000);
@@ -1273,6 +1280,7 @@ function collapsedBeam(){
 
 function goldCoins(){
     player.treasureCardContainer.push(dungeon_cards[57])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
 
     /* "трофей" Комната пуста, однако на полу Вы заметили небольшой кошелёк. 
@@ -1281,6 +1289,7 @@ function goldCoins(){
 
 function preciousStone(){
     player.treasureCardContainer.push(dungeon_cards[58])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
 
     /* "трофей" Комната пуста, однако Вы заметили как под ногами что-то свернуло. 

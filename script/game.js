@@ -200,7 +200,7 @@ class Game {
         if (y > 0 && this.checkOtherPlayer([x, y - 1]) && this.checkPermitWayNeighbour([x, y - 1], 'down', false, withoutDoors)  && this.checkPermitWay([x, y], 'up', true, withoutDoors)) coordinates.push([x, y - 1]);   
         if (x < 14 && this.checkOtherPlayer([x + 1, y]) && this.checkPermitWayNeighbour([x + 1, y], 'left', false, withoutDoors)  && this.checkPermitWay([x, y], 'right', true, withoutDoors)) coordinates.push([x + 1, y]);  
         if (y < 11  && this.checkOtherPlayer([x, y + 1]) && this.checkPermitWayNeighbour([x, y + 1], 'up', false, withoutDoors)  && this.checkPermitWay([x, y], 'down', true, withoutDoors))  coordinates.push([x, y + 1]);  
-        if (this.isPlayerInTower() && player.catacomb) coordinates.push(...this.startFields)
+        if (this.isPlayerInTower() && !player.catacomb) coordinates.push(...this.startFields)
         return coordinates;
     }
 
