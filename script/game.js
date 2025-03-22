@@ -351,9 +351,23 @@ class Game {
                 <div class="hero-value defense-value">${heroes[heroName].defense}</div>
                 <div class="hero-value luck-value">${heroes[heroName].luck}</div>
                 <div class="hero-value health-value">${heroes[heroName].health}</div>             
+                <div class="hero-value gold-value"><i class="fa-solid fa-coins"></i>   ${player.gold}</div>             
             </div>
         `;
     };
+
+    updateGoldValue(){
+        const cards = player.treasureCardContainer
+        let gold = 0
+        if (cards.length === 0) return
+
+        cards.forEach(card => {
+            if (card.cost) gold += card.cost
+        });
+
+        player.gold = gold
+        this.addCharacterTablet(player.hero)
+    }
 
     updatePackCardsEW(packCards){
         const element = document.querySelector('.event-main');
@@ -420,6 +434,7 @@ class Game {
             `
         });
         treasureCardContainer.innerHTML=inner;
+        this.updateGoldValue()
 
         addScrolCardsEffect('.treasure-card-container');
     };
@@ -1099,6 +1114,7 @@ class Game {
 
         this.drawEffectPackCards();
         this.drawTreasurePackCards()
+        this.updateGoldValue()
     }
 
     subtractArrays(arr1, arr2, key) {

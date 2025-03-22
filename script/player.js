@@ -21,19 +21,20 @@ class Player {
         this.endMoveEventCardContainer = [];
         
         this.attack = 1;
-        this.extraMove = false
-        this.skipMove = 0
-        this.escapeBattle = true
-        this.curseOfTheSorcerer = false
+        this.extraMove = false;
+        this.skipMove = 0;
+        this.escapeBattle = true;
+        this.curseOfTheSorcerer = false;
         this.oldResolve = 0;
         this.curseResolve = false;
-        this.checkEventCards = true
-        this.checkEndMoveEventCardContainer = true
-        this.holeInCeiling = false
+        this.checkEventCards = true;
+        this.checkEndMoveEventCardContainer = true;
+        this.holeInCeiling = false;
 
         this.choiceNumber= [];
-        this.ambushRoom = false
-        this.surroundedMonsters = false
+        this.ambushRoom = false;
+        this.surroundedMonsters = false;
+        this.gold = 0
     }
 }
 

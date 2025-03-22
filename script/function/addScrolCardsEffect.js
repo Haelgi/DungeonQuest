@@ -49,6 +49,8 @@ export function addScrolCardsEffect(container, fn) {
     // **Добавляем новые обработчики и сохраняем их в Map**
     parentContainer.addEventListener('mousedown', handleMouseDown);
     parentContainer.addEventListener('mouseup', handleMouseUp);
+    parentContainer.addEventListener('touchstart', handleMouseDown);
+    parentContainer.addEventListener('touchend', handleMouseUp);
 
     handlersMap.set(parentContainer, { down: handleMouseDown, up: handleMouseUp });
 }
