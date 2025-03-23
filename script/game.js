@@ -509,10 +509,10 @@ class Game {
         if (!player.position) array = this.startFields;
         if (player.position ) array = this.nextCoordinates;
 
-        this.checkCurseOfTheSorcerer()
-        this.checkEventCards()
-        this.checkCatacombCards()
-        this.checkMonsterCards()
+        // this.checkCurseOfTheSorcerer()
+        // this.checkEventCards()
+        // this.checkCatacombCards()
+        // this.checkMonsterCards()
     
         if (!document.querySelector(`.available-field`)) {
             this.highlightFields(array);    
@@ -698,6 +698,7 @@ class Game {
     drawTileField(x, y){
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         const roomNumber = this.getRundomElement(this.room_tiles, room_tiles).number;
+
         let rotate;
         
         if (x > player.positionPrevious[0]) {rotate = 90}  
@@ -980,7 +981,7 @@ class Game {
     clickTreasureIcon(){
         const treasureIcon = document.querySelector('.treasure-icon');
         treasureIcon.addEventListener('click', () => {
-            const card = this.getRundomElement(this.treasure_cards, treasure_cards)
+            const card = this.getRundomElement(this.dragon_cards, dragon_cards)
             ew.drawCardEW(card)
         });
     };
@@ -1097,9 +1098,10 @@ class Game {
     }
 
     getRundomElement(idxArr, objArr){
+        if (idxArr.length === 0 ) return
         const randomIdx = this.random(idxArr.length);
-        idxArr.splice(randomIdx, 1);
-        return objArr[randomIdx]
+        const obj = idxArr.splice(randomIdx, 1);
+        return objArr[obj - 1]
     }
     
     random(maxValue){
