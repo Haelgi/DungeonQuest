@@ -26,7 +26,6 @@ class Card {
 
 function attack(){
     const card = game.getRundomElement(game.monster_cards, monster_cards)
-    game.distributionCards([card])
 
     ew.removeAllEW();
     ew.drawCardEW(card)
@@ -35,7 +34,6 @@ function attack(){
 
 function trap(){
     const card = game.getRundomElement(game.trap_cards, trap_cards)
-    game.distributionCards([card])
 
     ew.removeAllEW(); 
     ew.drawCardEW(card)
@@ -44,7 +42,6 @@ function trap(){
 
 function deadAdventurer(){
     const card = game.getRundomElement(game.deadman_cards, deadman_cards)
-    game.distributionCards([card])
 
     ew.removeAllEW(); 
     ew.drawCardEW(card)
@@ -53,7 +50,6 @@ function deadAdventurer(){
 
 function crypt(){
     const card = game.getRundomElement(game.сrypt_cards, сrypt_cards)
-    game.distributionCards([card])
 
     ew.removeAllEW(); 
     ew.drawCardEW(card)
@@ -231,8 +227,9 @@ function ambushRoom(){
         player.escapeBattle = false
         player.ambushRoom = true
         const cards = [game.getRundomElement(game.monster_cards, monster_cards),
-            game.getRundomElement(game.monster_cards, monster_cards)]
-            game.gameFields[player.position[1]][player.position[0]]['m'] = cards
+                       game.getRundomElement(game.monster_cards, monster_cards)]
+
+        game.gameFields[player.position[1]][player.position[0]]['m'] = cards
 
             game.distributionCards(cards)
 
@@ -261,8 +258,6 @@ function surroundedByMonsters(){
 
         game.gameFields[player.position[1]][player.position[0]]['m'] = cards
 
-        game.distributionCards(cards)
-
         ew.drawCardEW(cards)
         ew.removeTitile()
         ew.addTitleToEW('Події підземелля')
@@ -274,7 +269,7 @@ function surroundedByMonsters(){
     const falseFn = ()=>{
         ew.removeAllEW()
         const cards = [game.getRundomElement(game.monster_cards, monster_cards),
-            game.getRundomElement(game.monster_cards, monster_cards)]
+                       game.getRundomElement(game.monster_cards, monster_cards)]
 
         game.gameFields[player.position[1]][player.position[0]]['m'] = cards
 
