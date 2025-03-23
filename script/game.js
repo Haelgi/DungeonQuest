@@ -1044,7 +1044,7 @@ class Game {
             if (e.target.closest('.web-icon')) {
                 const trueFn = ()=>  e.target.remove()
                 const falseFn = ()=>  this.endMove()
-                ew.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, 2, trueFn, falseFn, true, true)
+                ew.diceRollEW('Кімнату оплутала павутиння заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, 2, trueFn, falseFn, true, true)
             }
         });
     }
