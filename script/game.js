@@ -1055,14 +1055,21 @@ class Game {
                 const trueFn = ()=>  e.target.remove()
                 const falseFn = ()=>{
                     this.removeIcon('.bridge-icon');
-                    const trueFn = ()=>  {
-                        this.changeHealth(-this.diceRollResultGlobal);
+                    const result = ()=>  {
+                        ew.removeLastEW()
+                        const damage = this.diceRollResultGlobal
+                        this.changeHealth(-damage);
+                        ew.removeLastEW()
+                        ew.drawEW(`Ви отримали ${damage} пораненнь`)
+                        setTimeout(() => {
+                            ew.removeLastEW()
+                        }, 2000);
                         this.endMove()
                     };
                     
                     this.getDirectionCatacomb()
                     this.drawHeroMitl(player.position[0], player.position[1]);
-                    ew.diceRollEW('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.',false, 6, false, 1, trueFn, true, true);
+                    ew.diceRollEW('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.',false, 6, false, 1, result, false, true);
                 } 
                 ew.diceRollEW('Перед вами кімната з глибокою прірвою, через яку перекинуто хитку дошку, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, trueFn, falseFn, true, true)   
             }
