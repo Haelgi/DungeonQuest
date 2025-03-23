@@ -54,7 +54,7 @@ class EventWidows{
         }
     
         this.drawEW(title);
-        this.drawTitleInEW(texts);
+        if (txt) this.drawTitleInEW(texts);
         this.drawDiceInEW(diceCount);
         this.drawBtnInEW('roll', 'Кинути Кубики', () => {
             this.rollDiceFn();
@@ -400,6 +400,7 @@ class EventWidows{
         });
 
         element.insertAdjacentHTML('beforeend', `<div class="card-deck-container event-deck-container">${cardDeckContainer}</div>`);
+        game.updateGoldValue()
     }
     
     removePackCardsInEW(){

@@ -161,7 +161,7 @@ function demonOfSuffering() {
     ew.removeRawBtnInEW('btn_ew')
 
     function getCards(){
-        const card = this.getRundomElement(this.search_cards, search_cards)   
+        const card = game.getRundomElement(game.search_cards, search_cards)   
         ew.drawCardEW(card);
     }
 
@@ -253,7 +253,7 @@ function demonOfRage() {
     ew.removeRawBtnInEW('btn_ew')
 
     function getCards(){
-        const card = this.getRundomElement(this.treasure_cards, treasure_cards)   
+        const card = game.getRundomElement(game.treasure_cards, treasure_cards)   
         ew.drawCardEW(card);
     }
 
@@ -370,7 +370,7 @@ function servantOfChaos() {
     ew.removeRawBtnInEW('btn_ew')
 
     function getCards(){
-        const card = this.getRundomElement(this.search_cards, search_cards)   
+        const card = game.getRundomElement(game.search_cards, search_cards)   
         ew.drawCardEW(card);
     }
 
@@ -402,6 +402,7 @@ function cultAdept() {
         player.treasureCardContainer.splice(randomId, 1)
     
         ew.drawEW(`Ви втратили один з своїх тофеїв`)
+        game.drawTreasurePackCards()
         setTimeout(() => {ew.removeLastEW()}, 2000);
     }
 
@@ -420,7 +421,7 @@ function skeletonWarrior() {
     ew.removeRawBtnInEW('btn_ew')
     
     function getCards(){
-        const card = this.getRundomElement(this.deadman_cards, deadman_cards)   
+        const card = game.getRundomElement(game.deadman_cards, deadman_cards)   
         ew.drawCardEW(card);
     }
 
@@ -470,7 +471,7 @@ function decrepitSkeleton() {
     ew.removeRawBtnInEW('btn_ew')
     
     function getCards(){
-        const card = this.getRundomElement(this.deadman_cards, deadman_cards)   
+        const card = game.getRundomElement(game.deadman_cards, deadman_cards)   
         ew.drawCardEW(card);
     }
 
@@ -520,7 +521,7 @@ function skeletonKiller() {
     ew.removeRawBtnInEW('btn_ew')
     
     function getCards(){
-        const card = this.getRundomElement(this.deadman_cards, deadman_cards)   
+        const card = game.getRundomElement(game.deadman_cards, deadman_cards)   
         ew.drawCardEW(card);
     }
 
@@ -570,7 +571,7 @@ function skeletonArcher() {
     ew.removeRawBtnInEW('btn_ew')
     
     function getCards(){
-        const card = this.getRundomElement(this.deadman_cards, deadman_cards)   
+        const card = game.getRundomElement(game.deadman_cards, deadman_cards)   
         ew.drawCardEW(card);
     }
 

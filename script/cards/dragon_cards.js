@@ -22,7 +22,7 @@ function dragonSleep(){
                    game.getRundomElement(game.treasure_cards, treasure_cards)]
 
     game.distributionCards(cards)
-    player.positionTreasuryCards.push(cards)
+    player.positionTreasuryCards.push(...cards)
 
     ew.drawEW('Скарбниця')
     ew.addPackCards(cards)
@@ -38,8 +38,11 @@ function dragonSleep(){
 function dragonsFury(){
 
     // TODO для многопользовательской игры добавить код ключ для действия на всех игроков
+    console.log(player.treasureCardContainer)
+    console.log(player.positionTreasuryCards)
     player.treasureCardContainer = game.subtractArrays(player.treasureCardContainer, player.positionTreasuryCards, "name")
     game.drawTreasurePackCards()
+    console.log(player.treasureCardContainer)
 
     player.positionTreasuryCards = [];
 
@@ -67,15 +70,15 @@ function dragonsFury(){
 }
 
 const dragon_cards = [
-    new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
-    new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
-    new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
-    new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
-    new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
-    new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
-    new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
+    /*0*/new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
+    /*1*/new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
+    /*2*/new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
+    /*3*/new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
+    /*4*/new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
+    /*5*/new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
+    /*6*/new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
     
-    new Card(2, 'Ярость Дракона', ()=>{dragonsFury()}),
+    /*7*/new Card(2, 'Ярость Дракона', ()=>{dragonsFury()}),
 ]
 
 export {dragon_cards}

@@ -19,6 +19,7 @@ class Card {
 
 function smallHealingPotion(){
     player.treasureCardContainer.push(сrypt_cards[3])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
 
     /* "трофей" Во время своего хода, 
@@ -28,6 +29,7 @@ function smallHealingPotion(){
 
 function vesselWithGold(){
     player.treasureCardContainer.push(сrypt_cards[5])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
 
     /* "трофей" Вы нашли в склепе сосуд, наполненный золотыми монетами. +250 золота*/
@@ -35,6 +37,7 @@ function vesselWithGold(){
 
 function trollSmasher(){
     player.treasureCardContainer.push(сrypt_cards[6])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
 
     /* "трофей" Пока эта карта у Вас, в бою с троллем, каждая 
@@ -106,6 +109,7 @@ function livingDead(){
 
 function volatilePotion(){
     player.treasureCardContainer.push(сrypt_cards[8])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
 
     /* TODO Вы можете сбросить зелье в начале своего хода 
@@ -119,6 +123,7 @@ function volatilePotion(){
 
 function scrollOfLightness(){
     player.treasureCardContainer.push(сrypt_cards[9])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
 
     /* "трофей" 
@@ -130,6 +135,7 @@ function scrollOfLightness(){
 
 function scrollOfInvisibility(){
     player.treasureCardContainer.push(сrypt_cards[10])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
     /* "трофей" Пытаясь убежать во время боя с монстром, 
     TODO Вы можете сбросить эту карту; 
@@ -139,6 +145,7 @@ function scrollOfInvisibility(){
 
 function smallSpeedPotion(){
     player.treasureCardContainer.push(сrypt_cards[11])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
     /* "трофей" 
     TODO Сбросив эту карту во время своего хода, 
@@ -147,18 +154,21 @@ function smallSpeedPotion(){
 
 function goldenVessel(){
     player.treasureCardContainer.push(сrypt_cards[12])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
     /* "трофей" Обыскивая склеп, Вы нашли золотой сосуд. +90 золота*/
 }
 
 function goldenStatuette(){
     player.treasureCardContainer.push(сrypt_cards[13])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
     /* "трофей" В склепе Вы нашли красивую золотую статуэтку. +120 золота*/
 }
 
 function preciousBrooch(){
     player.treasureCardContainer.push(сrypt_cards[13])
+    game.drawTreasurePackCards()
     ew.removeAllEW()
     /* "трофей" Обыскивая склеп, Вы нашли красивую брошь, наверняка весьма ценную. +170 золота*/
 }

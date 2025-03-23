@@ -142,6 +142,8 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         ew.drawCardEW(card);
+        // ew.drawCardEW(monster_cards[10]);
+        // TODO
     }
 
     playCatacombEvent(){
@@ -198,9 +200,10 @@ class Game {
 
         if (x > 0 && this.checkOtherPlayer([x - 1, y]) && this.checkPermitWayNeighbour([x - 1, y], 'right', false, withoutDoors)  && this.checkPermitWay([x, y],'left', true, withoutDoors)) coordinates.push([x - 1, y]); 
         if (y > 0 && this.checkOtherPlayer([x, y - 1]) && this.checkPermitWayNeighbour([x, y - 1], 'down', false, withoutDoors)  && this.checkPermitWay([x, y], 'up', true, withoutDoors)) coordinates.push([x, y - 1]);   
-        if (x < 14 && this.checkOtherPlayer([x + 1, y]) && this.checkPermitWayNeighbour([x + 1, y], 'left', false, withoutDoors)  && this.checkPermitWay([x, y], 'right', true, withoutDoors)) coordinates.push([x + 1, y]);  
+        if (x < 14 && this.checkOtherPlayer([x + 1, y]) && this.checkPermitWayNeighbour([x + 1, y], 'left', false, withoutDoors)  && this.checkPermitWay([x, y], 'right', true, withoutDoors)) coordinates.push([x + 1, y]); 
         if (y < 11  && this.checkOtherPlayer([x, y + 1]) && this.checkPermitWayNeighbour([x, y + 1], 'up', false, withoutDoors)  && this.checkPermitWay([x, y], 'down', true, withoutDoors))  coordinates.push([x, y + 1]);  
-        if (this.isPlayerInTower() && player.catacomb) coordinates.push(...this.startFields)
+        if (this.isPlayerInTower() && !player.catacomb) coordinates.push(...this.startFields)
+
         return coordinates;
     }
 
@@ -209,42 +212,46 @@ class Game {
         if(!this.gameFields[y][x]['[id]']) return true
     }
 
-    checkPermitWayNeighbour(coordinat, direction , checkBarrier, withoutDoors) {
+    checkPermitWayNeighbour(coordinat, direction, checkBarrier, withoutDoors) {
         const [x, y] = coordinat;
         const tileIdx = this.gameFields[y][x]['id'];
         const room = room_tiles[tileIdx];
     
         if (!room && withoutDoors) return false;
         if (!room) return true;
-
-        let permission = this.checkPermitWay(coordinat, direction , checkBarrier);
     
-        if (permission === 'abyss' && !(player.position[0] === x && player.position[1] === y)) {
-
-            while (permission === 'abyss') {
-                switch (this.gameFields[y][x]['r']) {
-                    case '0':
-                        this.gameFields[y][x]['r'] = '180';
-                        break;
-                    case '90':
-                        this.gameFields[y][x]['r'] = '270';
-                        break;
-                    case '270':
-                        this.gameFields[y][x]['r'] = '90';
-                        break;
-                    case '180':
-                        this.gameFields[y][x]['r'] = '0';
-                        break;
-                }
-                permission = this.checkPermitWay(coordinat, direction, checkBarrier);
+        let permission = this.checkPermitWay(coordinat, direction, checkBarrier);
+        let rotationAttempts = 0; 
+        const maxRotations = 4; 
+    
+        while (permission === 'abyss' && rotationAttempts < maxRotations) {
+            switch (this.gameFields[y][x]['r']) {
+                case 0:
+                    this.gameFields[y][x]['r'] = 180;
+                    break;
+                case 90:
+                    this.gameFields[y][x]['r'] = 270;
+                    break;
+                case 270:
+                    this.gameFields[y][x]['r'] = 90;
+                    break;
+                case 180:
+                    this.gameFields[y][x]['r'] = 0;
+                    break;
             }
+            permission = this.checkPermitWay(coordinat, direction, checkBarrier);
+            rotationAttempts++;
         }
-
+    
+        if (rotationAttempts >= maxRotations) {
+            console.warn(`Cancel loop in ${tileIdx} (${x}, ${y}).`);
+            return false; 
+        }
+    
         return permission;
     }
         
     checkPermitWay(coordinat, direction, checkBarrier, withoutDoors){
-
         const [x, y] = coordinat;
         const tileIdx = this.gameFields[y][x]['id'];
         const room = room_tiles[tileIdx];
@@ -317,7 +324,7 @@ class Game {
             });
 
         }
-        
+
         return value
     }
     
@@ -513,6 +520,7 @@ class Game {
         this.checkEventCards()
         this.checkCatacombCards()
         this.checkMonsterCards()
+        // TODO
     
         if (!document.querySelector(`.available-field`)) {
             this.highlightFields(array);    
@@ -559,18 +567,19 @@ class Game {
                     this.drawIcon(x, y, 'fa-regular fa-gem', 'treasure');
                     this.clickTreasureIcon(x, y);
                 }
-    
+
                 this.removeHighlightFields(array);
                 this.drawHeroMitl(x, y);
 
                 if (!player.catacomb) this.nextCoordinates = this.newCoordinate();
                 
-                if (player.catacomb) this.nextCoordinates = this.newCoordinateInCatacomb();
+                if (player.catacomb) {this.nextCoordinates = this.newCoordinateInCatacomb()};
     
                 if (!room_tiles[this.gameFields[y][x]['id']]) return;
 
                 this.checkRoomEvents()
-    
+                // TODO
+
                 if(room_tiles[this.gameFields[y][x]['id']]?.special !== 'bridge' 
                    && room_tiles[this.gameFields[y][x]['id']]?.special !== 'corridor' 
                    && room_tiles[this.gameFields[y][x]['id']]?.special !== 'pit' 
@@ -581,7 +590,7 @@ class Game {
                     player.extraMove = false
                     this.endMove()      
                 }
-                
+
                 player.extraMove = false
             }
     
@@ -698,6 +707,9 @@ class Game {
     drawTileField(x, y){
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         const roomNumber = this.getRundomElement(this.room_tiles, room_tiles).number;
+        // TODO
+        // const roomNumber = 47;
+
         let rotate;
         
         if (x > player.positionPrevious[0]) {rotate = 90}  
@@ -980,7 +992,7 @@ class Game {
     clickTreasureIcon(){
         const treasureIcon = document.querySelector('.treasure-icon');
         treasureIcon.addEventListener('click', () => {
-            const card = this.getRundomElement(this.treasure_cards, treasure_cards)
+            const card = this.getRundomElement(this.dragon_cards, dragon_cards)
             ew.drawCardEW(card)
         });
     };
@@ -1044,7 +1056,7 @@ class Game {
             if (e.target.closest('.web-icon')) {
                 const trueFn = ()=>  e.target.remove()
                 const falseFn = ()=>  this.endMove()
-                ew.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, 2, trueFn, falseFn, true, true)
+                ew.diceRollEW('Кімнату оплутала павутиння заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, 2, trueFn, falseFn, true, true)
             }
         });
     }
@@ -1055,14 +1067,21 @@ class Game {
                 const trueFn = ()=>  e.target.remove()
                 const falseFn = ()=>{
                     this.removeIcon('.bridge-icon');
-                    const trueFn = ()=>  {
-                        this.changeHealth(-this.diceRollResultGlobal);
+                    const result = ()=>  {
+                        ew.removeLastEW()
+                        const damage = this.diceRollResultGlobal
+                        this.changeHealth(-damage);
+                        ew.removeLastEW()
+                        ew.drawEW(`Ви отримали ${damage} пораненнь`)
+                        setTimeout(() => {
+                            ew.removeLastEW()
+                        }, 2000);
                         this.endMove()
                     };
                     
                     this.getDirectionCatacomb()
                     this.drawHeroMitl(player.position[0], player.position[1]);
-                    ew.diceRollEW('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.',false, 6, false, 1, trueFn, true, true);
+                    ew.diceRollEW('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.',false, 6, false, 1, result, false, true);
                 } 
                 ew.diceRollEW('Перед вами кімната з глибокою прірвою, через яку перекинуто хитку дошку, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, trueFn, falseFn, true, true)   
             }
@@ -1072,12 +1091,12 @@ class Game {
     clickAbyssIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.abyss-icon')) {
-                const trueFn = ()=> e.target.remove()
+                const trueFn = ()=> this.removeIcon('.abyss-icon');
                 const falseFn =()=>{
-                    this.changeHealth(-5)
-                    this.getDirectionCatacomb()
+                    this.changeHealth(-5);
+                    this.getDirectionCatacomb();
                     this.drawHeroMitl(player.position[0], player.position[1]);
-                    this.endMove()
+                    this.endMove();
                 } 
                 ew.diceRollEW('Кімнату розділило навпіл глибоким прірвою, щоб вийти з кімнати по той бік прірви перевірте Спритність.', `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, trueFn, falseFn, true, true)   
             }
@@ -1090,9 +1109,10 @@ class Game {
     }
 
     getRundomElement(idxArr, objArr){
+        if (idxArr.length === 0 ) return
         const randomIdx = this.random(idxArr.length);
-        idxArr.splice(randomIdx, 1);
-        return objArr[randomIdx]
+        const obj = idxArr.splice(randomIdx, 1);
+        return objArr[obj - 1]
     }
     
     random(maxValue){

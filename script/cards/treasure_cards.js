@@ -16,6 +16,7 @@ class Card {
 
 function ringOfLife() {
     player.treasureCardContainer.push(treasure_cards[0]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей" 
     TODO Вы можете сбросить эту карту (высвободить силу кольца, уничтожив его) и получить исцеление. 
@@ -24,6 +25,7 @@ function ringOfLife() {
 
 function smallMagicCrystal() {
     player.treasureCardContainer.push(treasure_cards[1]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Если этот кристалл разбить, произойдет опасный взрыв магической энергии.
@@ -32,12 +34,14 @@ function smallMagicCrystal() {
 
 function sapphireNecklace() {
     player.treasureCardContainer.push(treasure_cards[2]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей" +250 золота*/
 }
 
 function magicRing() {
     player.treasureCardContainer.push(treasure_cards[3]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Сбросив эту карту, Вы можете один раз перебросить кубик. 
@@ -46,6 +50,7 @@ function magicRing() {
 
 function largeMagicCrystal() {
     player.treasureCardContainer.push(treasure_cards[4]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Если этот кристалл разбить, произойдет опасный взрыв магической энергии. 
@@ -54,6 +59,7 @@ function largeMagicCrystal() {
 
 function magicKey() {
     player.treasureCardContainer.push(treasure_cards[5]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Если Вы, пытаясь открыть дверь, вытянули карту Дверь Заблокирована, 
@@ -62,6 +68,7 @@ function magicKey() {
 
 function fireAmulet() {
     player.treasureCardContainer.push(treasure_cards[6]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Вы не получаете ранений, разыгрывая эффекты карт Струя Огня и Пылающая Комната. +400 золота*/
@@ -69,6 +76,7 @@ function fireAmulet() {
 
 function snakeRing() {
     player.treasureCardContainer.push(treasure_cards[7]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Пока это кольцо у Вас, эффекты карт Гигантская Змея и Ядовитая Змея на Вас не действуют. +400 золота*/
@@ -76,6 +84,7 @@ function snakeRing() {
 
 function speedDagger() {
     player.treasureCardContainer.push(treasure_cards[8]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Имея эту карту, Вы можете получить 4 ранения в обмен на автоматический успех попытки побега в бою с монстром. 
@@ -84,6 +93,7 @@ function speedDagger() {
 
 function foresightPotion() {
     player.treasureCardContainer.push(treasure_cards[9]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Сбросьте эту карту после того, как Вы вытянули тайл комнаты. 
@@ -92,6 +102,7 @@ function foresightPotion() {
 
 function speedPotion() {
     player.treasureCardContainer.push(treasure_cards[10]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Сбросив эту карту во время своего хода, 
@@ -100,6 +111,7 @@ function speedPotion() {
 
 function twilightCloak() {
     player.treasureCardContainer.push(treasure_cards[11]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Накидка поможет сориентироваться в темноте. 
@@ -108,6 +120,7 @@ function twilightCloak() {
 
 function shadowAmulet() {
     player.treasureCardContainer.push(treasure_cards[12]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Имея эту карту, находясь в Катакомбах, каждый раз, когда Вы тянете очередную Карту Катакомб, у Вас исцеляется 1 ранение. +550 золота*/
@@ -115,6 +128,7 @@ function shadowAmulet() {
 
 function dragonEgg() {
     player.treasureCardContainer.push(treasure_cards[13]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO  +600 золота*/
@@ -122,6 +136,7 @@ function dragonEgg() {
 
 function staffOfLife() {
     player.treasureCardContainer.push(treasure_cards[14]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO С этой картой, пока Ваш герой жив, во время своего хода 
@@ -131,6 +146,7 @@ function staffOfLife() {
 
 function staffOfDeath() {
     player.treasureCardContainer.push(treasure_cards[15]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Имея эту карту, каждый раз, когда Вы вытянули Карту Ловушек и разыграли ее эфеект, 
@@ -139,6 +155,7 @@ function staffOfDeath() {
 
 function phoenixBelt() {
     player.treasureCardContainer.push(treasure_cards[16]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Если количество Вашего здоровья меньше или равно 3, 
@@ -148,6 +165,7 @@ function phoenixBelt() {
 
 function magnetismTiara() {
     player.treasureCardContainer.push(treasure_cards[17]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Имея эту карту, Вы можете проходить через проходы с решётками не выполняя проверку Силы. +700 золота*/
@@ -155,6 +173,7 @@ function magnetismTiara() {
 
 function tranquilityHarp() {
     player.treasureCardContainer.push(treasure_cards[18]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Пока эта карта у Вас, в Сокровищнице 
@@ -164,6 +183,7 @@ function tranquilityHarp() {
 
 function lifeBelt() {
     player.treasureCardContainer.push(treasure_cards[19]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO После каждого боя с монстром, который закончился смертью монстра, 
@@ -172,6 +192,7 @@ function lifeBelt() {
 
 function lightSword() {
     player.treasureCardContainer.push(treasure_cards[20]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Пока эта карта у Вас, в бою с демоном, или скелетом, 
@@ -180,6 +201,7 @@ function lightSword() {
 
 function crown() {
     player.treasureCardContainer.push(treasure_cards[21]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO  +1000 золота*/
@@ -187,6 +209,7 @@ function crown() {
 
 function bagOfGems() {
     player.treasureCardContainer.push(treasure_cards[22]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO  +1000 золота*/
@@ -194,6 +217,7 @@ function bagOfGems() {
 
 function genieLamp() {
     player.treasureCardContainer.push(treasure_cards[23]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Сбросив эту карту, Вы теряете все Трофеи и у Вас остается 1 очко жизни. 
@@ -202,6 +226,7 @@ function genieLamp() {
 
 function dragonStaff() {
     player.treasureCardContainer.push(treasure_cards[24]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Когда зашло солнце и двери подземелья закрылись, 
@@ -210,6 +235,7 @@ function dragonStaff() {
 
 function enchantedBook() {
     player.treasureCardContainer.push(treasure_cards[25]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO  Начиная свой ход в Сокровищнице, перед тем как тянуть Карту Дракона, 
@@ -223,6 +249,7 @@ function enchantedBook() {
 
 function treasureEater() {
     player.treasureCardContainer.push(treasure_cards[26]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO  При выходе из Подземелья Дракона, 
@@ -233,24 +260,28 @@ function treasureEater() {
 
 function decoratedBoots() {
     player.treasureCardContainer.push(treasure_cards[27]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей" +90 золота*/
 }
 
 function crystalRing() {
     player.treasureCardContainer.push(treasure_cards[28]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей" +110 золота*/
 }
 
 function pearlRing() {
     player.treasureCardContainer.push(treasure_cards[29]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей" +130 золота*/
 }
 
 function attentivenessPotion() {
     player.treasureCardContainer.push(treasure_cards[30]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Сбросьте эту карту в конце своего хода, чтобы убрать из комнаты, в которой вы находитесь, жетон поиска. В следующий свой ход Вы сможете снова обыскать эту комнату. +150 золота*/
@@ -258,12 +289,14 @@ function attentivenessPotion() {
 
 function silverRing() {
     player.treasureCardContainer.push(treasure_cards[31]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей" +160 золота*/
 }
 
 function sorcererRing() {
     player.treasureCardContainer.push(treasure_cards[32]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Бросив кубик, Вы можете сбросить эту карту (кольцо уничтожается) и добавить 1 к выпавшему на кубике результату. 
@@ -272,6 +305,7 @@ function sorcererRing() {
 
 function goldRing() {
     player.treasureCardContainer.push(treasure_cards[33]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO  +190 золота*/
@@ -279,6 +313,7 @@ function goldRing() {
 
 function woodenRing() {
     player.treasureCardContainer.push(treasure_cards[34]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Вы подобрали это кольцо думая, что оно обладает магическими свойствами, но ошиблись. +1 золота*/
@@ -286,6 +321,7 @@ function woodenRing() {
 
 function lawBook() {
     player.treasureCardContainer.push(treasure_cards[35]);
+    game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
     TODO Вы думали, что эта книга содержит в себе тайные знания, но оказалось, что это всего лишь свод законов одного из отдаленных королевств, не имеющий особой ценности. +15 золота*/
