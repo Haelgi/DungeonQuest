@@ -139,8 +139,6 @@ function goblinExplorer(){
         return
     }
 
-    const container = document.querySelector('.event-section')
-    container.style.flexDirection = 'column'
     ew.removeRawBtnInEW('btn_ew')
     ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{
         emptyFelds.forEach(card=>{player.treasureCardContainer.push(card)})

@@ -13,7 +13,7 @@ player.idx = 0;
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
 player.authentication = true;
-// player.treasureCardContainer = [treasure_cards[1]];
+player.treasureCardContainer = [treasure_cards[1],treasure_cards[2],treasure_cards[3],treasure_cards[4]];
 // player.positionTreasuryCards = [treasure_cards[1],treasure_cards[4]];
 // player.catacombCardContainer = [treasure_cards[1],treasure_cards[4]];
 
@@ -27,7 +27,7 @@ game.authentication = true;
 
 
 export function game_container() {
-    game.drawFieldTileTests(1, 90, 1,  0);
+    // game.drawFieldTileTests(1, 90, 1,  0);
     // game.drawFieldTileTests(58, 0, 1,  1);
     // game.drawFieldTileTests(11, '90', 2,  0);
     // game.drawFieldTileTests(11, '180', 1,  1);

@@ -142,6 +142,7 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         ew.drawCardEW(card);
+        // ew.drawCardEW(dungeon_cards[32]);
     }
 
     playCatacombEvent(){
@@ -513,6 +514,7 @@ class Game {
         // this.checkEventCards()
         // this.checkCatacombCards()
         // this.checkMonsterCards()
+        // TODO
     
         if (!document.querySelector(`.available-field`)) {
             this.highlightFields(array);    
@@ -570,6 +572,7 @@ class Game {
                 if (!room_tiles[this.gameFields[y][x]['id']]) return;
 
                 this.checkRoomEvents()
+                // TODO
     
                 if(room_tiles[this.gameFields[y][x]['id']]?.special !== 'bridge' 
                    && room_tiles[this.gameFields[y][x]['id']]?.special !== 'corridor' 
@@ -697,7 +700,9 @@ class Game {
     
     drawTileField(x, y){
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
-        const roomNumber = this.getRundomElement(this.room_tiles, room_tiles).number;
+        // const roomNumber = this.getRundomElement(this.room_tiles, room_tiles).number;
+        // TODO
+        const roomNumber = 85;
 
         let rotate;
         
