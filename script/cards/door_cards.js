@@ -106,6 +106,8 @@ function jetOfFire(){
         ew.removeRawBtnInEW('btnChoice');
         battle();
     });
+    const btnChoice = document.getElementById('btnChoice')
+    btnChoice.style.display = 'none'
 
     /*Когда Вы попытались открыть дверь, с отверстия в стене вылетела струя огня. 
     Загадайте два числа от 1 до 6. 
