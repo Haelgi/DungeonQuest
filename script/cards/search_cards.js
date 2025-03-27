@@ -84,6 +84,7 @@ function secretLever(){
         ew.removeAllEW()
     }
 
+    ew.addBtnInEW('btn_close', 'НЕ поветрати кімнату', ()=>{ew.removeAllEW()})
     ew.addBtnInEW('btn_90L', 'Повернути на 90° Ліворуч', ()=>{rotateRoom(-90)})
     ew.addBtnInEW('btn_90R', 'Повернути на 90° Праворуч', ()=>{rotateRoom(90)})
     ew.addBtnInEW('btn_180', 'Повернути на 180°', ()=>{rotateRoom(180)})
