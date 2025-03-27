@@ -1148,6 +1148,7 @@ function alchemist(){
             game.changeHealth(hp)
 
             ew.drawEW(`Ви відновили ${hp} здоров'я`)
+            game.drawTreasurePackCards()
             setTimeout(() => {
                 ew.removeAllEW()
             }, 2000);
@@ -1199,8 +1200,7 @@ function alchemist(){
     
                     if(card) {
                         player.treasureCardContainer.push(card)
-    
-                        ew.updatePackCardsEW(player.treasureCardContainer)
+                        game.drawTreasurePackCards()
                         drawCardToFeld(1)  
                     }
                 })

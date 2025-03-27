@@ -24,11 +24,12 @@ function greedyGoblin(){
     ew.removeRawBtnInEW('btn_ew');
 
     function discardTheCard(){
+        const maxValue = player.treasureCardContainer.length-1
         const randomId = Math.floor(Math.random() * maxValue);
                     
         player.treasureCardContainer.splice(randomId, 1);
         
-        ew.drawEW(`Гоблін поранив Вас (ви отримали ${damage} поранення), вкрав один із скарбів та втік`);
+        ew.drawEW(`Гоблін вкрав один із скарбів та втік, але залишив двері відкритими`);
         setTimeout(() => {ew.removeAllEW()}, 2000);
     };
 

@@ -199,7 +199,7 @@ function goblinExplorer(){
                 if(card) {
                     player.treasureCardContainer.push(card)
 
-                    ew.updatePackCardsEW(player.treasureCardContainer)
+                    game.drawTreasurePackCards()
                     drawCardToFeld(2)  
                 }
             })
@@ -933,8 +933,7 @@ function treasureGuard(){
 
                     if(card) {
                         player.treasureCardContainer.push(card)
-
-                        ew.updatePackCardsEW(player.treasureCardContainer)
+                        game.drawTreasurePackCards()
                         drawCardToFeld(count)  
                     }
                 })

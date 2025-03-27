@@ -141,8 +141,8 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        ew.drawCardEW(card);
-        // ew.drawCardEW(door_cards[12]);
+        // ew.drawCardEW(card);
+        ew.drawCardEW(door_cards[9]);
         // TODO
     }
 

@@ -529,7 +529,7 @@ function spinningBlade() {
     
                     if (card) {
                         player.treasureCardContainer.push(card);
-                        ew.updatePackCardsEW(player.treasureCardContainer);
+                        game.drawTreasurePackCards()
                         drawCardToFeld(count);
                     }
                 });
