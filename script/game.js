@@ -141,8 +141,8 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        // ew.drawCardEW(card);
-        ew.drawCardEW(door_cards[9]);
+        ew.drawCardEW(card);
+        // ew.drawCardEW(door_cards[9]);
         // TODO
     }
 
@@ -708,7 +708,7 @@ class Game {
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         const roomNumber = this.getRundomElement(this.room_tiles, room_tiles).number;
         // TODO
-        // const roomNumber = 47;
+        // const roomNumber = 45;
 
         let rotate;
         
