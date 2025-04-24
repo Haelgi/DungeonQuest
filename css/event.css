@@ -17,10 +17,10 @@
     background-color: #000000cb;
     border-radius: 10px;
     box-shadow: 1px 1px 40px 25px #000000cb;
-    min-width: 320px;
+    min-width: 250px;
     max-width: 70vh;
     flex-grow: 1; 
-    max-height: 90vh; 
+    max-height: 80vh; 
     overflow-y: auto; 
 }
 
@@ -74,7 +74,7 @@
     background-repeat: no-repeat;
     box-shadow: 0 4px 8px #000; 
     border-radius: 10px;
-    height: 450px;
+    height: 420px;
     width: 300px;
     margin-bottom: 20px;
     flex-shrink: 0;

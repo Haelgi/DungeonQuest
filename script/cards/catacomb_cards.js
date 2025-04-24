@@ -33,8 +33,17 @@ function holeInCeiling(){
     ew.removeRawBtnInEW('btn_ew')
 
     function trueFn(){
-        player.holeInCeiling = false
-        ew.escapeCatacombEW()
+        ew.removeAllEW()
+        ew.drawEW(`Хочете покинути катакомбит?`)
+        ew.drawBtnInEW('btn_next','Покинути', ()=>{
+            player.holeInCeiling = false
+            ew.escapeCatacombEW()
+            ew.removeAllEW()
+        })
+
+        ew.drawBtnInEW('btn_close','Залишитись', ()=>{
+            ew.removeAllEW()
+        })
     }
 
     function falseFn(){
@@ -45,12 +54,33 @@ function holeInCeiling(){
             ew.removeAllEW()
         }, 2000);
     }
+    
+    if(!player.catacombCardContainer.some((card) => (card.name === 'Дыра в Потолке'))) {
+        ew.drawBtnInEW('btn_agan','Перевірити cпритність', ()=>{
+            ew.removeRawBtnInEW('btn_agan')
+            ew.removeRawBtnInEW('btn_next')
+            ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, false, false)
+        })
+
+        ew.drawBtnInEW('btn_next','Тягнути карту катакомб', ()=>{
+            ew.removeRawBtnInEW('btn_agan')
+            ew.removeRawBtnInEW('btn_next')
+            player.treasureCardContainer.forEach((card, id) => {
+                if(card.name === 'Веревка'){
+                    player.treasureCardContainer.pop(id,1)
+                    game.drawTreasurePackCards()
+                    ew.removeAllEW()
+                }
+            })
+        })
+        return 
+    }
 
     ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, false, false)
 
     player.treasureCardContainer.forEach((card, id) => {
 
-        if(card.pack === 'deadman' && card.id === 2 ){
+        if(card.name === 'Веревка'){
             
             const rope = ()=>{
                 ew.drawCardEW(card)
@@ -90,9 +120,17 @@ function doorWithRiddle(){
                 player.catacombCardContainer.splice(id,1)
             }
         })
-
         ew.removeAllEW()
-        ew.escapeCatacombEW()
+        ew.drawEW(`Хочете покинути катакомбит?`)
+        ew.drawBtnInEW('btn_next','Покинути', ()=>{
+            player.holeInCeiling = false
+            ew.escapeCatacombEW()
+            ew.removeAllEW()
+        })
+
+        ew.drawBtnInEW('btn_close','Залишитись', ()=>{
+            ew.removeAllEW()
+        })
     }
 
     const falseFn = ()=> {
@@ -111,6 +149,24 @@ function doorWithRiddle(){
             ew.drawBtnInEW('btn_close','Далі', ()=>{ew.removeAllEW()})
         }
     })
+
+    if(!player.catacombCardContainer.some((card) => (card.name === 'Дверь с Загадкой'))) {
+        ew.drawBtnInEW('btn_agan','Перевірити Удачу', ()=>{
+            luck()
+        })
+
+        ew.drawBtnInEW('btn_next','Тягнути карту катакомб', ()=>{
+            ew.clear()
+            player.treasureCardContainer.forEach((card, id) => {
+                if(card.name === 'Дверь с Загадкой'){
+                    player.treasureCardContainer.pop(id,1)
+                    game.drawTreasurePackCards()
+                    ew.removeAllEW()
+                }
+            })
+        })
+        return 
+    }
 
     ew.drawBtnInEW('btn_luk','Перевірити Удачу',luck)
 
@@ -484,6 +540,7 @@ function stickyWeb(){
 
     if(!player.eventCardContainer.some((card) => (card.id === 14 && card.pack === 'catacomb'))) {
         player.eventCardContainer.push(catacomb_cards[31])
+        game.drawEventPackCards()
         ew.removeAllEW()
         return 
     }
@@ -866,6 +923,7 @@ function vampire(){
     if (!player.catacomb) return player.eventCardContainer.forEach((card, idx) => {
          if (card.id === 21 && card.pack === 'catacomb') {
             player.eventCardContainer.splice(idx, 1)
+            game.drawEventPackCards()
             ew.removeAllEW()
         }
     })
@@ -889,6 +947,7 @@ function vampire(){
 
     const falseFn = ()=> {
         player.eventCardContainer.push(catacomb_cards[38])
+        game.drawEventPackCards()
         ew.drawEW(`Ви отримали 1 поранення`)
         game.changeHealth(-1)
         setTimeout(() => {ew.removeAllEW()}, 2000);
@@ -1030,11 +1089,15 @@ function spiderPoison(){
     if (!player.catacomb) return player.eventCardContainer.forEach((card, idx) => {
         if (card.id === 25 && card.pack === 'catacomb') {
             player.eventCardContainer.splice(idx, 1)
+            game.drawEventPackCards()
             ew.removeAllEW()
         }
     })
 
-    if (!player.eventCardContainer.some((card) => (card.id === 25 && card.pack === 'catacomb'))) player.eventCardContainer.push(catacomb_cards[38])
+    if (!player.eventCardContainer.some((card) => (card.id === 25 && card.pack === 'catacomb'))) {
+        player.eventCardContainer.push(catacomb_cards[38])
+        game.drawEventPackCards()
+    }
 
     const result = ()=>{ 
         const result = game.diceRollResultGlobal
@@ -1085,11 +1148,17 @@ function naga(){
 }
 
 function torchGoesOut(){ 
-    if (!player.eventCardContainer.some((card) => (card.id === 27 && card.pack === 'catacomb'))) player.eventCardContainer.push(catacomb_cards[44])
+    if (!player.eventCardContainer.some((card) => (card.id === 27 && card.pack === 'catacomb'))) {
+        player.eventCardContainer.push(catacomb_cards[44])
+        game.drawEventPackCards()
+    }
 
     const trueFn = ()=> {
         player.eventCardContainer.forEach((card, idx) => {
-            if (card.id === 27 && card.pack === 'catacomb') player.eventCardContainer.splice(idx, 1)
+            if (card.id === 27 && card.pack === 'catacomb') {
+                player.eventCardContainer.splice(idx, 1)
+                game.drawEventPackCards()
+            }
         })
         ew.drawEW(`Ви змогли запалити Смолоскип`)
         setTimeout(() => {

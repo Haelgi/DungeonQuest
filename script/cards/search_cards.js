@@ -181,11 +181,11 @@ const search_cards = [
     /*6*/new Card(1, 'Секретный проход', false, false, ()=>{secretPass()}),
     /*7*/new Card(1, 'Секретный проход', false, false, ()=>{secretPass()}),
     
-    /*8*/new Card(2, 'Зелье Лечения', 'treasure', false, ()=>{healingPotion()}),
-    /*9*/new Card(2, 'Зелье Лечения', 'treasure', false, ()=>{healingPotion()}),
-    /*10*/new Card(2, 'Зелье Лечения', 'treasure', false, ()=>{healingPotion()}),
-    /*11*/new Card(2, 'Зелье Лечения', 'treasure', false, ()=>{healingPotion()}),
-    /*12*/new Card(2, 'Зелье Лечения', 'treasure', false, ()=>{healingPotion()}),
+    /*8*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}),
+    /*9*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}),
+    /*10*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}),
+    /*11*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}),
+    /*12*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}),
         
     /*13*/new Card(3, 'Спуск в Катакомбы', false, false, ()=>{descentToCatacombs()}),
     /*14*/new Card(3, 'Спуск в Катакомбы', false, false, ()=>{descentToCatacombs()}),

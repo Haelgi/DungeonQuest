@@ -369,7 +369,7 @@ function ironCage(){
 
     const falseFn = ()=>{
         player.eventCardContainer.push(trap_cards[8])
-        console.log(player.eventCardContainer)
+        game.drawEventPackCards()
         ew.removeAllEW()
         game.endMove()
     }
@@ -377,6 +377,7 @@ function ironCage(){
     ew.addDiceRollSection(`Ваша Сила : ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, true, 2, trueFn, falseFn)
 
     if (!player.eventCardContainer.some(item => item['name'] === trap_cards[8]['name'])){
+        game.drawEventPackCards()
         game.changeHealth(-2)
         ew.drawEW(`Ви отримаєте 2 поранення`)
         setTimeout(() => {ew.removeLastEW()}, 2000);
@@ -399,7 +400,8 @@ function pitOfTheDead(){
         }
 
         const falseFn = ()=> {
-            player.eventCardContainer.push(trap_cards[8])
+            player.eventCardContainer.push(trap_cards[9])
+            game.drawEventPackCards()
             game.changeHealth(-2)
             ew.drawEW(`Ви отримали 2 поранення, та потрапили в яму`)
             setTimeout(() => {
@@ -429,7 +431,8 @@ function pitOfTheDead(){
         }
 
         const falseFn = ()=> {
-            player.eventCardContainer.push(trap_cards[8])
+            player.eventCardContainer.push(trap_cards[9])
+            game.drawEventPackCards()
             ew.drawEW(`Ви НЕ змогли вибратися з ями`)
             setTimeout(() => {
                 ew.removeAllEW();

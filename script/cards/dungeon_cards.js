@@ -49,10 +49,17 @@ function deadAdventurer(){
 }
 
 function crypt(){
-    const card = game.getRundomElement(game.сrypt_cards, сrypt_cards)
+    
+    ew.removeRawBtnInEW('btn_ew')
 
-    ew.removeAllEW(); 
-    ew.drawCardEW(card)
+    ew.addBtnInEW('btn_next', 'Обшукати', ()=>{
+        const card = game.getRundomElement(game.сrypt_cards, сrypt_cards)
+        ew.removeAllEW()
+        ew.drawCardEW(card)
+    })
+
+    ew.addBtnInEW('btn_close', 'Пропустити', ()=>{ew.removeAllEW()})
+
     /*Вы можете обыскать склеп в надежде найти что-нибудь ценное. Если Вы решили это сделать, тяните Карту Склепа.*/
 }
 
@@ -67,18 +74,26 @@ function collapse(){
 }
 
 function burial(){
-    ew.removeAllEW()
+    ew.removeRawBtnInEW('btn_ew')
 
-    const cards = [game.getRundomElement(game.deadman_cards, deadman_cards),
-                   game.getRundomElement(game.deadman_cards, deadman_cards),
-                   game.getRundomElement(game.deadman_cards, deadman_cards)]
+    ew.addBtnInEW('btn_next', 'Обшукати', ()=>{
+        ew.removeAllEW()
 
-                   game.distributionCards(cards)
+        const cards = [game.getRundomElement(game.deadman_cards, deadman_cards),
+                       game.getRundomElement(game.deadman_cards, deadman_cards),
+                       game.getRundomElement(game.deadman_cards, deadman_cards)]
+    
+                       game.distributionCards(cards)
+    
+        ew.drawEW('Карти мерців')
+        ew.addPackCards(cards)
+        addScrolCardsEffect('.event-deck-container', false)
+        ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+    })
 
-    ew.drawEW('Карти мерців')
-    ew.addPackCards(cards)
-    addScrolCardsEffect('.event-deck-container', false)
-    ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+    ew.addBtnInEW('btn_close', 'Пропустити', ()=>{ew.removeAllEW()})
+
+    
     /*Вы нашли захоронение. Вы можете вытянуть сразу 3 Карты Мертвеца.*/
 }
 
@@ -114,18 +129,26 @@ function wallCollapse(){
 }
 
 function undergroundNecropolis(){
-    ew.removeAllEW()
+    ew.removeRawBtnInEW('btn_ew')
+
+    ew.addBtnInEW('btn_next', 'Обшукати', ()=>{
+        ew.removeAllEW()
 
     const cards = [game.getRundomElement(game.сrypt_cards, сrypt_cards),
                     game.getRundomElement(game.сrypt_cards, сrypt_cards),
                     game.getRundomElement(game.сrypt_cards, сrypt_cards)]
     
-                    game.distributionCards(cards)
+        game.distributionCards(cards)
 
-    ew.drawEW('Події підземелля')
-    ew.addPackCards(cards)
-    addScrolCardsEffect('.event-deck-container', false)
-    ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+        ew.drawEW('Події підземелля')
+        ew.addPackCards(cards)
+        addScrolCardsEffect('.event-deck-container', false)
+        ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+    })
+
+    ew.addBtnInEW('btn_close', 'Пропустити', ()=>{ew.removeAllEW()})
+
+    
 
     /*Вы нашли подземный некрополь. Вы можете вытянуть 3 Карты Склепа.*/
 }
@@ -379,7 +402,8 @@ function deadCrowd(){
         }
     
         const falseFn1 = ()=>{
-            player.eventCardContainer.unshift(dungeon_cards[40])
+            player.eventCardContainer.push(dungeon_cards[40])
+            game.drawEventPackCards()
             ew.removeAllEW()
             game.endMove()
         }
@@ -394,8 +418,8 @@ function deadCrowd(){
         const trueFn2 = ()=>{
             game.changeHealth(-game.diceRollResultGlobal) 
             const card = game.getRundomElement(game.treasure_cards, treasure_cards)
-            player.treasureCardContainer.push()
             game.drawTreasurePackCards()
+            game.drawEventPackCards()
             ew.drawEW('Ви отримали 2 поранення');
             ew.drawBtnInEW('btn_next', 'Отримати бонус за бій', ()=>{
                 ew.removeAllEW()
@@ -578,7 +602,7 @@ function healingSpring(){
         const result = game.diceRollResultGlobal
         let healing
         if (2 >=result) healing = 1
-        if (3 >= result >= 4) healing = 2
+        if (result >= 3 && result <= 4) healing = 2;
         if (result >= 5) healing = 3
         game.changeHealth(healing) 
         ew.drawEW(`Ви зцілили ${healing} здоров'я`)
@@ -588,7 +612,9 @@ function healingSpring(){
         if(player.curseOfTheSorcerer){
             player.curseOfTheSorcerer = false
             player.eventCardContainer.forEach((card, id)=>{
-                if(card.name === 'Проклятие Колдуна') player.eventCardContainer.splice(id, 1);
+                if(card.name === 'Проклятие Колдуна') {
+                    player.eventCardContainer.splice(id, 1)
+                    game.drawEventPackCards()};
             })
         }
     }
@@ -986,6 +1012,7 @@ function curseOfTheSorcerer(){
     ew.drawBtnInEW('next', 'Далі', ()=>{
         const card = dungeon_cards[52]
         player.eventCardContainer.push(card)
+        game.drawEventPackCards()
         if (player.curseOfTheSorcerer) ew.removeAllEW()
         if (!player.curseOfTheSorcerer) {
             player.curseOfTheSorcerer = true

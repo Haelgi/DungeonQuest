@@ -6,16 +6,16 @@ class Player {
         this.hero; 
         this.authentication = false;
         this.positionPrevious = false;
-        this.positionTreasury=false;
-        this.positionTreasuryCards=[];
+        this.positionTreasury = false;
         this.position = false;
         this.finish = false;
         this.catacomb = false;
         this.catacombDirection = 0;
-
+        
         this.card_abilitie = Array.from({ length: 5 }, (_, index) => index + 1);
-        this.effectCardContainer = [];
+        this.eventCardContainer = [];
         this.treasureCardContainer = [];
+        this.positionTreasuryCards = [];
         this.catacombCardContainer = [];
         this.eventCardContainer = [];
         this.endMoveEventCardContainer = [];

@@ -38,11 +38,8 @@ function dragonSleep(){
 function dragonsFury(){
 
     // TODO для многопользовательской игры добавить код ключ для действия на всех игроков
-    console.log(player.treasureCardContainer)
-    console.log(player.positionTreasuryCards)
     player.treasureCardContainer = game.subtractArrays(player.treasureCardContainer, player.positionTreasuryCards, "name")
     game.drawTreasurePackCards()
-    console.log(player.treasureCardContainer)
 
     player.positionTreasuryCards = [];
 

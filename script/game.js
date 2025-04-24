@@ -99,7 +99,7 @@ class Game {
         this.playingField = document.querySelector(`.playing-field`);    
         this.addCharacterTablet(player.hero);        
         this.drawAbilitiePackCards();
-        this.drawEffectPackCards();
+        this.drawEventPackCards();
         this.drawTreasurePackCards()
     
         this.clickDoorIcon()
@@ -142,7 +142,7 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         ew.drawCardEW(card);
-        // ew.drawCardEW(door_cards[9]);
+        // ew.drawCardEW(dungeon_cards[40]);
         // TODO
     }
 
@@ -411,21 +411,21 @@ class Game {
         addScrolCardsEffect('.abilitie-card-container');
     };
 
-    drawEffectPackCards(){
-        const effectCardContainer = document.querySelector(`.effect-card-container`);
-        let activeId = Math.round((player.effectCardContainer.length-1)/2) 
+    drawEventPackCards(){
+        const eventCardContainer = document.querySelector(`.event-card-container`);
+        let activeId = Math.round((player.eventCardContainer.length-1)/2) 
         let inner ='';
 
-        player.effectCardContainer.forEach((item, idx) => {
+        player.eventCardContainer.forEach((item, idx) => {
             let active = ''
             if(idx === activeId) active = 'active'
             inner+=`
                 <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
             `
         });
-        effectCardContainer.innerHTML=inner;
+        eventCardContainer.innerHTML=inner;
 
-        addScrolCardsEffect('.effect-card-container');
+        addScrolCardsEffect('.event-card-container');
     };
 
     drawTreasurePackCards(){
@@ -474,6 +474,7 @@ class Game {
     checkEventCards(){
         if (player.eventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
         const [card] = player.eventCardContainer.splice(0, 1);
+        this.drawEventPackCards()
         ew.drawCardEW(card)
     }
 
@@ -673,7 +674,6 @@ class Game {
 
     endGame(){
         ew.removeAllEW()
-        console.log('Game Over')
     }
 
     rotateRoomTile(angl) {
@@ -1132,7 +1132,7 @@ class Game {
             if (card.type === 'event') player.eventCardContainer.push(card)
         });
 
-        this.drawEffectPackCards();
+        this.drawEventPackCards();
         this.drawTreasurePackCards()
         this.updateGoldValue()
     }
