@@ -413,10 +413,18 @@ class Game {
 
     drawEventPackCards(){
         const eventCardContainer = document.querySelector(`.event-card-container`);
-        let activeId = Math.round((player.eventCardContainer.length-1)/2) 
+        let activeId = Math.round((player.eventCardContainer.length+player.endMoveEventCardContainer-2)/2) 
         let inner ='';
 
         player.eventCardContainer.forEach((item, idx) => {
+            let active = ''
+            if(idx === activeId) active = 'active'
+            inner+=`
+                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
+            `
+        });
+
+        player.endMoveEventCardContainer.forEach((item, idx) => {
             let active = ''
             if(idx === activeId) active = 'active'
             inner+=`

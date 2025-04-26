@@ -13,7 +13,6 @@ class Player {
         this.catacombDirection = 0;
         
         this.card_abilitie = Array.from({ length: 5 }, (_, index) => index + 1);
-        this.eventCardContainer = [];
         this.treasureCardContainer = [];
         this.positionTreasuryCards = [];
         this.catacombCardContainer = [];
