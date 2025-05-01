@@ -1277,8 +1277,9 @@ function alchemist(){
         }
     }
 
-    ew.drawBtnInEW('btn_hpForTr',`Життя за скарби`, hpForTr)
-    ew.drawBtnInEW('btn_trForHp',`Скарби за життя`, trForHp)
+    if (heroes[player.hero].health > 4) ew.drawBtnInEW('btn_hpForTr',`Життя за скарби`, hpForTr)
+    if (player.treasureCardContainer.length > 0) ew.drawBtnInEW('btn_trForHp',`Скарби за життя`, trForHp)
+    ew.drawBtnInEW('btn_close',`Пропустити`, ()=>{ew.removeAllEW()})
     /*Вы набрели на лабораторию Алхимика. 
     С ним можно заключить одну из сделок: 
     1) Обменять 4 очка жизни на сокровище (получите 4 ранения и тяните Карту Сокровища). 

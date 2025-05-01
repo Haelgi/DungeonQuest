@@ -41,10 +41,18 @@ function trap(){
 }
 
 function deadAdventurer(){
-    const card = game.getRundomElement(game.deadman_cards, deadman_cards)
+    ew.removeRawBtnInEW('btn_ew')
 
-    ew.removeAllEW(); 
-    ew.drawCardEW(card)
+    ew.addBtnInEW('btn_next', 'Обшукати', ()=>{
+        const card = game.getRundomElement(game.deadman_cards, deadman_cards)
+
+        ew.removeAllEW(); 
+        ew.drawCardEW(card)
+    })
+
+    ew.addBtnInEW('btn_close', 'Пропустити', ()=>{ew.removeAllEW()})
+
+    
     /*Вы увидели мертвого приключенца. Чтобы обыскать его тяните Карту Мертвеца.*/
 }
 
