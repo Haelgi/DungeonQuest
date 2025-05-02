@@ -15,9 +15,9 @@ player.name = 'Олег';
 player.hero = 'enchantress'; 
 player.authentication = true;
 // player.eventCardContainer = [monster_cards[9],monster_cards[10],monster_cards[11]];
-player.checkEventCards = true
-player.surroundedMonsters = true;
-player.treasureCardContainer = [treasure_cards[1]];
+// player.checkEventCards = true
+// player.surroundedMonsters = true;
+// player.treasureCardContainer = [treasure_cards[1]];
 // player.positionTreasuryCards = [treasure_cards[1],treasure_cards[4]];
 // player.catacombCardContainer = [treasure_cards[1],treasure_cards[4]];
 
