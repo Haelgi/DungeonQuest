@@ -207,8 +207,7 @@ const search_cards = [
     /*27*/new Card(11, 'Золотая Серьга', 'treasure', 150, ()=>{goldenEarring()}),
     /*28*/new Card(12, 'Мелкие Золотые Слитки', 'treasure', 70, ()=>{smallGoldenIngots()}),
     /*29*/new Card(13, 'Золотой Слиток', 'treasure', 60, ()=>{goldenIngots()}),
-    /*30*/new Card(14, 'Золотые Монеты', 'treasure', 15, ()=>{goldCoins()}),
-    /*31*/new Card(15, 'Перемешивание карт', false, false, ()=>{cardShuffling()}),
+    /*30*/new Card(14, 'Золотые Монеты', 'treasure', 15, ()=>{goldCoins()})
 ]
 
 export {search_cards}

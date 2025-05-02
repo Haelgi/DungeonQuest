@@ -1395,8 +1395,7 @@ const catacomb_cards = [
     /*46*/new Card(29, 'Гигантский Алмаз', 'treasure', 4000, ()=>{giantDiamond()}),
     
     /*47*/new Card(30, 'Шкатулка с Золотом', 'treasure', false, ()=>{boxOfGold()}),
-    /*48*/new Card(31, 'Молот Мощи', 'treasure', false, ()=>{hammerOfPower()}),
-    /*49*/new Card(32, 'Перемешивание Карт', false, false, ()=>{cardShuffling()}),
+    /*48*/new Card(31, 'Молот Мощи', 'treasure', false, ()=>{hammerOfPower()})
 ]
 
 export {catacomb_cards}

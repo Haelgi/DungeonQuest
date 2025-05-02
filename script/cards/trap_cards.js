@@ -710,8 +710,7 @@ const trap_cards = [
     /*11*/new Card(12, 'Вращающееся Лезвие', ()=>{spinningBlade()}),
     /*12*/new Card(13, 'Смертоносные Пилы', ()=>{deadlySaws()}),
     /*13*/new Card(14, 'Падающий Топор', ()=>{fallingAxe()}),
-    /*14*/new Card(15, 'Пылающая Комната', ()=>{burningRoom()}),
-    /*15*/new Card(16, 'Перемешивание Карт', ()=>{cardShuffling()}),
+    /*14*/new Card(15, 'Пылающая Комната', ()=>{burningRoom()})
 ]
 
 export {trap_cards}

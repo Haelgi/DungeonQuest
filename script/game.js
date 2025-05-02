@@ -83,13 +83,13 @@ class Game {
     createGameFields(){this.gameFields=Array(12).fill().map(() => Array(15).fill().map(() => ({})))}
 
     refreshRoomTiles(){ this.room_tiles = Array.from({ length: 130 }, (_, index) => index + 1) }
-    refreshDungeonCards(){ this.dungeon_cards=Array.from({ length: 60 }, (_, index) => index + 1) }
-    refreshCatacombCards(){ this.catacomb_cards=Array.from({ length: 50 }, (_, index) => index + 1) }
-    refreshDeadmanCards(){this.deadman_cards=Array.from({ length: 16 }, (_, index) => index + 1)}
-    refreshTrapCards(){this.trap_cards=Array.from({ length: 16 }, (_, index) => index + 1)}
-    refreshCryptCards(){this.сrypt_cards=Array.from({ length: 16 }, (_, index) => index + 1)}
-    refreshDoorCards(){this.door_cards=Array.from({ length: 16 }, (_, index) => index + 1)}
-    refreshSearchCards(){this.search_cards=Array.from({ length: 32 }, (_, index) => index + 1)}
+    refreshDungeonCards(){ this.dungeon_cards=Array.from({ length: 59 }, (_, index) => index + 1) }
+    refreshCatacombCards(){ this.catacomb_cards=Array.from({ length: 49 }, (_, index) => index + 1) }
+    refreshDeadmanCards(){this.deadman_cards=Array.from({ length: 15 }, (_, index) => index + 1)}
+    refreshTrapCards(){this.trap_cards=Array.from({ length: 15 }, (_, index) => index + 1)}
+    refreshCryptCards(){this.сrypt_cards=Array.from({ length: 15 }, (_, index) => index + 1)}
+    refreshDoorCards(){this.door_cards=Array.from({ length: 15 }, (_, index) => index + 1)}
+    refreshSearchCards(){this.search_cards=Array.from({ length: 31 }, (_, index) => index + 1)}
     refreshTreasureCards(){this.treasure_cards=Array.from({ length: 36 }, (_, index) => index + 1)}
     refreshMonsterCards(){this.monster_cards=Array.from({ length: 20 }, (_, index) => index + 1)}
     refreshDragonCards(){this.dragon_cards=Array.from({ length: 8 }, (_, index) => index + 1)}
@@ -1117,7 +1117,18 @@ class Game {
     }
 
     getRundomElement(idxArr, objArr){
-        if (idxArr.length === 0 ) return
+        if (idxArr.length < 3) {
+            if (idxArr === this.сrypt_cards) this.refreshCryptCards();
+            if (idxArr === this.catacomb_cards) this.refreshCatacombCards();
+            if (idxArr === this.deadman_cards) this.refreshDeadmanCards();
+            if (idxArr === this.door_cards) this.refreshDoorCards();
+            if (idxArr === this.dungeon_cards) this.refreshDungeonCards();
+            if (idxArr === this.room_tiles) this.refreshRoomTiles();
+            if (idxArr === this.search_cards) this.refreshSearchCards();
+            if (idxArr === this.trap_cards) this.refreshTrapCards();
+        }
+
+
         const randomIdx = this.random(idxArr.length);
         const obj = idxArr.splice(randomIdx, 1);
         return objArr[obj - 1]

@@ -198,8 +198,7 @@ const сrypt_cards = [
     /*11*/new Card(9, 'Малое Зелье Скорости', 'treasure', 225, ()=>{smallSpeedPotion()}),
     /*12*/new Card(10, 'Золотой Сосуд', 'treasure', 90, ()=>{goldenVessel()}),
     /*13*/new Card(11, 'Золотая Статуэтка', 'treasure', 120, ()=>{goldenStatuette()}),
-    /*14*/new Card(12, 'Драгоценная Брошь', 'treasure', 170, ()=>{preciousBrooch()}),
-    /*15*/new Card(13, 'Перемешивание Карт', 'event', false, ()=>{cardShuffling()}),
+    /*14*/new Card(12, 'Драгоценная Брошь', 'treasure', 170, ()=>{preciousBrooch()})
 ]
 
 export {сrypt_cards}

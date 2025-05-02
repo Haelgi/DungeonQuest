@@ -75,7 +75,7 @@ const dragon_cards = [
     /*5*/new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
     /*6*/new Card(1, 'Дракон Спит', ()=>{dragonSleep()}),
     
-    /*7*/new Card(2, 'Ярость Дракона', ()=>{dragonsFury()}),
+    /*7*/new Card(2, 'Ярость Дракона', ()=>{dragonsFury()})
 ]
 
 export {dragon_cards}

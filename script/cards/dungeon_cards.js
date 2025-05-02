@@ -1406,8 +1406,7 @@ const dungeon_cards = [
     /*55*/new Card(32, 'Свирепый Головорез', false, false, ()=>{fierceCutthroat()}, 'Далі'),
     /*56*/new Card(33, 'Рухнувшая Балка', false, false, ()=>{collapsedBeam()}, 'Далі'),
     /*57*/new Card(34, 'Золотые Монеты', 'treasure', 40, ()=>{goldCoins()}, 'Далі'),
-    /*58*/new Card(35, 'Драгоценный Камень', 'treasure', 60, ()=>{preciousStone()}, 'Далі'),
-    /*50*/new Card(36, 'Перемешивание Карт', false, false, ()=>{cardShuffling()}, 'Далі'),
+    /*58*/new Card(35, 'Драгоценный Камень', 'treasure', 60, ()=>{preciousStone()}, 'Далі')
 ]
 
 export {dungeon_cards}

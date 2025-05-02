@@ -208,8 +208,7 @@ const door_cards = [
     /*11*/new Card(4, 'Заколдованная дверь', ()=>{enchantedDoor()}),
     /*12*/new Card(5, 'Струя Огня', ()=>{jetOfFire()}),
     /*13*/new Card(6, 'Шипы из Пола', ()=>{thornsFromTheFloor()}),
-    /*14*/new Card(7, 'Смертоностные Стрелы', ()=>{deadlyArrows()}),
-    /*15*/new Card(8, 'Перемешивание Карт', ()=>{cardShuffling()}),
+    /*14*/new Card(7, 'Смертоностные Стрелы', ()=>{deadlyArrows()})
 ]
 
 export {door_cards}

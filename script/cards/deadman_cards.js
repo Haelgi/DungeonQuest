@@ -149,8 +149,7 @@ const deadman_cards = [
     /*12*/new Card(8, 'Медицинская Книга', 'treasure', 200, ()=>{medicalBook()}),
     /*13*/new Card(9, 'Золотая Цепочка', 'treasure', 50, ()=>{goldenChain()}),
     
-    /*14*/new Card(10, 'Ядовитая Кислота', 'treasure', 180, ()=>{poisonousAcid()}),
-    /*15*/new Card(11, 'Перемешивание Карт', 'event', false, ()=>{cardShuffling()}),
+    /*14*/new Card(10, 'Ядовитая Кислота', 'treasure', 180, ()=>{poisonousAcid()})
 ]
 
 export {deadman_cards}
