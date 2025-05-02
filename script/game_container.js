@@ -4,6 +4,7 @@ import  {game}  from './game.js';
 import  {player}  from './player.js';
 import  {ew}  from './eventWidows.js';
 import  {treasure_cards}  from './cards/treasure_cards.js';
+import { monster_cards } from './cards/monster_cards.js';
 
 
 
@@ -13,7 +14,10 @@ player.idx = 0;
 player.name = 'Олег'; 
 player.hero = 'enchantress'; 
 player.authentication = true;
-// player.treasureCardContainer = [treasure_cards[1],treasure_cards[2],treasure_cards[3],treasure_cards[4]];
+// player.eventCardContainer = [monster_cards[9],monster_cards[10],monster_cards[11]];
+player.checkEventCards = true
+player.surroundedMonsters = true;
+player.treasureCardContainer = [treasure_cards[1]];
 // player.positionTreasuryCards = [treasure_cards[1],treasure_cards[4]];
 // player.catacombCardContainer = [treasure_cards[1],treasure_cards[4]];
 

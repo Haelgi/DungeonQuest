@@ -46,7 +46,7 @@ function ironGolem() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[0], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[0], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[0], endBattleFn))
 
     /*Во время боя с этим огромным големом была повреждена стена подземелья, за которой находился некрополь. 
     Победив в бою с этим големом, Вы можете немедленно вытянуть 3 Карты Склепа.*/
@@ -56,9 +56,7 @@ function iceGolem() {
     ew.removeRawBtnInEW('btn_ew')
 
     function endBattleFn(){
-        if (player.ambushRoom && player.surroundedMonsters) {
-            player.ambushRoom = false
-            player.surroundedMonsters = false
+        if (player.ambushRoom || player.surroundedMonsters) {
             ew.removeAllEW()
             return
         }
@@ -69,7 +67,7 @@ function iceGolem() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[1], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[1], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[1], endBattleFn))
     
     /*Это голем льда. 
     Когда голем погибает, все вокруг замерзает. 
@@ -88,7 +86,7 @@ function magmaGolem() {
             ew.removeLastEW()
             ew.clear()
             ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[2], endBattleFn))
-            ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[2], endBattleFn))
+            if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[2], endBattleFn))
         }, 1200);
     }
 
@@ -99,7 +97,7 @@ function magmaGolem() {
             ew.removeLastEW()
             ew.clear()
             ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[2], endBattleFn))
-            ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[2], endBattleFn))
+            if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[2], endBattleFn))
         }, 1200);
     }
 
@@ -136,9 +134,7 @@ function stoneGolem() {
     ew.removeRawBtnInEW('btn_ew')
 
     function endBattleFn(){
-        if (player.ambushRoom && player.surroundedMonsters) {
-            player.ambushRoom = false
-            player.surroundedMonsters = false
+        if (player.ambushRoom || player.surroundedMonsters) {
             ew.removeAllEW()
             return
         }
@@ -148,7 +144,7 @@ function stoneGolem() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[3], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[3], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[3], endBattleFn))
 
     /*Этот голем хранит в себе дающую силы энергию природы. 
     Если Вы победили его в бою, то можете немедленно выполнить еще одно перемещение. 
@@ -166,9 +162,7 @@ function demonOfSuffering() {
     }
 
     function endBattleFn(){
-        if (player.ambushRoom && player.surroundedMonsters) {
-            player.ambushRoom = false
-            player.surroundedMonsters = false
+        if (player.ambushRoom || player.surroundedMonsters) {
             ew.removeAllEW()
             return
         }
@@ -184,7 +178,7 @@ function demonOfSuffering() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[4], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[4], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[4], endBattleFn))
 
     /*Победив этого демона в бою, 
     Вы можете немедленно выполнить поиск в комнате, в которой Вы находитесь, если это возможно. 
@@ -202,7 +196,7 @@ function demonOfPain() {
             ew.removeLastEW()
             ew.clear()
             ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[5], endBattleFn))
-            ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[5], endBattleFn))
+            if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[5], endBattleFn))
         }, 1200);
     }
 
@@ -213,7 +207,7 @@ function demonOfPain() {
             ew.removeLastEW()
             ew.clear()
             ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[5], endBattleFn))
-            ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[5], endBattleFn))
+            if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[5], endBattleFn))
         }, 1200);
     }
 
@@ -243,7 +237,7 @@ function demonOfFear() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[6], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[6], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[6], endBattleFn))
 
     /*Вы были напуганы жутким видом этого демона. 
     Перед началом боя сбросьте все свои жетоны решимости.*/
@@ -270,16 +264,14 @@ function demonOfRage() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[7], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[7], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[7], endBattleFn))
     /*Этот демон обладает сокровищем. 
     Если Вы победили в бою с этим демоном, возьмите Карту Сокровища.*/
 }
 
 function possessedBySpirits() {
     ew.removeRawBtnInEW('btn_ew')
-    if (player.ambushRoom && player.surroundedMonsters) {
-        player.ambushRoom = false
-        player.surroundedMonsters = false
+    if (player.ambushRoom || player.surroundedMonsters) {
         ew.removeAllEW()
         return
     }
@@ -328,6 +320,7 @@ function servantOfTheUnderworld() {
     ew.removeRawBtnInEW('btn_ew')
 
     const result = ()=>{ 
+        
         const result = game.diceRollResultGlobal
 
         if (result<=3) {
@@ -350,13 +343,17 @@ function servantOfTheUnderworld() {
     }
 
     function endBattleFn(){
+        if (player.ambushRoom || player.surroundedMonsters) {
+            ew.removeAllEW()
+            return
+        }
         ew.drawCardEW(monster_cards[9])
         ew.clear()
         ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[9], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[9], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[9], endBattleFn))
 
     /*Победив этого колдуна в бою, бросьте 1d6: 
     1-3 - Вы пропускаете свой следующий ход; 
@@ -386,7 +383,7 @@ function servantOfChaos() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[10], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[10], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[10], endBattleFn))
     /*Победив этого колдуна в бою, Вы можете обыскать его тело. 
     Тяните Карту Мертвеца.*/
 }
@@ -394,7 +391,7 @@ function servantOfChaos() {
 function cultAdept() {
     ew.removeRawBtnInEW('btn_ew')
 
-    const maxValue = player.treasureCardContainer.length-1
+    const maxValue = player.treasureCardContainer.length
 
     if (maxValue>0) {
         const randomId = Math.floor(Math.random() * maxValue)
@@ -411,7 +408,7 @@ function cultAdept() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[11], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[11], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[11], endBattleFn))
 
     /*Этот колдун таким образом наложил проклятие на один из ваших Трофеев, что он стал для Вас неподъёмным. 
     Перед началом боя с этим колдуном случайным образом сбросьте один из своих Трофеев.*/
@@ -447,7 +444,7 @@ function skeletonWarrior() {
                 ew.drawCardEW(monster_cards[12])
                 ew.clear()
                 ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[12], endBattleFn))
-                ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[12], endBattleFn))
+                if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[12], endBattleFn))
             }, 1200);
         }
 
@@ -460,7 +457,7 @@ function skeletonWarrior() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[12], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[12], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[12], endBattleFn))
 
     /*Победив этого скелета в бою, бросьте 1d6: 
     1-4 - Скелет побежден и его можно обыскать; тяните Карту Мертвеца; 
@@ -497,7 +494,7 @@ function decrepitSkeleton() {
                 ew.drawCardEW(monster_cards[13])
                 ew.clear()
                 ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[12], endBattleFn))
-                ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[12], endBattleFn))
+                if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[12], endBattleFn))
             }, 1200);
         }
 
@@ -510,7 +507,7 @@ function decrepitSkeleton() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[13], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[13], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[13], endBattleFn))
 
     /*Победив этого скелета в бою, бросьте 1d6: 
     1-2 - Скелет побежден и его можно обыскать; тяните Карту Мертвеца; 
@@ -547,7 +544,7 @@ function skeletonKiller() {
                 ew.drawCardEW(monster_cards[14])
                 ew.clear()
                 ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[14], endBattleFn))
-                ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[14], endBattleFn))
+                if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[14], endBattleFn))
             }, 1200);
         }
 
@@ -560,7 +557,7 @@ function skeletonKiller() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[14], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[14], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[14], endBattleFn))
 
     /*Победив этот скелет в бою, бросьте 1d6: 
     1-4 - Скелет побежден и его можно обыскать; тянуть Карту Мертвеца; 
@@ -597,7 +594,7 @@ function skeletonArcher() {
                 ew.drawCardEW(monster_cards[15])
                 ew.clear()
                 ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[15], endBattleFn))
-                ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[15], endBattleFn))
+                if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[15], endBattleFn))
             }, 1200);
         }
 
@@ -610,7 +607,7 @@ function skeletonArcher() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[15], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[15], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[15], endBattleFn))
     /*Победив этого скелета в бою, бросьте 1d6: 
     1-4 - Скелет побежден и его можно обыскать; тяните Карту Мертвеца; 
     5-6 - Скелет исцеляется от всех ранений и Вам необходимо снова провести с ним бой, после чего снова разыграть этот эффект, бросив 1d6.*/
@@ -639,7 +636,7 @@ function trollDestroyer() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[16], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[16], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[16], endBattleFn))
 
     /*Во время боя с этим троллем была повреждена стена подземелья, за которой находился некрополь. 
     Победив в бою с этим троллем, Вы можете немедленно вытянуть 3 Карты Склепа.*/
@@ -649,9 +646,7 @@ function madTroll() {
     ew.removeRawBtnInEW('btn_ew')
 
     function endBattleFn(){
-        if (player.ambushRoom && player.surroundedMonsters) {
-            player.ambushRoom = false
-            player.surroundedMonsters = false
+        if (player.ambushRoom || player.surroundedMonsters) {
             ew.removeAllEW()
             return
         }
@@ -662,7 +657,7 @@ function madTroll() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[17], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[17], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[17], endBattleFn))
 
     /*Тролль крушит все вокруг. 
     Победив его в бою, Вы можете немедленно выполнить перемещение в любую соседнюю область, игнорируя решетки, двери и стены. 
@@ -675,9 +670,7 @@ function trollBrute() {
     ew.removeRawBtnInEW('btn_ew')
 
     function endBattleFn(){
-        if (player.ambushRoom && player.surroundedMonsters) {
-            player.ambushRoom = false
-            player.surroundedMonsters = false
+        if (player.ambushRoom || player.surroundedMonsters) {
             ew.removeAllEW()
             return
         }
@@ -688,7 +681,7 @@ function trollBrute() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[18], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[18], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[18], endBattleFn))
     
     /*После боя с этим огромным троллем Вы были сильно истощены. 
     Победив его в бою, пропустите свой следующий ход. 
@@ -701,9 +694,7 @@ function trollCannibal() {
     ew.removeRawBtnInEW('btn_ew')
 
     function endBattleFn(){
-        if (player.ambushRoom && player.surroundedMonsters) {
-            player.ambushRoom = false
-            player.surroundedMonsters = false
+        if (player.ambushRoom || player.surroundedMonsters) {
             ew.removeAllEW()
             return
         }
@@ -713,7 +704,7 @@ function trollCannibal() {
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[17], endBattleFn))
-    ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[17], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[17], endBattleFn))
 
     /*Убийство этого кровожадного тролля-людоеда воодушевит Вас. 
     Победив его в бою, Вы можете немедленно выполнить еще одно перемещение. 

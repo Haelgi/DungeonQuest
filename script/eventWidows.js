@@ -238,6 +238,8 @@ class EventWidows{
 
     removeAllEW(){
         game.activeEvent = false
+        player.checkEventCards = true
+
         const elements = document.querySelectorAll('.event-container')
         elements.forEach(element => {
             element.remove()
@@ -519,7 +521,7 @@ class EventWidows{
 
         this.addDiceRollSection(false, 6, false, true, 1, trueFn, false, false, false)
         
-        if (player.escapeBattle) this.drawBtnInEW('btn_esc','Втекти', ()=>this.escapeBattle(card))
+        if (player.escapeBattle && !player.ambushRoom && !player.surroundedMonsters) this.drawBtnInEW('btn_esc','Втекти', ()=>this.escapeBattle(card))
 
         if (card.health < 1) {
             this.drawEW(`${card.name} переможений!`)
