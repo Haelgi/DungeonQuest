@@ -9,6 +9,8 @@ export function addScrolCardsEffect(container, fn) {
 
     function handleStart(e) {
         e.preventDefault();
+        removeActiveClasses();
+        e.target.classList.add('active');
         startX = e.touches ? e.touches[0].clientX : e.clientX;
     }
 
