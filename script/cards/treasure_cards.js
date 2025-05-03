@@ -2,7 +2,7 @@ import { ew } from '../eventWidows.js';
 import { player } from '../player.js';
 
 class Card {
-    constructor(id, name, cost, effect) {
+    constructor(id, name, cost, effect, clickFn) {
         this.id = id;
         this.name = name;
         this.type = 'treasure';
@@ -11,6 +11,7 @@ class Card {
         this.title = 'Скарбниця';
         this.pack = 'treasure';
         this.btnName = 'Далі';
+        this.clickFn = clickFn;
     }
 }
 
@@ -27,6 +28,13 @@ function smallMagicCrystal() {
     player.treasureCardContainer.push(treasure_cards[1]);
     game.drawTreasurePackCards()
     ew.removeAllEW();
+    /* "трофей"
+    TODO Если этот кристалл разбить, произойдет опасный взрыв магической энергии.
+    В сражении с монстром, Вы можете сброситьт эту карту, а Ваш противник получит 2 ранения. +200 золота*/
+}
+
+function smallMagicCrystalFn() {
+    console.log('smallMagicCrystalFn');
     /* "трофей"
     TODO Если этот кристалл разбить, произойдет опасный взрыв магической энергии.
     В сражении с монстром, Вы можете сброситьт эту карту, а Ваш противник получит 2 ранения. +200 золота*/
@@ -329,7 +337,7 @@ function lawBook() {
 
 const treasure_cards = [
     /*0*/new Card(1, 'Кольцо Жизни', 250, ()=>{ringOfLife()}),
-    /*1*/new Card(2, 'Малый Кристал Магии', 200, ()=>{smallMagicCrystal()}),
+    /*1*/new Card(2, 'Малый Кристал Магии', 200, ()=>{smallMagicCrystal()}, smallMagicCrystalFn),
     /*2*/new Card(3, 'Ожерелье с Сапфирами', 250, ()=>{sapphireNecklace()}),
     /*3*/new Card(4, 'Магическое Кольцо', 290, ()=>{magicRing()}),
     /*4*/new Card(5, 'Большой Кристалл Магии', 320, ()=>{largeMagicCrystal()}),

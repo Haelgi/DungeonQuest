@@ -403,7 +403,7 @@ class Game {
             let active = ''
             if(idx === activeId) active = 'active'
             inner+=`
-                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/abilitie_cards/abilitie_${player.hero}_${item.id}.jpg')"></div>        
+                <div id="${idx}"  sours="heroes" pack="abilities" class="card-deck ${active}" style="background-image: url('img/abilitie_cards/abilitie_${player.hero}_${item.id}.jpg')"></div>        
             `
         });
         abilitieCardContainer.innerHTML=inner;
@@ -420,7 +420,7 @@ class Game {
             let active = ''
             if(idx === activeId) active = 'active'
             inner+=`
-                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
+                <div id="${idx}" pack="eventCardContainer" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
             `
         });
 
@@ -428,7 +428,7 @@ class Game {
             let active = ''
             if(idx === activeId) active = 'active'
             inner+=`
-                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
+                <div id="${idx}" sours="player" pack="endMoveEventCardContainer" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
             `
         });
         eventCardContainer.innerHTML=inner;
@@ -445,7 +445,7 @@ class Game {
             let active = ''
             if(idx === activeId) active = 'active'
             inner+=`
-                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
+                <div id="${idx}" sours="player" pack="treasureCardContainer" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
             `
         });
         treasureCardContainer.innerHTML=inner;
@@ -463,7 +463,7 @@ class Game {
             let active = ''
             if(idx === activeId) active = 'active'
             inner+=`
-                <div id="${idx}" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
+                <div id="${idx}" sours="player" pack="catacombCardContainer" class="card-deck ${active}" style="background-image: url('img/${item.pack}_cards/${item.pack}_${item.id}.jpg')"></div>        
             `
         });
         catacombCardContainer.innerHTML=inner;

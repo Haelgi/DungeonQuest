@@ -1,3 +1,7 @@
+import { player } from '../player.js';
+import  {heroes}  from '../cards/heroes.js';
+import  {ew}  from '../eventWidows.js';
+
 const handlersMap = new Map(); // Храним обработчики для каждого контейнера
 
 export function addScrolCardsEffect(container, fn) {
@@ -9,8 +13,9 @@ export function addScrolCardsEffect(container, fn) {
 
     function handleStart(e) {
         e.preventDefault();
-        removeActiveClasses();
-        e.target.classList.add('active');
+
+        
+
         startX = e.touches ? e.touches[0].clientX : e.clientX;
     }
 
@@ -18,8 +23,28 @@ export function addScrolCardsEffect(container, fn) {
         if (!startX) return;
 
         endX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+        let activeCard
 
-        if (startX === endX && fn) fn(e);
+        if (startX === endX) {
+            if (!e.target.classList.contains('active')) {
+                removeActiveClasses();
+                e.target.classList.add('active');
+                return
+            }
+            const sours = e.target.getAttribute('sours');
+            const cardId = parseInt(e.target.getAttribute('id'));
+            const cardPack = e.target.getAttribute('pack');
+
+            if (sours === 'player') activeCard = player[cardPack][cardId] 
+            if (sours === 'heroes') activeCard = heroes[player.hero][cardPack][cardId] 
+
+            if (activeCard.clickFn) {
+                ew.drawEW('Вікорістаті цю карту?')
+                ew.drawCardsInEW(activeCard)
+                ew.addBtnInEW('btn_next','Так', activeCard.clickFn)
+                ew.addBtnInEW('btn_clouse','Ні', ew.removeAllEW)
+            }
+        };
 
         if (startX - endX > 50) {
             let elem = parentContainer.querySelector('.active')?.nextElementSibling;
