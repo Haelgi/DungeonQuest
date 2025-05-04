@@ -33,6 +33,7 @@ class Player {
         this.choiceNumber= [];
         this.ambushRoom = false;
         this.surroundedMonsters = false;
+        this.fightWithMonsters = false;
         this.gold = 0
     }
 }

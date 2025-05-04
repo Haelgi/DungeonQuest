@@ -1,5 +1,6 @@
 import { ew } from '../eventWidows.js';
 import { player } from '../player.js';
+import { game } from '../game.js';
 
 class Card {
     constructor(id, name, cost, effect, clickFn) {
@@ -20,8 +21,26 @@ function ringOfLife() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей" 
-    TODO Вы можете сбросить эту карту (высвободить силу кольца, уничтожив его) и получить исцеление. 
+    Вы можете сбросить эту карту (высвободить силу кольца, уничтожив его) и получить исцеление. 
     Бросьте 1d6: 1-3 У Вас исцеляется 1 ранение; 4-6 - У Вас исцеляется 4 ранения. +250 золота*/
+}
+
+function ringOfLifeFn() {
+    game.removeCurrentCardFromPack(player.treasureCardContainer, 'name', 'Кольцо Жизни')
+    game.drawTreasurePackCards()
+    
+    function resultFn() {
+        const result = game.diceRollResultGlobal
+        let healing
+        if (result <= 3) healing = 1
+        if (result > 3) healing = 4
+
+        ew.drawEW(`Ви отримете ${healing} зцилення`)
+        game.changeHealth(healing)
+        setTimeout(() => {ew.removeAllEW()}, 1200);
+    }
+    ew.clear();
+    ew.addDiceRollSection(false, 6, false, true, 1, resultFn, false, false, false)
 }
 
 function smallMagicCrystal() {
@@ -29,15 +48,13 @@ function smallMagicCrystal() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO Если этот кристалл разбить, произойдет опасный взрыв магической энергии.
+    Если этот кристалл разбить, произойдет опасный взрыв магической энергии.
     В сражении с монстром, Вы можете сброситьт эту карту, а Ваш противник получит 2 ранения. +200 золота*/
 }
 
 function smallMagicCrystalFn() {
-    console.log('smallMagicCrystalFn');
-    /* "трофей"
-    TODO Если этот кристалл разбить, произойдет опасный взрыв магической энергии.
-    В сражении с монстром, Вы можете сброситьт эту карту, а Ваш противник получит 2 ранения. +200 золота*/
+    game.removeCurrentCardFromPack(player.treasureCardContainer, 'name', 'Малый Кристал Магии')
+    game.drawTreasurePackCards()
 }
 
 function sapphireNecklace() {
@@ -336,42 +353,42 @@ function lawBook() {
 }
 
 const treasure_cards = [
-    /*0*/new Card(1, 'Кольцо Жизни', 250, ()=>{ringOfLife()}),
-    /*1*/new Card(2, 'Малый Кристал Магии', 200, ()=>{smallMagicCrystal()}, smallMagicCrystalFn),
-    /*2*/new Card(3, 'Ожерелье с Сапфирами', 250, ()=>{sapphireNecklace()}),
-    /*3*/new Card(4, 'Магическое Кольцо', 290, ()=>{magicRing()}),
-    /*4*/new Card(5, 'Большой Кристалл Магии', 320, ()=>{largeMagicCrystal()}),
-    /*5*/new Card(6, 'Волшебный Ключ', 350, ()=>{magicKey()}),
-    /*6*/new Card(7, 'Огненный Амулет', 400, ()=>{fireAmulet()}),
-    /*7*/new Card(8, 'Змеиное Кольцо', 400, ()=>{snakeRing()}),
-    /*8*/new Card(9, 'Кинжал Скорости', 450, ()=>{speedDagger()}),
-    /*9*/new Card(10, 'Зелье Прозорливости', 450, ()=>{foresightPotion()}),
-    /*10*/new Card(11, 'Зелье Скорости', 450, ()=>{speedPotion()}),
-    /*11*/new Card(12, 'Сумеречная Накидка', 500, ()=>{twilightCloak()}),
-    /*12*/new Card(13, 'Амулет Теней', 550, ()=>{shadowAmulet()}),
-    /*13*/new Card(14, 'Яйцо Дракона', 600, ()=>{dragonEgg()}),
-    /*14*/new Card(15, 'Посох Жизни', 650, ()=>{staffOfLife()}),
-    /*15*/new Card(16, 'Посох Смерти', 650, ()=>{staffOfDeath()}),
-    /*16*/new Card(17, 'Пояс Феникса', 700, ()=>{phoenixBelt()}),
-    /*17*/new Card(18, 'Тиара Магнетизма', 700, ()=>{magnetismTiara()}),
-    /*18*/new Card(19, 'Арфа Спокойствия', 700, ()=>{tranquilityHarp()}),
-    /*19*/new Card(20, 'Пояс Жизни', 900, ()=>{lifeBelt()}),
-    /*20*/new Card(21, 'Меч Света', 900, ()=>{lightSword()}),
-    /*21*/new Card(22, 'Корона', 1000, ()=>{crown()}),
-    /*22*/new Card(23, 'Сумка с Самоцветами', 1000, ()=>{bagOfGems()}),
-    /*23*/new Card(24, 'Лампа с Джином', 1100, ()=>{genieLamp()}),
-    /*24*/new Card(25, 'Посох Дракона', 1510, ()=>{dragonStaff()}),
-    /*25*/new Card(26, 'Заколдованная Книга', false, ()=>{enchantedBook()}),
-    /*26*/new Card(27, 'Пожиратель Сокровищ', false, ()=>{treasureEater()}),
-    /*27*/new Card(28, 'Украшенные Ботинки', 90, ()=>{decoratedBoots()}),
-    /*28*/new Card(29, 'Кольцо с Кристалом', 110, ()=>{crystalRing()}),
-    /*29*/new Card(30, 'Жемчужное Кольцо', 130, ()=>{pearlRing()}),
-    /*30*/new Card(31, 'Зелье Внимательности', 150, ()=>{attentivenessPotion()}),
-    /*31*/new Card(32, 'Серебрянное Кольцо', 160, ()=>{silverRing()}),
-    /*32*/new Card(33, 'Кольцо Колдуна', 170, ()=>{sorcererRing()}),
-    /*33*/new Card(34, 'Золотое Кольцо', 190, ()=>{goldRing()}),
-    /*34*/new Card(35, 'Деревянное Кольцо', 1, ()=>{woodenRing()}),
-    /*35*/new Card(36, 'Свод Законов', 15, ()=>{lawBook()})
+    /*0*/new Card(1, 'Кольцо Жизни', 250, ringOfLife, ringOfLifeFn),
+    /*1*/new Card(2, 'Малый Кристал Магии', 200,smallMagicCrystal, smallMagicCrystalFn),
+    /*2*/new Card(3, 'Ожерелье с Сапфирами', 250,sapphireNecklace),
+    /*3*/new Card(4, 'Магическое Кольцо', 290,magicRing),
+    /*4*/new Card(5, 'Большой Кристалл Магии', 320,largeMagicCrystal),
+    /*5*/new Card(6, 'Волшебный Ключ', 350,magicKey),
+    /*6*/new Card(7, 'Огненный Амулет', 400,fireAmulet),
+    /*7*/new Card(8, 'Змеиное Кольцо', 400,snakeRing),
+    /*8*/new Card(9, 'Кинжал Скорости', 450,speedDagger),
+    /*9*/new Card(10, 'Зелье Прозорливости', 450,foresightPotion),
+    /*10*/new Card(11, 'Зелье Скорости', 450,speedPotion),
+    /*11*/new Card(12, 'Сумеречная Накидка', 500,twilightCloak),
+    /*12*/new Card(13, 'Амулет Теней', 550,shadowAmulet),
+    /*13*/new Card(14, 'Яйцо Дракона', 600,dragonEgg),
+    /*14*/new Card(15, 'Посох Жизни', 650,staffOfLife),
+    /*15*/new Card(16, 'Посох Смерти', 650,staffOfDeath),
+    /*16*/new Card(17, 'Пояс Феникса', 700,phoenixBelt),
+    /*17*/new Card(18, 'Тиара Магнетизма', 700,magnetismTiara),
+    /*18*/new Card(19, 'Арфа Спокойствия', 700,tranquilityHarp),
+    /*19*/new Card(20, 'Пояс Жизни', 900,lifeBelt),
+    /*20*/new Card(21, 'Меч Света', 900,lightSword),
+    /*21*/new Card(22, 'Корона', 1000,crown),
+    /*22*/new Card(23, 'Сумка с Самоцветами', 1000,bagOfGems),
+    /*23*/new Card(24, 'Лампа с Джином', 1100,genieLamp),
+    /*24*/new Card(25, 'Посох Дракона', 1510,dragonStaff),
+    /*25*/new Card(26, 'Заколдованная Книга', false,enchantedBook),
+    /*26*/new Card(27, 'Пожиратель Сокровищ', false,treasureEater),
+    /*27*/new Card(28, 'Украшенные Ботинки', 90,decoratedBoots),
+    /*28*/new Card(29, 'Кольцо с Кристалом', 110,crystalRing),
+    /*29*/new Card(30, 'Жемчужное Кольцо', 130,pearlRing),
+    /*30*/new Card(31, 'Зелье Внимательности', 150,attentivenessPotion),
+    /*31*/new Card(32, 'Серебрянное Кольцо', 160,silverRing),
+    /*32*/new Card(33, 'Кольцо Колдуна', 170,sorcererRing),
+    /*33*/new Card(34, 'Золотое Кольцо', 190,goldRing),
+    /*34*/new Card(35, 'Деревянное Кольцо', 1,woodenRing),
+    /*35*/new Card(36, 'Свод Законов', 15,lawBook)
 ];
 
 export { treasure_cards };

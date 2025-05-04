@@ -142,7 +142,7 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         ew.drawCardEW(card);
-        // ew.drawCardEW(monster_cards[11]);
+        // ew.drawCardEW(monster_cards[0]);
         // TODO
     }
 
@@ -1176,6 +1176,14 @@ class Game {
         game.distributionCards(cards)
         return cards
     }
+
+    removeCurrentCardFromPack(arr, key, keyValue){
+        const index = arr.findIndex(obj => obj?.[key] === keyValue);
+        if (index !== -1) {
+            arr.splice(index, 1);
+        }
+    }
+    
 }
 
 

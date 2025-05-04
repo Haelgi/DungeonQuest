@@ -39,17 +39,10 @@ export function addScrolCardsEffect(container, fn) {
             if (sours === 'player') activeCard = player[cardPack][cardId] 
             if (sours === 'heroes') activeCard = heroes[player.hero][cardPack][cardId] 
 
-            function useTheCard() {
-                ew.removeAllEW();
-                if (sours === 'player') player[cardPack].splice([cardId],1)
-                if (sours === 'heroes') activeCard = heroes[player.hero].splice([cardId],1)
-                game.drawTreasurePackCards()         
-                activeCard.clickFn();
-            }
             if (activeCard.clickFn) {
                 ew.drawEW('Вікорістаті цю карту?')
                 ew.drawCardsInEW(activeCard)
-                ew.addBtnInEW('btn_next','Так', useTheCard)
+                ew.addBtnInEW('btn_next','Так', activeCard.clickFn)
                 ew.addBtnInEW('btn_clouse','Ні', ew.removeAllEW)
             }
         };
