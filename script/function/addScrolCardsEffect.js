@@ -37,9 +37,11 @@ export function addScrolCardsEffect(container, fn) {
             const cardPack = e.target.getAttribute('pack');
 
             if (sours === 'player') activeCard = player[cardPack][cardId] 
-            if (sours === 'heroes') activeCard = heroes[player.hero][cardPack][cardId] 
+            if (sours === 'heroes') activeCard = heroes[player.hero][cardPack][cardId]
 
-            if (activeCard.clickFn) {
+            if(fn) fn(e)
+                
+            if (activeCard?.clickFn) {
                 ew.drawEW('Вікорістаті цю карту?')
                 ew.drawCardsInEW(activeCard)
                 ew.addBtnInEW('btn_next','Так', activeCard.clickFn)

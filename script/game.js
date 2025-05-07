@@ -141,8 +141,8 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        ew.drawCardEW(card);
-        // ew.drawCardEW(monster_cards[0]);
+        // ew.drawCardEW(card);
+        ew.drawCardEW(dungeon_cards[34]);
         // TODO
     }
 
@@ -480,26 +480,26 @@ class Game {
     }
 
     checkEventCards(){
-        if (player.eventCardContainer.length === 0 || this.activeEvent || !player.checkEventCards) return
+        if (player.eventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
         this.activeEvent = true
-        player.checkEventCards = false
+        player.checkEventCards = true
         const [card] = player.eventCardContainer.splice(0, 1);
         this.drawEventPackCards()
         ew.drawCardEW(card)
     }
 
     checkEndMoveEventCardContainer(){
-        if (player.endMoveEventCardContainer.length === 0 || !this.activeEvent || !player.checkEventCards) return
-        this.activeEvent = false
-        player.checkEventCards = false
+        if (player.endMoveEventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
+        this.activeEvent = true
+        player.checkEventCards = true
         const [card] = player.endMoveEventCardContainer.splice(0, 1);
         ew.drawCardEW(card)
     }
 
     checkCatacombCards(){
-        if (player.catacombCardContainer.length === 0 || !this.activeEvent || !player.checkEventCards) return
-        this.activeEvent = false
-        player.checkEventCards = false
+        if (player.catacombCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
+        this.activeEvent = true
+        player.checkEventCards = true
         const [card] = player.catacombCardContainer.splice(0, 1);
         ew.drawCardEW(card)
     }
@@ -507,7 +507,7 @@ class Game {
     checkMonsterCards(){
         if (!player.position) return
         if (player.extraMove) return
-        if (this.gameFields[player.position[1]][player.position[0]]['m'] === undefined || !this.activeEvent) return
+        if (this.gameFields[player.position[1]][player.position[0]]['m'] === undefined || this.activeEvent) return
         if (this.gameFields[player.position[1]][player.position[0]]['m'].length === 0) {
             delete this.gameFields[player.position[1]][player.position[0]]['m']
             return
@@ -684,7 +684,6 @@ class Game {
         this.checkEndMoveEventCardContainer()
         this.toggleCurrentPlayer()
         this.queueEW()
-        this.activeEvent = false
         player.checkEventCards = true
     }
 

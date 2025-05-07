@@ -113,7 +113,7 @@ function wallCollapse(){
         player.extraMove = true
         game.removePreviousTileField = true
         game.removeAllIcon()
-
+        ew.removeAllEW()
     }
 
     const falseFn = ()=>{
@@ -126,7 +126,7 @@ function wallCollapse(){
         ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
     }
 
-    ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, false, true)
+    ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, true, false)
 
     /*Комната рушится. 
     Выполните проверку Ловкости и, в случае неудачи, получите 2 ранения от летящих обломков. 
@@ -176,6 +176,7 @@ function goblinExplorer(){
         game.drawTreasurePackCards()
         ew.removeAllEW()
     })
+
     ew.addEmptyFeldForCard(2)
     ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{
         game.removeHighlightFields(game.nextCoordinates)
@@ -229,7 +230,7 @@ function goblinExplorer(){
 
                 if(card) {
                     player.treasureCardContainer.push(card)
-
+                    ew.updatePackCardsEW(player.treasureCardContainer)
                     game.drawTreasurePackCards()
                     drawCardToFeld(2)  
                 }
@@ -255,21 +256,24 @@ function ambushRoom(){
         ew.removeAllEW()
         player.escapeBattle = false
         player.ambushRoom = true
+
         const cards = [game.getRundomElement(game.monster_cards, monster_cards),
                        game.getRundomElement(game.monster_cards, monster_cards)]
-
-        game.gameFields[player.position[1]][player.position[0]]['m'] = cards
-
-            game.distributionCards(cards)
+                       
+        
 
         ew.drawEW('Події підземелля')
         ew.addPackCards(cards)
         addScrolCardsEffect('.event-deck-container', false)
 
-        ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+        ew.drawBtnInEW('next', 'Далі', ()=>{
+            ew.removeLastEW()
+            game.gameFields[player.position[1]][player.position[0]]['m'] = cards
+            game.activeEvent = false
+        })
     }
 
-    ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, false, true)
+    ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, true, true)
 
     /*В комнату вошли монстры, а на выходы начали опускаться решетки. 
     Выполните проверку Ловкости. 

@@ -52,11 +52,6 @@ function smallMagicCrystal() {
     В сражении с монстром, Вы можете сброситьт эту карту, а Ваш противник получит 2 ранения. +200 золота*/
 }
 
-function smallMagicCrystalFn() {
-    game.removeCurrentCardFromPack(player.treasureCardContainer, 'name', 'Малый Кристал Магии')
-    game.drawTreasurePackCards()
-}
-
 function sapphireNecklace() {
     player.treasureCardContainer.push(treasure_cards[2]);
     game.drawTreasurePackCards()
@@ -354,9 +349,9 @@ function lawBook() {
 
 const treasure_cards = [
     /*0*/new Card(1, 'Кольцо Жизни', 250, ringOfLife, ringOfLifeFn),
-    /*1*/new Card(2, 'Малый Кристал Магии', 200,smallMagicCrystal, smallMagicCrystalFn),
-    /*2*/new Card(3, 'Ожерелье с Сапфирами', 250,sapphireNecklace),
-    /*3*/new Card(4, 'Магическое Кольцо', 290,magicRing),
+    /*1*/new Card(2, 'Малый Кристал Магии', 200, smallMagicCrystal),
+    /*2*/new Card(3, 'Ожерелье с Сапфирами', 250, sapphireNecklace),
+    /*3*/new Card(4, 'Магическое Кольцо', 290, magicRing),
     /*4*/new Card(5, 'Большой Кристалл Магии', 320,largeMagicCrystal),
     /*5*/new Card(6, 'Волшебный Ключ', 350,magicKey),
     /*6*/new Card(7, 'Огненный Амулет', 400,fireAmulet),

@@ -30,7 +30,7 @@ class EventWidows{
         this.drawEW(card.title);
         this.drawCardsInEW(card);
         this.drawBtnInEW('btn_ew', card.btnName, ()=>{
-            game.activeEvent = false
+            game.activeEvent = true
             if (card.effect() === undefined) return
             card.effect()
         });
@@ -165,11 +165,12 @@ class EventWidows{
 
         if (game.diceRollResultGlobal <= (valueIn)) {
             if (rolResult){
-                this.drawEW('Успіх!', 'green');
-                this.drawBtnInEW('next','Далі', ()=>{
-                    if (trueFn) trueFn();
-                    if (closeEW) this.removeAllEW()
-                });
+            this.drawEW('Успіх!', 'green');
+            this.rerollDice(resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
+            this.drawBtnInEW('next','Далі', ()=>{
+                if (trueFn) trueFn();
+                if (closeEW) this.removeAllEW()
+            });
             }
 
             if (!rolResult){
@@ -180,6 +181,7 @@ class EventWidows{
 
         if (game.diceRollResultGlobal > valueIn && game.diceRollResultGlobal <= value) {
             this.drawEW('Провал....?');
+            this.rerollDice(resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
             this.drawBtnInEW('add_resolve','Додати Рішучості', ()=>{
                 const diff = game.diceRollResultGlobal - valueIn;
                 game.changeResolve(-diff) ;
@@ -199,12 +201,15 @@ class EventWidows{
         if (game.diceRollResultGlobal > value) {
             if (rolResult){
                 this.drawEW('Провал!', 'red');
+                this.rerollDice(resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
+                
                 this.drawBtnInEW('next','Далі', ()=>{
                     if (closeEW) this.removeAllEW()
                     if (falseFn) falseFn();
                 });
                 game.changeResolve(+1);
             }
+
             if (!rolResult){
                 if (closeEW) this.removeAllEW()
                 if (falseFn) falseFn();
@@ -212,6 +217,22 @@ class EventWidows{
             }
         }
     }
+
+    rerollDice(resolve, valueIn, trueFn, falseFn, rolResult, closeEW){
+        if (player.treasureCardContainer.some(card => card.name === 'Магическое Кольцо')&& document.querySelector('.dice')){
+            ew.drawBtnInEW('btn_ring', 'Перекінути кубік (за 290 золота)', ()=>{
+                ew.removeLastEW()
+                game.removeCurrentCardFromPack(player.treasureCardContainer, 'name', 'Магическое Кольцо')
+                game.drawTreasurePackCards()
+                this.rollDiceFn();
+                setTimeout(() => {
+                    this.rolResultEW(resolve, valueIn, trueFn, falseFn, rolResult, closeEW);
+                }, 1700);
+            })
+        }
+    }
+    
+
 
     endMoveEW() {
         this.drawEW('Завершити свій хід?');
@@ -524,7 +545,7 @@ class EventWidows{
         if (player.fightWithMonsters 
             && player.treasureCardContainer.some(card => card.name === 'Малый Кристал Магии')) {
                 this.drawBtnInEW('btn_crystal', 'Використати Кристал (2 пораннення за 200 золота)', () => {
-                    player.fightWithMonsters = false;
+                    
                     game.removeCurrentCardFromPack(player.treasureCardContainer, 'name', 'Малый Кристал Магии');
                     game.updateGoldValue()
                     game.drawTreasurePackCards()
@@ -546,6 +567,7 @@ class EventWidows{
             this.drawEW(`${card.name} переможений!`)
             setTimeout(() => {
                 this.removeAllEW()
+                player.fightWithMonsters = false;
                 endBattleFn()
             }, 2000);
             return
@@ -555,6 +577,7 @@ class EventWidows{
             this.drawEW(`Ви загинули(`)
             setTimeout(() => {
                 this.removeAllEW()
+                player.fightWithMonsters = false;
                 game.endGame()
             }, 2000);
             return
