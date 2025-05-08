@@ -988,9 +988,10 @@ function darkPortal(){
     ew.removeRawBtnInEW('btn_ew')
 
     function result(){ 
+        console.log(3)
         const result = game.diceRollResultGlobal
         const damage = result * 2
-
+        console.log(result, damage)
         ew.drawEW(`Ви отримете ${damage} поранення`)
         ew.drawBtnInEW('btn_reRoll','Перекинути (+1 поранення)', ()=>{
             ew.removeLastEW()
@@ -1000,7 +1001,8 @@ function darkPortal(){
         })
 
         ew.drawBtnInEW('btn_next','Далі', ()=>{
-            ew.removeLastEW()
+            console.log(4)
+            ew.removeAllEW()
 
             game.changeHealth(-damage)
 
@@ -1010,9 +1012,10 @@ function darkPortal(){
     }
 
     function diceDamage(){
+        console.log(2)
+        ew.removeLastEW()
         ew.clear()
-        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
-
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
     }
 
     const trueFn = ()=> {
@@ -1023,6 +1026,7 @@ function darkPortal(){
     const falseFn = ()=> {
         ew.drawEW(`Вам не вдалося пробитися до порталу`)
         setTimeout(() => {
+            console.log(1)
             ew.removeLastEW(); 
             diceDamage()
         }, 1200);
@@ -1030,17 +1034,17 @@ function darkPortal(){
 
     function dexterity(){
         ew.clear()
-        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, true, true)
+        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, true, false)
     }
 
     function defense(){
         ew.clear()
-        ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn, true, true)
+        ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn, true, false)
     }
 
     function luck(){
         ew.clear()
-        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, true, true)
+        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, true, false)
     }
 
     ew.addTxt('Пройти перевірку на:')
@@ -1093,7 +1097,7 @@ function livingArmor(){
         game.changeHealth(-damage)
     }
 
-    ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
 
     /*Вас атаковали ожившие доспехи. 
     Бросьте 1d6: 
@@ -1199,7 +1203,7 @@ function fierceCutthroat(){
                 }
             }
     
-            ew.addDiceRollSection(false, 6, false, true, 1, trueFn, false, true, true)
+            ew.addDiceRollSection(false, 6, false, true, 1, trueFn, false, false, false)
         }
 
         reroll()
