@@ -540,7 +540,7 @@ class EventWidows{
 
         }
 
-        this.addDiceRollSection(false, 6, false, true, 1, trueFn, false, false, false)
+        this.addDiceRollSection(false, 6, false, true, 1, trueFn, false, true, true)
         
         if (player.fightWithMonsters 
             && player.treasureCardContainer.some(card => card.name === 'Малый Кристал Магии')) {

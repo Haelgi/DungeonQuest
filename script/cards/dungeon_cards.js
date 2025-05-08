@@ -457,90 +457,23 @@ function deadCrowd(){
     
 function manticore(){
     ew.removeRawBtnInEW('btn_ew')
-    ew.removeTitile()
-    ew.addTitleToEW(`Оцінка Здоров'я Мантикори`)
+
+    const manticore = {
+        name : 'Мантикора',
+        health : 0,
+        penalty : 0
+    }
+    ew.addTxt(`Оцінка Здоров'я Мантикори`)
 
     const enterBattle = ()=>{
-        document.querySelector('.dice-container').remove()
-        ew.removeRawBtnInEW('roll')
-        ew.removeTitile()
-        ew.addTitleToEW(`Бій з Мантикорою`)
+        ew.removeLastEW()
+        player.escapeBattle = false
+        manticore.health = game.diceRollResultGlobal
 
-        ew.addTxt(`
-            ${player.hero.toUpperCase()}<br>
-            <i id="pl_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px; margin: 10px auto;">${heroes[player.hero].health}</i><br>
-            <i id="pl_str" class="fa-solid fa-hand-fist" style="color:#00BFFF; font-size: 25px; margin: 10px auto; ">${heroes[player.hero].strength}</i>
-        `)
-
-        ew.addTxt(`
-            <i style="font-size: 30px;"> </i><br>
-            <i style="font-size: 25px;">VS</i><br>
-        `)
-
-        ew.addTxt(`
-            ${'мантикора'.toUpperCase()}<br>
-            <i id="em_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px; margin: 20px auto;">${game.diceRollResultGlobal}</i><br>
-        `)
-
-        const pl_hp = document.getElementById('pl_hp')
-        const em_hp = document.getElementById('em_hp')
-
-        function endBattle(txt){
-            ew.drawEW(txt)
-            setTimeout(() => {
-                ew.removeAllEW()
-            }, 1200);
-        }
-
-        function reroll(){
-
-            const trueFn = ()=>{ 
-                const new_em_hp = Number(em_hp.innerHTML) - player.attack
-                em_hp.innerHTML = new_em_hp
-                ew.drawEW(`Ви поранили Мантикору`)
-                setTimeout(() => {
-                    ew.removeLastEW()
-                    ew.removeRawBtnInEW('roll')
-                    document.querySelectorAll('.dice-section').forEach((item)=>{
-                        item.remove()
-                    })
-                    reroll()
-                    
-                }, 1200);
-                
-                if (new_em_hp === 0) return endBattle(`Ви перемогли Мантикору`)
-            }
-            
-            const falseFn = ()=>{
-                game.changeHealth(-1)
-                pl_hp.innerHTML = heroes[player.hero].health
-                
-                ew.drawEW(`Ви троимали поранення(`)
-                setTimeout(() => {
-                    ew.removeLastEW()
-                    ew.removeRawBtnInEW('roll')
-                    document.querySelectorAll('.dice-section').forEach((item)=>{
-                        item.remove()
-                    })
-                    reroll()
-                    
-                }, 1200);
-
-                if (heroes[player.hero].health === 0) {
-                    endBattle(`Ви загинули(`)
-                    game.endGame()
-                    return
-                }
-            }
-    
-            ew.addDiceRollSection(false, heroes[player.hero].strength, false, true, 2, trueFn, falseFn, false, false)
-        }
-
-        reroll()
-        
+        ew.addBattleSection(manticore, ew.removeAllEW)
     }
 
-    ew.addDiceRollSection(false, 6, false, true, 1, enterBattle, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, enterBattle, false, true, false)
 
 
     /*На Вас напала мантикора. 
