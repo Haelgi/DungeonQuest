@@ -53,6 +53,7 @@ function livingDead(){
         ew.drawEW(`Вдало!`)
         setTimeout(() => {
             ew.removeLastEW()
+            ew.removeLastEW()
             ew.removeDiceRollSection();
             nextCheck();
         }, 1200);
@@ -64,13 +65,14 @@ function livingDead(){
         ew.drawEW(`Ви отримали 2 поранення`)
         setTimeout(() => {
             ew.removeLastEW()
+            ew.removeLastEW()
             ew.removeDiceRollSection();
             nextCheck();
         }, 1200);
     };
 
     function checkParameters(txt, param) {
-        ew.addDiceRollSection(`Ваша ${txt}: ${param}`, param, false, true, 2, trueFn, falseFn, false, false);
+        ew.addDiceRollSection(`Ваша ${txt}: ${param}`, param, false, true, 2, trueFn, falseFn, true, false);
     }
 
     function nextCheck() {
