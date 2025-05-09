@@ -142,7 +142,7 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         // ew.drawCardEW(card);
-        ew.drawCardEW(catacomb_cards[46]);
+        ew.drawCardEW(door_cards[14]);
         // TODO
     }
 

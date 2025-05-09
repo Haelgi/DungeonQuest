@@ -74,6 +74,7 @@ function enchantedDoor(){
 function jetOfFire(){
 
     const result = ()=>{ 
+        ew.removeLastEW()
         const result = game.diceRollResultGlobal
         const index = player.choiceNumber.indexOf(result);
         if (index === -1) {
@@ -88,14 +89,14 @@ function jetOfFire(){
             setTimeout(() => {
                 ew.removeAllEW();
                 game.endMove();
-            }, 2000);
+            }, 1200);
         }
 
     }
 
     function battle() {
         ew.clear()
-        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
     }
 
     ew.removeRawBtnInEW('btn_ew');
@@ -123,6 +124,7 @@ function thornsFromTheFloor(){
     let damage = 0;
 
     const trueFn = ()=>{
+        ew.removeLastEW()
         ew.drawEW(`Ви змогли ухилитись!`)
         setTimeout(() => {
             ew.removeAllEW();
@@ -131,6 +133,7 @@ function thornsFromTheFloor(){
     }
 
     const falseFn = ()=>{
+        ew.removeLastEW()
         game.changeHealth(-damage)
         ew.drawEW(`Ви отримали ${damage} поранення!`)
             setTimeout(() => {
@@ -146,7 +149,7 @@ function thornsFromTheFloor(){
         ew.removeRawBtnInEW('btn_defense')
         ew.removeRawBtnInEW('btn_luck')
 
-        ew.addDiceRollSection( `${nameValue}: ${value}`, value, false, true, 2, trueFn, falseFn, false, true)
+        ew.addDiceRollSection( `${nameValue}: ${value}`, value, false, true, 2, trueFn, falseFn, true, false)
     }
 
     ew.removeRawBtnInEW('btn_ew')
@@ -165,13 +168,14 @@ function deadlyArrows(){
     ew.removeRawBtnInEW('btn_ew');
 
     const trueFn = ()=>{
+        ew.removeLastEW()
         const damage = game.diceRollResultGlobal
         game.changeHealth(-damage) 
         ew.drawEW(`Ви отримали ${damage} поранення`);
         ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
     }
     
-    ew.addDiceRollSection( false, 6, false, false,1, trueFn, false, false, false)
+    ew.addDiceRollSection( false, 6, false, false,1, trueFn, false, true, false)
 
     /*Когда Вы открывали дверь, с отверстий в стене полетели стрелы. 
     Бросьте 1d6 и получите количество ранений, эквивалентное результату; 

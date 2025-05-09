@@ -2,9 +2,6 @@
 -карта перебросить кубы
         - пройтись по всем картам
 
-            -catacomb
-            -deadman
-            -door
             -hero abiliti
             -hero
             -monster
