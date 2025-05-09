@@ -59,7 +59,7 @@ function holeInCeiling(){
         ew.drawBtnInEW('btn_agan','Перевірити cпритність', ()=>{
             ew.removeRawBtnInEW('btn_agan')
             ew.removeRawBtnInEW('btn_next')
-            ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, false, false)
+            ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, true, false)
         })
 
         ew.drawBtnInEW('btn_next','Тягнути карту катакомб', ()=>{
@@ -76,7 +76,7 @@ function holeInCeiling(){
         return 
     }
 
-    ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, false, false)
+    ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, true, false)
 
     player.treasureCardContainer.forEach((card, id) => {
 
@@ -141,7 +141,7 @@ function doorWithRiddle(){
 
     function luck(){
         ew.clear()
-        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, true)
     }
 
     player.catacombCardContainer.forEach((card)=>{
@@ -187,6 +187,7 @@ function enchantedRoots(){
             ew.drawEW('Ви змогли виплутатись')
             setTimeout(() => {
                 ew.removeAllEW()
+                ew.removeAllEW()
             }, 2000);
             return
         }
@@ -195,6 +196,7 @@ function enchantedRoots(){
 
         ew.drawEW('Вдало')
         setTimeout(() => {
+            ew.removeLastEW()
             ew.removeLastEW()
             strength()
         }, 2000);
@@ -209,13 +211,14 @@ function enchantedRoots(){
         ew.drawEW('Провал')
         setTimeout(() => {
             ew.removeLastEW()
+            ew.removeLastEW()
             strength()
         }, 2000);
     }
 
     function strength(){
         ew.clear()
-        ew.addDiceRollSection(`Ваша Сила : ${heroes[player.hero].strength}`, heroes[player.hero].strength, false,true, 2, trueFn, falseFn, false, false)
+        ew.addDiceRollSection(`Ваша Сила : ${heroes[player.hero].strength}`, heroes[player.hero].strength, false,true, 2, trueFn, falseFn, true, false)
     }
 
     strength()
@@ -253,7 +256,7 @@ function hailOfArrows(){
     }
 
     ew.removeRawBtnInEW('btn_ew')
-    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, false, false)
+    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, true, false)
 
     /*Монстр атакует Вас из лука. 
     Выполните проверку Удачи. 
@@ -264,34 +267,38 @@ function hailOfArrows(){
 }
 
 function giantRat(){
+
     let ratHealth = 3
 
     const trueFn = ()=> {
-        ratHealth -= 1
+        ew.removeLastEW()
 
-        defense()
+        ratHealth -= 1
 
         ew.drawEW(`Ви нанесли поранення Гігантському Щуру`)
         setTimeout(() => {
             ew.removeLastEW()
+            defense()
             if(ratHealth < 1) {
                 ew.drawEW(`Ви вбили Гігантського Щура`)
-                setTimeout(() => {ew.removeAllEW()}, 2000);
+                setTimeout(() => {ew.removeAllEW()}, 1200);
             }
         }, 2000);
     }
 
     const falseFn = ()=> {
-        defense()
+        ew.removeLastEW()
+
         ew.drawEW(`Ви отримали 1 поранення`)
         game.changeHealth(-1)
         setTimeout(() => {
             ew.removeLastEW()
+            defense()
             if(heroes[player.hero].health<1){
                 ew.removeAllEW()
                 game.endGame()
             }
-        }, 2000);
+        }, 1200);
     }
 
     function defense(){
@@ -299,7 +306,7 @@ function giantRat(){
         ew.addTxt(`
             Гігантський<br>Щур<br><i id="pl_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px; margin: 10px auto;">${ratHealth}</i>
         `)
-        ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn, true)
     }
 
     ew.removeRawBtnInEW('btn_ew')
@@ -316,6 +323,7 @@ function risingDead(){
     const damage = Math.floor(heroes[player.hero].health / 2)
 
     const trueFn = ()=> {
+        ew.removeLastEW()
         ew.drawEW('Ви змогли втекти')
         setTimeout(() => {
             ew.removeAllEW()
@@ -323,6 +331,7 @@ function risingDead(){
     }
 
     const falseFn = ()=> {
+        ew.removeLastEW()
         game.changeHealth(-damage)
         ew.drawEW(`Ви отримали ${damage} поранення`)
         setTimeout(() => {
@@ -331,7 +340,7 @@ function risingDead(){
     }
 
     ew.removeRawBtnInEW('btn_ew')
-    ew.addDiceRollSection(`Ваша Сила : ${heroes[player.hero].strength}`, heroes[player.hero].strength, false,true, 2, trueFn, falseFn, false, false)
+    ew.addDiceRollSection(`Ваша Сила : ${heroes[player.hero].strength}`, heroes[player.hero].strength, false,true, 2, trueFn, falseFn, true, false)
 
     /*Вас начали предпринимать восстания из гробов мертвецов. 
     Выполните проверку Силы. 
@@ -343,11 +352,13 @@ function shadowKiller(){
 
     if(!player.endMoveEventCardContainer.some((card) => (card.id === 10 && card.pack === 'catacomb'))) {
         player.endMoveEventCardContainer.push(catacomb_cards[27])
+        game.drawEventPackCards()
         ew.removeAllEW()
         return 
     }
 
     const result = ()=>{ 
+        ew.removeLastEW()
         const result = game.diceRollResultGlobal
         let damage
 
@@ -380,7 +391,7 @@ function shadowKiller(){
     }
 
     ew.removeRawBtnInEW('btn_ew')
-    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
 
     /*Сохраните эту карту. 
     Пока она у Вас, в конце каждого своего хода (этого включительно) 
@@ -393,6 +404,7 @@ function shadowKiller(){
 function monsterFromDarkness(){
 
     const trueFn = ()=> {
+        ew.removeLastEW()
         game.changeHealth(-1)
         ew.drawEW(`Ви перемогли монстра, але отримали 1 поранення`)
         setTimeout(() => {
@@ -401,6 +413,7 @@ function monsterFromDarkness(){
     }
 
     const falseFn = ()=> {
+        ew.removeLastEW()
         game.changeHealth(-6)
         ew.drawEW(`Ви перемогли монстра, але отримали 6 пораненнь`)
         setTimeout(() => {
@@ -409,7 +422,7 @@ function monsterFromDarkness(){
     }
 
     ew.removeRawBtnInEW('btn_ew')
-    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, false, false)
+    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, true, false)
 
     /*Из темноты на Вас напал монстр, начался бой. 
     Проведите проверку Удачи, не используя жетоны решимости. 
@@ -419,6 +432,7 @@ function monsterFromDarkness(){
 
 function trap(){
     const trueFn = ()=> {
+        ew.removeLastEW()
         game.changeHealth(-1)
         ew.drawEW(`Вас захистили обладунки та Ви отримуєте 1 поранення`)
         setTimeout(() => {
@@ -427,6 +441,7 @@ function trap(){
     }
 
     const falseFn = ()=> {
+        ew.removeLastEW()
         game.changeHealth(-4)
         player.skipMove = 1
 
@@ -508,7 +523,7 @@ function trap(){
     }
 
     ew.removeRawBtnInEW('btn_ew')
-    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, false, false)
+    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, true, false)
 
     /*Выполните проверку Удачи. 
     В случае успеха Вас защитили доспехи и Вы получаете 1 ранение. 
@@ -520,6 +535,7 @@ function scorpion(){
     ew.removeRawBtnInEW('btn_ew')
 
     const result = ()=>{
+        ew.removeLastEW()
 
         const damage = game.diceRollResultGlobal
 
@@ -531,7 +547,7 @@ function scorpion(){
         }, 2000);
     }
 
-    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
     /*Вас ужалил скорпион. 
     Бросьте 1d6 и получите коичество ранений, эквивалентное результату.*/
 }
@@ -546,6 +562,7 @@ function stickyWeb(){
     }
 
     const trueFn = ()=> {
+        ew.removeLastEW()
         ew.drawEW(`Ви змогли втекти`)
         setTimeout(() => {
             ew.removeAllEW()
@@ -553,6 +570,7 @@ function stickyWeb(){
     }
 
     const falseFn = ()=> {
+        ew.removeLastEW()
         game.changeHealth(-1)
         ew.drawEW(`Ви застрягли, та отримали 1 поранення`)
         setTimeout(() => {
@@ -564,7 +582,7 @@ function stickyWeb(){
 
     function luck(){
         ew.clear()
-        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, false, false)
+        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, true, false)
     }
 
     function wake(){
@@ -593,6 +611,7 @@ function razorwing(){
     ew.removeRawBtnInEW('btn_ew')
 
     const result = ()=>{
+        ew.removeLastEW()
 
         const damage = game.diceRollResultGlobal + 1
 
@@ -604,7 +623,7 @@ function razorwing(){
         }, 2000);
     }
 
-    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
     /*На Вас внезапно напал бритвокрыл. 
     Бросьте 1d6, добавьте к выпавшему числу 1 и получите количество ранений, эквивалентное результату.*/
 }
@@ -622,6 +641,8 @@ function darkElf(){
     }
     
     const result = ()=>{
+        ew.removeLastEW()
+
         const diceRes = game.diceRollResultGlobal * 100
         const price = emptyFelds.cost
 
@@ -644,7 +665,7 @@ function darkElf(){
         ew.clear()
         ew.removePackCardsInEW()
 
-        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
     })
     
     ew.addPackCards(player.treasureCardContainer)
@@ -709,6 +730,8 @@ function strikeFromShadow(){
     ew.removeRawBtnInEW('btn_ew')
 
     const trueFn = ()=> {
+        ew.removeLastEW()
+
         ew.drawEW(`Ви вбиваєте ворога і закінчуєте свій хід`)
         setTimeout(() => {
             ew.removeAllEW()
@@ -717,6 +740,8 @@ function strikeFromShadow(){
     }
 
     const falseFn = ()=> {
+        ew.removeLastEW()
+
         const damage = 10 - heroes[player.hero].defense 
         game.changeHealth(-damage)
         ew.drawEW(`Ви отримали ${damage} поранення`)
@@ -725,7 +750,7 @@ function strikeFromShadow(){
         }, 2000);
     }
 
-    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, true)
 
     /*Вас атаковал поджидавший в тени убийца. 
     Выполните проверку Удачи. 
@@ -824,7 +849,7 @@ function tentacles(){
         
     }
 
-    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, true)
 
     /*Вас атаковали гигантские щупальца. 
     Выполните проверку Удачи. 
@@ -836,6 +861,8 @@ function tentacles(){
 function roguesAttack(){
 
     const result = ()=>{ 
+        ew.removeLastEW()
+
         const result = game.diceRollResultGlobal
 
         let damage
@@ -873,7 +900,7 @@ function roguesAttack(){
     }
 
     ew.removeRawBtnInEW('btn_ew')
-    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
     /*Вы попали в засаду разбойника. 
     Бросьте 1d6: 
     1-2 - От удара Вы потеряли сознание, получите 4 ранения, случайным образом выберете 2 своих трофея (если нет 2, то сколько осталось) и сбросьте их; 
@@ -884,6 +911,8 @@ function roguesAttack(){
 function horribleSpider(){
 
     const result = ()=>{ 
+        ew.removeLastEW()
+
         const result = game.diceRollResultGlobal
 
         if (result<=3) {
@@ -907,7 +936,7 @@ function horribleSpider(){
 
     function battle() {
         ew.clear()
-        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
     }
 
     battle()
@@ -941,11 +970,15 @@ function vampire(){
     const defense = heroes[player.hero].defense
 
     const trueFn = ()=> {
+        ew.removeLastEW()
+
         ew.drawEW(`Вамрір вами не зацікавився`)
         setTimeout(() => {ew.removeAllEW()}, 2000);
     }
 
     const falseFn = ()=> {
+        ew.removeLastEW()
+
         player.eventCardContainer.push(catacomb_cards[38])
         game.drawEventPackCards()
         ew.drawEW(`Ви отримали 1 поранення`)
@@ -955,8 +988,8 @@ function vampire(){
 
     ew.removeRawBtnInEW('btn_ew')
 
-    if (dexterity > defense) ew.addDiceRollSection(`Ваш Захист: ${defense}`, defense, false, true, 2, trueFn, falseFn)
-    if (dexterity < defense) ew.addDiceRollSection(`Ваша Спритність: ${dexterity}`, dexterity, true, true, 2, trueFn, falseFn)
+    if (dexterity > defense) ew.addDiceRollSection(`Ваш Захист: ${defense}`, defense, false, true, 2, trueFn, falseFn, true)
+    if (dexterity < defense) ew.addDiceRollSection(`Ваша Спритність: ${dexterity}`, dexterity, true, true, 2, trueFn, falseFn, true)
 
 
     /*Выполните проверку Ловкости или Защиты (в зависимости от того, что меньше). 
@@ -982,6 +1015,8 @@ function poisonousSnake(){
     }
 
     const trueFn = ()=> {
+        ew.removeLastEW()
+
         ew.drawEW(`Ви не отримали поранення`)
         setTimeout(() => {
             ew.removeLastEW()
@@ -991,6 +1026,8 @@ function poisonousSnake(){
     }
 
     const falseFn = ()=> {
+        ew.removeLastEW()
+
         ew.drawEW(`Ви отримали 1 поранення`)
         game.changeHealth(-1)
         setTimeout(() => {
@@ -1002,22 +1039,22 @@ function poisonousSnake(){
 
     function strengthFn(){
         ew.clear()
-        ew.addDiceRollSection(`Ваша Cила: ${strength}`, strength, true, true,2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Cила: ${strength}`, strength, true, true,2, trueFn, falseFn, true)
     }
 
     function dexterityFn(){
         ew.clear()
-        ew.addDiceRollSection(`Ваша Спритність: ${dexterity}`, dexterity, true, true,2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Спритність: ${dexterity}`, dexterity, true, true,2, trueFn, falseFn, true)
     }
 
     function defenseFn(){
         ew.clear()
-        ew.addDiceRollSection(`Ваш Захист: ${defense}`, defense, false, true,2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваш Захист: ${defense}`, defense, false, true,2, trueFn, falseFn, true)
     }
 
     function luckFn(){
         ew.clear()
-        ew.addDiceRollSection(`Ваша Удача: ${luck}`, luck, false, true, 2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Удача: ${luck}`, luck, false, true, 2, trueFn, falseFn, true)
     }
 
     ew.drawBtnInEW('btn_dx',`Ваша Сила: ${strength}`, ()=>{ count = dexterity; reroll = strengthFn; strengthFn()})
@@ -1037,6 +1074,8 @@ function sorcererAttack(){
     ew.removeRawBtnInEW('btn_ew')
 
     const trueFn = ()=> {
+        ew.removeLastEW()
+
         ew.drawEW(`Ви змогрли захиститись`)
         setTimeout(() => {
             ew.removeAllEW()
@@ -1045,6 +1084,8 @@ function sorcererAttack(){
     }
 
     const falseFn = ()=> {
+        ew.removeLastEW()
+
         const damage = game.diceRollResultGlobal + 1
         ew.drawEW(`Ви отримали ${damage} поранення`)
         game.changeHealth(-damage)
@@ -1053,7 +1094,7 @@ function sorcererAttack(){
         }, 2000);
     }
 
-    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, true)
     /*Колдун запустил в Вас магический огненный шар и сбежал. 
     Выполните проверку Удачи. 
     В случае успеха Вы смогли защититься; завершите свой ход. 
@@ -1064,6 +1105,8 @@ function hordeOfRats(){
     ew.removeRawBtnInEW('btn_ew')
 
     const trueFn = ()=> {
+        ew.removeLastEW()
+
         ew.drawEW(`Ви змогрли захиститись`)
         setTimeout(() => {
             ew.removeAllEW()
@@ -1071,6 +1114,8 @@ function hordeOfRats(){
     }
 
     const falseFn = ()=> {
+        ew.removeLastEW()
+
         const damage = game.diceRollResultGlobal + 1
         ew.drawEW(`Ви отримали ${damage} поранення`)
         game.changeHealth(-damage)
@@ -1079,7 +1124,7 @@ function hordeOfRats(){
         }, 2000);
     }
 
-    ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
+    ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn, true)
     /*Вы натолкнулись на огромную стаю отвратительных крыс. 
     Выполните проверку Защиты. 
     Если Вы провалили проверку, то добавьте 1 к числу, на которое была провалена проверка и получите колочество ранений, эквивалентное результату.*/
@@ -1100,6 +1145,8 @@ function spiderPoison(){
     }
 
     const result = ()=>{ 
+        ew.removeLastEW()
+
         const result = game.diceRollResultGlobal
 
         if (result<=3) {
@@ -1121,7 +1168,7 @@ function spiderPoison(){
 
     function battle() {
         ew.clear()
-        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
     }
 
     ew.removeRawBtnInEW('btn_ew')
@@ -1154,6 +1201,8 @@ function torchGoesOut(){
     }
 
     const trueFn = ()=> {
+        ew.removeLastEW()
+
         player.eventCardContainer.forEach((card, idx) => {
             if (card.id === 27 && card.pack === 'catacomb') {
                 player.eventCardContainer.splice(idx, 1)
@@ -1167,6 +1216,8 @@ function torchGoesOut(){
     }
 
     const falseFn = ()=> {
+        ew.removeLastEW()
+
         ew.drawEW(`Ви не змогли запалити Смолоскип`)
         setTimeout(() => {
             ew.removeAllEW()
@@ -1175,7 +1226,7 @@ function torchGoesOut(){
     }
 
     ew.removeRawBtnInEW('btn_ew')
-    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, true)
     /*Сохраните эту карту. 
     Факел погас. 
     В начале каждого своего последующего хода выполните проверку Удачи, чтобы снова зажечь его. 
@@ -1300,6 +1351,8 @@ function giantDiamond(){
 
 function boxOfGold(){
     const result = ()=>{ 
+        ew.removeLastEW()
+
         const result = game.diceRollResultGlobal * 100
         const card = catacomb_cards[47]
 
@@ -1314,7 +1367,7 @@ function boxOfGold(){
     }
 
     ew.removeRawBtnInEW('btn_ew')
-    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
 
     /* "трофей" Когда Вы покинули Подземелье Дракона, бросьте 1d6. 
     Вы находите в шкатулке количество золота, эквивалентное результату броска, умноженному на 100.*/
