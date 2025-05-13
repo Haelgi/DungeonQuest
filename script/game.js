@@ -141,8 +141,8 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        // ew.drawCardEW(card);
-        ew.drawCardEW(door_cards[14]);
+        ew.drawCardEW(card);
+        // ew.drawCardEW(trap_cards[15]);
         // TODO
     }
 
@@ -1049,8 +1049,14 @@ class Game {
     clickGrilleIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.grille-icon')) {
-                const trueFn = ()=>  e.target.remove()
-                const falseFn = ()=>  this.endMove()
+                const trueFn = ()=>  {
+                    e.target.remove()
+                    ew.removeAllEW()
+                }
+                const falseFn = ()=>  {
+                    ew.removeAllEW()
+                    this.endMove()
+                }
                 ew.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, 2, trueFn, falseFn, true, true)
             }
         });
@@ -1059,8 +1065,14 @@ class Game {
     clickCollapseIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.collapse-icon')) {
-                const trueFn = ()=>  e.target.remove()
-                const falseFn = ()=>  this.endMove()
+                const trueFn = ()=>  {
+                    e.target.remove()
+                    ew.removeAllEW()
+                }
+                const falseFn = ()=>  {
+                    ew.removeAllEW()
+                    this.endMove()
+                }
                 ew.diceRollEW('Перед вами кімната заповнена уламками стелі що впала, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, trueFn, falseFn, true, true)   
             }
         });
@@ -1069,8 +1081,14 @@ class Game {
     clickWebIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.web-icon')) {
-                const trueFn = ()=>  e.target.remove()
-                const falseFn = ()=>  this.endMove()
+                const trueFn = ()=>  {
+                    e.target.remove()
+                    ew.removeAllEW()
+                }
+                const falseFn = ()=>  {
+                    ew.removeAllEW()
+                    this.endMove()
+                }
                 ew.diceRollEW('Кімнату оплутала павутиння заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, 2, trueFn, falseFn, true, true)
             }
         });
@@ -1079,8 +1097,12 @@ class Game {
     clickBridgeIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.bridge-icon')) {
-                const trueFn = ()=>  e.target.remove()
+                const trueFn = ()=>  {
+                    e.target.remove()
+                    ew.removeAllEW()
+                }
                 const falseFn = ()=>{
+                    ew.removeAllEW()
                     this.removeIcon('.bridge-icon');
                     const result = ()=>  {
                         ew.removeLastEW()
@@ -1106,8 +1128,12 @@ class Game {
     clickAbyssIcon() {
         this.playingField.addEventListener('click', (e) => {
             if (e.target.closest('.abyss-icon')) {
-                const trueFn = ()=> this.removeIcon('.abyss-icon');
+                const trueFn = ()=> {
+                    this.removeIcon('.abyss-icon')
+                    ew.removeAllEW()
+                };
                 const falseFn =()=>{
+                    ew.removeAllEW()
                     this.changeHealth(-5);
                     this.getDirectionCatacomb();
                     this.drawHeroMitl(player.position[0], player.position[1]);

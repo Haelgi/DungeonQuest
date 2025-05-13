@@ -32,7 +32,7 @@ function sandTrap(){
 
         setTimeout(() => {
             ew.removeAllEW()
-        }, 2000);
+        }, 1200);
     }
 
     function reroll(){
@@ -75,7 +75,7 @@ function sandTrap(){
             if (count === 0) return endBattle()
         }
 
-        ew.addDiceRollSection(false, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, false, false)
+        ew.addDiceRollSection(false, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, true, true)
     }
 
     reroll()
@@ -111,7 +111,7 @@ function burningRay() {
     };
 
     function checkParameters(txt, param) {
-        ew.addDiceRollSection(`Ваша ${txt}: ${param}`, param, false, true, 2, trueFn, falseFn, false, false);
+        ew.addDiceRollSection(`Ваша ${txt}: ${param}`, param, false, true, 2, trueFn, falseFn, true, true);
     }
 
     function nextCheck() {
@@ -172,7 +172,7 @@ function flyingBlade(){
         setTimeout(() => {
             ew.removeLastEW()
             ew.removeDiceRollSection();
-            ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+            ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
         }, 1200);
     };
 
@@ -188,11 +188,11 @@ function flyingBlade(){
         setTimeout(() => {
             ew.removeLastEW()
             ew.removeDiceRollSection();
-            ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn2, falseFn2)
+            ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn2, falseFn2, true, true)
         }, 1200);
     };
 
-    ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn1, falseFn1)
+    ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn1, falseFn1, true, true)
 
     /*На Вас обрушилось острое лезвие.  
     Выполните проверку Защиты.  
@@ -214,7 +214,7 @@ function spikes(){
         setTimeout(() => {ew.removeAllEW()}, 2000);
     }
 
-    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
     /*Из пола выдвинулись острые шипы. 
     Бросьте 1d6 и получите количество ранений, эквивалентное результату.*/
 }
@@ -243,7 +243,7 @@ function floorFailure(){
         }, 2000);
     }
     
-    ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+    ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, true, true)
 
 
     /*Пол под Вами начал проваливаться. 
@@ -279,12 +279,12 @@ function pitWithStakes(){
             ew.removeLastEW()
             ew.removeDiceRollSection()
 
-            ew.addDiceRollSection(false, 6, false, true, 1, result2, false, false, false)
+            ew.addDiceRollSection(false, 6, false, true, 1, result2, false, true, true)
 
         }, 2000);
     }
 
-    ew.addDiceRollSection(false, 6, false, true, 1, result1, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result1, false, true, true)
 
     /*Вы упали в яму с кольями. 
     Бросьте 116, отнимите от выпавшего числа 3 и получите количество ранений, эквивалентное результату. 
@@ -374,7 +374,7 @@ function ironCage(){
         game.endMove()
     }
 
-    ew.addDiceRollSection(`Ваша Сила : ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, true, 2, trueFn, falseFn)
+    ew.addDiceRollSection(`Ваша Сила : ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, true, 2, trueFn, falseFn, true, true)
 
     if (!player.eventCardContainer.some(item => item['name'] === trap_cards[8]['name'])){
         game.drawEventPackCards()
@@ -412,12 +412,12 @@ function pitOfTheDead(){
 
         function dexterity(){
             ew.clear()
-            ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+            ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, true, true)
         }
 
         function luck(){
             ew.clear()
-            ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+            ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, true, true)
         }
 
         ew.drawBtnInEW('btn_dx','Спритність', dexterity)
@@ -440,7 +440,7 @@ function pitOfTheDead(){
             }, 1200);
         }
 
-        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, true, true)
     }
 
     /*Выполните проверку Ловкости или Удачи. 
@@ -561,10 +561,10 @@ function spinningBlade() {
             }, 1200);
         }
 
-        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn2, falseFn2)
+        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn2, falseFn2, true, true)
     }
 
-    ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
+    ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn, true, true)
 
 
     /*Выполните проверку Защиты; 
@@ -593,7 +593,7 @@ function deadlySaws(){
             }, 1200);
     }
 
-    ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
+    ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn, true, true)
 
     /*Вдоль стены начали движение смертоносные пилы. 
     Выполните проверку Защиты. 
@@ -618,7 +618,7 @@ function fallingAxe(){
         }, 1200);
     }
 
-    ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
+    ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn, true, true)
 
     /*Вы не заметили, как на Вас обрушился огромный топор. 
     Выполните проверку Защиты; если проверка провалена, получите 7 ранений.*/
@@ -653,7 +653,7 @@ function burningRoom(){
     };
 
     function checkParameters(txt, param) {
-        ew.addDiceRollSection(`Ваша ${txt}: ${param}`, param, false, false, 2, trueFn, falseFn, false, false);
+        ew.addDiceRollSection(`Ваша ${txt}: ${param}`, param, false, false, 2, trueFn, falseFn, true, true);
     }
 
     function nextCheck() {

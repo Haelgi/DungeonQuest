@@ -40,7 +40,7 @@ function ringOfLifeFn() {
         setTimeout(() => {ew.removeAllEW()}, 1200);
     }
     ew.clear();
-    ew.addDiceRollSection(false, 6, false, true, 1, resultFn, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, resultFn, false, true, true)
 }
 
 function smallMagicCrystal() {

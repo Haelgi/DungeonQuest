@@ -96,7 +96,7 @@ function jetOfFire(){
 
     function battle() {
         ew.clear()
-        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
     }
 
     ew.removeRawBtnInEW('btn_ew');
@@ -149,7 +149,7 @@ function thornsFromTheFloor(){
         ew.removeRawBtnInEW('btn_defense')
         ew.removeRawBtnInEW('btn_luck')
 
-        ew.addDiceRollSection( `${nameValue}: ${value}`, value, false, true, 2, trueFn, falseFn, true, false)
+        ew.addDiceRollSection( `${nameValue}: ${value}`, value, false, true, 2, trueFn, falseFn, true, true)
     }
 
     ew.removeRawBtnInEW('btn_ew')
@@ -175,7 +175,7 @@ function deadlyArrows(){
         ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
     }
     
-    ew.addDiceRollSection( false, 6, false, false,1, trueFn, false, true, false)
+    ew.addDiceRollSection( false, 6, false, false,1, trueFn, false, true, true)
 
     /*Когда Вы открывали дверь, с отверстий в стене полетели стрелы. 
     Бросьте 1d6 и получите количество ранений, эквивалентное результату; 

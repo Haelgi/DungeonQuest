@@ -159,40 +159,39 @@ class EventWidows{
     }
 
     rolResultEW (resolve, valueIn, trueFn, falseFn, rolResult, closeEW){
+
         let value = valueIn
 
         if (resolve) value += heroes[player.hero].resolve
 
         if (game.diceRollResultGlobal <= (valueIn)) {
             if (rolResult){
-            this.drawEW('Успіх!', 'green');
-            this.rerollDice(resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
+            this.drawEW(`Результат: ${game.diceRollResultGlobal}`, 'green');
             this.drawBtnInEW('next','Далі', ()=>{
+                if (closeEW) this.removeLastEW()
                 if (trueFn) trueFn();
-                if (closeEW) this.removeAllEW()
             });
             }
 
             if (!rolResult){
+                if (closeEW) this.removeLastEW()
                 if (trueFn) trueFn();
-                if (closeEW) this.removeAllEW()
             }
         }
 
         if (game.diceRollResultGlobal > valueIn && game.diceRollResultGlobal <= value) {
-            this.drawEW('Провал....?');
-            this.rerollDice(resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
+            this.drawEW(`Результат: ${game.diceRollResultGlobal}`);
             this.drawBtnInEW('add_resolve','Додати Рішучості', ()=>{
                 const diff = game.diceRollResultGlobal - valueIn;
                 game.changeResolve(-diff) ;
                 this.removeLastEW()
-                if (closeEW) this.removeAllEW()
+                if (closeEW) this.removeLastEW()
                 if (trueFn) trueFn();  
             });
 
             this.drawBtnInEW('next','Далі', ()=>{
                 this.removeLastEW()
-                if (closeEW) this.removeAllEW()
+                if (closeEW) this.removeLastEW()
                 if (falseFn) falseFn();
                 game.changeResolve(+1);
             });
@@ -200,22 +199,23 @@ class EventWidows{
 
         if (game.diceRollResultGlobal > value) {
             if (rolResult){
-                this.drawEW('Провал!', 'red');
-                this.rerollDice(resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
-                
+                this.drawEW(`Результат: ${game.diceRollResultGlobal}`, 'red');                
                 this.drawBtnInEW('next','Далі', ()=>{
-                    if (closeEW) this.removeAllEW()
+                    if (closeEW) this.removeLastEW()
                     if (falseFn) falseFn();
                 });
                 game.changeResolve(+1);
             }
 
             if (!rolResult){
-                if (closeEW) this.removeAllEW()
+                if (closeEW) this.removeLastEW()
                 if (falseFn) falseFn();
                 game.changeResolve(+1);
             }
         }
+
+        this.rerollDice(resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
+
     }
 
     rerollDice(resolve, valueIn, trueFn, falseFn, rolResult, closeEW){
@@ -631,7 +631,7 @@ class EventWidows{
         }
 
         this.clear()
-        this.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, false, false)
+        this.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, true, true)
     }
 
 }

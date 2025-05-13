@@ -58,7 +58,7 @@ function dragonsFury(){
         }, 2000);
     }
 
-    ew.addDiceRollSection(false, 12, false, true, 2, result, false, false, false)
+    ew.addDiceRollSection(false, 12, false, true, 2, result, false, true, true)
 
      /*Сбросьте все свои добытые в Сокровищнице Трофеи. 
      Бросьте 2d6 и получите количество ранений, эквивалентное результату. 

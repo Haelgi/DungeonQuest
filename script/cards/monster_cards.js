@@ -88,6 +88,7 @@ function magmaGolem() {
 
 
     const trueFn = ()=> {
+        ew.removeLastEW()
         ew.drawEW(`Ви не отримали поранення`)
         setTimeout(() => {
             ew.removeLastEW()
@@ -98,6 +99,7 @@ function magmaGolem() {
     }
 
     const falseFn = ()=> {
+        ew.removeLastEW()
         ew.drawEW(`Ви отримали 2 поранення`)
         game.changeHealth(-2)
         setTimeout(() => {
@@ -110,17 +112,17 @@ function magmaGolem() {
 
     function dexterity(){
         ew.clear()
-        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, true, true)
     }
 
     function defense(){
         ew.clear()
-        ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn, true, true)
     }
 
     function luck(){
         ew.clear()
-        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, true, true)
     }
 
     function endBattleFn(){
@@ -232,7 +234,7 @@ function demonOfPain() {
 
     function dexterity(){
         ew.clear()
-        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn)
+        ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, true, true)
     }
 
     function endBattleFn(){
@@ -340,7 +342,7 @@ function possessedBySpirits() {
 
     }
 
-    ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+    ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
 
     /*Перед началом боя бросьте 1d6: 
     1-2 - Ничего не происходит; 
@@ -387,7 +389,7 @@ function servantOfTheUnderworld() {
         }
         ew.drawCardEW(monster_cards[9])
         ew.clear()
-        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[9], endBattleFn))
@@ -437,6 +439,16 @@ function cultAdept() {
 
     const maxValue = player.treasureCardContainer.length
 
+    
+    function endBattleFn(){
+        player.fightWithMonsters = false
+        
+        ew.removeAllEW()
+    }
+    
+    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[11], endBattleFn))
+    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[11], endBattleFn))
+        
     if (maxValue>0) {
         const randomId = Math.floor(Math.random() * maxValue)
 
@@ -444,18 +456,8 @@ function cultAdept() {
     
         ew.drawEW(`Ви втратили один з своїх тофеїв`)
         game.drawTreasurePackCards()
-        setTimeout(() => {ew.removeLastEW()}, 2000);
+        setTimeout(() => {ew.removeLastEW()}, 1200);
     }
-
-    function endBattleFn(){
-        player.fightWithMonsters = false
-
-        ew.removeAllEW()
-    }
-
-    ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[11], endBattleFn))
-    if (!player.ambushRoom && !player.surroundedMonsters) ew.drawBtnInEW('btn_esc','Втекти', ()=>ew.escapeBattle(monster_cards[11], endBattleFn))
-
     /*Этот колдун таким образом наложил проклятие на один из ваших Трофеев, что он стал для Вас неподъёмным. 
     Перед началом боя с этим колдуном случайным образом сбросьте один из своих Трофеев.*/
 }
@@ -503,7 +505,7 @@ function skeletonWarrior() {
 
         ew.drawCardEW(monster_cards[12])
         ew.clear()
-        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[12], endBattleFn))
@@ -557,7 +559,7 @@ function decrepitSkeleton() {
 
         ew.drawCardEW(monster_cards[13])
         ew.clear()
-        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[13], endBattleFn))
@@ -611,7 +613,7 @@ function skeletonKiller() {
 
         ew.drawCardEW(monster_cards[12])
         ew.clear()
-        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[14], endBattleFn))
@@ -665,7 +667,7 @@ function skeletonArcher() {
 
         ew.drawCardEW(monster_cards[15])
         ew.clear()
-        ew.addDiceRollSection(false, 6, false, true, 1, result, false, false, false)
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
     }
 
     ew.drawBtnInEW('btn_df','Битись', ()=>ew.addBattleSection(monster_cards[15], endBattleFn))

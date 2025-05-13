@@ -72,7 +72,7 @@ function livingDead(){
     };
 
     function checkParameters(txt, param) {
-        ew.addDiceRollSection(`Ваша ${txt}: ${param}`, param, false, true, 2, trueFn, falseFn, true, false);
+        ew.addDiceRollSection(`Ваша ${txt}: ${param}`, param, false, true, 2, trueFn, falseFn, true, true);
     }
 
     function nextCheck() {
