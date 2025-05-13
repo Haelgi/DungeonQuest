@@ -26,7 +26,7 @@ function ringOfLife() {
 }
 
 function ringOfLifeFn() {
-    game.removeCurrentCardFromPack(player.treasureCardContainer, 'name', 'Кольцо Жизни')
+    game.removeCurrentCardNameFromPack(player.treasureCardContainer, 'Кольцо Жизни')
     game.drawTreasurePackCards()
     
     function resultFn() {

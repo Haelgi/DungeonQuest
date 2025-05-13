@@ -573,7 +573,7 @@ class EventWidows{
         if (player.fightWithMonsters 
             && player.treasureCardContainer.some(card => card.name === `${cardObj.name}`)) {
                 this.drawBtnInEW(`btn_crystal_${cardObj.id}`, `Використати ${cardObj.name} (${damage} пораннення за ${cardObj.cost} золота)`, () => {
-                    game.removeCurrentCardFromPack(player.treasureCardContainer, 'name', `${cardObj.name}`);
+                    game.removeCurrentCardNameFromPack(player.treasureCardContainer, `${cardObj.name}`);
                     game.updateGoldValue()
                     game.drawTreasurePackCards()
                     this.removeRawBtnInEW(`btn_crystal_${cardObj.id}`);
@@ -615,6 +615,20 @@ class EventWidows{
 
         this.clear()
         this.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, true, true)
+    }
+
+    drawBtnInEwIfSomeCardInTreasure(card, txtFor, fn, elseFn){
+        if (game.checkCardNameInPack(player.treasureCardContainer, `${card.name}`)) {
+            this.drawBtnInEW(`btn_card_${card.id}`, `Використати ${card.name} (${txtFor} за ${card.cost} золота)`, () => {
+                game.removeCurrentCardNameFromPack(player.treasureCardContainer, `${card.name}`);
+                game.updateGoldValue()
+                game.drawTreasurePackCards()
+                if (fn) fn();
+            });
+            if (elseFn) this.drawBtnInEW('btn_next', 'Далі', ()=>elseFn())
+        } else {
+            if (elseFn) elseFn();
+        }
     }
 
 }

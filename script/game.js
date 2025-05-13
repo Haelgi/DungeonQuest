@@ -142,7 +142,7 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         ew.drawCardEW(card);
-        // ew.drawCardEW(monster_cards[1]);
+        // ew.drawCardEW(trap_cards[14]);
         // TODO
     }
 
@@ -1203,11 +1203,15 @@ class Game {
         return cards
     }
 
-    removeCurrentCardFromPack(arr, key, keyValue){
-        const index = arr.findIndex(obj => obj?.[key] === keyValue);
+    removeCurrentCardNameFromPack(arr, keyValue){
+        const index = arr.findIndex(obj => obj?.name === keyValue);
         if (index !== -1) {
             arr.splice(index, 1);
         }
+    }
+
+    checkCardNameInPack(arr, name){
+        return arr.some(card => card.name === name)
     }
     
 }

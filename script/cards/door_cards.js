@@ -25,7 +25,7 @@ function lockedDoor(){
     ew.removeRawBtnInEW('btn_ew');
 
     ew.drawBtnInEW(`btn_${treasure_cards[5].id}`, `Використати ${treasure_cards[5].name} (спробувати знову за ${treasure_cards[5].cost} золота)`, () => {
-        game.removeCurrentCardFromPack(player.treasureCardContainer, 'name', `${treasure_cards[5].name}`);
+        game.removeCurrentCardNameFromPack(player.treasureCardContainer, `${treasure_cards[5].name}`);
         game.updateGoldValue()
         game.drawTreasurePackCards()
 
@@ -123,16 +123,24 @@ function jetOfFire(){
     }
 
     ew.removeRawBtnInEW('btn_ew');
-    ew.addTxt('Виберіть ДВА числа від 1 до 6:');
-    ew.addNumberSectionForChoice();
-    ew.addBtnInEW('btnChoice', 'Вибрати', ()=>{
-        ew.removeTxt();
-        ew.removeNumberSectionForChoice();
-        ew.removeRawBtnInEW('btnChoice');
-        battle();
-    });
-    const btnChoice = document.getElementById('btnChoice')
-    btnChoice.style.display = 'none'
+    
+    ew.drawBtnInEwIfSomeCardInTreasure(treasure_cards[6], 'уникнути поранень', ()=>ew.removeAllEW(), ()=>{
+        ew.clear()
+        ew.addTxt('Виберіть ДВА числа від 1 до 6:');
+        ew.addNumberSectionForChoice();
+        ew.addBtnInEW('btnChoice', 'Вибрати', ()=>{
+            ew.removeTxt();
+            ew.removeNumberSectionForChoice();
+            ew.removeRawBtnInEW('btnChoice');
+            battle();
+        });
+        const btnChoice = document.getElementById('btnChoice')
+        btnChoice.style.display = 'none'
+    })
+
+  
+
+    
 
     /*Когда Вы попытались открыть дверь, с отверстия в стене вылетела струя огня. 
     Загадайте два числа от 1 до 6. 

@@ -1,6 +1,7 @@
 import  {ew}  from '../eventWidows.js';
 import  {player}  from '../player.js';
 import  {heroes}  from '../cards/heroes.js';
+import  {treasure_cards}  from '../cards/treasure_cards.js';
 import  {game}  from '../game.js';
 import  {room_tiles}  from './room_tiles.js';
 import  {addScrolCardsEffect}  from '../function/addScrolCardsEffect.js';
@@ -633,6 +634,7 @@ function burningRoom(){
     if (heroes[player.hero].resolve >= 2) heroes[player.hero].resolve -= 2;
     game.addCharacterTablet(player.hero);
 
+
     const trueFn = () => {
         damage--;
         ew.drawEW(`Вдало!`)
@@ -677,7 +679,11 @@ function burningRoom(){
             }, 1200);        }
     }
 
-    nextCheck();
+    ew.drawBtnInEwIfSomeCardInTreasure(treasure_cards[6], 'уникнути поранень', ()=>ew.removeAllEW(), ()=>{
+        ew.clear()
+        nextCheck();
+    })
+
 
     /*В комнате вспыхнуло пламя. 
     Сбросьте 2 жетона решимости (если нет 2, то все оставшиеся) 
