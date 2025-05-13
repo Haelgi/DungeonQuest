@@ -2,6 +2,7 @@ import  {ew}  from '../eventWidows.js';
 import  {game}  from '../game.js';
 import  {player}  from '../player.js';
 import  {heroes}  from '../cards/heroes.js';
+import { treasure_cards } from './treasure_cards.js';
 
 class Card {
     constructor(id, name, effect) {
@@ -15,8 +16,30 @@ class Card {
 };
 
 function lockedDoor(){
-    ew.removeAllEW();
-    game.endMove();
+    if (!player.treasureCardContainer.some(card => card.name === `${treasure_cards[5].name}`)) {
+        ew.removeAllEW();
+        game.endMove();
+        return
+    }
+
+    ew.removeRawBtnInEW('btn_ew');
+
+    ew.drawBtnInEW(`btn_${treasure_cards[5].id}`, `Використати ${treasure_cards[5].name} (спробувати знову за ${treasure_cards[5].cost} золота)`, () => {
+        game.removeCurrentCardFromPack(player.treasureCardContainer, 'name', `${treasure_cards[5].name}`);
+        game.updateGoldValue()
+        game.drawTreasurePackCards()
+
+        ew.removeAllEW()
+        const card = game.getRundomElement(game.door_cards, door_cards)
+        ew.drawCardEW(card)
+        if (card.name !== `${door_cards[7].name}`) player.doorEventTarget.remove()
+    });
+
+    ew.addBtnInEW('btn_close', 'Пропустити', ()=>{
+        ew.removeAllEW();
+        game.endMove();
+    });
+
     /*Дверь не открывается; оставайтесь в Вашей текущей комнате.*/
 }
 

@@ -1,5 +1,6 @@
 import  {game}  from './game.js';
 import  {heroes}  from './cards/heroes.js';
+import  {treasure_cards}  from './cards/treasure_cards.js';
 import { player } from './player.js';
 
 class EventWidows{
@@ -542,24 +543,8 @@ class EventWidows{
 
         this.addDiceRollSection(false, 6, false, true, 1, trueFn, false, true, true)
         
-        if (player.fightWithMonsters 
-            && player.treasureCardContainer.some(card => card.name === 'Малый Кристал Магии')) {
-                this.drawBtnInEW('btn_crystal', 'Використати Кристал (2 пораннення за 200 золота)', () => {
-                    
-                    game.removeCurrentCardFromPack(player.treasureCardContainer, 'name', 'Малый Кристал Магии');
-                    game.updateGoldValue()
-                    game.drawTreasurePackCards()
-                    this.removeRawBtnInEW('btn_crystal');
-                    let damage = 2;
-                    card.health -= damage;
-                    this.drawEW(`${card.name} отримав ${damage} поранення`);
-                    setTimeout(() => {
-                        this.removeLastEW();
-                        this.clear();
-                        this.addBattleSection(card, endBattleFn);
-                    }, 1200);
-            });
-        }
+        this.useMagicCrystal(treasure_cards[1], 2, card, endBattleFn)
+        this.useMagicCrystal(treasure_cards[4], 3, card, endBattleFn)
 
         if (player.escapeBattle && !player.ambushRoom && !player.surroundedMonsters) this.drawBtnInEW('btn_esc','Втекти', ()=>this.escapeBattle(card))
 
@@ -584,16 +569,14 @@ class EventWidows{
         }
     }
 
-    useMagicCrystal(){
+    useMagicCrystal(cardObj, damage, card, endBattleFn){
         if (player.fightWithMonsters 
-            && player.treasureCardContainer.some(card => card.name === 'Малый Кристал Магии')) {
-                this.drawBtnInEW('btn_crystal', 'Використати Кристал (2 пораннення за 200 золота)', () => {
-                    
-                    game.removeCurrentCardFromPack(player.treasureCardContainer, 'name', 'Малый Кристал Магии');
+            && player.treasureCardContainer.some(card => card.name === `${cardObj.name}`)) {
+                this.drawBtnInEW(`btn_crystal_${cardObj.id}`, `Використати ${cardObj.name} (${damage} пораннення за ${cardObj.cost} золота)`, () => {
+                    game.removeCurrentCardFromPack(player.treasureCardContainer, 'name', `${cardObj.name}`);
                     game.updateGoldValue()
                     game.drawTreasurePackCards()
-                    this.removeRawBtnInEW('btn_crystal');
-                    let damage = 2;
+                    this.removeRawBtnInEW(`btn_crystal_${cardObj.id}`);
                     card.health -= damage;
                     this.drawEW(`${card.name} отримав ${damage} поранення`);
                     setTimeout(() => {
@@ -601,7 +584,7 @@ class EventWidows{
                         this.clear();
                         this.addBattleSection(card, endBattleFn);
                     }, 1200);
-            });
+                });
         }
     } 
 

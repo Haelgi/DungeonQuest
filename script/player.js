@@ -18,6 +18,7 @@ class Player {
         this.catacombCardContainer = [];
         this.eventCardContainer = [];
         this.endMoveEventCardContainer = [];
+        this.doorEventTarget;
         
         this.attack = 1;
         this.extraMove = false;

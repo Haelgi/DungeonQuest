@@ -142,7 +142,7 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         ew.drawCardEW(card);
-        // ew.drawCardEW(dungeon_cards[44]);
+        // ew.drawCardEW(monster_cards[1]);
         // TODO
     }
 
@@ -1017,7 +1017,8 @@ class Game {
             if(e.target.closest('.door-icon')) {
                 const card = this.getRundomElement(this.door_cards, door_cards)
                 ew.drawCardEW(card)
-                e.target.remove()
+                player.doorEventTarget = e.target
+                if (card.name !== `${door_cards[7].name}`) e.target.remove()               
             }
         });
     };
