@@ -31,7 +31,7 @@ function ringOfLifeFn() {
     
     function resultFn() {
         const result = game.diceRollResultGlobal
-        let healing
+        let healing = 0
         if (result <= 3) healing = 1
         if (result > 3) healing = 4
 

@@ -580,6 +580,7 @@ function armyOfGhosts(){
         let damage
 
         if (result<=2) {
+            damage = 0
             ew.drawEW(`Ви подолали свій страх і залишилися цілими`)
             setTimeout(() => {
                 ew.removeAllEW()
@@ -711,6 +712,7 @@ function bats(){
         let damage
 
         if (result<=2) {
+            damage = 0
             ew.drawEW(`Ви залишилися цілими і не отримуєте поранень`)
             setTimeout(() => {
                 ew.removeAllEW()
@@ -746,6 +748,7 @@ function evilGoblin(){
         let damage
 
         if (result<=2) {
+            damage = 0
             ew.drawEW(`Ви вбили гобліна і залишилися неушкодженими`)
             setTimeout(() => {
                 ew.removeAllEW()
