@@ -613,8 +613,16 @@ class EventWidows{
             
         }
 
-        this.clear()
-        this.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, true, true)
+        ew.drawBtnInEwIfSomeCardInTreasure(treasure_cards[8], 
+            'гарантована втеча та 4 поранення', ()=>{
+                ew.removeAllEW()
+                game.changeHealth(-4)
+            }, ()=>{   
+                this.clear()
+                this.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, true, true)
+            }
+        )
+
     }
 
     drawBtnInEwIfSomeCardInTreasure(card, txtFor, fn, elseFn){
