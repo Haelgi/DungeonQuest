@@ -223,7 +223,7 @@ class EventWidows{
         if (player.treasureCardContainer.some(card => card.name === 'Магическое Кольцо')&& document.querySelector('.dice')){
             ew.drawBtnInEW('btn_ring', 'Перекінути кубік (за 290 золота)', ()=>{
                 ew.removeLastEW()
-                game.removeCurrentCardFromPack(player.treasureCardContainer, 'name', 'Магическое Кольцо')
+                game.removeCurrentCardNameFromPack(player.treasureCardContainer, 'Магическое Кольцо')
                 game.drawTreasurePackCards()
                 this.rollDiceFn();
                 setTimeout(() => {

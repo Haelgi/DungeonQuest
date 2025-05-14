@@ -371,8 +371,12 @@ function giantSnake(){
         ew.drawEW(`Ви отримали ${damage} поранення`);
         ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
     }
+
+    ew.drawBtnInEwIfSomeCardInTreasure(treasure_cards[7], 'уникнути поранень', ()=>ew.removeAllEW(), ()=>{
+        ew.clear()
+        ew.addDiceRollSection( false, 6, false, false,1, trueFn, false, true, true)
+    })
     
-    ew.addDiceRollSection( false, 6, false, false,1, trueFn, false, true, true)
 
     /*Вы потревожили гигантскую змею. 
     Бросьте 1d6, добавьте к выпавшему числу 2 и получите количество ранений, эквивалентное результату.*/

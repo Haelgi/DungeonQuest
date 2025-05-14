@@ -1015,8 +1015,6 @@ function poisonousSnake(){
     }
 
     const trueFn = ()=> {
-        ew.removeLastEW()
-
         ew.drawEW(`Ви не отримали поранення`)
         setTimeout(() => {
             ew.removeLastEW()
@@ -1026,8 +1024,6 @@ function poisonousSnake(){
     }
 
     const falseFn = ()=> {
-        ew.removeLastEW()
-
         ew.drawEW(`Ви отримали 1 поранення`)
         game.changeHealth(-1)
         setTimeout(() => {
@@ -1057,10 +1053,15 @@ function poisonousSnake(){
         ew.addDiceRollSection(`Ваша Удача: ${luck}`, luck, false, true, 2, trueFn, falseFn, true, true)
     }
 
-    ew.drawBtnInEW('btn_dx',`Ваша Сила: ${strength}`, ()=>{ count = dexterity; reroll = strengthFn; strengthFn()})
-    ew.drawBtnInEW('btn_dx',`Ваша Спритність: ${dexterity}`,()=>{ count = dexterity; reroll = dexterityFn; dexterityFn()})
-    ew.drawBtnInEW('btn_df',`Ваш Захист: ${defense}`,()=>{ count = defense; reroll = defenseFn; defenseFn()})
-    ew.drawBtnInEW('btn_luk',`Ваша Удача: ${luck}`,()=>{ count = luck; reroll = luckFn; luckFn()})
+    ew.drawBtnInEwIfSomeCardInTreasure(treasure_cards[7], 'уникнути поранень', ()=>ew.removeAllEW(), ()=>{
+        ew.clear()
+        ew.drawBtnInEW('btn_dx',`Ваша Сила: ${strength}`, ()=>{ count = dexterity; reroll = strengthFn; strengthFn()})
+        ew.drawBtnInEW('btn_dx',`Ваша Спритність: ${dexterity}`,()=>{ count = dexterity; reroll = dexterityFn; dexterityFn()})
+        ew.drawBtnInEW('btn_df',`Ваш Захист: ${defense}`,()=>{ count = defense; reroll = defenseFn; defenseFn()})
+        ew.drawBtnInEW('btn_luk',`Ваша Удача: ${luck}`,()=>{ count = luck; reroll = luckFn; luckFn()})
+    })
+
+
 
     /*Вы потревожили ядовитую змею. 
     Она попыталась Вас укусить. 
