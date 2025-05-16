@@ -153,3 +153,8 @@
     background: #fae100;
     color: #000000;
 }
+ 
+.choice-tile.active{
+    box-shadow: 0 0 5px #fae100, 0 0 25px #fae100, 0 0 50px #fae100, 0 0 100px #fae100;
+
+}

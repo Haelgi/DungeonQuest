@@ -1,6 +1,7 @@
 import { ew } from '../eventWidows.js';
 import { player } from '../player.js';
 import { game } from '../game.js';
+import { room_tiles } from './room_tiles.js';
 
 class Card {
     constructor(id, name, cost, effect, clickFn) {
@@ -118,6 +119,53 @@ function foresightPotion() {
     /* "трофей"
     TODO Сбросьте эту карту после того, как Вы вытянули тайл комнаты. 
     Вытяните еще один тайл и выберите, какой из них Вы разместите на поле. Замешайте другой тайл в стопку тайлов. +450 золота*/
+}
+
+function foresightPotionFn() {
+    ew.removeAllEW();
+    if (!player.position) return
+    const [x, y] = player.position;
+    const roomIdInt = game.gameFields[y][x]['id'] + 1
+    if (roomIdInt === undefined) return
+
+    const rooomIdNew = game.getRundomElement(game.room_tiles, room_tiles).number -1
+    let correctRoomId
+    let showBtn = true
+
+    game.removeCurrentCardNameFromPack(player.treasureCardContainer, treasure_cards[9].name)
+    ew.drawEW(`Виберіть тайл кімнати`)
+    const roomIdIntElem = ew.drawTileInEW(roomIdInt)
+    const rooomIdNewElem = ew.drawTileInEW(rooomIdNew)
+
+    const tilesArr = document.querySelectorAll(`.choice-tile`)
+
+    function selectTile(e) {
+
+        tilesArr.forEach(elem => {
+            elem.classList.remove('active')
+        })
+
+        e.target.classList.add('active')
+        correctRoomId = e.target.getAttribute('id')
+
+        if (showBtn) {
+            showBtn = false
+            ew.addBtnInEW('btn_next', `Вибрати`, () => {
+                game.removeTileField(x, y)
+                game.drawTileField(x, y, correctRoomId)
+                ew.removeAllEW();
+            })
+        }
+    }
+
+    tilesArr.forEach(element => {
+        element.addEventListener('click', selectTile)
+        element.addEventListener('touchstart', selectTile)
+    });
+
+    // вытянуть новый тайл и нарисовать его
+    // повесить слушатель событий на выбор тайла
+    // заменить тайл на поле и закрыть все окна
 }
 
 function speedPotion() {
@@ -357,7 +405,7 @@ const treasure_cards = [
     /*6*/new Card(7, 'Огненный Амулет', 400,fireAmulet),
     /*7*/new Card(8, 'Змеиное Кольцо', 400,snakeRing),
     /*8*/new Card(9, 'Кинжал Скорости', 450,speedDagger),
-    /*9*/new Card(10, 'Зелье Прозорливости', 450,foresightPotion),
+    /*9*/new Card(10, 'Зелье Прозорливости', 450, foresightPotion, foresightPotionFn),
     /*10*/new Card(11, 'Зелье Скорости', 450,speedPotion),
     /*11*/new Card(12, 'Сумеречная Накидка', 500,twilightCloak),
     /*12*/new Card(13, 'Амулет Теней', 550,shadowAmulet),

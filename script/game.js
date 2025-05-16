@@ -142,7 +142,7 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         // ew.drawCardEW(card);
-        ew.drawCardEW(monster_cards[1]);
+        // ew.drawCardEW(monster_cards[1]);
         // TODO
     }
 
@@ -719,11 +719,10 @@ class Game {
         player.catacombDirection = rotate
     }
     
-    drawTileField(x, y){
+    drawTileField(x, y, roomNumber){
+
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
-        const roomNumber = this.getRundomElement(this.room_tiles, room_tiles).number;
-        // TODO
-        // const roomNumber = 45;
+        if (!roomNumber) roomNumber = this.getRundomElement(this.room_tiles, room_tiles).number;
 
         let rotate;
         

@@ -294,6 +294,13 @@ class EventWidows{
         element.insertAdjacentHTML('beforeend', eventSection);
     }
 
+    drawTileInEW(tileId){
+        const element = document.querySelector('.event-main');
+        const eventSection = `<img id="${tileId}" class="tile-field tile-map shadow choice-tile" src="img/room_tiles/room_${tileId}.jpg" alt="" style="rotate: 0deg; height: 200px; width: 200px; margin: 10px;">`
+        element.insertAdjacentHTML('beforeend', eventSection);
+        return element
+    }
+
     addTxt(txt){
         let container = document.querySelector('.event-main');
 
