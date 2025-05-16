@@ -117,7 +117,7 @@ function foresightPotion() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO Сбросьте эту карту после того, как Вы вытянули тайл комнаты. 
+    Сбросьте эту карту после того, как Вы вытянули тайл комнаты. 
     Вытяните еще один тайл и выберите, какой из них Вы разместите на поле. Замешайте другой тайл в стопку тайлов. +450 золота*/
 }
 
@@ -133,6 +133,7 @@ function foresightPotionFn() {
     let showBtn = true
 
     game.removeCurrentCardNameFromPack(player.treasureCardContainer, treasure_cards[9].name)
+    game.drawTreasurePackCards()
     ew.drawEW(`Виберіть тайл кімнати`)
     const roomIdIntElem = ew.drawTileInEW(roomIdInt)
     const rooomIdNewElem = ew.drawTileInEW(rooomIdNew)
@@ -173,8 +174,16 @@ function speedPotion() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO Сбросив эту карту во время своего хода, 
+    Сбросив эту карту во время своего хода, 
     Вы можете совершить еще два дополнительных хода по завершении текущего. +450 золота*/
+}
+
+function speedPotionFn() {
+    game.removeCurrentCardNameFromPack(player.treasureCardContainer, treasure_cards[10].name)
+    game.drawTreasurePackCards()
+    player.extraMove += 2
+    ew.drawEW(`Ви отримали 2 додаткових ходів`)
+    setTimeout(ew.removeAllEW, 1200);
 }
 
 function twilightCloak() {
@@ -406,7 +415,7 @@ const treasure_cards = [
     /*7*/new Card(8, 'Змеиное Кольцо', 400,snakeRing),
     /*8*/new Card(9, 'Кинжал Скорости', 450,speedDagger),
     /*9*/new Card(10, 'Зелье Прозорливости', 450, foresightPotion, foresightPotionFn),
-    /*10*/new Card(11, 'Зелье Скорости', 450,speedPotion),
+    /*10*/new Card(11, 'Зелье Скорости', 450,speedPotion, speedPotionFn),
     /*11*/new Card(12, 'Сумеречная Накидка', 500,twilightCloak),
     /*12*/new Card(13, 'Амулет Теней', 550,shadowAmulet),
     /*13*/new Card(14, 'Яйцо Дракона', 600,dragonEgg),

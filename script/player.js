@@ -21,7 +21,7 @@ class Player {
         this.doorEventTarget;
         
         this.attack = 1;
-        this.extraMove = false;
+        this.extraMove = 1;
         this.skipMove = 0;
         this.escapeBattle = true;
         this.curseOfTheSorcerer = false;

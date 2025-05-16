@@ -28,7 +28,7 @@ function sandTrap(){
         game.changeHealth(-damage)
         ew.drawEW(`Ви отримали ${damage} поранень!`)
         game.removeAllIcon()
-        player.extraMove = true
+        player.extraMove += 1
         player.skipMove = 1
 
         setTimeout(() => {

@@ -110,7 +110,7 @@ function wallCollapse(){
 
     const trueFn = ()=>{
         if (game.nextCoordinates.length === 0) game.endGame()
-        player.extraMove = true
+        player.extraMove += 1
         game.removePreviousTileField = true
         game.removeAllIcon()
         ew.removeAllEW()
@@ -119,7 +119,7 @@ function wallCollapse(){
     const falseFn = ()=>{
         if (game.nextCoordinates.length === 0) game.endGame()
         game.changeHealth(-2)
-        player.extraMove = true
+        player.extraMove += 1
         game.removePreviousTileField = true
         game.removeAllIcon()
         ew.drawEW('Ви отримали 2 поранення');
@@ -810,7 +810,7 @@ function orcAttack(){
             setTimeout(() => {ew.removeAllEW()}, 1200);
             return  
         }
-        player.extraMove = true
+        player.extraMove += 1
         setTimeout(() => {ew.removeAllEW()}, 1200);
     }
 
@@ -932,7 +932,7 @@ function stoneBall(){
     if (coord.length > 0){
         game.changeHealth(-1)
         ew.drawEW(`Ви отримали 1 поранення`)
-        player.extraMove = true
+        player.extraMove += 1
         game.removeHighlightFields(game.nextCoordinates)
         game.removeAllIcon()
         game.nextCoordinates = coord

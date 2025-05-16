@@ -154,7 +154,7 @@ function stoneGolem() {
             return
         }
 
-        player.extraMove = true
+        player.extraMove += 1
         ew.removeAllEW()
     }
 
@@ -723,7 +723,7 @@ function madTroll() {
             return
         }
 
-        player.extraMove = true
+        player.extraMove += 1
         game.removeAllIcon()
         ew.removeAllEW()
     }
@@ -779,7 +779,7 @@ function trollCannibal() {
             return
         }
 
-        player.extraMove = true
+        player.extraMove += 1
         ew.removeAllEW()
     }
 

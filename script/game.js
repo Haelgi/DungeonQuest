@@ -506,7 +506,8 @@ class Game {
 
     checkMonsterCards(){
         if (!player.position) return
-        if (player.extraMove) return
+        // if (player.extraMove) return
+        // TODO
         if (this.gameFields[player.position[1]][player.position[0]]['m'] === undefined || this.activeEvent) return
         if (this.gameFields[player.position[1]][player.position[0]]['m'].length === 0) {
             delete this.gameFields[player.position[1]][player.position[0]]['m']
@@ -601,14 +602,10 @@ class Game {
                    && room_tiles[this.gameFields[y][x]['id']]?.special !== 'corridor' 
                    && room_tiles[this.gameFields[y][x]['id']]?.special !== 'pit' 
                    && !player.positionTreasury
-                   && !player.catacomb
-                   && !player.extraMove) {
+                   && !player.catacomb) {
                     player.positionTreasury = false
-                    player.extraMove = false
                     this.endMove()      
                 }
-
-                player.extraMove = false
             }
     
             this.diceRollResultGlobal = 0;
@@ -681,10 +678,18 @@ class Game {
     }
 
     endMove(){
+        if (player.extraMove !== 0) {
+            player.extraMove -= 1
+            player.checkEventCards = true
+            this.makeMove()
+            return
+        }
+
+        player.extraMove = 0
+
         this.checkEndMoveEventCardContainer()
         this.toggleCurrentPlayer()
         this.queueEW()
-        player.checkEventCards = true
     }
 
     endGame(){
