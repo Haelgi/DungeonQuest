@@ -4,6 +4,7 @@ import { ew } from '../eventWidows.js';
 import { player } from '../player.js';
 import { game } from '../game.js';
 import { room_tiles } from './room_tiles.js';
+import { heroes } from './heroes.js';
 
 class Card {
     constructor(id, name, cost, effect, clickFn) {
@@ -321,9 +322,25 @@ function phoenixBelt() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO Если количество Вашего здоровья меньше или равно 3, 
+    Если количество Вашего здоровья меньше или равно 3, 
     Вы можете сбросить эту карту и мгновенно исцелить 3 ранения. 
     Карту нельзя использовать после смерти героя.  +700 золота*/
+}
+
+function phoenixBeltFn(){
+    ew.removeAllEW();
+    
+    if(heroes[player.hero].health > 3) {
+        ew.drawEW('Ви не можете використати цей пояс зараз')
+        ew.drawBtnInEW('btn_next', 'Далі', ew.removeAllEW)
+        return
+    }
+
+    game.removeCurrentCardNameFromPack(player.treasureCardContainer, treasure_cards[16].name)
+    game.drawTreasurePackCards()
+    ew.drawEW('Ви отримали 3 зцілення')
+    game.changeHealth(3)
+    setTimeout(() => {ew.removeAllEW()}, 1200);
 }
 
 function magnetismTiara() {
@@ -507,7 +524,7 @@ const treasure_cards = [
     /*13*/new Card(14, 'Яйцо Дракона', 600,dragonEgg),
     /*14*/new Card(15, 'Посох Жизни', 650,staffOfLife, staffOfLifeFn),
     /*15*/new Card(16, 'Посох Смерти', 650,staffOfDeath),
-    /*16*/new Card(17, 'Пояс Феникса', 700,phoenixBelt),
+    /*16*/new Card(17, 'Пояс Феникса', 700,phoenixBelt, phoenixBeltFn),
     /*17*/new Card(18, 'Тиара Магнетизма', 700,magnetismTiara),
     /*18*/new Card(19, 'Арфа Спокойствия', 700,tranquilityHarp),
     /*19*/new Card(20, 'Пояс Жизни', 900,lifeBelt),
