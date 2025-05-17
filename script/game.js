@@ -1073,6 +1073,12 @@ class Game {
                     this.endMove()
                 }
                 ew.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, 2, trueFn, falseFn, true, true)
+
+                if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[17].name)) {}
+                ew.drawBtnInEW(`btn_close`, `Використати ${treasure_cards[17].name} що б пройти без перевірки`, ()=>{
+                    ew.removeAllEW()
+                    this.removeIcon('.grille-icon')
+                })
             }
         });
     }
