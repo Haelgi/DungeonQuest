@@ -1,3 +1,5 @@
+import  {addScrolCardsEffect}  from '../function/addScrolCardsEffect.js';
+
 import { ew } from '../eventWidows.js';
 import { player } from '../player.js';
 import { game } from '../game.js';
@@ -200,7 +202,7 @@ function shadowAmulet() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO Имея эту карту, находясь в Катакомбах, каждый раз, когда Вы тянете очередную Карту Катакомб, у Вас исцеляется 1 ранение. +550 золота*/
+    Имея эту карту, находясь в Катакомбах, каждый раз, когда Вы тянете очередную Карту Катакомб, у Вас исцеляется 1 ранение. +550 золота*/
 }
 
 function dragonEgg() {
@@ -208,7 +210,7 @@ function dragonEgg() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO  +600 золота*/
+      +600 золота*/
 }
 
 function staffOfLife() {
@@ -216,9 +218,93 @@ function staffOfLife() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO С этой картой, пока Ваш герой жив, во время своего хода 
+    С этой картой, пока Ваш герой жив, во время своего хода 
     Вы можете сбросить любое количество своих Трофеев (кроме этого) и исцелить число ранений, 
     равное числу сброшенных Трофеев +650 золота*/
+}
+
+function staffOfLifeFn() {
+    if(player.treasureCardContainer.length < 1) {
+        ew.drawEW('У вас недостатаня кількість трофеїв.')
+        ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+        return
+    }
+    
+    const treasureCardContainerCopy = [...player.treasureCardContainer]
+    game.removeCurrentCardNameFromPack(treasureCardContainerCopy, treasure_cards[14].name)
+
+    const length = treasureCardContainerCopy.length
+    
+    if(length < 1) {
+        ew.drawEW('У вас недостатаня кількість трофеїв.')
+        ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+        return
+    }
+
+    ew.clear()
+    ew.addBtnInEW('btn_close', 'Не віддавати трофеї', ew.removeAllEW)
+    ew.addEmptyFeldForCard(length)
+    ew.addPackCards(treasureCardContainerCopy)
+    ew.addBtnInEW('btn_next', 'Віддавати трофеї', ()=>{
+        treasureCardContainerCopy.push(treasure_cards[14])
+        player.treasureCardContainer = treasureCardContainerCopy
+        game.drawTreasurePackCards()
+
+        const health = emptyFelds.length
+        game.changeHealth(health)
+        ew.drawEW(`Ви отримали ${health} зцилення`)
+        setTimeout(ew.removeAllEW, 1200);
+    })
+
+    const emptyFelds = []
+    const btnNext = document.getElementById('btn_next')
+    btnNext.style.display = 'none'
+
+    addScrolCardsEffect('.event-deck-container', (e)=> {
+        const [card] = removeCardFromPack(e)
+
+        emptyFelds.push(card)
+        drawCardToFeld(length)
+    });
+
+    function removeCardFromPack(e) {
+        const id = e.target.getAttribute('id')
+        const card = treasureCardContainerCopy.splice(id, 1)
+
+        ew.updatePackCardsEW(treasureCardContainerCopy)
+
+        return card
+    }
+
+    function drawCardToFeld(count){
+        
+        if(emptyFelds.length >= 1) btnNext.style.display = 'block'
+        if(emptyFelds.length < 1) btnNext.style.display = 'none'
+        
+        for (let i = 0; i < count; i++) {
+
+            const feld = document.getElementById(`card-feld-${i}`)
+            if (!feld) continue;
+
+            if(emptyFelds[i] === undefined) {
+                feld.innerHTML = ''
+                continue; 
+            }
+
+            feld.innerHTML = `<div id="${i}" class="card" style="background-image: url('img/${emptyFelds[i].pack}_cards/${emptyFelds[i].pack}_${emptyFelds[i].id}.jpg')"></div>`
+
+            feld.onclick = () => {
+                const [card] = emptyFelds.splice(i, 1)
+                if(card) {
+                    treasureCardContainerCopy.push(card)
+                    ew.updatePackCardsEW(treasureCardContainerCopy)
+                    drawCardToFeld(count)  
+                    console.log(4)
+                }
+            }
+        }
+    }
+
 }
 
 function staffOfDeath() {
@@ -419,7 +505,7 @@ const treasure_cards = [
     /*11*/new Card(12, 'Сумеречная Накидка', 500,twilightCloak),
     /*12*/new Card(13, 'Амулет Теней', 550,shadowAmulet),
     /*13*/new Card(14, 'Яйцо Дракона', 600,dragonEgg),
-    /*14*/new Card(15, 'Посох Жизни', 650,staffOfLife),
+    /*14*/new Card(15, 'Посох Жизни', 650,staffOfLife, staffOfLifeFn),
     /*15*/new Card(16, 'Посох Смерти', 650,staffOfDeath),
     /*16*/new Card(17, 'Пояс Феникса', 700,phoenixBelt),
     /*17*/new Card(18, 'Тиара Магнетизма', 700,magnetismTiara),
