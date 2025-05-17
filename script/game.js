@@ -150,6 +150,11 @@ class Game {
         if (player.holeInCeiling) return
         const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
         ew.drawCardEW(card);
+        if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[12].name)) {
+            game.changeHealth(1)
+            ew.drawEW(`Ви отримали 1 очко здоров'я!`);
+            setTimeout(ew.removeLastEW, 1200);
+        }
     }
     
     playTreasuryEvent(){

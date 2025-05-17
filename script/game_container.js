@@ -17,9 +17,10 @@ player.authentication = true;
 // player.eventCardContainer = [monster_cards[9],monster_cards[10],monster_cards[11]];
 // player.checkEventCards = true
 // player.surroundedMonsters = true;
-player.treasureCardContainer = [treasure_cards[3], treasure_cards[1], treasure_cards[11], treasure_cards[1], treasure_cards[1]];
+player.treasureCardContainer = [treasure_cards[3], treasure_cards[1], treasure_cards[12], treasure_cards[1], treasure_cards[1]];
 // player.positionTreasuryCards = [treasure_cards[1],treasure_cards[4]];
 // player.catacombCardContainer = [treasure_cards[1],treasure_cards[4]];
+
 
 // heroes[player.hero].resolve = 5
 
@@ -31,7 +32,7 @@ game.authentication = true;
 
 
 export function game_container() {
-    // game.drawFieldTileTests(114, 90, 1,  0);
+    // game.drawFieldTileTests(8, 90, 1,  0);
     // game.drawFieldTileTests(58, 0, 1,  1);
     // game.drawFieldTileTests(11, '90', 2,  0);
     // game.drawFieldTileTests(11, '180', 1,  1);
