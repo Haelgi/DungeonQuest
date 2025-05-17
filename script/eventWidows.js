@@ -330,6 +330,16 @@ class EventWidows{
             }, 1700);
         }
         this.drawBtnInEW('roll', 'Кинути Кубики', trueFn)
+
+        if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[11].name)) {
+            ew.addBtnInEW('btn_skip', 'Пропустити кидок (за 290 золота)', ()=>{
+                ew.removeLastEW()
+                game.removeCurrentCardNameFromPack(player.treasureCardContainer, treasure_cards[11].name)
+                game.drawTreasurePackCards()
+                game.nextCoordinates = game.newCoordinate()
+                game.activeEvent = false
+            })
+        }
     }
 
     removeDiceInEW(){
