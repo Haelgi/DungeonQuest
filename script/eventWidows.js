@@ -517,6 +517,11 @@ class EventWidows{
     }
 
     addBattleSection(card, endBattleFn){
+        let attack = player.attack
+
+        if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[20].name) && 
+            (player.fightWithDemon || player.fightWithSkeleton)) attack += 1
+
         this.clear()
         this.addTxt(`
             ${player.hero.toUpperCase()}<br>
@@ -535,9 +540,8 @@ class EventWidows{
 
         const trueFn = ()=>{ 
             if(game.diceRollResultGlobal<=3){
-                let damage = player.attack
-                card.health -= damage
-                this.drawEW(`${card.name} отримав ${damage} поранення`)
+                card.health -= attack
+                this.drawEW(`${card.name} отримав ${attack} поранення`)
                 setTimeout(() => {
                     this.removeLastEW()
                     this.clear()
@@ -567,7 +571,7 @@ class EventWidows{
 
         if (card.health < 1) {
             this.drawEW(`${card.name} переможений!`)
-            if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[19] || player.fightWithMonsters)) {
+            if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[19].name) || player.fightWithMonsters) {
                 this.addTxt('Ви зцілили 1 своє поранення')
                 game.changeHealth(1)
             }

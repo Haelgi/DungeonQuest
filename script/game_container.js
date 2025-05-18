@@ -17,7 +17,7 @@ player.authentication = true;
 // player.eventCardContainer = [monster_cards[9],monster_cards[10],monster_cards[11]];
 // player.checkEventCards = true
 // player.surroundedMonsters = true;
-player.treasureCardContainer = [treasure_cards[3], treasure_cards[1], treasure_cards[19], treasure_cards[1], treasure_cards[1]];
+player.treasureCardContainer = [treasure_cards[3], treasure_cards[1], treasure_cards[20], treasure_cards[1], treasure_cards[1]];
 // player.positionTreasuryCards = [treasure_cards[1],treasure_cards[4]];
 // player.catacombCardContainer = [treasure_cards[1],treasure_cards[4]];
 

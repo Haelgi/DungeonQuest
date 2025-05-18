@@ -25,6 +25,7 @@ class Card {
 
 function ironGolem() {
     player.fightWithMonsters = true
+    player.fightWithGolem = true
     ew.removeRawBtnInEW('btn_ew')
 
     function getCards(){
@@ -37,6 +38,7 @@ function ironGolem() {
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithGolem = false
         ew.drawCardEW(monster_cards[0])
         ew.clear()
         ew.drawBtnInEW('next', 'Витягнути 3 Карти Склепу', ()=>{
@@ -57,9 +59,11 @@ function ironGolem() {
 function iceGolem() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithGolem = true
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithGolem = false
 
         if (player.ambushRoom || player.surroundedMonsters) {
             ew.removeAllEW()
@@ -85,6 +89,7 @@ function iceGolem() {
 function magmaGolem() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithGolem = true
 
 
     const trueFn = ()=> {
@@ -127,6 +132,7 @@ function magmaGolem() {
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithGolem = false
 
         ew.removeAllEW() 
     }
@@ -144,9 +150,11 @@ function magmaGolem() {
 function stoneGolem() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithGolem = true
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithGolem = false   
 
         if (player.ambushRoom || player.surroundedMonsters) {
             ew.removeAllEW()
@@ -170,6 +178,7 @@ function stoneGolem() {
 function demonOfSuffering() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithDemon = true
 
 
     function getCards(){
@@ -179,6 +188,8 @@ function demonOfSuffering() {
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithDemon = false
+        
 
         if (player.ambushRoom || player.surroundedMonsters) {
             ew.removeAllEW()
@@ -208,6 +219,7 @@ function demonOfSuffering() {
 function demonOfPain() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithDemon = true
 
 
     const trueFn = ()=> {
@@ -238,6 +250,7 @@ function demonOfPain() {
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithDemon = false
 
         ew.removeAllEW() 
     }
@@ -251,6 +264,7 @@ function demonOfPain() {
 
 function demonOfFear() {
     player.fightWithMonsters = true
+    player.fightWithDemon = true
 
     ew.removeRawBtnInEW('btn_ew')
     heroes[player.hero].resolve = 0
@@ -258,6 +272,7 @@ function demonOfFear() {
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithDemon = false
 
         ew.removeAllEW()
     }
@@ -272,6 +287,7 @@ function demonOfFear() {
 function demonOfRage() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithDemon = true
 
 
     function getCards(){
@@ -281,6 +297,7 @@ function demonOfRage() {
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithDemon = false
 
 
         ew.drawCardEW(monster_cards[7])
@@ -302,6 +319,7 @@ function demonOfRage() {
 function possessedBySpirits() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithSorcerer = true
 
     if (player.ambushRoom || player.surroundedMonsters) {
         ew.removeAllEW()
@@ -313,6 +331,7 @@ function possessedBySpirits() {
 
         function endBattleFn(){
             player.fightWithMonsters = false
+            player.fightWithSorcerer = false
             ew.removeAllEW()
     }
 
@@ -354,6 +373,7 @@ function possessedBySpirits() {
 function servantOfTheUnderworld() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithSorcerer = true
 
 
     const result = ()=>{ 
@@ -381,6 +401,7 @@ function servantOfTheUnderworld() {
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithSorcerer = false
 
         if (player.ambushRoom || player.surroundedMonsters) {
             ew.removeAllEW()
@@ -405,6 +426,7 @@ function servantOfTheUnderworld() {
 function servantOfChaos() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithSorcerer = true
 
 
     function getCards(){
@@ -414,6 +436,7 @@ function servantOfChaos() {
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithSorcerer = false
 
         ew.drawCardEW(monster_cards[10])
         ew.clear()
@@ -434,6 +457,7 @@ function servantOfChaos() {
 function cultAdept() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithSorcerer = true
 
 
     const maxValue = player.treasureCardContainer.length
@@ -441,6 +465,7 @@ function cultAdept() {
     
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithSorcerer = false
         
         ew.removeAllEW()
     }
@@ -464,7 +489,8 @@ function cultAdept() {
 function skeletonWarrior() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
-
+    player.fightWithSkeleton = true
+    
     
     function getCards(){
         const card = game.getRundomElement(game.deadman_cards, deadman_cards)   
@@ -501,6 +527,7 @@ function skeletonWarrior() {
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithSkeleton = false
 
         ew.drawCardEW(monster_cards[12])
         ew.clear()
@@ -518,6 +545,7 @@ function skeletonWarrior() {
 function decrepitSkeleton() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithSkeleton = true
 
     
     function getCards(){
@@ -555,6 +583,7 @@ function decrepitSkeleton() {
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithSkeleton = false
 
         ew.drawCardEW(monster_cards[13])
         ew.clear()
@@ -572,6 +601,7 @@ function decrepitSkeleton() {
 function skeletonKiller() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithSkeleton = true
 
     
     function getCards(){
@@ -609,6 +639,7 @@ function skeletonKiller() {
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithSkeleton = false
 
         ew.drawCardEW(monster_cards[12])
         ew.clear()
@@ -626,6 +657,7 @@ function skeletonKiller() {
 function skeletonArcher() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithSkeleton = true
 
     
     function getCards(){
@@ -663,6 +695,7 @@ function skeletonArcher() {
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithSkeleton = false
 
         ew.drawCardEW(monster_cards[15])
         ew.clear()
@@ -679,6 +712,7 @@ function skeletonArcher() {
 function trollDestroyer() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithTroll = true
 
 
     function getCards(){
@@ -691,6 +725,7 @@ function trollDestroyer() {
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithTroll = false
 
         ew.drawCardEW(monster_cards[16])
         ew.clear()
@@ -712,10 +747,12 @@ function trollDestroyer() {
 function madTroll() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithTroll = true
 
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithTroll = false
 
         if (player.ambushRoom || player.surroundedMonsters) {
             ew.removeAllEW()
@@ -740,10 +777,12 @@ function madTroll() {
 function trollBrute() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithTroll = true
 
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithTroll = false
 
         if (player.ambushRoom || player.surroundedMonsters) {
             ew.removeAllEW()
@@ -768,10 +807,12 @@ function trollBrute() {
 function trollCannibal() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
+    player.fightWithTroll = true
 
 
     function endBattleFn(){
         player.fightWithMonsters = false
+        player.fightWithTroll = false
 
         if (player.ambushRoom || player.surroundedMonsters) {
             ew.removeAllEW()

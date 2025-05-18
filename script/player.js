@@ -36,6 +36,11 @@ class Player {
         this.ambushRoom = false;
         this.surroundedMonsters = false;
         this.fightWithMonsters = false;
+        this.fightWithGolem = false;
+        this.fightWithDemon = false;
+        this.fightWithSorcerer = false;
+        this.fightWithSkeleton = false;
+        this.fightWithTroll = false;
         this.gold = 0
     }
 }
