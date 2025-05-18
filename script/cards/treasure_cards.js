@@ -390,7 +390,7 @@ function crown() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO  +1000 золота*/
+    +1000 золота*/
 }
 
 function bagOfGems() {
@@ -398,7 +398,7 @@ function bagOfGems() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO  +1000 золота*/
+    +1000 золота*/
 }
 
 function genieLamp() {
@@ -406,8 +406,32 @@ function genieLamp() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO Сбросив эту карту, Вы теряете все Трофеи и у Вас остается 1 очко жизни. 
+    Сбросив эту карту, Вы теряете все Трофеи и у Вас остается 1 очко жизни. 
     Потом вытяните 2 Карты Сокровищ и выполните перемещение на любую клетку поля (кроме стартовых) в обычном порядке. +1100 золота*/
+}
+
+function genieLampFn(){
+    ew.removeAllEW();
+    ew.drawEW('Ви втратили всі трофеї і у вас залишилось 1 очко життя')
+    setTimeout(() => {
+        ew.removeAllEW();
+        game.changeHealth(-heroes[player.hero].health + 1)
+        player.treasureCardContainer = []
+        game.drawTreasurePackCards()
+        
+        const cards = [game.getRundomElement(game.treasure_cards, treasure_cards),
+                        game.getRundomElement(game.treasure_cards, treasure_cards)]
+
+        game.distributionCards(cards)
+        player.positionTreasuryCards.push(...cards)
+
+        ew.drawEW('Скарбниця')
+        ew.addPackCards(cards)
+        addScrolCardsEffect('.event-deck-container', false)
+        ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
+
+        game.moveToAnyCell()
+    }, 1200);
 }
 
 function dragonStaff() {
@@ -537,7 +561,7 @@ const treasure_cards = [
     /*20*/new Card(21, 'Меч Света', 900,lightSword),
     /*21*/new Card(22, 'Корона', 1000,crown),
     /*22*/new Card(23, 'Сумка с Самоцветами', 1000,bagOfGems),
-    /*23*/new Card(24, 'Лампа с Джином', 1100,genieLamp),
+    /*23*/new Card(24, 'Лампа с Джином', 1100,genieLamp, genieLampFn),
     /*24*/new Card(25, 'Посох Дракона', 1510,dragonStaff),
     /*25*/new Card(26, 'Заколдованная Книга', false,enchantedBook),
     /*26*/new Card(27, 'Пожиратель Сокровищ', false,treasureEater),

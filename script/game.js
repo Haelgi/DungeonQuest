@@ -1225,6 +1225,14 @@ class Game {
     checkCardNameInPack(arr, name){
         return arr.some(card => card.name === name)
     }
+
+    moveToAnyCell() {
+        this.removeHighlightFields(this.nextCoordinates)
+        this.removeAllIcon()
+        const toRemove = new Set(["0,0", "14,0", "0,11", "14,11", "7,5", "7,6"]);
+        const arr = Array.from({ length: 12 }, (_, y) => Array.from({ length: 15 }, (_, x) => [x, y])).flat().filter(([x, y]) => !toRemove.has(`${x},${y}`));
+        this.nextCoordinates = arr
+    }
     
 }
 
