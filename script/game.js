@@ -35,6 +35,7 @@ class Game {
         this.darkRoomCoordinates = {};
 
         this.day = 0; 
+        this.dayMax = 0; 
         this.gameFields; 
         this.startFields=[[0,0], [14,0], [0,11], [14,11]]; 
         this.treasuryFields=[[7,5], [7,6]]; 
@@ -345,7 +346,14 @@ class Game {
     }
 
     sunTokenPosition(day){
-        if (day > 38) return this.endGame();
+        if (day > this.dayMax) {
+            if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[24].name)){
+                this.dayMax +=4
+            return
+        }
+            this.endGame()
+            return 
+        };
         const token_sun = document.querySelector(`.token_sun`);
         if (token_sun) token_sun.remove();
         const dayContainer = document.querySelector(`[day="${day}"]`);
@@ -695,6 +703,7 @@ class Game {
     }
 
     endGame(){
+
         ew.removeAllEW()
     }
 
