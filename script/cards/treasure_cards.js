@@ -356,9 +356,15 @@ function tranquilityHarp() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO Пока эта карта у Вас, в Сокровищнице 
+    Пока эта карта у Вас, в Сокровищнице 
     Вы должны вытаскивать по две карты дракона вместо одной. 
     Вы можете сбросить эту карту в начале любого своего хода. +700 золота*/
+}
+
+function tranquilityHarpFn() {
+    game.removeCurrentCardNameFromPack(player.treasureCardContainer, treasure_cards[18].name)
+    game.drawTreasurePackCards()
+    ew.removeAllEW();
 }
 
 function lifeBelt() {
@@ -526,7 +532,7 @@ const treasure_cards = [
     /*15*/new Card(16, 'Посох Смерти', 650,staffOfDeath),
     /*16*/new Card(17, 'Пояс Феникса', 700,phoenixBelt, phoenixBeltFn),
     /*17*/new Card(18, 'Тиара Магнетизма', 700,magnetismTiara),
-    /*18*/new Card(19, 'Арфа Спокойствия', 700,tranquilityHarp),
+    /*18*/new Card(19, 'Арфа Спокойствия', 700,tranquilityHarp, tranquilityHarpFn),
     /*19*/new Card(20, 'Пояс Жизни', 900,lifeBelt),
     /*20*/new Card(21, 'Меч Света', 900,lightSword),
     /*21*/new Card(22, 'Корона', 1000,crown),

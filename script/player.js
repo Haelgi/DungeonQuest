@@ -23,6 +23,7 @@ class Player {
         this.attack = 1;
         this.extraMove = 1;
         this.skipMove = 0;
+        this.extraDragonCard = 0;
         this.escapeBattle = true;
         this.curseOfTheSorcerer = false;
         this.oldResolve = 0;

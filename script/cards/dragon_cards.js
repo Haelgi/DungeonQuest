@@ -18,6 +18,18 @@ class Card {
 function dragonSleep(){
     ew.removeAllEW()
 
+    if (player.extraDragonCard > 0) {
+        ew.drawEW('Ви повинні витягнути ще одну карту дракона')
+        setTimeout(() => {
+            ew.removeAllEW()
+            player.extraDragonCard -= 1
+            const card = game.getRundomElement(game.dragon_cards, dragon_cards)
+            ew.drawCardEW(card)
+        }, 1200);
+        return
+    }
+    
+    
     const cards = [game.getRundomElement(game.treasure_cards, treasure_cards),
                    game.getRundomElement(game.treasure_cards, treasure_cards)]
 

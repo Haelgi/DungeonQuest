@@ -15,14 +15,6 @@ import  {monster_cards}  from './cards/monster_cards.js';
 import  {dragon_cards}  from './cards/dragon_cards.js';
 import { player } from './player.js';
 
-// TODO создать метод завершение хода
-// TODO добавить метод завершение хода в необходиміе ме На жаль, ви повернулись у попередню кымнатуста 
-
-// TODO создать метод завершение игі
-//  На жаль, ви повернулись у попередню кымнатуTODO добавить условия завершение игі
-
-
-// На жаль, ви повернулись у попередню кымнату/ TODO попробовать создавать окно навешиванием методов цепочкой
 
 class Game {
 
@@ -163,6 +155,10 @@ class Game {
     }
     
     playTreasuryEvent(){
+        if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[18].name)) {
+            player.extraDragonCard += 1
+        }
+
         const card = this.getRundomElement(this.dragon_cards, dragon_cards)   
         ew.drawCardEW(card);
     }
@@ -516,8 +512,6 @@ class Game {
 
     checkMonsterCards(){
         if (!player.position) return
-        // if (player.extraMove) return
-        // TODO
         if (this.gameFields[player.position[1]][player.position[0]]['m'] === undefined || this.activeEvent) return
         if (this.gameFields[player.position[1]][player.position[0]]['m'].length === 0) {
             delete this.gameFields[player.position[1]][player.position[0]]['m']
@@ -546,7 +540,6 @@ class Game {
         this.checkEventCards()
         this.checkCatacombCards()
         this.checkMonsterCards()
-        // TODO
     
         if (!document.querySelector(`.available-field`)) {
             this.highlightFields(array);    
@@ -606,7 +599,6 @@ class Game {
                 if (!room_tiles[this.gameFields[y][x]['id']]) return;
 
                 this.checkRoomEvents()
-                // TODO
 
                 if(room_tiles[this.gameFields[y][x]['id']]?.special !== 'bridge' 
                    && room_tiles[this.gameFields[y][x]['id']]?.special !== 'corridor' 
@@ -1019,10 +1011,10 @@ class Game {
     }
 
     clickTreasureIcon(){
-        const treasureIcon = document.querySelector('.treasure-icon');
+        const treasureIcon = document.querySelector('.treasure-icon');    
+
         treasureIcon.addEventListener('click', () => {
-            const card = this.getRundomElement(this.dragon_cards, dragon_cards)
-            ew.drawCardEW(card)
+            this.playTreasuryEvent()
         });
     };
 
