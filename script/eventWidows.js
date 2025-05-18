@@ -567,6 +567,10 @@ class EventWidows{
 
         if (card.health < 1) {
             this.drawEW(`${card.name} переможений!`)
+            if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[19] || player.fightWithMonsters)) {
+                this.addTxt('Ви зцілили 1 своє поранення')
+                game.changeHealth(1)
+            }
             setTimeout(() => {
                 this.removeAllEW()
                 player.fightWithMonsters = false;

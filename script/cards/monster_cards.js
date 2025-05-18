@@ -145,7 +145,6 @@ function stoneGolem() {
     ew.removeRawBtnInEW('btn_ew')
     player.fightWithMonsters = true
 
-
     function endBattleFn(){
         player.fightWithMonsters = false
 
