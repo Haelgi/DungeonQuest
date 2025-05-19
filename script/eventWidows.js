@@ -638,9 +638,9 @@ class EventWidows{
             
         }
 
-        ew.drawBtnInEwIfSomeCardInTreasure(treasure_cards[8], 
+        this.drawBtnInEwIfSomeCardInTreasure(treasure_cards[8], 
             'гарантована втеча та 4 поранення', ()=>{
-                ew.removeAllEW()
+                this.removeAllEW()
                 game.changeHealth(-4)
             }, ()=>{   
                 this.clear()

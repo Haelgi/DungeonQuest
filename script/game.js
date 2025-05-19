@@ -37,7 +37,8 @@ class Game {
         this.day = 0; 
         this.dayMax = 0; 
         this.gameFields; 
-        this.startFields=[[0,0], [14,0], [0,11], [14,11]]; 
+        this.startFields=[[0,0], [14,0], [0,11], [14,11], [7,6]]; 
+        // TODO убрать потом
         this.treasuryFields=[[7,5], [7,6]]; 
         this.room_tiles; 
         this.dungeon_cards; 
@@ -160,8 +161,17 @@ class Game {
             player.extraDragonCard += 1
         }
 
-        const card = this.getRundomElement(this.dragon_cards, dragon_cards)   
-        ew.drawCardEW(card);
+        if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[25].name)) {
+            ew.drawCardEW(treasure_cards[25])
+            return
+        } 
+
+        getCard()
+
+        function getCard(){
+            const card = this.getRundomElement(this.dragon_cards, dragon_cards)   
+            ew.drawCardEW(card);
+        }
     }
      
     drawFieldTileTests(roomNumber, rotate, x, y){

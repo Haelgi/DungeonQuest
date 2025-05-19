@@ -300,7 +300,6 @@ function staffOfLifeFn() {
                     treasureCardContainerCopy.push(card)
                     ew.updatePackCardsEW(treasureCardContainerCopy)
                     drawCardToFeld(count)  
-                    console.log(4)
                 }
             }
         }
@@ -439,16 +438,149 @@ function dragonStaff() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO Когда зашло солнце и двери подземелья закрылись, 
+    Когда зашло солнце и двери подземелья закрылись, 
     Ваш герой может выполнить 4 дополнительных хода и, если он доберется до выхода, покинуть Подземелье Дракона. +1510 золота*/
 }
 
 function enchantedBook() {
+    if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[25].name)) {
+        ew.clear();
+        ew.addDiceRollSection(false, 12, false, true, 2, resultFn, false, true, true)
+
+        function resultFn() {
+            const result = game.diceRollResultGlobal
+
+            if (result <= 3) {
+                ew.drawEW('Ви загинули')
+                setTimeout(() => {
+                    ew.removeAllEW()
+                    game.endGame()
+                }, 1200);
+            }
+
+            if (result > 3 && result < 6) {
+                ew.clear()
+                ew.addDiceRollSection(false, 6, false, true, 1, resultFn2, false, true, true)
+
+                function resultFn2() {
+                    const result = game.diceRollResultGlobal
+                    ew.drawEW(`Ви отримали ${result} поранення`)
+                    game.changeHealth(-result)
+                    setTimeout(() => {
+                        ew.removeAllEW()
+                        game.endMove()
+                    }, 1200);
+                }
+
+            }
+
+            if (result > 5 && result < 9) {
+                ew.drawEW('Ваш хід закінчується')
+                setTimeout(() => {
+                    ew.removeAllEW()
+                    game.endMove()
+                }, 1200);
+            }
+
+            if (result > 8 && result < 12) {
+                const length = 2
+                let emptyFelds = []
+                const cardsForChoice = [game.getRundomElement(game.treasure_cards, treasure_cards),
+                                        game.getRundomElement(game.treasure_cards, treasure_cards),
+                                        game.getRundomElement(game.treasure_cards, treasure_cards),
+                                        game.getRundomElement(game.treasure_cards, treasure_cards)]
+                    
+                ew.clear()
+                ew.addEmptyFeldForCard(length)
+                ew.addPackCards(cardsForChoice)
+                addScrolCardsEffect('.event-deck-container', (e)=> {
+                    const [card] = removeCardFromPack(e)
+
+                    emptyFelds.push(card)
+                    drawCardToFeld(length)
+                });
+                ew.addBtnInEW('btn_next', 'Вибрати', ()=>{
+                    ew.removeAllEW()
+                    player.treasureCardContainer.push(...emptyFelds)
+                    emptyFelds = []
+                    game.drawTreasurePackCards()
+                })
+
+                const btnNext = document.getElementById('btn_next')
+                btnNext.style.display = 'none'
+
+                addScrolCardsEffect('.event-deck-container', (e)=> {
+                    const [card] = removeCardFromPack(e)
+
+                    emptyFelds.push(card)
+                    drawCardToFeld(length)
+                });
+
+                function removeCardFromPack(e) {
+                    const id = e.target.getAttribute('id')
+                    const card = cardsForChoice.splice(id, 1)
+
+                    ew.updatePackCardsEW(cardsForChoice)
+
+                    return card
+                }  
+
+                function drawCardToFeld(count){
+                        
+                    if(emptyFelds.length >= 1) btnNext.style.display = 'block'
+                    if(emptyFelds.length < 1) btnNext.style.display = 'none'
+                    
+                    for (let i = 0; i < count; i++) {
+
+                        const feld = document.getElementById(`card-feld-${i}`)
+                        if (!feld) continue;
+
+                        if(emptyFelds[i] === undefined) {
+                            feld.innerHTML = ''
+                            continue; 
+                        }
+
+                        feld.innerHTML = `<div id="${i}" class="card" style="background-image: url('img/${emptyFelds[i].pack}_cards/${emptyFelds[i].pack}_${emptyFelds[i].id}.jpg')"></div>`
+
+                        feld.onclick = () => {
+                            const [card] = emptyFelds.splice(i, 1)
+                            if(card) {
+                                cardsForChoice.push(card)
+                                ew.updatePackCardsEW(cardsForChoice)
+                                drawCardToFeld(count)  
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return
+    }
+
+    if (result > 11) {
+        ew.removeAllEW()
+        const cards = [game.getRundomElement(game.treasure_cards, treasure_cards),
+                       game.getRundomElement(game.treasure_cards, treasure_cards)]
+
+        game.distributionCards(cards)
+
+        ew.drawEW('Події підземелля')
+        ew.addPackCards(cards)
+        addScrolCardsEffect('.event-deck-container', false)
+
+        ew.drawBtnInEW('next', 'Далі', ()=>{
+            emptyFelds = []
+            ew.removeAllEW()
+            game.endGame()
+        })
+    }
+
+
     player.treasureCardContainer.push(treasure_cards[25]);
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO  Начиная свой ход в Сокровищнице, перед тем как тянуть Карту Дракона, 
+    Начиная свой ход в Сокровищнице, перед тем как тянуть Карту Дракона, 
     бросьте 216: 
     2-3 - Вы погибаете; 
     4-5 - Бросьте 1d6 и получите количество ранений, эквивалентное результату; 
