@@ -215,6 +215,7 @@ class EventWidows{
             }
         }
 
+        this.addPointToDiceResult(resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
         this.rerollDice(resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
 
     }
@@ -232,8 +233,19 @@ class EventWidows{
             })
         }
     }
-    
 
+    addPointToDiceResult(resolve, valueIn, trueFn, falseFn, rolResult, closeEW){
+        if (player.treasureCardContainer.some(card => card.name === treasure_cards[32].name)
+            && game.diceRollResultGlobal < valueIn){
+            ew.drawBtnInEW('btn_add', 'Додати 1 до результату (за 170 золота)', ()=>{
+                ew.removeLastEW()
+                game.removeCurrentCardNameFromPack(player.treasureCardContainer, treasure_cards[32].name)
+                game.drawTreasurePackCards()
+                game.diceRollResultGlobal +=1
+                this.rolResultEW (resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
+            })
+        }
+    }
 
     endMoveEW() {
         this.drawEW('Завершити свій хід?');
