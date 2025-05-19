@@ -652,7 +652,23 @@ function attentivenessPotion() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO Сбросьте эту карту в конце своего хода, чтобы убрать из комнаты, в которой вы находитесь, жетон поиска. В следующий свой ход Вы сможете снова обыскать эту комнату. +150 золота*/
+    Сбросьте эту карту в конце своего хода, чтобы убрать из комнаты, в которой вы находитесь, жетон поиска. В следующий свой ход Вы сможете снова обыскать эту комнату. +150 золота*/
+}
+
+function attentivenessPotionFn() {
+    if (game.gameFields[player.position[1]][player.position[0]]['s'] === undefined
+        || player.catacomb
+        || game.gameFields[player.position[1]][player.position[0]]['m'] !== undefined) {
+            ew.drawEW('Не можна викорасти карту зараз(')
+            setTimeout(ew.removeAllEW, 1200);
+            return
+    }
+    game.removeCurrentCardNameFromPack(player.treasureCardContainer, treasure_cards[30].name)
+    game.drawTreasurePackCards()
+    game.gameFields[player.position[1]][player.position[0]]['s'] = 0
+    game.drawIcon(player.position[0], player.position[1], 'fa-solid fa-magnifying-glass', 'search');
+    game.clickSerchIcon();
+    ew.removeAllEW()
 }
 
 function silverRing() {
@@ -726,7 +742,7 @@ const treasure_cards = [
     /*27*/new Card(28, 'Украшенные Ботинки', 90,decoratedBoots),
     /*28*/new Card(29, 'Кольцо с Кристалом', 110,crystalRing),
     /*29*/new Card(30, 'Жемчужное Кольцо', 130,pearlRing),
-    /*30*/new Card(31, 'Зелье Внимательности', 150,attentivenessPotion),
+    /*30*/new Card(31, 'Зелье Внимательности', 150, attentivenessPotion, attentivenessPotionFn),
     /*31*/new Card(32, 'Серебрянное Кольцо', 160,silverRing),
     /*32*/new Card(33, 'Кольцо Колдуна', 170,sorcererRing),
     /*33*/new Card(34, 'Золотое Кольцо', 190,goldRing),

@@ -365,11 +365,12 @@ class Game {
         if (day > this.dayMax) {
             if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[24].name)){
                 this.dayMax +=4
-            return
-        }
+                return
+            }
             this.endGame()
             return 
         };
+
         const token_sun = document.querySelector(`.token_sun`);
         if (token_sun) token_sun.remove();
         const dayContainer = document.querySelector(`[day="${day}"]`);
@@ -689,7 +690,7 @@ class Game {
 
     toggleCurrentPlayer(){
         if (this.playerList.length -1 < this.currentPlayerIndex) this.currentPlayerIndex += 1;
-        if (this.playerList.length -1 === this.currentPlayerIndex) {
+        if (this.playerList.length -1 > this.currentPlayerIndex) {
             this.currentPlayerIndex += 0;
             this.day += 1;
         }
@@ -705,6 +706,7 @@ class Game {
     }
 
     endMove(){
+        console.log('endMove')
         if (player.extraMove !== 0) {
             player.extraMove -= 1
             player.checkEventCards = true
@@ -920,14 +922,17 @@ class Game {
         const [x,y] = player.position
         const serchIcon = document.querySelector('.search-icon');
         serchIcon.addEventListener('click', () => {
+            console.log(11111)
             const card = this.getRundomElement(this.search_cards, search_cards)
             ew.drawCardEW(card)
             this.removeIcon('.search-icon');
 
             if (this.gameFields[y][x]['s']===undefined) {
                 this.gameFields[y][x]['s'] = 1
+                console.log(this.gameFields[y][x])
             } else {
                 this.gameFields[y][x]['s'] += 1
+                console.log(this.gameFields[y][x])
             }
             this.endMove()
         });
