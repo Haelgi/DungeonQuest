@@ -590,11 +590,37 @@ function enchantedBook() {
 }
 
 function treasureEater() {
-    player.treasureCardContainer.push(treasure_cards[26]);
-    game.drawTreasurePackCards()
-    ew.removeAllEW();
+    if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[26].name)) {
+        ew.clear();
+        ew.addDiceRollSection(false, 12, false, true, 2, resultFn, false, true, true)
+
+        function resultFn() {
+            if (game.diceRollResultGlobal < 6) {
+                game.removeRandomCardFromPack(player.treasureCardContainer)
+                game.drawTreasurePackCards()
+                ew.drawEW('Ви втратили 1 трофей')
+                setTimeout(ew.removeAllEW, 1200);
+            }
+
+            if (game.diceRollResultGlobal > 5) {
+                const cardCost = game.diceRollResultGlobal * 100
+                const card = game.findClosestByCost(player.treasureCardContainer, cardCost)
+                game.removeCurrentCardNameFromPack(player.treasureCardContainer, card.name)
+                game.drawTreasurePackCards()
+                ew.removeAllEW()
+                ew.drawEW('Ви втратили цю карту')
+                ew.drawCardsInEW([card])
+                ew.addBtnInEW('btn_close', 'Далі', ew.removeAllEW)
+            }
+        }
+
+    } else {
+        player.treasureCardContainer.push(treasure_cards[26]);
+        game.drawTreasurePackCards()
+        ew.removeAllEW();
+    }
     /* "трофей"
-    TODO  При выходе из Подземелья Дракона, 
+    При выходе из Подземелья Дракона, 
     бросьте 216: 
     2-5 - Сбросьте любой свой другой Трофей; 
     6-12 - Эта карта имеет стоимость, эквивалентную выпавшему на кубиках результату, умноженному на 100.*/
@@ -650,7 +676,7 @@ function goldRing() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO  +190 золота*/
+     +190 золота*/
 }
 
 function woodenRing() {
@@ -658,7 +684,7 @@ function woodenRing() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO Вы подобрали это кольцо думая, что оно обладает магическими свойствами, но ошиблись. +1 золота*/
+    Вы подобрали это кольцо думая, что оно обладает магическими свойствами, но ошиблись. +1 золота*/
 }
 
 function lawBook() {
@@ -666,7 +692,7 @@ function lawBook() {
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"
-    TODO Вы думали, что эта книга содержит в себе тайные знания, но оказалось, что это всего лишь свод законов одного из отдаленных королевств, не имеющий особой ценности. +15 золота*/
+    Вы думали, что эта книга содержит в себе тайные знания, но оказалось, что это всего лишь свод законов одного из отдаленных королевств, не имеющий особой ценности. +15 золота*/
 }
 
 const treasure_cards = [

@@ -166,12 +166,8 @@ class Game {
             return
         } 
 
-        getCard()
-
-        function getCard(){
-            const card = this.getRundomElement(this.dragon_cards, dragon_cards)   
-            ew.drawCardEW(card);
-        }
+        const card = this.getRundomElement(this.dragon_cards, dragon_cards)   
+        ew.drawCardEW(card);
     }
      
     drawFieldTileTests(roomNumber, rotate, x, y){
@@ -209,6 +205,16 @@ class Game {
         if (!player.position) return false
         const [x, y] = player.position;
         return this.treasuryFields.some(coord => coord[0] === x && coord[1] === y);
+    }
+
+    isPlayerLeftTreasury(){
+        if (this.checkCardNameInPack(player.treasureCardContainer, treasure_cards[26].name)) {
+            const islastPositionTreasury = this.treasuryFields.some(coord => coord[0] === player.positionPrevious[0] && coord[1] === player.positionPrevious[1])
+            const isNewPositionTreasury = this.treasuryFields.some(coord => coord[0] === player.position[0] && coord[1] === player.position[1])
+            if (islastPositionTreasury && !isNewPositionTreasury) {
+                ew.drawCardEW(treasure_cards[26])
+            }
+        }
     }
 
     newCoordinate(withoutDoors) {
@@ -615,6 +621,7 @@ class Game {
                 if (player.catacomb) {this.nextCoordinates = this.newCoordinateInCatacomb()};
     
                 if (!room_tiles[this.gameFields[y][x]['id']]) return;
+                this.isPlayerLeftTreasury()
 
                 this.checkRoomEvents()
 
@@ -1251,6 +1258,16 @@ class Game {
         const toRemove = new Set(["0,0", "14,0", "0,11", "14,11", "7,5", "7,6"]);
         const arr = Array.from({ length: 12 }, (_, y) => Array.from({ length: 15 }, (_, x) => [x, y])).flat().filter(([x, y]) => !toRemove.has(`${x},${y}`));
         this.nextCoordinates = arr
+    }
+
+    findClosestByCost(arr, target) {
+        return arr.reduce((closest, item) => {
+            if (typeof item.cost !== 'number') return closest;
+
+            if (!closest || Math.abs(item.cost - target) < Math.abs(closest.cost - target) )  return item;
+
+            return closest;
+        }, null);
     }
     
 }
