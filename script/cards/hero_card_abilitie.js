@@ -26,6 +26,12 @@ const dwarf = [
         }),
     
     new Card( 2, 'Поиск Прохода', ()=>{
+        if (!player.positionPrevious
+            || player.catacomb) {
+                ew.drawEW('Не можна викорасти карту зараз(')
+                setTimeout(ew.removeAllEW, 1200);
+                return
+        }
         ew.removeAllEW()
         game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Поиск Прохода')
         game.drawAbilitiePackCards()
