@@ -1,6 +1,7 @@
 import  {game}  from './game.js';
 import  {heroes}  from './cards/heroes.js';
 import  {treasure_cards}  from './cards/treasure_cards.js';
+import  {hero_card_abilitie}  from './cards/hero_card_abilitie.js';
 import { player } from './player.js';
 
 class EventWidows{
@@ -300,6 +301,7 @@ class EventWidows{
         }
 
         cards.forEach(card => {
+            if (card.pack === 'abilitie') return eventSection += `<div class="card" style="background-image: url('img/${card.pack}_cards/${card.pack}_${player.hero}_${card.id}.jpg')"></div>`
             eventSection += `<div class="card" style="background-image: url('img/${card.pack}_cards/${card.pack}_${card.id}.jpg')"></div>`
         });
 
@@ -576,14 +578,21 @@ class EventWidows{
 
         this.addDiceRollSection(false, 6, false, true, 1, trueFn, false, true, true)
         
-        this.useMagicCrystal(treasure_cards[1], 2, card, endBattleFn)
-        this.useMagicCrystal(treasure_cards[4], 3, card, endBattleFn)
-
+        this.useCardForDamage(player.treasureCardContainer, treasure_cards[1], 2, card, endBattleFn)
+        this.useCardForDamage(player.treasureCardContainer, treasure_cards[4], 3, card, endBattleFn)
+        
+        this.useCardForDamage(player.abilitieCardContainer, hero_card_abilitie.dwarf[0], 2, card, endBattleFn)
+        this.useCardForDamage(player.abilitieCardContainer, hero_card_abilitie.enchantress[0], 2, card, endBattleFn)
+        this.useCardForDamage(player.abilitieCardContainer, hero_card_abilitie.hunter[0], 2, card, endBattleFn)
+        this.useCardForDamage(player.abilitieCardContainer, hero_card_abilitie.knight[0], 2, card, endBattleFn)
+        this.useCardForDamage(player.abilitieCardContainer, hero_card_abilitie.mage[0], 2, card, endBattleFn)
+        this.useCardForDamage(player.abilitieCardContainer, hero_card_abilitie.robber[0], 2, card, endBattleFn)
+        
         if (player.escapeBattle && !player.ambushRoom && !player.surroundedMonsters) this.drawBtnInEW('btn_esc','Втекти', ()=>this.escapeBattle(card))
 
         if (card.health < 1) {
             this.drawEW(`${card.name} переможений!`)
-            if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[19].name) || player.fightWithMonsters) {
+            if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[19].name) && player.fightWithMonsters) {
                 this.addTxt('Ви зцілили 1 своє поранення')
                 game.changeHealth(1)
             }
@@ -606,13 +615,16 @@ class EventWidows{
         }
     }
 
-    useMagicCrystal(cardObj, damage, card, endBattleFn){
+    useCardForDamage(packCards, cardObj, damage, card, endBattleFn){
         if (player.fightWithMonsters 
-            && player.treasureCardContainer.some(card => card.name === `${cardObj.name}`)) {
-                this.drawBtnInEW(`btn_crystal_${cardObj.id}`, `Використати ${cardObj.name} (${damage} пораннення за ${cardObj.cost} золота)`, () => {
-                    game.removeCurrentCardNameFromPack(player.treasureCardContainer, `${cardObj.name}`);
+            && packCards.some(card => card.name === `${cardObj.name}`)) {
+                let txt = `Використати ${cardObj.name} ${damage} пораннення`
+                if (cardObj.cost) txt += ` за ${cardObj.cost} золота`
+                this.drawBtnInEW(`btn_card_${cardObj.id}`, txt, () => {
+                    game.removeCurrentCardNameFromPack(packCards, `${cardObj.name}`);
                     game.updateGoldValue()
                     game.drawTreasurePackCards()
+                    game.drawAbilitiePackCards()
                     this.removeRawBtnInEW(`btn_crystal_${cardObj.id}`);
                     card.health -= damage;
                     this.drawEW(`${card.name} отримав ${damage} поранення`);

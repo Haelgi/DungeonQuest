@@ -1,27 +1,61 @@
+import  {addScrolCardsEffect}  from '../function/addScrolCardsEffect.js';
+
+import { ew } from '../eventWidows.js';
+import { player } from '../player.js';
+import { game } from '../game.js';
+import { room_tiles } from './room_tiles.js';
+import { heroes } from './heroes.js';
+
+
 class Card {
-    constructor(id, name, effect) {
+    constructor(id, name, clickFn) {
         this.id = id;  
         this.name = name;  
-        this.effect = effect;  
+        this.clickFn = clickFn;
+        this.pack = 'abilitie';
     };
 };
 
 const dwarf = [
     new Card(1, 'Сильный удар', ()=>{return
-        /* TODO сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
+        /*  сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
         
     new Card(1, 'Сильный удар', ()=>{return
-        /* TODO сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
+        /*  сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
     
-    new Card( 2, 'Поиск Прохода', ()=>{return
-        /* TODO Сбросьте перед перемещением. Переместитесь в любую соседнюю область, игнорируя любые
+    new Card( 2, 'Поиск Прохода', ()=>{
+        ew.removeAllEW()
+        game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Поиск Прохода')
+        game.drawAbilitiePackCards()
+        game.removeHighlightFields(game.nextCoordinates)
+        game.nextCoordinates = game.getCoordinatesWithoutRoom()
+        game.drawHeroMitl(player.position[0], player.position[1]);
+        game.removeAllIcon()
+        
+        /*  Сбросьте перед перемещением. Переместитесь в любую соседнюю область, игнорируя любые
             преграды, в том числе и стены. Если область неисследована, разместите в ней тайл Комнаты
             Подземелья в обычном порядке. Если Вы вступите в бой с монстром, то не сможете спастись бегством.*/
         }),
     
-    new Card( 3, 'Знание Подземелий', ()=>{return
+    new Card( 3, 'Знание Подземелий', ()=>{
+        if (!player.positionPrevious
+            || game.gameFields[player.position[1]][player.position[0]]['s'] === undefined
+            || player.catacomb
+            || game.gameFields[player.position[1]][player.position[0]]['m'] !== undefined) {
+                ew.drawEW('Не можна викорасти карту зараз(')
+                setTimeout(ew.removeAllEW, 1200);
+                return
+        }
+        ew.removeAllEW()
+        game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Знание Подземелий')
+        game.drawAbilitiePackCards()
+        game.gameFields[player.position[1]][player.position[0]]['s'] = 0
+        const coord = game.getCoordinatesWithoutRoom()
+        console.log(coord)
+        game.drawIcon(player.position[0], player.position[1], 'fa-solid fa-magnifying-glass', 'search');
+        game.clickSerchIcon();
         /* TODO Сбросьте эту карту в конце своего хода, чтобы убрать все жетоны поиска с Вашей комнаты 
                 и всех прилегающих к ней комнат.*/
         }),
@@ -35,11 +69,11 @@ const dwarf = [
 
 const enchantress = [
     new Card(1, 'Магические Заряды', ()=>{return
-        /* TODO сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
+        /*  сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
         
     new Card(1, 'Магические Заряды', ()=>{return
-        /* TODO сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
+        /*  сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
     
     new Card( 2, 'Исцеляющая Волна', ()=>{return
@@ -62,11 +96,11 @@ const enchantress = [
 
 const hunter = [
     new Card(1, 'Меткий выстрел', ()=>{return
-        /* TODO сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
+        /* сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
         
     new Card(1, 'Меткий выстрел', ()=>{return
-        /* TODO сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
+        /*  сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
     
     new Card( 2, 'Второе дыхание', ()=>{return
@@ -88,11 +122,11 @@ const hunter = [
 
 const knight = [
     new Card(1, 'Сокрушающий удар', ()=>{return
-        /* TODO сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
+        /*  сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
         
     new Card(1, 'Сокрушающий удар', ()=>{return
-        /* TODO сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
+        /*  сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
     
     new Card( 2, 'Борец с Драконом', ()=>{return
@@ -116,11 +150,11 @@ const knight = [
 
 const mage = [
     new Card(1, 'Огненный Шар', ()=>{return
-        /* TODO сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
+        /*  сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
         
     new Card(1, 'Огненный Шар', ()=>{return
-        /* TODO сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
+        /*  сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
     
     new Card( 2, 'Вращение', ()=>{return
@@ -140,11 +174,11 @@ const mage = [
 
 const robber = [
     new Card(1, 'Метание Ножей', ()=>{return
-        /* TODO сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
+        /*  сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
         
     new Card(1, 'Метание Ножей', ()=>{return
-        /* TODO сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
+        /*  сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
     
     new Card( 2, 'Побег', ()=>{return

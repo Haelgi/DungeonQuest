@@ -57,7 +57,7 @@ class Game {
     }
 
     fillGamePacks(){
-        this.createGameFields() 
+        this.createGameFields()
 
         this.refreshRoomTiles()
         this.refreshDungeonCards()
@@ -91,7 +91,8 @@ class Game {
     startPosition(){
         this.body = document.querySelector(`body`);
         this.playingField = document.querySelector(`.playing-field`);    
-        this.addCharacterTablet(player.hero);        
+        this.addCharacterTablet(player.hero);  
+        this.createAbilitieCardContainer()      
         this.drawAbilitiePackCards();
         this.drawEventPackCards();
         this.drawTreasurePackCards()
@@ -104,6 +105,10 @@ class Game {
         this.clickBridgeIcon()
         this.clickArrowIcon()
     };
+
+    createAbilitieCardContainer(){
+        player.abilitieCardContainer = [...heroes[player.hero].abilities]
+    }
 
     changeHealth(damage){
         if (heroes[player.hero].health < 1) return this.endGame()
@@ -140,7 +145,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        ew.drawCardEW(card);
+        // ew.drawCardEW(card);
         // ew.drawCardEW(monster_cards[1]);
         // TODO
     }
@@ -430,7 +435,7 @@ class Game {
         let activeId = Math.round((heroes[player.hero].abilities.length-1)/2)
         let inner ='';
 
-        heroes[player.hero].abilities.forEach((item, idx) => {
+        player.abilitieCardContainer.forEach((item, idx) => {
             let active = ''
             if(idx === activeId) active = 'active'
             inner+=`
