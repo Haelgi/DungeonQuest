@@ -688,6 +688,17 @@ class EventWidows{
         }
     }
 
+    drawCoiceEW(condition, txtFor, card, fn, elseFn){
+        if (condition) {
+            this.drawEW(txtFor)
+            if (card) this.drawCardsInEW(card)
+            this.drawBtnInEW(`btn_next`, `Використати`, () => {if (fn) fn()});
+            if (elseFn) this.drawBtnInEW('btn_close', 'Пропустити', ()=>elseFn())
+        } else {
+            if (elseFn) elseFn();
+        }
+    }   
+
 }
 
 export const ew = new EventWidows();

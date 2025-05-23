@@ -14,6 +14,7 @@ import  {treasure_cards}  from './cards/treasure_cards.js';
 import  {monster_cards}  from './cards/monster_cards.js';
 import  {dragon_cards}  from './cards/dragon_cards.js';
 import { player } from './player.js';
+import { hero_card_abilitie } from './cards/hero_card_abilitie.js';
 
 
 class Game {
@@ -40,6 +41,7 @@ class Game {
         this.startFields=[[0,0], [14,0], [0,11], [14,11], [7,6]]; 
         // TODO убрать потом
         this.treasuryFields=[[7,5], [7,6]]; 
+        this.knowledgeTheCatacombCards = []
         this.room_tiles; 
         this.dungeon_cards; 
         this.catacomb_cards; 
@@ -152,13 +154,31 @@ class Game {
 
     playCatacombEvent(){
         if (player.holeInCeiling) return
-        const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
-        ew.drawCardEW(card);
-        if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[12].name)) {
-            game.changeHealth(1)
-            ew.drawEW(`Ви отримали 1 очко здоров'я!`);
-            setTimeout(ew.removeLastEW, 1200);
+        console.log(this.knowledgeTheCatacombCards)
+
+        const condition = player.catacomb && game.checkCardNameInPack(player.abilitieCardContainer, 'Знание Катакомб')
+        const txtFor = `Використати?`
+
+        const elseFn = ()=>{
+            ew.removeAllEW()
+            let card
+            console.log(this.knowledgeTheCatacombCards)
+            if (this.knowledgeTheCatacombCards.length !== 0) {
+                [card] = this.knowledgeTheCatacombCards.splice(0, 1);
+            } else {
+                card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
+            }
+            
+            ew.drawCardEW(card);
+
+            if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[12].name)) {
+                game.changeHealth(1)
+                ew.drawEW(`Ви отримали 1 очко здоров'я!`);
+                setTimeout(ew.removeLastEW, 1200);
+            }
         }
+        ew.drawCoiceEW(condition, txtFor, hero_card_abilitie[player.hero][4], ()=>this.knowledgeTheCatacombs(), ()=>elseFn())
+
     }
     
     playTreasuryEvent(){
@@ -1278,6 +1298,83 @@ class Game {
 
             return closest;
         }, null);
+    }
+
+    knowledgeTheCatacombs(){
+        const length = 4
+        let emptyFelds = []
+        const cardsForChoice = [this.getRundomElement(this.catacomb_cards, catacomb_cards),
+                                this.getRundomElement(this.catacomb_cards, catacomb_cards),
+                                this.getRundomElement(this.catacomb_cards, catacomb_cards),
+                                this.getRundomElement(this.catacomb_cards, catacomb_cards)]
+        
+        ew.clear()
+        ew.addEmptyFeldForCard(length)
+        ew.addPackCards(cardsForChoice)
+
+        addScrolCardsEffect('.event-deck-container', (e)=> {
+            const [card] = removeCardFromPack(e)
+
+            emptyFelds.push(card)
+            drawCardToFeld(length)
+        });
+
+        ew.addBtnInEW('btn_next', 'Вибрати', ()=>{
+            ew.removeAllEW()
+            this.knowledgeTheCatacombCards.push(...emptyFelds)
+            emptyFelds = []
+            this.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Знание Катакомб')
+            this.drawAbilitiePackCards()
+            const [card] = this.knowledgeTheCatacombCards.splice(0, 1);
+            ew.drawCardEW(card);
+        })
+
+        const btnNext = document.getElementById('btn_next')
+        btnNext.style.display = 'none'
+
+        addScrolCardsEffect('.event-deck-container', (e)=> {
+            const [card] = removeCardFromPack(e)
+
+            emptyFelds.push(card)
+            drawCardToFeld(length)
+        });
+        function removeCardFromPack(e) {
+            const id = e.target.getAttribute('id')
+            const card = cardsForChoice.splice(id, 1)
+
+            ew.updatePackCardsEW(cardsForChoice)
+
+            return card
+        }  
+
+        function drawCardToFeld(count){
+                
+            if(emptyFelds.length >= 1) btnNext.style.display = 'block'
+            if(emptyFelds.length < 1) btnNext.style.display = 'none'
+            
+            for (let i = 0; i < count; i++) {
+
+                const feld = document.getElementById(`card-feld-${i}`)
+                if (!feld) continue;
+
+                if(emptyFelds[i] === undefined) {
+                    feld.innerHTML = ''
+                    continue; 
+                }
+
+                feld.innerHTML = `<div id="${i}" class="card" style="background-image: url('img/${emptyFelds[i].pack}_cards/${emptyFelds[i].pack}_${emptyFelds[i].id}.jpg')"></div>`
+
+                feld.onclick = () => {
+                    const [card] = emptyFelds.splice(i, 1)
+                    if(card) {
+                        cardsForChoice.push(card)
+                        ew.updatePackCardsEW(cardsForChoice)
+                        drawCardToFeld(count)  
+                    }
+                }
+            }
+        }
+        // TODO
     }
     
 }
