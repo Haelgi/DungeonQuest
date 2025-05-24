@@ -4,6 +4,7 @@ import { ew } from '../eventWidows.js';
 import { player } from '../player.js';
 import { game } from '../game.js';
 import { room_tiles } from './room_tiles.js';
+import { search_cards } from './search_cards.js';
 import { heroes } from './heroes.js';
 
 
@@ -82,19 +83,153 @@ const enchantress = [
         /*  сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
     
-    new Card( 2, 'Исцеляющая Волна', ()=>{return
-        /* TODO Сбросьте эту карту в время своего хода. 
+    new Card( 2, 'Исцеляющая Волна', ()=>{
+        ew.removeAllEW()
+        game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Исцеляющая Волна')
+        game.drawAbilitiePackCards()
+        game.changeHealth(4)
+        ew.drawEW('Ви зцілили 4 здоровʼя')
+        setTimeout(ew.removeAllEW, 1200);
+
+        /*  Сбросьте эту карту в время своего хода. 
             У Вас исцеляется 4 ранения.*/
         }),
     
-    new Card( 3, 'Предвидение', ()=>{return
-        /* TODO Сбросьте эту карту в начале Вашего хода. 
+    new Card( 3, 'Предвидение', ()=>{
+        game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Предвидение')
+        game.drawAbilitiePackCards()
+
+        const length = 4
+        let emptyFelds = []
+        const cardsForChoice = [game.getRundomElement(game.search_cards, search_cards),
+                                game.getRundomElement(game.search_cards, search_cards),
+                                game.getRundomElement(game.search_cards, search_cards),
+                                game.getRundomElement(game.search_cards, search_cards)]
+        
+        ew.clear()
+        ew.addEmptyFeldForCard(length)
+        ew.addPackCards(cardsForChoice)
+
+        addScrolCardsEffect('.event-deck-container', (e)=> {
+            const [card] = removeCardFromPack(e)
+
+            emptyFelds.push(card)
+            drawCardToFeld(length)
+        });
+
+        ew.addBtnInEW('btn_next', 'Вибрати', ()=>{
+            ew.removeAllEW()
+            game.foresightSearchCard.push(...emptyFelds)
+            emptyFelds = []
+            game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Предвидение')
+            game.drawAbilitiePackCards()
+        })
+
+        const btnNext = document.getElementById('btn_next')
+        btnNext.style.display = 'none'
+
+        addScrolCardsEffect('.event-deck-container', (e)=> {
+            const [card] = removeCardFromPack(e)
+
+            emptyFelds.push(card)
+            drawCardToFeld(length)
+        });
+        function removeCardFromPack(e) {
+            const id = e.target.getAttribute('id')
+            const card = cardsForChoice.splice(id, 1)
+
+            ew.updatePackCardsEW(cardsForChoice)
+
+            return card
+        }  
+
+        function drawCardToFeld(count){
+                
+            if(emptyFelds.length >= 1) btnNext.style.display = 'block'
+            if(emptyFelds.length < 1) btnNext.style.display = 'none'
+            
+            for (let i = 0; i < count; i++) {
+
+                const feld = document.getElementById(`card-feld-${i}`)
+                if (!feld) continue;
+
+                if(emptyFelds[i] === undefined) {
+                    feld.innerHTML = ''
+                    continue; 
+                }
+
+                feld.innerHTML = `<div id="${i}" class="card" style="background-image: url('img/${emptyFelds[i].pack}_cards/${emptyFelds[i].pack}_${emptyFelds[i].id}.jpg')"></div>`
+
+                feld.onclick = () => {
+                    const [card] = emptyFelds.splice(i, 1)
+                    if(card) {
+                        cardsForChoice.push(card)
+                        ew.updatePackCardsEW(cardsForChoice)
+                        drawCardToFeld(count)  
+                    }
+                }
+            }
+        }        
+
+        /*  Сбросьте эту карту в начале Вашего хода. 
             Вытяните 4 Карты Поиска. 
             Посмотрите их и положите в любом порядке наверх колоды Карт Поиска.*/
         }),
     
-    new Card( 4, 'Транформация', ()=>{return
-        /* TODO Сбросьте эту карту после того, как Вы вытащили тайл Комнаты Подземелья. 
+    new Card( 4, 'Транформация', ()=>{
+        if (!player.positionPrevious
+            || game.gameFields[player.position[1]][player.position[0]]['s'] !== undefined
+            || player.catacomb
+            || game.gameFields[player.position[1]][player.position[0]]['m'] !== undefined) {
+                ew.drawEW('Не можна викорасти карту зараз(')
+                setTimeout(ew.removeAllEW, 1200);
+                return
+        }
+
+        
+        const [x, y] = player.position;
+        const roomIdInt = game.gameFields[y][x]['id'] + 1
+        const rooomIdNew = game.getRundomElement(game.room_tiles, room_tiles).number -1
+        if (game.gameFields[y][x]['id'] === undefined) return
+        ew.removeAllEW();
+        game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Транформация')
+        game.drawAbilitiePackCards()
+        
+        let correctRoomId
+        let showBtn = true
+
+        ew.drawEW(`Виберіть тайл кімнати`)
+
+        const roomIdIntElem = ew.drawTileInEW(roomIdInt)
+        const rooomIdNewElem = ew.drawTileInEW(rooomIdNew)
+        const tilesArr = document.querySelectorAll(`.choice-tile`)
+
+        function selectTile(e) {
+            tilesArr.forEach(elem => {
+                elem.classList.remove('active')
+            })
+
+            e.target.classList.add('active')
+            correctRoomId = e.target.getAttribute('id')
+
+            if (showBtn) {
+                showBtn = false
+                ew.addBtnInEW('btn_next', `Вибрати`, () => {
+                    game.removeAllIcon()
+                    game.removeTileField(x, y)
+                    game.drawTileField(x, y, correctRoomId)
+                    game.nextCoordinates = game.newCoordinate()
+                    ew.removeAllEW();
+                })
+            }
+        }
+
+        tilesArr.forEach(element => {
+            element.addEventListener('click', selectTile)
+            element.addEventListener('touchstart', selectTile)
+        });     
+
+        /*  Сбросьте эту карту после того, как Вы вытащили тайл Комнаты Подземелья. 
             Вытяните еще один тайл Комнаты Подземелья и выберите, какой из них Вы поместите на поле. 
             Замешайте другой тайл обратно в стопку тайлов Комнат Подземелья.*/
         }),

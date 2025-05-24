@@ -155,8 +155,10 @@ function foresightPotionFn() {
         if (showBtn) {
             showBtn = false
             ew.addBtnInEW('btn_next', `Вибрати`, () => {
+                game.removeAllIcon()
                 game.removeTileField(x, y)
                 game.drawTileField(x, y, correctRoomId)
+                game.nextCoordinates = game.newCoordinate()
                 ew.removeAllEW();
             })
         }
@@ -167,9 +169,6 @@ function foresightPotionFn() {
         element.addEventListener('touchstart', selectTile)
     });
 
-    // вытянуть новый тайл и нарисовать его
-    // повесить слушатель событий на выбор тайла
-    // заменить тайл на поле и закрыть все окна
 }
 
 function speedPotion() {

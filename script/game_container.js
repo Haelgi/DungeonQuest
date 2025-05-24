@@ -12,7 +12,7 @@ import { monster_cards } from './cards/monster_cards.js';
 
 player.idx = 0; 
 player.name = 'Олег'; 
-player.hero = 'dwarf'; 
+player.hero = 'enchantress'; 
 player.authentication = true;
 // player.eventCardContainer = [monster_cards[9],monster_cards[10],monster_cards[11]];
 // player.checkEventCards = true

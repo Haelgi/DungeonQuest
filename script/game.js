@@ -42,6 +42,7 @@ class Game {
         // TODO убрать потом
         this.treasuryFields=[[7,5], [7,6]]; 
         this.knowledgeTheCatacombCards = []
+        this.foresightSearchCard = []
         this.room_tiles; 
         this.dungeon_cards; 
         this.catacomb_cards; 
@@ -154,7 +155,6 @@ class Game {
 
     playCatacombEvent(){
         if (player.holeInCeiling) return
-        console.log(this.knowledgeTheCatacombCards)
 
         const condition = player.catacomb && game.checkCardNameInPack(player.abilitieCardContainer, 'Знание Катакомб')
         const txtFor = `Використати?`
@@ -162,7 +162,7 @@ class Game {
         const elseFn = ()=>{
             ew.removeAllEW()
             let card
-            console.log(this.knowledgeTheCatacombCards)
+
             if (this.knowledgeTheCatacombCards.length !== 0) {
                 [card] = this.knowledgeTheCatacombCards.splice(0, 1);
             } else {
@@ -947,8 +947,13 @@ class Game {
         const [x,y] = player.position
         const serchIcon = document.querySelector('.search-icon');
         serchIcon.addEventListener('click', () => {
-            console.log(11111)
-            const card = this.getRundomElement(this.search_cards, search_cards)
+            let card
+            if (this.foresightSearchCard.length !== 0) {
+                [card] = this.foresightSearchCard.splice(0, 1);
+            } else {
+                card = this.getRundomElement(this.search_cards, search_cards)   
+            }            
+
             ew.drawCardEW(card)
             this.removeIcon('.search-icon');
 
