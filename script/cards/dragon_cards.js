@@ -50,24 +50,68 @@ function dragonSleep(){
 function dragonsFury(){
 
     // TODO для многопользовательской игры добавить код ключ для действия на всех игроков
-    player.treasureCardContainer = game.subtractArrays(player.treasureCardContainer, player.positionTreasuryCards, "name")
-    game.drawTreasurePackCards()
-
-    player.positionTreasuryCards = [];
-
-
+    
+    
     ew.removeRawBtnInEW('btn_ew')
 
-    const result = ()=>{
-
+    const normalBehavior = ()=>{
         const damage = game.diceRollResultGlobal
-
+        
         game.changeHealth(-damage)
-
-        ew.drawEW(`Ви отримали ${damage} поранення`)
+        
+        player.treasureCardContainer = game.subtractArrays(player.treasureCardContainer, player.positionTreasuryCards, "name")
+        game.drawTreasurePackCards()
+    
+        player.positionTreasuryCards = [];
+        ew.drawEW(`Ви отримали ${damage} поранення, та втратили скарби`)
         setTimeout(() => {
             ew.removeAllEW()
         }, 2000);
+    }
+
+    const dragonFighter = ()=>{
+        if (game.diceRollResultGlobal>7) {
+            const damage = game.diceRollResultGlobal - 7
+        
+            game.changeHealth(-damage)
+            
+            player.treasureCardContainer = game.subtractArrays(player.treasureCardContainer, player.positionTreasuryCards, "name")
+            game.drawTreasurePackCards()
+        
+            player.positionTreasuryCards = [];
+            ew.drawEW(`Ви отримали ${damage} поранення, та втратили скарби`)
+            setTimeout(() => {
+                ew.removeAllEW()
+            }, 2000);
+        }
+
+        if (game.diceRollResultGlobal<=7
+            && game.diceRollResultGlobal>=5){
+                player.treasureCardContainer = game.subtractArrays(player.treasureCardContainer, player.positionTreasuryCards, "name")
+                game.drawTreasurePackCards()
+            
+                player.positionTreasuryCards = [];
+                ew.drawEW(`Ви не отримали поранення, але втратили скарби`)
+                setTimeout(() => {
+                    ew.removeAllEW()
+                }, 2000);
+        }
+
+        if (game.diceRollResultGlobal<=4){
+                ew.drawEW(`Ви не отримали поранення, та зберігли скарби`)
+                setTimeout(() => {
+                    ew.removeAllEW()
+                }, 2000);
+        }
+    }
+
+    const ifDragonFighter = ()=>{
+        if (!game.checkCardNameInPack(player.abilitieCardContainer, 'Борец с Драконом')) return normalBehavior()
+        dragonFighter()    
+    }
+    
+    const result = ()=>{
+        ifDragonFighter()
     }
 
     ew.addDiceRollSection(false, 12, false, true, 2, result, false, true, true)

@@ -43,6 +43,7 @@ class Player {
         this.fightWithTroll = false;
         this.gold = 0
         this.willToWin = 2
+        this.unbrokenSpirit = 0
     }
 }
 

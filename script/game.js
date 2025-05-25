@@ -113,8 +113,17 @@ class Game {
         player.abilitieCardContainer = [...heroes[player.hero].abilities]
     }
 
-    changeHealth(damage){
+    changeHealth(value){
+        let damage = value
+
+        if (player.unbrokenSpirit !== 0 && value < 0){
+            const heroHealth = heroes[player.hero].health + damage
+
+            if (heroHealth < 1) damage = 1 - heroes[player.hero].health
+        }
+
         if (heroes[player.hero].health < 1) return this.endGame()
+            
         heroes[player.hero].health += damage
         this.addCharacterTablet(player.hero);
     }
@@ -726,12 +735,16 @@ class Game {
     }
 
     endMove(){
-        console.log('endMove')
+
         if (player.extraMove !== 0) {
             player.extraMove -= 1
             player.checkEventCards = true
             this.makeMove()
             return
+        }
+
+        if (player.unbrokenSpirit !== 0){
+            this.unbrokenSpirit -= 1
         }
 
         player.extraMove = 0

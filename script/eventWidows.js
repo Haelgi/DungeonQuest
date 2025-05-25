@@ -49,6 +49,24 @@ class EventWidows{
                 })
         }
 
+        if (card.pack == 'catacomb'
+            && game.checkCardNameInPack(player.abilitieCardContainer, 'Крепкие Доспехи')){
+                ew.drawBtnInEW('btn_close', `Використати Крепкие Доспехи`, ()=>{
+                    game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Крепкие Доспехи')
+                    game.drawAbilitiePackCards()
+                    ew.removeAllEW()
+                })
+        }
+
+        if (card.pack == 'dungeon'
+            && game.checkCardNameInPack(player.abilitieCardContainer, 'Крепкие Доспехи')){
+                ew.drawBtnInEW('btn_close', `Використати Крепкие Доспехи`, ()=>{
+                    game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Крепкие Доспехи')
+                    game.drawAbilitiePackCards()
+                    ew.removeAllEW()
+                })
+        }
+
         if (card.pack == 'trap'
             && game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[15].name)) {
             game.changeHealth(1)
