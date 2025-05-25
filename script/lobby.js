@@ -4,11 +4,9 @@ import  {heroes}  from './cards/heroes.js';
 
 
 export function lobby() {
-    console.log(2, game, player)
     const cards = document.querySelectorAll('.card')
     const table = document.querySelector('.player-list')
     createPlayerListTable()
-    console.log(3, game, player)
 
     function createPlayerListTable(){
         game.playerList.forEach((player)=>{

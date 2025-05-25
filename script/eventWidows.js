@@ -1,5 +1,15 @@
+import  {addScrolCardsEffect}  from './function/addScrolCardsEffect.js';
+
 import  {game}  from './game.js';
 import  {heroes}  from './cards/heroes.js';
+import  {сrypt_cards}  from './cards/сrypt_cards.js';
+import  {catacomb_cards}  from './cards/catacomb_cards.js';
+import  {deadman_cards}  from './cards/deadman_cards.js';
+import  {door_cards}  from './cards/door_cards.js';
+import  {dungeon_cards}  from './cards/dungeon_cards.js';
+import  {monster_cards}  from './cards/monster_cards.js';
+import  {search_cards}  from './cards/search_cards.js';
+import  {trap_cards}  from './cards/trap_cards.js';
 import  {treasure_cards}  from './cards/treasure_cards.js';
 import  {hero_card_abilitie}  from './cards/hero_card_abilitie.js';
 import { player } from './player.js';
@@ -28,6 +38,94 @@ class EventWidows{
         document.querySelectorAll('.dice-section')?.forEach((item)=>{item.remove()})
     }
 
+    choiceCardEW(cardIn){
+        this.removeAllEW()
+        this.drawCardEW(hero_card_abilitie['robber'][4])
+
+        const length = 1
+        let emptyFelds = []
+        const cardsForChoice = [cardIn,
+                                this.getCardSamePack(cardIn)]
+        
+        this.clear()
+        this.addEmptyFeldForCard(length)
+        this.addPackCards(cardsForChoice)
+
+        addScrolCardsEffect('.event-deck-container', (e)=> {
+            const [card] = removeCardFromPack(e)
+
+            emptyFelds.push(card)
+            drawCardToFeld(length)
+        });
+
+        this.addBtnInEW('btn_next', 'Вибрати', ()=>{
+            this.removeAllEW()
+            const [card] = emptyFelds
+            emptyFelds = [] 
+            this.drawCardEW(card)
+        })
+
+        const btnNext = document.getElementById('btn_next')
+        btnNext.style.display = 'none'
+
+        addScrolCardsEffect('.event-deck-container', (e)=> {
+            const [card] = removeCardFromPack(e)
+
+            emptyFelds.push(card)
+            drawCardToFeld(length)
+        });
+
+        function removeCardFromPack(e) {
+            const id = e.target.getAttribute('id')
+            const card = cardsForChoice.splice(id, 1)
+
+            ew.updatePackCardsEW(cardsForChoice)
+
+            return card
+        }  
+
+        function drawCardToFeld(count){
+                
+            if(emptyFelds.length >= 1) btnNext.style.display = 'block'
+            if(emptyFelds.length < 1) btnNext.style.display = 'none'
+            
+            for (let i = 0; i < count; i++) {
+
+                const feld = document.getElementById(`card-feld-${i}`)
+                if (!feld) continue;
+
+                if(emptyFelds[i] === undefined) {
+                    feld.innerHTML = ''
+                    continue; 
+                }
+
+                feld.innerHTML = `<div id="${i}" class="card" style="background-image: url('img/${emptyFelds[i].pack}_cards/${emptyFelds[i].pack}_${emptyFelds[i].id}.jpg')"></div>`
+
+                feld.onclick = () => {
+                    const [card] = emptyFelds.splice(i, 1)
+                    if(card) {
+                        cardsForChoice.push(card)
+                        ew.updatePackCardsEW(cardsForChoice)
+                        drawCardToFeld(count)  
+                    }
+                }
+            }
+        }   
+
+    }
+
+    getCardSamePack(card){
+        if (card.pack == 'crypt') return game.getRundomElement(game.сrypt_cards, сrypt_cards) 
+        if (card.pack == 'catacomb') return game.getRundomElement(game.catacomb_cards, catacomb_cards) 
+        if (card.pack == 'deadman') return game.getRundomElement(game.deadman_cards, deadman_cards) 
+        if (card.pack == 'door') return game.getRundomElement(game.door_cards, door_cards) 
+        if (card.pack == 'dungeon') return game.getRundomElement(game.dungeon_cards, dungeon_cards) 
+        if (card.pack == 'monster') return game.getRundomElement(game.monster_cards, monster_cards) 
+        if (card.pack == 'search') return game.getRundomElement(game.search_cards, search_cards) 
+        if (card.pack == 'trap') return game.getRundomElement(game.trap_cards, сrypt_cards) 
+        if (card.pack == 'treasure') return game.getRundomElement(game.treasure_cards, treasure_cards) 
+    }
+
     drawCardEW(card) {
         this.drawEW(card.title);
         this.drawCardsInEW(card);
@@ -37,41 +135,56 @@ class EventWidows{
             card.effect()
         });
 
-        console.log(card.pack)
-        console.log(game.checkCardNameInPack(player.abilitieCardContainer, 'Обнаружение Ловушек'))
+        if (game.checkCardNameInPack(player.abilitieCardContainer, 'Шестое Чувство')
+            && card.pack !== 'dragon'){
+                this.drawBtnInEW('btn_sixSense', `Використати Шестое Чувство`, ()=>{
+                    game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Шестое Чувство')
+                    game.drawAbilitiePackCards()
+                    this.choiceCardEW(card)
+                })
+        }
 
         if (card.pack == 'trap'
             && game.checkCardNameInPack(player.abilitieCardContainer, 'Обнаружение Ловушек')){
-                ew.drawBtnInEW('btn_close', `Використати Обнаружение Ловушек`, ()=>{
+                this.drawBtnInEW('btn_close', `Використати Обнаружение Ловушек`, ()=>{
                     game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Обнаружение Ловушек')
                     game.drawAbilitiePackCards()
-                    ew.removeAllEW()
+                    this.removeAllEW()
+                })
+        }
+
+        if (card.pack == 'trap'
+            && game.checkCardNameInPack(player.abilitieCardContainer, 'Легкая Поступь')){
+                this.drawBtnInEW('btn_close', `Використати Легкая Поступь`, ()=>{
+                    game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Легкая Поступь')
+                    game.drawAbilitiePackCards()
+                    this.removeAllEW()
                 })
         }
 
         if (card.pack == 'catacomb'
             && game.checkCardNameInPack(player.abilitieCardContainer, 'Крепкие Доспехи')){
-                ew.drawBtnInEW('btn_close', `Використати Крепкие Доспехи`, ()=>{
+                this.drawBtnInEW('btn_close', `Використати Крепкие Доспехи`, ()=>{
                     game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Крепкие Доспехи')
                     game.drawAbilitiePackCards()
-                    ew.removeAllEW()
+                    this.removeAllEW()
                 })
         }
 
         if (card.pack == 'dungeon'
             && game.checkCardNameInPack(player.abilitieCardContainer, 'Крепкие Доспехи')){
-                ew.drawBtnInEW('btn_close', `Використати Крепкие Доспехи`, ()=>{
+                this.drawBtnInEW('btn_close', `Використати Крепкие Доспехи`, ()=>{
                     game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Крепкие Доспехи')
                     game.drawAbilitiePackCards()
-                    ew.removeAllEW()
+                    this.removeAllEW()
                 })
         }
 
         if (card.pack == 'trap'
             && game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[15].name)) {
             game.changeHealth(1)
-            ew.drawEW(`Ви отримали 1 очко здоров'я!`);
-            setTimeout(ew.removeLastEW, 1200);
+            this.drawEW(`Ви отримали 1 очко здоров'я!`);
+            setTimeout(this.removeLastEW, 1200);
         }
     }
 
@@ -658,7 +771,8 @@ class EventWidows{
         }
 
         this.addDiceRollSection(false, 6, false, true, 1, trueFn, false, true, true)
-
+        
+        this.escapeM()
         this.combatMagic()
         
         this.useCardForDamage(player.treasureCardContainer, treasure_cards[1], 2, card, endBattleFn)
@@ -699,10 +813,21 @@ class EventWidows{
         }
     }
 
+    escapeM(){
+        if (game.checkCardNameInPack(player.abilitieCardContainer, 'Побег')){
+            this.drawBtnInEW('btn_escM', 'Використати Побег', ()=>{
+                game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Побег')
+                game.drawAbilitiePackCards()
+                this.drawEW('Ви змогли втекли')
+                setTimeout(() => this.removeAllEW(), 1200);
+            })
+        }       
+    }
+
     combatMagic(){
         if (game.checkCardNameInPack(player.abilitieCardContainer, 'Боевая Магия')){
             this.drawBtnInEW('btn_cmbMg', 'Використати Боевая Магия', ()=>{
-                ew.removeRawBtnInEW('btn_cmbMg')
+                this.removeRawBtnInEW('btn_cmbMg')
                 player.combatMagic = true
                 game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Боевая Магия')
                 game.drawAbilitiePackCards()

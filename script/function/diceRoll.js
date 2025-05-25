@@ -9,8 +9,6 @@ export function diceRoll() {
 
     const valueOne  = Math.floor((Math.random() * 6) + 1);
     const valueTwo   = Math.floor((Math.random() * 6) + 1);
-    
-    // console.log(valueOne + ' ' + valueTwo);
 
     for (let i = 1; i <= 6; i++) {
         diceOne.classList.remove('show-' + i);

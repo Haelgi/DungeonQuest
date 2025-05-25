@@ -995,10 +995,8 @@ function darkPortal(){
     ew.removeRawBtnInEW('btn_ew')
 
     function result(){ 
-        console.log(3)
         const result = game.diceRollResultGlobal
         const damage = result * 2
-        console.log(result, damage)
         ew.drawEW(`Ви отримете ${damage} поранення`)
         ew.drawBtnInEW('btn_reRoll','Перекинути (+1 поранення)', ()=>{
             ew.removeLastEW()
@@ -1008,7 +1006,6 @@ function darkPortal(){
         })
 
         ew.drawBtnInEW('btn_next','Далі', ()=>{
-            console.log(4)
             ew.removeAllEW()
 
             game.changeHealth(-damage)
@@ -1019,7 +1016,6 @@ function darkPortal(){
     }
 
     function diceDamage(){
-        console.log(2)
         ew.removeLastEW()
         ew.clear()
         ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
@@ -1033,7 +1029,6 @@ function darkPortal(){
     const falseFn = ()=> {
         ew.drawEW(`Вам не вдалося пробитися до порталу`)
         setTimeout(() => {
-            console.log(1)
             ew.removeLastEW(); 
             diceDamage()
         }, 1200);

@@ -12,7 +12,7 @@ import { monster_cards } from './cards/monster_cards.js';
 
 player.idx = 0; 
 player.name = 'Олег'; 
-player.hero = 'mage'; 
+player.hero = 'robber'; 
 player.authentication = true;
 // player.eventCardContainer = [monster_cards[9],monster_cards[10],monster_cards[11]];
 // player.checkEventCards = true
@@ -32,7 +32,7 @@ game.authentication = true;
 
 
 export function game_container() {
-    game.drawFieldTileTests(6, 90, 1,  0);
+    // game.drawFieldTileTests(6, 90, 1,  0);
     // game.drawFieldTileTests(58, 0, 1,  1);
     // game.drawFieldTileTests(11, '90', 2,  0);
     // game.drawFieldTileTests(11, '180', 1,  1);

@@ -152,8 +152,8 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        // ew.drawCardEW(card);
-        ew.drawCardEW(monster_cards[8]);
+        ew.drawCardEW(card);
+        // ew.drawCardEW(monster_cards[8]);
         // TODO
     }
 
@@ -967,10 +967,8 @@ class Game {
 
             if (this.gameFields[y][x]['s']===undefined) {
                 this.gameFields[y][x]['s'] = 1
-                console.log(this.gameFields[y][x])
             } else {
                 this.gameFields[y][x]['s'] += 1
-                console.log(this.gameFields[y][x])
             }
             this.endMove()
         });
