@@ -123,7 +123,7 @@ class Game {
         }
 
         if (heroes[player.hero].health < 1) return this.endGame()
-            
+
         heroes[player.hero].health += damage
         this.addCharacterTablet(player.hero);
     }
@@ -153,7 +153,7 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         // ew.drawCardEW(card);
-        ew.drawCardEW(dungeon_cards[8]);
+        ew.drawCardEW(monster_cards[8]);
         // TODO
     }
 

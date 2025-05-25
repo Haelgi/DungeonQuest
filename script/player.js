@@ -44,6 +44,7 @@ class Player {
         this.gold = 0
         this.willToWin = 2
         this.unbrokenSpirit = 0
+        this.combatMagic = false
     }
 }
 

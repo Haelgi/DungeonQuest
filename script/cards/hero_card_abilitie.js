@@ -316,7 +316,7 @@ const knight = [
     new Card( 4, 'Крепкие Доспехи', ()=>{
             ew.drawEW('Не можна викорасти карту зараз(')
             setTimeout(ew.removeAllEW, 1200);  
-        /* TODO Сбросьте эту карту после того как Вы вытянули Карту Подземелья, или Карту Катакомб. 
+        /*  Сбросьте эту карту после того как Вы вытянули Карту Подземелья, или Карту Катакомб. 
             Вы можете не разыгрывать эффект вытянутой карты.*/
         }),
 ]
@@ -334,18 +334,51 @@ const mage = [
         /*  сбросить эту карту во время боя. Ваш противник получает 2 ранения*/
         }),
     
-    new Card( 2, 'Вращение', ()=>{return
-        /* TODO Сбросив эту карту, Вы можете повернуть тайл комнаты, 
+    new Card( 2, 'Вращение', ()=>{
+        if (!player.positionPrevious
+            || game.gameFields[player.position[1]][player.position[0]]['s'] !== undefined
+            || player.catacomb
+            || game.gameFields[player.position[1]][player.position[0]]['m'] !== undefined) {
+                ew.drawEW('Не можна викорасти карту зараз(')
+                setTimeout(ew.removeAllEW, 1200);
+                return
+        }
+                
+        ew.clear()
+
+        function rotateRoom(angle){
+            game.rotateRoomTile(angle)
+            game.removeHighlightFields(game.nextCoordinates)
+            game.removeAllIcon()
+            game.nextCoordinates = game.newCoordinate()
+            ew.removeAllEW()
+            game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Вращение')
+            game.drawAbilitiePackCards()
+        }
+
+        ew.addBtnInEW('btn_90L', 'Повернути на 90° Ліворуч', ()=>{rotateRoom(-90)})
+        ew.addBtnInEW('btn_90R', 'Повернути на 90° Праворуч', ()=>{rotateRoom(90)})
+        ew.addBtnInEW('btn_180', 'Повернути на 180°', ()=>{rotateRoom(180)})
+
+        /*  Сбросив эту карту, Вы можете повернуть тайл комнаты, 
                 в которой Вы находитесь, на 180°, или на 90° в любом направлении.*/
         }),
     
-    new Card( 3, 'Лечение', ()=>{return
+    new Card( 3, 'Лечение', ()=>{
+        ew.removeAllEW()
+        game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Лечение')
+        game.drawAbilitiePackCards()
+        game.changeHealth(4)
+        ew.drawEW('Ви зцілили 4 здоровʼя')
+        setTimeout(ew.removeAllEW, 1200);
         /* TODO Сбросьте эту карту в время своего хода. У Вас исцеляется 4 ранения.*/
         }),
     
-    new Card( 4, 'Боевая Магия', ()=>{return
-        /* TODO Сбросив эту карту в бою, 
-                Вы будете наносить ранения противнику при выпадении значений 1-4 на кубике.*/
+    new Card( 4, 'Боевая Магия', ()=>{
+            ew.drawEW('Не можна викорасти карту зараз(')
+            setTimeout(ew.removeAllEW, 1200);  
+        /*  Сбросив эту карту в бою, 
+            Вы будете наносить ранения противнику при выпадении значений 1-4 на кубике.*/
         }),
 ]
 

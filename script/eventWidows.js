@@ -632,7 +632,9 @@ class EventWidows{
         `)
 
         const trueFn = ()=>{ 
-            if(game.diceRollResultGlobal<=3){
+            let result = 3
+            if (player.combatMagic) result = 4
+            if(game.diceRollResultGlobal <= result){
                 card.health -= attack
                 this.drawEW(`${card.name} отримав ${attack} поранення`)
                 setTimeout(() => {
@@ -642,7 +644,7 @@ class EventWidows{
                 }, 1200);
             }
 
-            if(game.diceRollResultGlobal>3){
+            if(game.diceRollResultGlobal > result){
                 let damage = 1
                 game.changeHealth(-damage)
                 this.drawEW(`Ви отримали ${damage} поранення`)
@@ -656,6 +658,8 @@ class EventWidows{
         }
 
         this.addDiceRollSection(false, 6, false, true, 1, trueFn, false, true, true)
+
+        this.combatMagic()
         
         this.useCardForDamage(player.treasureCardContainer, treasure_cards[1], 2, card, endBattleFn)
         this.useCardForDamage(player.treasureCardContainer, treasure_cards[4], 3, card, endBattleFn)
@@ -670,6 +674,7 @@ class EventWidows{
         if (player.escapeBattle && !player.ambushRoom && !player.surroundedMonsters) this.drawBtnInEW('btn_esc','Втекти', ()=>this.escapeBattle(card))
 
         if (card.health < 1) {
+            player.combatMagic = false
             this.drawEW(`${card.name} переможений!`)
             if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[19].name) && player.fightWithMonsters) {
                 this.addTxt('Ви зцілили 1 своє поранення')
@@ -691,6 +696,17 @@ class EventWidows{
                 game.endGame()
             }, 2000);
             return
+        }
+    }
+
+    combatMagic(){
+        if (game.checkCardNameInPack(player.abilitieCardContainer, 'Боевая Магия')){
+            this.drawBtnInEW('btn_cmbMg', 'Використати Боевая Магия', ()=>{
+                ew.removeRawBtnInEW('btn_cmbMg')
+                player.combatMagic = true
+                game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Боевая Магия')
+                game.drawAbilitiePackCards()
+            })
         }
     }
 
