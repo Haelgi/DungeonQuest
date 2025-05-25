@@ -127,11 +127,6 @@ class Game {
     playTrapEvent(){
         const card = this.getRundomElement(this.trap_cards, trap_cards)   
         ew.drawCardEW(card);
-        if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[15].name)) {
-            game.changeHealth(1)
-            ew.drawEW(`Ви отримали 1 очко здоров'я!`);
-            setTimeout(ew.removeLastEW, 1200);
-        }
     }
 
     playPitEvent(){
@@ -149,7 +144,7 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         // ew.drawCardEW(card);
-        // ew.drawCardEW(monster_cards[1]);
+        ew.drawCardEW(dungeon_cards[8]);
         // TODO
     }
 

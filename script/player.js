@@ -42,6 +42,7 @@ class Player {
         this.fightWithSkeleton = false;
         this.fightWithTroll = false;
         this.gold = 0
+        this.willToWin = 2
     }
 }
 

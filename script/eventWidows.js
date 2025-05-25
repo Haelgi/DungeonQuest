@@ -23,7 +23,7 @@ class EventWidows{
     }
 
     clear(){
-        ew.removeTxt()
+        this.removeTxt()
         document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
         document.querySelectorAll('.dice-section')?.forEach((item)=>{item.remove()})
     }
@@ -36,6 +36,25 @@ class EventWidows{
             if (card.effect() === undefined) return
             card.effect()
         });
+
+        console.log(card.pack)
+        console.log(game.checkCardNameInPack(player.abilitieCardContainer, 'Обнаружение Ловушек'))
+
+        if (card.pack == 'trap'
+            && game.checkCardNameInPack(player.abilitieCardContainer, 'Обнаружение Ловушек')){
+                ew.drawBtnInEW('btn_close', `Використати Обнаружение Ловушек`, ()=>{
+                    game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Обнаружение Ловушек')
+                    game.drawAbilitiePackCards()
+                    ew.removeAllEW()
+                })
+        }
+
+        if (card.pack == 'trap'
+            && game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[15].name)) {
+            game.changeHealth(1)
+            ew.drawEW(`Ви отримали 1 очко здоров'я!`);
+            setTimeout(ew.removeLastEW, 1200);
+        }
     }
 
     diceRollEW(title, txt, value, dexterity, diceCount, trueFn, falseFn, rolResult, closeEW) {
@@ -81,7 +100,7 @@ class EventWidows{
             newValue -= treasure;
         }
     
-        if(txt) ew.addTxt(texts);
+        if(txt) this.addTxt(texts);
         this.drawDiceInEW(diceCount);
         this.drawBtnInEW('roll', 'Кинути Кубики', () => {
             this.rollDiceFn();
@@ -166,7 +185,7 @@ class EventWidows{
 
         if (resolve) value += heroes[player.hero].resolve
 
-        if (game.diceRollResultGlobal <= (valueIn)) {
+        if (game.diceRollResultGlobal <= valueIn) {
             if (rolResult){
             this.drawEW(`Результат: ${game.diceRollResultGlobal}`, 'green');
             this.drawBtnInEW('next','Далі', ()=>{
@@ -216,15 +235,41 @@ class EventWidows{
             }
         }
 
+        this.everyRollIsTrue(resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
         this.addPointToDiceResult(resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
         this.rerollDice(resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
+        this.willToWin(resolve, valueIn, trueFn, falseFn, rolResult, closeEW)
 
     }
 
+    everyRollIsTrue(resolve, valueIn, trueFn, falseFn, rolResult, closeEW){
+        if (game.diceRollResultGlobal > valueIn
+            && game.checkCardNameInPack(player.abilitieCardContainer, 'Второе дыхание')
+            && !player.fightWithMonsters) {
+                this.drawBtnInEW('btn_secondBreath', 'Використати Второе дыхание', ()=>{
+                    this.removeLastEW()
+                    game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Второе дыхание')
+                    game.drawAbilitiePackCards()
+                    if (rolResult){
+                    this.drawEW(`Ви пройшли перевірку!`, 'green');
+                    this.drawBtnInEW('next','Далі', ()=>{
+                        if (closeEW) this.removeLastEW()
+                        if (trueFn) trueFn();
+                    });
+                    }
+
+                    if (!rolResult){
+                        if (closeEW) this.removeLastEW()
+                        if (trueFn) trueFn();
+                    }                   
+                })
+        }
+    }
+
     rerollDice(resolve, valueIn, trueFn, falseFn, rolResult, closeEW){
-        if (player.treasureCardContainer.some(card => card.name === 'Магическое Кольцо')&& document.querySelector('.dice')){
-            ew.drawBtnInEW('btn_ring', 'Перекінути кубік (за 290 золота)', ()=>{
-                ew.removeLastEW()
+        if (game.checkCardNameInPack(player.treasureCardContainer, 'Магическое Кольцо')){
+            this.drawBtnInEW('btn_ring', 'Перекінути кубік (за 290 золота)', ()=>{
+                this.removeLastEW()
                 game.removeCurrentCardNameFromPack(player.treasureCardContainer, 'Магическое Кольцо')
                 game.drawTreasurePackCards()
                 this.rollDiceFn();
@@ -235,11 +280,27 @@ class EventWidows{
         }
     }
 
+    willToWin(resolve, valueIn, trueFn, falseFn, rolResult, closeEW){
+        if (game.checkCardNameInPack(player.abilitieCardContainer, 'Воля к победе')){
+            this.drawBtnInEW('btn_ring', 'Перекінути кубік за Воля к победе', ()=>{
+                player.willToWin -= 1
+                this.removeLastEW()
+                if (player.willToWin === 0) game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Воля к победе')
+                game.drawAbilitiePackCards()
+                this.rollDiceFn();
+                setTimeout(() => {
+                    this.rolResultEW(resolve, valueIn, trueFn, falseFn, rolResult, closeEW);
+                }, 1700);
+            })
+        }
+    }
+
+
     addPointToDiceResult(resolve, valueIn, trueFn, falseFn, rolResult, closeEW){
         if (player.treasureCardContainer.some(card => card.name === treasure_cards[32].name)
             && game.diceRollResultGlobal < valueIn){
-            ew.drawBtnInEW('btn_add', 'Додати 1 до результату (за 170 золота)', ()=>{
-                ew.removeLastEW()
+            this.drawBtnInEW('btn_add', 'Додати 1 до результату (за 170 золота)', ()=>{
+                this.removeLastEW()
                 game.removeCurrentCardNameFromPack(player.treasureCardContainer, treasure_cards[32].name)
                 game.drawTreasurePackCards()
                 game.diceRollResultGlobal +=1
@@ -346,8 +407,8 @@ class EventWidows{
         this.drawBtnInEW('roll', 'Кинути Кубики', trueFn)
 
         if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[11].name)) {
-            ew.addBtnInEW('btn_skip', 'Пропустити кидок (за 290 золота)', ()=>{
-                ew.removeLastEW()
+            this.addBtnInEW('btn_skip', 'Пропустити кидок (за 290 золота)', ()=>{
+                this.removeLastEW()
                 game.removeCurrentCardNameFromPack(player.treasureCardContainer, treasure_cards[11].name)
                 game.drawTreasurePackCards()
                 game.nextCoordinates = game.newCoordinate()
