@@ -21,7 +21,7 @@ class Player {
         this.doorEventTarget;
         
         this.attack = 1;
-        this.extraMove = 1;
+        this.extraMove = 0;
         this.skipMove = 0;
         this.extraDragonCard = 0;
         this.escapeBattle = true;

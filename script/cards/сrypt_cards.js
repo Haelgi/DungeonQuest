@@ -4,7 +4,7 @@ import  {heroes}  from '../cards/heroes.js';
 import  {game}  from '../game.js';
 
 class Card {
-    constructor(id, name, type, cost, effect) {
+    constructor(id, name, type, cost, effect, clickFn) {
         this.id = id;  
         this.name = name;  
         this.type = type;
@@ -13,6 +13,8 @@ class Card {
         this.title = 'Обшук Склепу';  
         this.pack = 'сrypt';  
         this.btnName = 'Далі';
+        this.clickFn = clickFn;
+
     };
 };
 
@@ -23,8 +25,18 @@ function smallHealingPotion(){
     ew.removeAllEW()
 
     /* "трофей" Во время своего хода, 
-    TODO Вы можете сбросить эту карту, исцелив при этом 2 ранения Вашего героя. 
+     Вы можете сбросить эту карту, исцелив при этом 2 ранения Вашего героя. 
     Вы не можете использовать эту карту после смерти своего героя. +150 золота*/
+}
+
+function smallHealingPotionFn(){
+    ew.removeAllEW()
+    const healing = 2;
+    game.changeHealth(healing);
+    ew.drawEW(`Ви зцілили ${healing} поранення`);
+    setTimeout(() => ew.removeLastEW(), 1200);
+    game.removeCurrentCardNameFromPack(player.treasureCardContainer, сrypt_cards[3].name);
+    game.drawTreasurePackCards()
 }
 
 function vesselWithGold(){
@@ -41,7 +53,7 @@ function trollSmasher(){
     ew.removeAllEW()
 
     /* "трофей" Пока эта карта у Вас, в бою с троллем, каждая 
-    TODO Ваша успешная атака наносит 2 ранения вместо 1. +500 золота*/
+     Ваша успешная атака наносит 2 ранения вместо 1. +500 золота*/
 }
 
 function livingDead(){
@@ -114,7 +126,7 @@ function volatilePotion(){
     game.drawTreasurePackCards()
     ew.removeAllEW()
 
-    /* TODO Вы можете сбросить зелье в начале своего хода 
+    /* Вы можете сбросить зелье в начале своего хода 
     и бросить 2d6: 
     2 - Вы погибаете; 
     3-5 - Вы получаете 4 раны; 
@@ -123,13 +135,55 @@ function volatilePotion(){
     11-12 - Вы полностью излечиваетесь.*/
 }
 
+function volatilePotionFn(){
+    ew.clear()
+
+    function result(){
+        if (game.diceRollResultGlobal === 2) {
+            ew.drawEW(`Ви померли!`);
+            setTimeout(() => {
+                ew.removeAllEW();
+                game.gameOver();
+            }, 1200);
+        }
+        if (game.diceRollResultGlobal >= 3 && game.diceRollResultGlobal <= 5) {
+            const damage = 4;
+            game.changeHealth(-damage);
+            ew.drawEW(`Ви отримали ${damage} поранень`);
+            setTimeout(() => ew.removeAllEW(), 1200);
+        } 
+        if (game.diceRollResultGlobal >= 6 && game.diceRollResultGlobal <= 7) {
+            ew.drawEW(`Нічого не відбулося`);
+            setTimeout(() => ew.removeAllEW(), 1200);
+        } 
+        if (game.diceRollResultGlobal >= 8 && game.diceRollResultGlobal <= 10) {
+            const healing = 3;
+            game.changeHealth(healing);
+            ew.drawEW(`Ви зцілили ${healing} поранень`);
+            setTimeout(() => ew.removeAllEW(), 1200);
+        }
+        if (game.diceRollResultGlobal >= 11 && game.diceRollResultGlobal <= 12) {
+            if (heroes[player.hero].healthMax < heroes[player.hero].health){
+                heroes[player.hero].health = heroes[player.hero].healthMax;
+                game.addCharacterTablet(player.hero)
+            }
+            ew.drawEW(`Ви повністю зцілилися`);
+            setTimeout(() => ew.removeAllEW(), 1200);
+        }
+        game.removeCurrentCardNameFromPack(player.treasureCardContainer, сrypt_cards[8].name);
+        game.drawTreasurePackCards()
+    }
+
+    ew.addDiceRollSection(' ', 12, false, false, 2, result, false, true, true);
+}
+
 function scrollOfLightness(){
     player.treasureCardContainer.push(сrypt_cards[9])
     game.drawTreasurePackCards()
     ew.removeAllEW()
 
     /* "трофей" 
-    TODO В Комнате с Мостом, Вы можете сбросить эту карту, 
+     В Комнате с Мостом, Вы можете сбросить эту карту, 
     чтобы проверка характеристик перед прохождением моста автоматически засчиталась Успешной. 
     В Комнате с Обрывом, Вы можете сбросить эту карту, 
     чтобы выйти из прохода комнаты на противоположной стороне обрыва.*/
@@ -140,7 +194,7 @@ function scrollOfInvisibility(){
     game.drawTreasurePackCards()
     ew.removeAllEW()
     /* "трофей" Пытаясь убежать во время боя с монстром, 
-    TODO Вы можете сбросить эту карту; 
+     Вы можете сбросить эту карту; 
     тогда проверка Ловкости атоматически будет считаться Успешной 
     и Вы не получите штрафных ранений за побег.*/
 }
@@ -150,8 +204,18 @@ function smallSpeedPotion(){
     game.drawTreasurePackCards()
     ew.removeAllEW()
     /* "трофей" 
-    TODO Сбросив эту карту во время своего хода, 
+     Сбросив эту карту во время своего хода, 
     Вы можете совершить еще один дополнительный ход по завершении текущего. +225 золота*/
+}
+
+function smallSpeedPotionFn(){
+    ew.removeAllEW()
+    game.removeCurrentCardNameFromPack(player.treasureCardContainer, сrypt_cards[11].name);
+    game.drawTreasurePackCards()
+    player.extraMove +=1
+    ew.drawEW('Ви отримали 1 додатковий крок')
+    setTimeout(() => ew.removeAllEW(), 1200);
+
 }
 
 function goldenVessel(){
@@ -188,16 +252,16 @@ const сrypt_cards = [
     /*1*/new Card(1, 'Пусто', false, false, ()=>{ew.removeAllEW()}),
     /*2*/new Card(1, 'Пусто', false, false, ()=>{ew.removeAllEW()}),
     
-    /*3*/new Card(2, 'Малое Зелье Лечения', 'treasure', 150, ()=>{smallHealingPotion()}),
-    /*4*/new Card(2, 'Малое Зелье Лечения', 'treasure', 150, ()=>{smallHealingPotion()}),
+    /*3*/new Card(2, 'Малое Зелье Лечения', 'treasure', 150, ()=>{smallHealingPotion()}, smallHealingPotionFn),
+    /*4*/new Card(2, 'Малое Зелье Лечения', 'treasure', 150, ()=>{smallHealingPotion()}, smallHealingPotionFn),
     
     /*5*/new Card(3, 'Сосуд с золотом', 'treasure', 250, ()=>{vesselWithGold()}),
     /*6*/new Card(4, 'Сокрушитель Тролей', 'treasure', 500, ()=>{trollSmasher()}),
     /*7*/new Card(5, 'Оживший Мертвец', false, false, ()=>{livingDead()}),
-    /*8*/new Card(6, 'Изменчивое Зелье', false, false, ()=>{volatilePotion()}),
+    /*8*/new Card(6, 'Изменчивое Зелье', false, false, ()=>{volatilePotion()}, volatilePotionFn),
     /*9*/new Card(7, 'Свиток Легкости', 'treasure', false, ()=>{scrollOfLightness()}),
     /*10*/new Card(8, 'Свиток Невидимости', 'treasure', false, ()=>{scrollOfInvisibility()}),
-    /*11*/new Card(9, 'Малое Зелье Скорости', 'treasure', 225, ()=>{smallSpeedPotion()}),
+    /*11*/new Card(9, 'Малое Зелье Скорости', 'treasure', 225, ()=>{smallSpeedPotion()}, smallSpeedPotionFn),
     /*12*/new Card(10, 'Золотой Сосуд', 'treasure', 90, ()=>{goldenVessel()}),
     /*13*/new Card(11, 'Золотая Статуэтка', 'treasure', 120, ()=>{goldenStatuette()}),
     /*14*/new Card(12, 'Драгоценная Брошь', 'treasure', 170, ()=>{preciousBrooch()})

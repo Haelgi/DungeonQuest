@@ -10,6 +10,7 @@ class Hero {
         this.defense = defense; 
         this.luck = luck; 
         this.health = health; 
+        this.healthMax = health; 
         this.special = special; 
         this.abilities = abilities; 
     };

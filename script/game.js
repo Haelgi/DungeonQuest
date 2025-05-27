@@ -153,7 +153,7 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         // ew.drawCardEW(card);
-        ew.drawCardEW(monster_cards[1]);
+        ew.drawCardEW(monster_cards[8]);
         // TODO
     }
 
@@ -1205,7 +1205,18 @@ class Game {
                     this.drawHeroMitl(player.position[0], player.position[1]);
                     ew.diceRollEW('Ви впали з мосу у Катакомби. Киньте кубик для визначення отриманих ушкождень.',false, 6, false, 1, result, false, true);
                 } 
+
                 ew.diceRollEW('Перед вами кімната з глибокою прірвою, через яку перекинуто хитку дошку, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, trueFn, falseFn, true, true)   
+                
+                if (this.checkCardNameInPack(player.treasureCardContainer, сrypt_cards[9].name)) {
+                    ew.drawBtnInEW('btn_close', `Використати ${сrypt_cards[9].name}`, ()=>{
+                        e.target.remove()
+                        ew.removeAllEW()
+                        this.removeCurrentCardNameFromPack(player.treasureCardContainer, сrypt_cards[9].name)
+                        this.drawTreasurePackCards()
+                    })
+                
+                }
             }
         });
     }
@@ -1225,6 +1236,15 @@ class Game {
                     this.endMove();
                 } 
                 ew.diceRollEW('Кімнату розділило навпіл глибоким прірвою, щоб вийти з кімнати по той бік прірви перевірте Спритність.', `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, trueFn, falseFn, true, true)   
+                
+                if (this.checkCardNameInPack(player.treasureCardContainer, сrypt_cards[9].name)) {
+                    ew.drawBtnInEW('btn_close', `Використати ${сrypt_cards[9].name}`, ()=>{
+                        e.target.remove()
+                        ew.removeAllEW()
+                        this.removeCurrentCardNameFromPack(player.treasureCardContainer, сrypt_cards[9].name)
+                        this.drawTreasurePackCards()
+                    })
+                }           
             }
         });
     }

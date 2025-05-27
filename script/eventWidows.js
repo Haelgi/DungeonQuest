@@ -747,8 +747,11 @@ class EventWidows{
         
         let attack = player.attack
 
-        if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[20].name) && 
-            (player.fightWithDemon || player.fightWithSkeleton)) attack += 1
+        if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[20].name) 
+            && (player.fightWithDemon || player.fightWithSkeleton)) attack += 1
+
+        if (game.checkCardNameInPack(player.treasureCardContainer, сrypt_cards[6].name) 
+            && player.fightWithTroll) attack += 1
 
         this.clear()
         this.addTxt(`
@@ -956,11 +959,26 @@ class EventWidows{
             }
         )
 
+        this.drawBtnInEwIfSomeCardInTreasure(сrypt_cards[10], 
+            `Гарантована втеча`, ()=>{
+                this.removeAllEW()
+                game.removeCurrentCardNameFromPack(player.treasureCardContainer, сrypt_cards[10].name)
+                game.drawTreasurePackCards()
+            }, ()=>{   
+                this.clear()
+                this.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, true, true)
+            }
+        )
+
     }
 
     drawBtnInEwIfSomeCardInTreasure(card, txtFor, fn, elseFn){
+        let txt = `Використати ${card.name}`
+        if (txtFor) txt += ` ${txtFor}`
+        if (card.cost) txt += ` за ${card.cost} золота`
+
         if (game.checkCardNameInPack(player.treasureCardContainer, `${card.name}`)) {
-            this.drawBtnInEW(`btn_card_${card.id}`, `Використати ${card.name} (${txtFor} за ${card.cost} золота)`, () => {
+            this.drawBtnInEW(`btn_card_${card.id}`, txt , () => {
                 game.removeCurrentCardNameFromPack(player.treasureCardContainer, `${card.name}`);
                 game.updateGoldValue()
                 game.drawTreasurePackCards()
