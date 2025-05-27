@@ -135,6 +135,20 @@ class EventWidows{
             card.effect()
         });
 
+        if (player.hero == 'hunter' && card.name == 'Капкан') {
+            this.drawBtnInEW('btn_hunter', 'Скинути Капкан, та взяти іншу карту', ()=>{
+                ew.removeLastEW()
+                const cardNext = this.getCardSamePack(card)
+                this.drawCardEW(cardNext)
+            })
+        }
+
+        if (player.hero == 'knight' && card.pack == 'monster') {
+            game.changeResolve(1)
+            this.drawEW(`Ви отримали 1 рішучості!`);
+            setTimeout(this.removeLastEW, 1200);           
+        }
+
         if (game.checkCardNameInPack(player.abilitieCardContainer, 'Шестое Чувство')
             && card.pack !== 'dragon'){
                 this.drawBtnInEW('btn_sixSense', `Використати Шестое Чувство`, ()=>{
@@ -185,6 +199,13 @@ class EventWidows{
             game.changeHealth(1)
             this.drawEW(`Ви отримали 1 очко здоров'я!`);
             setTimeout(this.removeLastEW, 1200);
+        }
+
+        if (player.hero == 'hunter' && card.pack == 'trap'){
+            game.changeResolve(1)
+            this.drawEW(`Ви отримали 1 рішучості!`);
+            setTimeout(this.removeLastEW, 1200);
+
         }
     }
 
@@ -723,6 +744,7 @@ class EventWidows{
     }
 
     addBattleSection(card, endBattleFn){
+        
         let attack = player.attack
 
         if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[20].name) && 
@@ -746,7 +768,33 @@ class EventWidows{
 
         const trueFn = ()=>{ 
             let result = 3
+            if(player.hero == 'mage' && player.mageFirstThrow){
+                if(game.diceRollResultGlobal >= 4){
+                    card.health -= 1
+                    this.drawEW(`${card.name} отримав ${1} поранення від Удару Блискавкою`)
+                    setTimeout(() => {
+                        this.removeLastEW()
+                        this.clear()
+                        this.addBattleSection(card, endBattleFn)
+                        player.mageFirstThrow = false
+                    }, 2000);
+                } 
+
+                if(game.diceRollResultGlobal < 4){
+                    this.drawEW(`${card.name} ухилився від Удару Блискавкою`)
+                    setTimeout(() => {
+                        this.removeLastEW()
+                        this.clear()
+                        this.addBattleSection(card, endBattleFn)
+                        player.mageFirstThrow = false
+                    }, 2000);
+                }
+
+                return               
+            }
+
             if (player.combatMagic) result = 4
+
             if(game.diceRollResultGlobal <= result){
                 card.health -= attack
                 this.drawEW(`${card.name} отримав ${attack} поранення`)
@@ -767,7 +815,6 @@ class EventWidows{
                     this.addBattleSection(card, endBattleFn)
                 }, 1200);
             }
-
         }
 
         this.addDiceRollSection(false, 6, false, true, 1, trueFn, false, true, true)
@@ -789,11 +836,22 @@ class EventWidows{
 
         if (card.health < 1) {
             player.combatMagic = false
+            player.mageFirstThrow = true
             this.drawEW(`${card.name} переможений!`)
-            if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[19].name) && player.fightWithMonsters) {
+
+            if (player.hero == 'enchantress'
+                && player.fightWithSorcerer){
+                    game.changeResolve(1)
+                    this.drawEW(`Ви отримали 1 Рішучість!`);
+                }
+
+
+            if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[19].name) 
+                && player.fightWithMonsters) {
                 this.addTxt('Ви зцілили 1 своє поранення')
                 game.changeHealth(1)
             }
+
             setTimeout(() => {
                 this.removeAllEW()
                 player.fightWithMonsters = false;
@@ -807,6 +865,8 @@ class EventWidows{
             setTimeout(() => {
                 this.removeAllEW()
                 player.fightWithMonsters = false;
+                player.combatMagic = false
+                player.mageFirstThrow = true
                 game.endGame()
             }, 2000);
             return
@@ -816,6 +876,8 @@ class EventWidows{
     escapeM(){
         if (game.checkCardNameInPack(player.abilitieCardContainer, 'Побег')){
             this.drawBtnInEW('btn_escM', 'Використати Побег', ()=>{
+                player.combatMagic = false
+                player.mageFirstThrow = true                
                 game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Побег')
                 game.drawAbilitiePackCards()
                 this.drawEW('Ви змогли втекли')
@@ -862,6 +924,8 @@ class EventWidows{
             let damage = card.penalty
             game.changeHealth(-damage)
             this.drawEW(`Ви змогли втекти, але отримали ${damage} поранень`)
+            player.combatMagic = false
+            player.mageFirstThrow = true            
             setTimeout(() => {
                 game.drawMonsterToken(player.position[0], player.position[1], card)
                 player.extraMove = true
@@ -883,7 +947,7 @@ class EventWidows{
         }
 
         this.drawBtnInEwIfSomeCardInTreasure(treasure_cards[8], 
-            'гарантована втеча та 4 поранення', ()=>{
+            'Гарантована втеча та 4 поранення', ()=>{
                 this.removeAllEW()
                 game.changeHealth(-4)
             }, ()=>{   

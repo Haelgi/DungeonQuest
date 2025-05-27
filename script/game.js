@@ -152,8 +152,8 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        ew.drawCardEW(card);
-        // ew.drawCardEW(monster_cards[8]);
+        // ew.drawCardEW(card);
+        ew.drawCardEW(monster_cards[1]);
         // TODO
     }
 
@@ -1116,6 +1116,11 @@ class Game {
                 this.drawHeroMitl(player.position[0], player.position[1]);
 
                 this.removeIcon('.arrow-icon')
+
+                if (player.hero == 'hunter'){
+                    const card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
+                    ew.drawCardEW(card);
+                }
             }
         });
     };

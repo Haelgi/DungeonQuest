@@ -162,8 +162,11 @@ function undergroundNecropolis(){
 }
 
 function goblinExplorer(){
+    let countCard = 2
+
+    if (player.hero == 'dwarf') countCard = 1
     
-    if(player.treasureCardContainer.length < 2) {
+    if(player.treasureCardContainer.length < countCard) {
         ew.removeAllEW()
         ew.drawEW('У вас недостатаня кількість трофеїв.')
         ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
@@ -177,7 +180,7 @@ function goblinExplorer(){
         ew.removeAllEW()
     })
 
-    ew.addEmptyFeldForCard(2)
+    ew.addEmptyFeldForCard(countCard)
     ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{
         game.removeHighlightFields(game.nextCoordinates)
         game.nextCoordinates = game.getCoordinatesWithoutRoom()
@@ -195,12 +198,12 @@ function goblinExplorer(){
 
     addScrolCardsEffect('.event-deck-container', (e)=> {
         
-        if (emptyFelds.length >= 2) return
+        if (emptyFelds.length >= countCard) return
 
         const [card] = removeCardFromPack(e)
 
         emptyFelds.push(card)
-        drawCardToFeld(2)
+        drawCardToFeld(countCard)
     });
     
     function removeCardFromPack(e) {
@@ -213,8 +216,8 @@ function goblinExplorer(){
     }
 
     function drawCardToFeld(count){
-        if(emptyFelds.length === 2) btnNext.style.display = 'block'
-        if(emptyFelds.length < 2) btnNext.style.display = 'none'
+        if(emptyFelds.length === count) btnNext.style.display = 'block'
+        if(emptyFelds.length < count) btnNext.style.display = 'none'
         
         for (let i = 0; i < count; i++) {
             const feld = document.getElementById(`card-feld-${i}`)
@@ -232,7 +235,7 @@ function goblinExplorer(){
                     player.treasureCardContainer.push(card)
                     ew.updatePackCardsEW(player.treasureCardContainer)
                     game.drawTreasurePackCards()
-                    drawCardToFeld(2)  
+                    drawCardToFeld(count)  
                 }
             })
         }

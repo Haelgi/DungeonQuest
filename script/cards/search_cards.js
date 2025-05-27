@@ -17,12 +17,15 @@ class Card {
 };
 
 function secretPass(){
-
     game.removeHighlightFields(game.nextCoordinates)
     game.nextCoordinates = game.getCoordinatesWithoutRoom()
     game.drawHeroMitl(player.position[0], player.position[1]);
     game.removeAllIcon()
     ew.removeAllEW()
+    
+    if (player.hero == 'dwarf') game.changeResolve(1)
+    ew.drawEW('Ви отримали 1 рішучості')
+    setTimeout(() => ew.removeLastEW(), 1200);
 
     /*Вы заметили в стене выступающий камень и нажали на него. 
     Показался секретный проход. 
@@ -105,6 +108,17 @@ function smallHealingPotion(){
     исцелив при этом 2 ранения Вашего героя. 
     Вы не можете использовать эту карту после смерти своего героя. 
     +150 золота*/
+}
+
+function smallHealingPotionFn(){
+    ew.removeAllEW();
+
+    let healing = 2;
+    if (player.hero == 'enchantress') healing = 3;
+
+    game.changeHealth(healing);
+    ew.drawEW(`Ви отримали ${healing} лікування.`)
+    setTimeout(() => ew.removeLastEW(), 1200);
 }
 
 function scrollOfPassage(){
@@ -201,7 +215,7 @@ const search_cards = [
     
     /*22*/new Card(6, 'Проход в Склеп', false, false, ()=>{passageToTheCrypt()}),
     /*23*/new Card(7, 'Секретный Рычаг', false, false, ()=>{secretLever()}),
-    /*24*/new Card(8, 'Малое Зелье Лечения', 'treasure', 150, ()=>{smallHealingPotion()}),
+    /*24*/new Card(8, 'Малое Зелье Лечения', 'treasure', 150, ()=>{smallHealingPotion()}, smallHealingPotionFn),
     /*25*/new Card(9, 'Свиток Прохода', false, false, ()=>{scrollOfPassage()}),
     /*26*/new Card(10, 'Удар Сзади', false, false, ()=>{hitFromBehind()}),
     /*27*/new Card(11, 'Золотая Серьга', 'treasure', 150, ()=>{goldenEarring()}),

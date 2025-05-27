@@ -66,6 +66,11 @@ function dragonsFury(){
         ew.drawEW(`Ви отримали ${damage} поранення, та втратили скарби`)
         setTimeout(() => {
             ew.removeAllEW()
+            if (player.hero == 'knight') {
+                game.changeHealth(1)
+                ew.drawEW(`Ви зцілили 1 поранення`)
+                setTimeout(() => ew.removeLastEW, 1200);
+            }
         }, 2000);
     }
 
@@ -82,6 +87,9 @@ function dragonsFury(){
             ew.drawEW(`Ви отримали ${damage} поранення, та втратили скарби`)
             setTimeout(() => {
                 ew.removeAllEW()
+                game.changeHealth(1)
+                ew.drawEW(`Ви зцілили 1 поранення`)
+                setTimeout(() => ew.removeLastEW, 1200);
             }, 2000);
         }
 
@@ -94,6 +102,9 @@ function dragonsFury(){
                 ew.drawEW(`Ви не отримали поранення, але втратили скарби`)
                 setTimeout(() => {
                     ew.removeAllEW()
+                    game.changeHealth(1)
+                    ew.drawEW(`Ви зцілили 1 поранення`)
+                    setTimeout(() => ew.removeLastEW, 1200);
                 }, 2000);
         }
 

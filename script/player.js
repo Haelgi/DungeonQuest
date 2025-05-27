@@ -45,6 +45,7 @@ class Player {
         this.willToWin = 2
         this.unbrokenSpirit = 0
         this.combatMagic = false
+        this.mageFirstThrow = true
     }
 }
 

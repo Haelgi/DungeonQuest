@@ -51,6 +51,7 @@ function scrollOfAgility(){
     Вы можете выйти через любой из проходов комнаты на Ваш выбор.*/
 }
 
+
 function scrollOfLight(){
     player.treasureCardContainer.push(deadman_cards[9])
     game.drawTreasurePackCards()
