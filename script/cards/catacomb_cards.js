@@ -77,33 +77,15 @@ function holeInCeiling(){
     }
 
     ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, true, true)
-
-    player.treasureCardContainer.forEach((card, id) => {
-
-        if(card.name === 'Веревка'){
-            
-            const rope = ()=>{
-                ew.drawCardEW(card)
-                ew.removeTitile()
-                ew.removeRawBtnInEW('btn_ew')
-    
-                ew.drawBtnInEW('btn_next','Використати Мотузку', ()=>{
-                    player.treasureCardContainer.pop(id,1)
-                    game.drawTreasurePackCards()
-                    ew.removeAllEW()
-                    ew.escapeCatacombEW()
-                })
-    
-                ew.drawBtnInEW('btn_close','Назад', ()=>{
-                    ew.removeLastEW()
-                    ew.removeRawBtnInEW('btn_rope')
-                    ew.drawBtnInEW('btn_rope','Використати Мотузку', rope)
-                })
-            }
-    
-            ew.drawBtnInEW('btn_rope','Використати Мотузку', rope)
-        }
-    });
+        
+    if (this.checkCardNameInPack(player.treasureCardContainer, deadman_cards[3].name)){
+        ew.drawBtnInEW('btn_close', `Використати ${deadman_cards[3].name}, щоб не впасти`, ()=>{
+            this.removeCurrentCardNameFromPack(player.treasureCardContainer, deadman_cards[3].name)
+            this.drawTreasurePackCards()
+            ew.removeAllEW()
+            trueFn()
+        })
+    }
 
     /*Выполните проверку Ловкости. 
     Если проверка Успешна, то Вы можете покинуть Катакомбы. 
@@ -1370,7 +1352,8 @@ function boxOfGold(){
     ew.removeRawBtnInEW('btn_ew')
     ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
 
-    /* "трофей" Когда Вы покинули Подземелье Дракона, бросьте 1d6. 
+    /* "трофей" 
+    //TODO Когда Вы покинули Подземелье Дракона, бросьте 1d6. 
     Вы находите в шкатулке количество золота, эквивалентное результату броска, умноженному на 100.*/
 }
 
@@ -1378,7 +1361,8 @@ function hammerOfPower(){
     player.treasureCardContainer.push(catacomb_cards[48])
     game.drawTreasurePackCards()
     ew.removeAllEW()
-    /* "трофей" Пока эта карта у Вас, в бою с големом, каждая Ваша успешная атака наносит 2 ранения вместо 1.*/
+    /* "трофей" 
+    // Пока эта карта у Вас, в бою с големом, каждая Ваша успешная атака наносит 2 ранения вместо 1.*/
 }
 
 function cardShuffling(){
@@ -1453,5 +1437,3 @@ const catacomb_cards = [
 ]
 
 export {catacomb_cards}
-
-// TODO під час бою з големами перевіряти чи є карта Молот Мощи catacomb_cards[48]

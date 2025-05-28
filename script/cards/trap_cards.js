@@ -2,6 +2,7 @@ import  {ew}  from '../eventWidows.js';
 import  {player}  from '../player.js';
 import  {heroes}  from '../cards/heroes.js';
 import  {treasure_cards}  from '../cards/treasure_cards.js';
+import  {deadman_cards}  from '../cards/deadman_cards.js';
 import  {game}  from '../game.js';
 import  {room_tiles}  from './room_tiles.js';
 import  {addScrolCardsEffect}  from '../function/addScrolCardsEffect.js';
@@ -246,6 +247,15 @@ function floorFailure(){
     
     ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, true, true)
 
+        
+    if (this.checkCardNameInPack(player.treasureCardContainer, deadman_cards[3].name)){
+        ew.drawBtnInEW('btn_close', `Використати ${deadman_cards[3].name}, щоб не впасти`, ()=>{
+            this.removeCurrentCardNameFromPack(player.treasureCardContainer, deadman_cards[3].name)
+            this.drawTreasurePackCards()
+            ew.removeAllEW()
+            trueFn()
+        })
+    }
 
     /*Пол под Вами начал проваливаться. 
     Выполните проверку Ловкости. 

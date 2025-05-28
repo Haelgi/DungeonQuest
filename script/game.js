@@ -148,12 +148,21 @@ class Game {
         } 
 
         ew.diceRollEW('Зайшовши в кімнату у вас під ногами виявилася дуже крихка підлога, щоб не провалитися в катакомби перевірте свою Удачу.',`Ваша Удача:  ${heroes[player.hero].luck} `, heroes[player.hero].luck, false, 2, trueFn, falseFn, true, true)
+        
+        if (this.checkCardNameInPack(player.treasureCardContainer, deadman_cards[3].name)){
+            ew.drawBtnInEW('btn_close', `Використати ${deadman_cards[3].name}, щоб не впасти`, ()=>{
+                this.removeCurrentCardNameFromPack(player.treasureCardContainer, deadman_cards[3].name)
+                this.drawTreasurePackCards()
+                ew.removeAllEW()
+                trueFn()
+            })
+        }
     }
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         // ew.drawCardEW(card);
-        ew.drawCardEW(monster_cards[8]);
+        // ew.drawCardEW(monster_cards[8]);
         // TODO
     }
 
@@ -1159,6 +1168,15 @@ class Game {
                     this.endMove()
                 }
                 ew.diceRollEW('Перед вами кімната заповнена уламками стелі що впала, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, trueFn, falseFn, true, true)   
+                
+                if (this.checkCardNameInPack(player.treasureCardContainer, deadman_cards[8].name)) {
+                    ew.drawBtnInEW('btn_close', `Використати ${deadman_cards[8].name}`, ()=>{
+                        e.target.remove()
+                        ew.removeAllEW()
+                        this.removeCurrentCardNameFromPack(player.treasureCardContainer, deadman_cards[8].name)
+                        this.drawTreasurePackCards()
+                    })
+                }               
             }
         });
     }
@@ -1175,6 +1193,15 @@ class Game {
                     this.endMove()
                 }
                 ew.diceRollEW('Кімнату оплутала павутиння заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, 2, trueFn, falseFn, true, true)
+                
+                if (this.checkCardNameInPack(player.treasureCardContainer, deadman_cards[8].name)) {
+                    ew.drawBtnInEW('btn_close', `Використати ${deadman_cards[8].name}`, ()=>{
+                        e.target.remove()
+                        ew.removeAllEW()
+                        this.removeCurrentCardNameFromPack(player.treasureCardContainer, deadman_cards[8].name)
+                        this.drawTreasurePackCards()
+                    })
+                }            
             }
         });
     }
@@ -1215,7 +1242,6 @@ class Game {
                         this.removeCurrentCardNameFromPack(player.treasureCardContainer, сrypt_cards[9].name)
                         this.drawTreasurePackCards()
                     })
-                
                 }
             }
         });

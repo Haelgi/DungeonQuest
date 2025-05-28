@@ -4,6 +4,7 @@ import  {game}  from './game.js';
 import  {player}  from './player.js';
 import  {ew}  from './eventWidows.js';
 import  {treasure_cards}  from './cards/treasure_cards.js';
+import  {deadman_cards}  from './cards/deadman_cards.js';
 import  {сrypt_cards}  from './cards/сrypt_cards.js';
 import { monster_cards } from './cards/monster_cards.js';
 
@@ -18,7 +19,7 @@ player.authentication = true;
 // player.eventCardContainer = [monster_cards[9],monster_cards[10],monster_cards[11]];
 // player.checkEventCards = true
 // player.surroundedMonsters = true;
-player.treasureCardContainer = [сrypt_cards[10]];
+player.treasureCardContainer = [deadman_cards[11]];
 // player.positionTreasuryCards = [treasure_cards[1],treasure_cards[4]];
 // player.catacombCardContainer = [treasure_cards[1],treasure_cards[4]];
 
@@ -33,7 +34,7 @@ game.authentication = true;
 
 
 export function game_container() {
-    game.drawFieldTileTests(46, 90, 1,  0);
+    game.drawFieldTileTests(6, 90, 1,  0);
     // game.drawFieldTileTests(58, 0, 1,  1);
     // game.drawFieldTileTests(11, '90', 2,  0);
     // game.drawFieldTileTests(11, '180', 1,  1);

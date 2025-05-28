@@ -747,11 +747,17 @@ class EventWidows{
         
         let attack = player.attack
 
+        if (game.checkCardNameInPack(player.treasureCardContainer, deadman_cards[11].name) 
+            && (player.fightWithSorcerer)) attack += 1
+
         if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[20].name) 
             && (player.fightWithDemon || player.fightWithSkeleton)) attack += 1
 
         if (game.checkCardNameInPack(player.treasureCardContainer, сrypt_cards[6].name) 
             && player.fightWithTroll) attack += 1
+
+        if (game.checkCardNameInPack(player.treasureCardContainer, catacomb_cards[48].name) 
+            && player.fightWithGolem) attack += 1
 
         this.clear()
         this.addTxt(`
