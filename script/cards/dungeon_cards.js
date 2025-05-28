@@ -775,6 +775,11 @@ function evilGoblin(){
         if (5<=result) {
             damage = 3
 
+            if (player.treasureCardContainer.length == 0) {
+                ew.drawEW(`Гоблін поранив Вас (ви отримали ${damage} поранення)`)
+                setTimeout(() => {ew.removeAllEW()}, 2000);
+            }
+
             const maxValue = player.treasureCardContainer.length-1
             const randomId = Math.floor(Math.random() * maxValue)
             
@@ -796,8 +801,6 @@ function evilGoblin(){
     3-4 - Вы убили гоблина и получили 3 ранения. 
     5-6 - Гоблин ранил Вас и сбежал: получите 3 ранения и выполните проверку Ловкости; 
     в случае провала, сбросьте случайным образом 1 из своих Трофеев (если есть).*/
-
-    //TODO добавить проверти на наличие карт в сокровищах
 }
 
 function orcAttack(){
