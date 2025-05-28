@@ -127,6 +127,7 @@ class EventWidows{
     }
 
     drawCardEW(card) {
+        console.log(`[LOG]`, card.pack, card.name)
         this.drawEW(card.title);
         this.drawCardsInEW(card);
         this.drawBtnInEW('btn_ew', card.btnName, ()=>{
@@ -332,6 +333,7 @@ class EventWidows{
     }
 
     rolResultEW (resolve, valueIn, trueFn, falseFn, rolResult, closeEW){
+        console.log(`[LOG] dice result:`, game.diceRollResultGlobal)
 
         let value = valueIn
 

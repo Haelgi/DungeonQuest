@@ -817,6 +817,8 @@ class Game {
         this.gameFields[y][x]['p'] = player.name;
 
         delete this.gameFields[player.position[1]][player.position[0]]['p'];
+
+        console.log(`[LOG] room`, roomNumber, `rotate:`, rotate)
         
         return roomNumber
     };
