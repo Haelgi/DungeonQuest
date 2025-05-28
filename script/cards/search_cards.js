@@ -2,14 +2,16 @@ import  {ew}  from '../eventWidows.js';
 import  {player}  from '../player.js';
 import  {game}  from '../game.js';
 import  {сrypt_cards}  from './сrypt_cards.js';
+import  {room_tiles}  from './room_tiles.js';
 
 class Card {
-    constructor(id, name, type, cost, effect) {
+    constructor(id, name, type, cost, effect, clickFn) {
         this.id = id;  
         this.name = name;
         this.type = type;
         this.cost = cost;   
         this.effect = effect;
+        this.clickFn = clickFn;
         this.title = 'Пошук';  
         this.pack = 'search';  
         this.btnName = 'Далі';
@@ -62,7 +64,7 @@ function masterKey(){
     game.drawTreasurePackCards()
     /* "трофей" Обыскивая комнату, Вы нашли магический ключ. 
     Сбросьте эту карту вместо того, чтобы тянуть Карту Двери; дверь открывается.*/
-    // TODO при нажатии на иконку двери добавить проверку на наличие это карты в контейнере игрока
+    // при нажатии на иконку двери добавить проверку на наличие это карты в контейнере игрока
 }
 
 function passageToTheCrypt(){
@@ -104,10 +106,11 @@ function smallHealingPotion(){
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей" Во время своего хода, 
-    TODO Вы можете сбросить эту карту, 
+     Вы можете сбросить эту карту, 
     исцелив при этом 2 ранения Вашего героя. 
     Вы не можете использовать эту карту после смерти своего героя. 
     +150 золота*/
+
 }
 
 function smallHealingPotionFn(){
@@ -119,6 +122,8 @@ function smallHealingPotionFn(){
     game.changeHealth(healing);
     ew.drawEW(`Ви отримали ${healing} лікування.`)
     setTimeout(() => ew.removeLastEW(), 1200);
+    game.removeCurrentCardNameFromPack(player.abilitieCardContainer, search_cards[24].name)
+    game.drawAbilitiePackCards()
 }
 
 function scrollOfPassage(){
@@ -126,9 +131,25 @@ function scrollOfPassage(){
     game.drawTreasurePackCards()
     ew.removeAllEW();
     /* "трофей"  Вы нашли магический свиток. 
-    TODO Вы можете сбросить эту карту вместо того, чтобы совершить поиск в комнате. 
+     Вы можете сбросить эту карту вместо того, чтобы совершить поиск в комнате. 
     Тогда Вы получите возможность выполнить перемещение в любою соседнюю исследованную область, 
     игнорируя решётки, двери или стены.*/
+}
+
+function scrollOfPassageFn(){
+    if (!player.positionPrevious
+        && room_tiles[game.gameFields[player.position[1]][player.position[0]]['id']-1].search
+        && !player.catacomb) {
+            ew.drawEW('Не можна викорасти карту зараз(')
+            setTimeout(ew.removeAllEW, 1200);
+            return
+    }
+    game.removeAllIcon()
+    game.removeHighlightFields(game.nextCoordinates)
+    game.nextCoordinates = game.getCoordinatesWithoutRoom()
+    game.removeCurrentCardNameFromPack(player.treasureCardContainer, search_cards[25].name)
+    game.drawTreasurePackCards()
+    ew.removeAllEW()
 }
 
 function hitFromBehind(){
@@ -216,7 +237,7 @@ const search_cards = [
     /*22*/new Card(6, 'Проход в Склеп', false, false, ()=>{passageToTheCrypt()}),
     /*23*/new Card(7, 'Секретный Рычаг', false, false, ()=>{secretLever()}),
     /*24*/new Card(8, 'Малое Зелье Лечения', 'treasure', 150, ()=>{smallHealingPotion()}, smallHealingPotionFn),
-    /*25*/new Card(9, 'Свиток Прохода', false, false, ()=>{scrollOfPassage()}),
+    /*25*/new Card(9, 'Свиток Прохода', false, false, ()=>{scrollOfPassage()}, scrollOfPassageFn),
     /*26*/new Card(10, 'Удар Сзади', false, false, ()=>{hitFromBehind()}),
     /*27*/new Card(11, 'Золотая Серьга', 'treasure', 150, ()=>{goldenEarring()}),
     /*28*/new Card(12, 'Мелкие Золотые Слитки', 'treasure', 70, ()=>{smallGoldenIngots()}),

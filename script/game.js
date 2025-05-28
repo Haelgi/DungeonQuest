@@ -162,7 +162,7 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         // ew.drawCardEW(card);
-        // ew.drawCardEW(monster_cards[8]);
+        // ew.drawCardEW(search_cards[20]);
         // TODO
     }
 
@@ -1100,7 +1100,16 @@ class Game {
                 const card = this.getRundomElement(this.door_cards, door_cards)
                 ew.drawCardEW(card)
                 player.doorEventTarget = e.target
-                if (card.name !== `${door_cards[7].name}`) e.target.remove()               
+                if (card.name !== `${door_cards[7].name}`) e.target.remove()
+                
+                if (this.checkCardNameInPack(player.treasureCardContainer, search_cards[20].name)) {
+                    ew.drawBtnInEW('btn_close', `Використати ${search_cards[20].name}`, ()=>{
+                        e.target.remove()
+                        ew.removeAllEW()
+                        this.removeCurrentCardNameFromPack(player.treasureCardContainer, search_cards[20].name)
+                        this.drawTreasurePackCards()
+                    })
+                }  
             }
         });
     };
