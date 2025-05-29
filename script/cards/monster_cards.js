@@ -26,7 +26,7 @@ class Card {
 function ironGolem() {
     player.fightWithMonsters = true
     player.fightWithGolem = true
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     function getCards(){
         const cards = game.getSomeCards(game.сrypt_cards, сrypt_cards, 3)
@@ -57,7 +57,7 @@ function ironGolem() {
 }
 
 function iceGolem() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithGolem = true
 
@@ -87,7 +87,7 @@ function iceGolem() {
 }
 
 function magmaGolem() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithGolem = true
 
@@ -148,7 +148,7 @@ function magmaGolem() {
 }
 
 function stoneGolem() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithGolem = true
 
@@ -176,7 +176,7 @@ function stoneGolem() {
 }
 
 function demonOfSuffering() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithDemon = true
 
@@ -217,7 +217,7 @@ function demonOfSuffering() {
 }
 
 function demonOfPain() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithDemon = true
 
@@ -266,7 +266,7 @@ function demonOfFear() {
     player.fightWithMonsters = true
     player.fightWithDemon = true
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     heroes[player.hero].resolve = 0
     game.addCharacterTablet(player.hero)
 
@@ -285,7 +285,7 @@ function demonOfFear() {
 }
 
 function demonOfRage() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithDemon = true
 
@@ -317,7 +317,7 @@ function demonOfRage() {
 }
 
 function possessedBySpirits() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithSorcerer = true
 
@@ -371,7 +371,7 @@ function possessedBySpirits() {
 }
 
 function servantOfTheUnderworld() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithSorcerer = true
 
@@ -424,7 +424,7 @@ function servantOfTheUnderworld() {
 }
 
 function servantOfChaos() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithSorcerer = true
 
@@ -455,7 +455,7 @@ function servantOfChaos() {
 }
 
 function cultAdept() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithSorcerer = true
 
@@ -487,7 +487,7 @@ function cultAdept() {
 }
 
 function skeletonWarrior() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithSkeleton = true
     
@@ -543,7 +543,7 @@ function skeletonWarrior() {
 }
 
 function decrepitSkeleton() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithSkeleton = true
 
@@ -599,7 +599,7 @@ function decrepitSkeleton() {
 }
 
 function skeletonKiller() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithSkeleton = true
 
@@ -655,7 +655,7 @@ function skeletonKiller() {
 }
 
 function skeletonArcher() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithSkeleton = true
 
@@ -710,7 +710,7 @@ function skeletonArcher() {
 }
 
 function trollDestroyer() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithTroll = true
 
@@ -745,7 +745,7 @@ function trollDestroyer() {
 }
 
 function madTroll() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithTroll = true
 
@@ -775,7 +775,7 @@ function madTroll() {
 }
 
 function trollBrute() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithTroll = true
 
@@ -805,7 +805,7 @@ function trollBrute() {
 }
 
 function trollCannibal() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     player.fightWithMonsters = true
     player.fightWithTroll = true
 

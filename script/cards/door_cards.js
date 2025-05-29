@@ -22,7 +22,7 @@ function lockedDoor(){
         return
     }
 
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
 
     ew.drawBtnInEW(`btn_${treasure_cards[5].id}`, `Використати ${treasure_cards[5].name} (спробувати знову за ${treasure_cards[5].cost} золота)`, () => {
         game.removeCurrentCardNameFromPack(player.treasureCardContainer, `${treasure_cards[5].name}`);
@@ -44,7 +44,7 @@ function lockedDoor(){
 }
 
 function greedyGoblin(){
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
 
     function discardTheCard(){
         const maxValue = player.treasureCardContainer.length-1
@@ -122,7 +122,7 @@ function jetOfFire(){
         ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
     }
 
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
     
     ew.drawBtnInEwIfSomeCardInTreasure(treasure_cards[6], 'уникнути поранень', ()=>ew.removeAllEW(), ()=>{
         ew.clear()
@@ -150,7 +150,7 @@ function jetOfFire(){
 }
 
 function thornsFromTheFloor(){
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
 
     let damage = 0;
 
@@ -183,7 +183,7 @@ function thornsFromTheFloor(){
         ew.addDiceRollSection( `${nameValue}: ${value}`, value, false, true, 2, trueFn, falseFn, true, true)
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     ew.drawBtnInEW('btn_strength', 'Перевірити Силу', ()=>{check('Ваша Сила',heroes[player.hero].strength)})
     ew.drawBtnInEW('btn_dexterity', 'Перевірити Спритність', ()=>{check('Ваша Спритність',heroes[player.hero].dexterity)})
     ew.drawBtnInEW('btn_defense', 'Перевірити Захист', ()=>{check('Ваш Захист',heroes[player.hero].defense)})
@@ -196,7 +196,7 @@ function thornsFromTheFloor(){
 }
 
 function deadlyArrows(){
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
 
     const trueFn = ()=>{
         ew.removeLastEW()

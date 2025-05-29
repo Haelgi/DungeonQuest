@@ -41,7 +41,7 @@ function trap(){
 }
 
 function deadAdventurer(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     ew.addBtnInEW('btn_next', 'Обшукати', ()=>{
         const card = game.getRundomElement(game.deadman_cards, deadman_cards)
@@ -58,7 +58,7 @@ function deadAdventurer(){
 
 function crypt(){
     
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     ew.addBtnInEW('btn_next', 'Обшукати', ()=>{
         const card = game.getRundomElement(game.сrypt_cards, сrypt_cards)
@@ -82,7 +82,7 @@ function collapse(){
 }
 
 function burial(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     ew.addBtnInEW('btn_next', 'Обшукати', ()=>{
         ew.removeAllEW()
@@ -106,7 +106,7 @@ function burial(){
 }
 
 function wallCollapse(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=>{
         if (game.nextCoordinates.length === 0) game.endGame()
@@ -137,7 +137,7 @@ function wallCollapse(){
 }
 
 function undergroundNecropolis(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     ew.addBtnInEW('btn_next', 'Обшукати', ()=>{
         ew.removeAllEW()
@@ -173,7 +173,7 @@ function goblinExplorer(){
         return
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     ew.addBtnInEW('close', 'Не віддавати трофеї', ()=>{
         emptyFelds.forEach(card=>{player.treasureCardContainer.push(card)})
         game.drawTreasurePackCards()
@@ -248,7 +248,7 @@ function goblinExplorer(){
 }
 
 function ambushRoom(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=>{
         game.removeAllIcon()
@@ -298,7 +298,7 @@ function surroundedByMonsters(){
         ew.removeTitile()
         ew.addTitleToEW('Події підземелля')
 
-        ew.removeRawBtnInEW('btn_ew')
+        ew.clear()
         ew.drawBtnInEW('next', 'Далі', ()=>{ew.removeAllEW()})
     }
 
@@ -325,7 +325,7 @@ function surroundedByMonsters(){
         ew.addDiceRollSection( `${nameValue}: ${value}`, value, false, false, 2, trueFn, falseFn, true, true)
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     ew.drawBtnInEW('btn_strength', 'Перевірити Силу', ()=>{check('Ваша Сила',heroes[player.hero].strength)})
     ew.drawBtnInEW('btn_defense', 'Перевірити Захист', ()=>{check('Ваш Захист',heroes[player.hero].defense)})
 
@@ -337,7 +337,7 @@ function surroundedByMonsters(){
 }
 
 function secretDoor(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     ew.drawBtnInEW('btn_next', 'Переміститись', ()=>{
         game.removeHighlightFields(game.nextCoordinates)
         game.nextCoordinates = game.getCoordinatesWithoutRoom()
@@ -366,7 +366,7 @@ function descentToCatacombs(){
 }
 
 function giantSnake(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=>{
         const damage = game.diceRollResultGlobal + 2
@@ -386,7 +386,7 @@ function giantSnake(){
 }
 
 function magicRoom(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=>{
         let angl = 0
@@ -410,7 +410,7 @@ function magicRoom(){
 }
 
 function deadCrowd(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     ew.drawBtnInEW('btn_luck', 'Перевірити Удачу', ()=>{
         ew.removeRawBtnInEW('btn_luck')
@@ -443,7 +443,7 @@ function deadCrowd(){
             ew.drawBtnInEW('btn_next', 'Отримати бонус за бій', ()=>{
                 ew.removeAllEW()
                 ew.drawCardEW(card)
-                ew.removeRawBtnInEW('btn_ew')
+                ew.clear()
                 ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
             });
         }
@@ -463,7 +463,7 @@ function deadCrowd(){
 
     
 function manticore(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const manticore = {
         name : 'Мантикора',
@@ -492,7 +492,7 @@ function manticore(){
 }
 
 function goblinWithTreasure() {
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn1 = ()=>{
         ew.drawEW(`Ви спіймали Гобліна`)
@@ -548,7 +548,7 @@ function goblinWithTreasure() {
 }
 
 function healingSpring(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const result = ()=>{ 
         const result = game.diceRollResultGlobal
@@ -580,7 +580,7 @@ function healingSpring(){
 }
 
 function armyOfGhosts(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const result = ()=>{ 
         const result = game.diceRollResultGlobal
@@ -630,7 +630,7 @@ function armyOfGhosts(){
 }
 
 function warriorOfAbyss(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=> {
         ew.drawEW(`Ви не отримали додаткові поранення`)
@@ -689,7 +689,7 @@ function warriorOfAbyss(){
 }
 
 function bloodthirstyLizard(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=> {
         game.changeHealth(-2)
@@ -712,7 +712,7 @@ function bloodthirstyLizard(){
 }
 
 function bats(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const result = ()=>{ 
         const result = game.diceRollResultGlobal
@@ -748,7 +748,7 @@ function bats(){
 }
 
 function evilGoblin(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const result = ()=>{ 
         const result = game.diceRollResultGlobal
@@ -804,7 +804,7 @@ function evilGoblin(){
 }
 
 function orcAttack(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=> {
         ew.drawEW(`Ви отримали 2 поранення`)
@@ -845,7 +845,7 @@ function orcAttack(){
 }
 
 function treasureGuard(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     game.changeHealth(-2)
     ew.drawEW(`Ви отримали 2 поранення`)
@@ -962,7 +962,7 @@ function stoneBall(){
 }
 
 function curseOfTheSorcerer(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const resolve = heroes[player.hero].resolve
     player.oldResolve = resolve
@@ -998,7 +998,7 @@ function curseOfTheSorcerer(){
 }
 
 function darkPortal(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     function result(){ 
         const result = game.diceRollResultGlobal
@@ -1069,7 +1069,7 @@ function darkPortal(){
 }
 
 function livingArmor(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const result = ()=>{ 
         const result = game.diceRollResultGlobal
@@ -1115,7 +1115,7 @@ function livingArmor(){
 }
 
 function fierceCutthroat(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     ew.clear()
 
     function bribe(){
@@ -1231,7 +1231,7 @@ function fierceCutthroat(){
 }
 
 function collapsedBeam(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=> {
         ew.drawEW(`Вам вдалося ухилитися`)

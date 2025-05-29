@@ -52,7 +52,7 @@ function dragonsFury(){
     // TODO для многопользовательской игры добавить код ключ для действия на всех игроков
     
     
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const normalBehavior = ()=>{
         const damage = game.diceRollResultGlobal

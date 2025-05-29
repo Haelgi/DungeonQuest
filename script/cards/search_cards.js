@@ -79,7 +79,7 @@ function passageToTheCrypt(){
 }
 
 function secretLever(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     function rotateRoom(angle){
         game.rotateRoomTile(angle)

@@ -57,7 +57,7 @@ function trollSmasher(){
 }
 
 function livingDead(){
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
     let count = 0;
     let falseCount = 0;
 

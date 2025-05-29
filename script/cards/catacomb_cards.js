@@ -30,7 +30,7 @@ function hiddenTrap(){
 }
 
 function holeInCeiling(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     function trueFn(){
         ew.removeAllEW()
@@ -94,7 +94,7 @@ function holeInCeiling(){
 }
 
 function doorWithRiddle(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     
     const trueFn = ()=> {
         player.catacombCardContainer.forEach((card, id)=>{
@@ -237,7 +237,7 @@ function hailOfArrows(){
         addScrolCardsEffect('.event-deck-container', false)
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, true, true)
 
     /*Монстр атакует Вас из лука. 
@@ -291,7 +291,7 @@ function giantRat(){
         ew.addDiceRollSection(`Ваш Захист: ${heroes[player.hero].defense}`, heroes[player.hero].defense, false, true,2, trueFn, falseFn, true, true)
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     defense()
     
@@ -321,7 +321,7 @@ function risingDead(){
         }, 2000);
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     ew.addDiceRollSection(`Ваша Сила : ${heroes[player.hero].strength}`, heroes[player.hero].strength, false,true, 2, trueFn, falseFn, true, true)
 
     /*Вас начали предпринимать восстания из гробов мертвецов. 
@@ -372,7 +372,7 @@ function shadowKiller(){
         game.changeHealth(-damage)
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
 
     /*Сохраните эту карту. 
@@ -403,7 +403,7 @@ function monsterFromDarkness(){
         }, 2000);
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, true, true)
 
     /*Из темноты на Вас напал монстр, начался бой. 
@@ -504,7 +504,7 @@ function trap(){
 
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, true, true)
 
     /*Выполните проверку Удачи. 
@@ -514,7 +514,7 @@ function trap(){
 }
 
 function scorpion(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const result = ()=>{
         ew.removeLastEW()
@@ -576,7 +576,7 @@ function stickyWeb(){
     }
 
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     ew.drawBtnInEW('btn_luk','Перевірити Удачу',luck)
     ew.drawBtnInEW('btn_wake','Розбудити Павука',wake)
@@ -590,7 +590,7 @@ function stickyWeb(){
 }
 
 function razorwing(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const result = ()=>{
         ew.removeLastEW()
@@ -611,7 +611,7 @@ function razorwing(){
 }
 
 function darkElf(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     
     const falfeFn = ()=>{
         emptyFelds.forEach(card=>{player.treasureCardContainer.push(card)})
@@ -709,7 +709,7 @@ function darkElf(){
 }
 
 function strikeFromShadow(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=> {
         ew.removeLastEW()
@@ -742,7 +742,7 @@ function strikeFromShadow(){
 
 function tentacles(){
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=> {
         ew.drawEW(`Ви змогли увернутися і залишитися неушкодженим`)
@@ -881,7 +881,7 @@ function roguesAttack(){
         game.changeHealth(-damage)
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
     /*Вы попали в засаду разбойника. 
     Бросьте 1d6: 
@@ -968,7 +968,7 @@ function vampire(){
         setTimeout(() => {ew.removeAllEW()}, 2000);
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     if (dexterity > defense) ew.addDiceRollSection(`Ваш Захист: ${defense}`, defense, false, true, 2, trueFn, falseFn, true, true)
     if (dexterity < defense) ew.addDiceRollSection(`Ваша Спритність: ${dexterity}`, dexterity, true, true, 2, trueFn, falseFn, true, true)
@@ -981,7 +981,7 @@ function vampire(){
 }
 
 function poisonousSnake(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const strength = heroes[player.hero].strength
     const dexterity = heroes[player.hero].dexterity
@@ -1054,7 +1054,7 @@ function poisonousSnake(){
 }
 
 function sorcererAttack(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=> {
         ew.removeLastEW()
@@ -1085,7 +1085,7 @@ function sorcererAttack(){
 }
 
 function hordeOfRats(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=> {
         ew.removeLastEW()
@@ -1154,7 +1154,7 @@ function spiderPoison(){
         ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     battle()
     
     /*Вас укусил ядовитый паўқ. 
@@ -1208,7 +1208,7 @@ function torchGoesOut(){
         }, 2000);
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, true, 2, trueFn, falseFn, true, true)
     /*Сохраните эту карту. 
     Факел погас. 
@@ -1218,7 +1218,7 @@ function torchGoesOut(){
 }
 
 function alchemist(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const hpForTr = ()=>{
         const cards = [game.getRundomElement(game.treasure_cards, treasure_cards)]
@@ -1349,7 +1349,7 @@ function boxOfGold(){
         }, 2000);
     }
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
 
     /* "трофей" 

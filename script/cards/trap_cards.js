@@ -20,7 +20,7 @@ class Card {
 
 function sandTrap(){
 
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
     let count = 4;
     let success = 0;
 
@@ -90,7 +90,7 @@ function sandTrap(){
 }
 
 function burningRay() {
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
     let count = 0;
 
     const trueFn = () => {
@@ -150,7 +150,7 @@ function burningRay() {
 }
 
 function flyingBlade(){
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
 
     function result(){ 
         const result = game.diceRollResultGlobal
@@ -206,7 +206,7 @@ function flyingBlade(){
 }
 
 function spikes(){
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
 
     function result(){ 
         const damage = game.diceRollResultGlobal
@@ -222,7 +222,7 @@ function spikes(){
 }
 
 function floorFailure(){
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
     
     const trueFn = ()=> {
         ew.drawEW(`Вам вдалося не провалитись`)
@@ -248,10 +248,10 @@ function floorFailure(){
     ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, true, true)
 
         
-    if (this.checkCardNameInPack(player.treasureCardContainer, deadman_cards[3].name)){
+    if (game.checkCardNameInPack(player.treasureCardContainer, deadman_cards[3].name)){
         ew.drawBtnInEW('btn_close', `Використати ${deadman_cards[3].name}, щоб не впасти`, ()=>{
-            this.removeCurrentCardNameFromPack(player.treasureCardContainer, deadman_cards[3].name)
-            this.drawTreasurePackCards()
+            game.removeCurrentCardNameFromPack(player.treasureCardContainer, deadman_cards[3].name)
+            game.drawTreasurePackCards()
             ew.removeAllEW()
             trueFn()
         })
@@ -265,7 +265,7 @@ function floorFailure(){
 }
 
 function pitWithStakes(){
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
     
     function result2(){
         const result = game.diceRollResultGlobal
@@ -303,7 +303,7 @@ function pitWithStakes(){
 }
 
 function undeadAttack(){
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
     let damage = 0;
 
     if (!player.catacomb) {
@@ -337,7 +337,7 @@ function undeadAttack(){
 }
 
 function poisonousSnakes(){
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
 
     ew.addBtnInEW('btn_0', 'Не пропускати хід', ()=>{
         game.changeHealth(-6)
@@ -371,7 +371,7 @@ function poisonousSnakes(){
 }
 
 function ironCage(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=>{
         ew.drawEW(`Ви змогли вибратися з клітки`)
@@ -402,7 +402,7 @@ function ironCage(){
 }
 
 function pitOfTheDead(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     if (!player.eventCardContainer.some(item => item['name'] === trap_cards[9]['name'])){
         const trueFn = ()=> {
@@ -477,7 +477,7 @@ function explosion(){
 }
 
 function spinningBlade() {
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
 
     function giveAwayTreasures(){
         ew.clear();
@@ -588,7 +588,7 @@ function spinningBlade() {
 }
 
 function deadlySaws(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=> {
         ew.drawEW(`Ви змогли ухилитись від пил`)
@@ -613,7 +613,7 @@ function deadlySaws(){
 }
 
 function fallingAxe(){
-    ew.removeRawBtnInEW('btn_ew')
+    ew.clear()
 
     const trueFn = ()=> {
         ew.drawEW(`Ви змогли ухилитись від сокири`)
@@ -636,7 +636,7 @@ function fallingAxe(){
 }
 
 function burningRoom(){
-    ew.removeRawBtnInEW('btn_ew');
+    ew.clear();
     let count = 0;
     let damage = 6;
 
