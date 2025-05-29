@@ -161,7 +161,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        // ew.drawCardEW(card);
+        ew.drawCardEW(card);
         // ew.drawCardEW(search_cards[20]);
         // TODO
     }
@@ -408,7 +408,6 @@ class Game {
             this.endGame()
             return 
         };
-
         const token_sun = document.querySelector(`.token_sun`);
         if (token_sun) token_sun.remove();
         const dayContainer = document.querySelector(`[day="${day}"]`);
@@ -731,6 +730,8 @@ class Game {
         if (this.playerList.length -1 > this.currentPlayerIndex) {
             this.currentPlayerIndex += 0;
             this.day += 1;
+            console.log(this.day)
+            this.sunTokenPosition(this.day)
         }
     }
 
@@ -746,6 +747,7 @@ class Game {
     endMove(){
 
         if (player.extraMove !== 0) {
+            console.log(`[LOG] Extra Move`)
             player.extraMove -= 1
             player.checkEventCards = true
             this.makeMove()
@@ -755,6 +757,7 @@ class Game {
         if (player.unbrokenSpirit !== 0){
             this.unbrokenSpirit -= 1
         }
+        console.log(`[LOG] End Move`)
 
         player.extraMove = 0
 
@@ -764,7 +767,7 @@ class Game {
     }
 
     endGame(){
-
+        console.log(`[LOG] End Game`)
         ew.removeAllEW()
     }
 

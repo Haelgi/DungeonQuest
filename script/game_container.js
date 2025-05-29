@@ -15,12 +15,12 @@ import { monster_cards } from './cards/monster_cards.js';
 
 player.idx = 0; 
 player.name = 'Олег'; 
-player.hero = 'robber'; 
+player.hero = 'dwarf'; 
 player.authentication = true;
 // player.eventCardContainer = [monster_cards[9],monster_cards[10],monster_cards[11]];
 // player.checkEventCards = true
 // player.surroundedMonsters = true;
-player.treasureCardContainer = [search_cards[25]];
+// player.treasureCardContainer = [search_cards[25]];
 // player.positionTreasuryCards = [treasure_cards[1],treasure_cards[4]];
 // player.catacombCardContainer = [treasure_cards[1],treasure_cards[4]];
 
@@ -35,7 +35,7 @@ game.authentication = true;
 
 
 export function game_container() {
-    game.drawFieldTileTests(6, 90, 1,  0);
+    // game.drawFieldTileTests(6, 90, 1,  0);
     // game.drawFieldTileTests(58, 0, 1,  1);
     // game.drawFieldTileTests(11, '90', 2,  0);
     // game.drawFieldTileTests(11, '180', 1,  1);

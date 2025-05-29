@@ -552,6 +552,7 @@ class EventWidows{
         const trueFn = ()=>{
             this.rollDiceFn()  
             setTimeout(() => {
+                console.log(`[LOG] dice result:`, game.diceRollResultGlobal)
                 this.removeAllEW();
                 if (!game.darkRoomCoordinates[game.diceRollResultGlobal]) return this.diceRollDarkRoomEW();
                 game.nextCoordinates = [game.darkRoomCoordinates[game.diceRollResultGlobal]];
