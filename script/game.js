@@ -36,7 +36,7 @@ class Game {
         this.darkRoomCoordinates = {};
 
         this.day = 0; 
-        this.dayMax = 0; 
+        this.dayMax = 38; 
         this.gameFields; 
         this.startFields=[[0,0], [14,0], [0,11], [14,11], [7,6]]; 
         // TODO убрать потом
@@ -726,12 +726,12 @@ class Game {
     }
 
     toggleCurrentPlayer(){
-        if (this.playerList.length -1 < this.currentPlayerIndex) this.currentPlayerIndex += 1;
-        if (this.playerList.length -1 > this.currentPlayerIndex) {
-            this.currentPlayerIndex += 0;
+        if (this.currentPlayerIndex < this.playerList.length - 1) {
+            this.currentPlayerIndex += 1;
+        } else {
+            this.currentPlayerIndex = 0;
             this.day += 1;
-            console.log(this.day)
-            this.sunTokenPosition(this.day)
+            this.sunTokenPosition(this.day);
         }
     }
 
