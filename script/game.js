@@ -167,7 +167,6 @@ class Game {
     }
 
     playCatacombEvent(){
-
         const condition = player.catacomb && game.checkCardNameInPack(player.abilitieCardContainer, 'Знание Катакомб')
         const txtFor = `Використати?`
 
@@ -181,8 +180,8 @@ class Game {
                 card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
             }
             
-            // ew.drawCardEW(card);
-            ew.drawCardEW(catacomb_cards[20]);
+            ew.drawCardEW(card);
+            // ew.drawCardEW(catacomb_cards[38]);
             
             if(game.checkCardNameInPack(player.catacombCardContainer, catacomb_cards[20].name)) {
                 ew.addBtnInEW(`btn_holeInCeiling`, `Спробувати ${catacomb_cards[20].name}`, ()=>{
@@ -199,6 +198,12 @@ class Game {
         }
         ew.drawCoiceEW(condition, txtFor, hero_card_abilitie[player.hero][4], ()=>this.knowledgeTheCatacombs(), ()=>elseFn())
 
+        if (this.checkCardNameInPack(player.eventCardContainer, catacomb_cards[38].name)){
+            ew.drawEW(`Ви отримали 1 поранення`)
+            setTimeout(() => ew.removeLastEW(), 1200);
+            game.changeHealth(-1)
+             
+        }
     }
     
     playTreasuryEvent(){
@@ -676,6 +681,10 @@ class Game {
                    && room_tiles[this.gameFields[y][x]['id']]?.special !== 'pit' 
                    && !player.positionTreasury
                    && !player.catacomb) {
+                    if (this.checkCardNameInPack(player.eventCardContainer, catacomb_cards[38].name)) {
+                        this.removeCurrentCardNameFromPack(player.eventCardContainer, catacomb_cards[38].name)
+                        this.drawEventPackCards()
+                    }
                     player.positionTreasury = false
                     this.endMove()      
                 }

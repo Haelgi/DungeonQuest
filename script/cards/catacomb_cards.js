@@ -910,23 +910,6 @@ function horribleSpider(){
 }
 
 function vampire(){
-    if (!player.catacomb) return player.eventCardContainer.forEach((card, idx) => {
-         if (card.id === 21 && card.pack === 'catacomb') {
-            player.eventCardContainer.splice(idx, 1)
-            game.drawEventPackCards()
-            ew.removeAllEW()
-        }
-    })
-
-    if (player.eventCardContainer.some((card) => (card.id === 21 && card.pack === 'catacomb'))) {
-        ew.drawEW(`Ви отримали 1 поранення, та вбили Павука`)
-        setTimeout(() => {
-            ew.removeAllEW()
-        }, 2000);
-        game.changeHealth(-1)
-        return 
-    }
-
     const dexterity = heroes[player.hero].dexterity
     const defense = heroes[player.hero].defense
 
