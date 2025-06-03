@@ -2,6 +2,7 @@ import  {ew}  from '../eventWidows.js';
 import  {player}  from '../player.js';
 import  {heroes}  from '../cards/heroes.js';
 import  {treasure_cards}  from '../cards/treasure_cards.js';
+import  {catacomb_cards}  from '../cards/catacomb_cards.js';
 import  {deadman_cards}  from '../cards/deadman_cards.js';
 import  {game}  from '../game.js';
 import  {room_tiles}  from './room_tiles.js';
@@ -230,26 +231,35 @@ function floorFailure(){
     }
 
     const falseFn = ()=> {
+        ew.removeAllEW()
         let damage = 1
-        if (player.catacomb) damage = 2
-        if (!player.catacomb) {
-            game.drawCatacombToken(player.position[0], player.position[1])
-            game.getDirectionCatacomb()
-        }
+
+        game.drawCatacombToken(player.position[0], player.position[1])
+        game.getDirectionCatacomb()
         game.changeHealth(-damage);
         ew.drawEW(`Ви отримете ${damage} поранення`)
         setTimeout(() => {
-            ew.removeAllEW()
-            const card = game.getRundomElement(game.trap_cards, trap_cards)   
-            ew.drawCardEW(card);
+            ew.removeLastEW()
         }, 2000);
     }
     
-    ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, true, true)
-
+    if (!player.catacomb) ew.addDiceRollSection(`Ваша Спритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true,2, trueFn, falseFn, true, true)
+    
+    if (player.catacomb) {
+        ew.drawBtnInEW('btn_nxt', `Далі`, ()=>{
+            let damage = 2
+            game.changeHealth(-damage);
+            ew.drawEW(`Ви отримете ${damage} поранення`)
+            setTimeout(() => {
+                ew.removeAllEW()
+                const card = game.getRundomElement(game.catacomb_cards, catacomb_cards)   
+                ew.drawCardEW(card);
+            }, 2000);
+        })
+    }
         
     if (game.checkCardNameInPack(player.treasureCardContainer, deadman_cards[3].name)){
-        ew.drawBtnInEW('btn_close', `Використати ${deadman_cards[3].name}, щоб не впасти`, ()=>{
+        ew.drawBtnInEW('btn_close', `Використати ${deadman_cards[3].name}`, ()=>{
             game.removeCurrentCardNameFromPack(player.treasureCardContainer, deadman_cards[3].name)
             game.drawTreasurePackCards()
             ew.removeAllEW()

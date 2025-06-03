@@ -4,6 +4,7 @@ import  {ew}  from '../eventWidows.js';
 import  {player}  from '../player.js';
 import  {heroes}  from '../cards/heroes.js';
 import {trap_cards} from './trap_cards.js';
+import {deadman_cards} from './deadman_cards.js';
 import  {monster_cards}  from './monster_cards.js';
 import  {treasure_cards}  from './treasure_cards.js';
 
@@ -36,9 +37,8 @@ function holeInCeiling(){
         ew.removeAllEW()
         ew.drawEW(`Хочете покинути катакомбит?`)
         ew.drawBtnInEW('btn_next','Покинути', ()=>{
-            player.holeInCeiling = false
-            ew.escapeCatacombEW()
             ew.removeAllEW()
+            ew.escapeCatacombEW()
         })
 
         ew.drawBtnInEW('btn_close','Залишитись', ()=>{
@@ -48,40 +48,19 @@ function holeInCeiling(){
 
     function falseFn(){
         player.catacombCardContainer.push(catacomb_cards[20])
-        player.holeInCeiling = true
+        game.drawCatacombPackCards()
         ew.drawEW(`Ви не пройшли перевірку`)
         setTimeout(() => {
             ew.removeAllEW()
         }, 2000);
     }
-    
-    if(!player.catacombCardContainer.some((card) => (card.name === 'Дыра в Потолке'))) {
-        ew.drawBtnInEW('btn_agan','Перевірити cпритність', ()=>{
-            ew.removeRawBtnInEW('btn_agan')
-            ew.removeRawBtnInEW('btn_next')
-            ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, true, true)
-        })
 
-        ew.drawBtnInEW('btn_next','Тягнути карту катакомб', ()=>{
-            ew.removeRawBtnInEW('btn_agan')
-            ew.removeRawBtnInEW('btn_next')
-            player.treasureCardContainer.forEach((card, id) => {
-                if(card.name === 'Веревка'){
-                    player.treasureCardContainer.pop(id,1)
-                    game.drawTreasurePackCards()
-                    ew.removeAllEW()
-                }
-            })
-        })
-        return 
-    }
-
-    ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, true, true)
+    ew.addDiceRollSection( `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, true, 2, trueFn, falseFn, true, false)
         
-    if (this.checkCardNameInPack(player.treasureCardContainer, deadman_cards[3].name)){
+    if (game.checkCardNameInPack(player.treasureCardContainer, deadman_cards[3].name)){
         ew.drawBtnInEW('btn_close', `Використати ${deadman_cards[3].name}, щоб не впасти`, ()=>{
-            this.removeCurrentCardNameFromPack(player.treasureCardContainer, deadman_cards[3].name)
-            this.drawTreasurePackCards()
+            game.removeCurrentCardNameFromPack(player.treasureCardContainer, deadman_cards[3].name)
+            game.drawTreasurePackCards()
             ew.removeAllEW()
             trueFn()
         })
@@ -918,7 +897,7 @@ function horribleSpider(){
 
     function battle() {
         ew.clear()
-        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
     }
 
     battle()
@@ -1114,18 +1093,16 @@ function hordeOfRats(){
 }
 
 function spiderPoison(){
-    if (!player.catacomb) return player.eventCardContainer.forEach((card, idx) => {
-        if (card.id === 25 && card.pack === 'catacomb') {
-            player.eventCardContainer.splice(idx, 1)
+    if (!player.catacomb) {
+        if (game.checkCardNameInPack(player.eventCardContainer, catacomb_cards[42].name))
+            game.removeCurrentCardNameFromPack(player.eventCardContainer, catacomb_cards[42].name)
             game.drawEventPackCards()
-            ew.removeAllEW()
-        }
-    })
-
-    if (!player.eventCardContainer.some((card) => (card.id === 25 && card.pack === 'catacomb'))) {
-        player.eventCardContainer.push(catacomb_cards[38])
-        game.drawEventPackCards()
+        return
     }
+
+    player.eventCardContainer.push(catacomb_cards[42])
+    game.drawEventPackCards()
+    
 
     const result = ()=>{ 
         ew.removeLastEW()

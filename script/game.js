@@ -161,13 +161,12 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        ew.drawCardEW(card);
-        // ew.drawCardEW(search_cards[20]);
+        // ew.drawCardEW(card);
+        // ew.drawCardEW(catacomb_cards[20]);
         // TODO
     }
 
     playCatacombEvent(){
-        if (player.holeInCeiling) return
 
         const condition = player.catacomb && game.checkCardNameInPack(player.abilitieCardContainer, 'Знание Катакомб')
         const txtFor = `Використати?`
@@ -182,7 +181,15 @@ class Game {
                 card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
             }
             
-            ew.drawCardEW(card);
+            // ew.drawCardEW(card);
+            ew.drawCardEW(catacomb_cards[20]);
+            
+            if(game.checkCardNameInPack(player.catacombCardContainer, catacomb_cards[20].name)) {
+                ew.addBtnInEW(`btn_holeInCeiling`, `Спробувати ${catacomb_cards[20].name}`, ()=>{
+                    ew.removeAllEW()
+                    ew.drawCardEW(catacomb_cards[20]);
+                })
+            }
 
             if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[12].name)) {
                 game.changeHealth(1)
@@ -481,7 +488,7 @@ class Game {
 
     drawEventPackCards(){
         const eventCardContainer = document.querySelector(`.event-card-container`);
-        let activeId = Math.round((player.eventCardContainer.length+player.endMoveEventCardContainer-2)/2) 
+        let activeId = Math.round((player.eventCardContainer.length + player.endMoveEventCardContainer - 2) / 2) 
         let inner ='';
 
         player.eventCardContainer.forEach((item, idx) => {
@@ -549,6 +556,7 @@ class Game {
 
     checkEventCards(){
         if (player.eventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
+        console.log(`checkEventCards`)
         this.activeEvent = true
         player.checkEventCards = true
         const [card] = player.eventCardContainer.splice(0, 1);
@@ -1450,7 +1458,6 @@ class Game {
                 }
             }
         }
-        // TODO
     }
     
 }

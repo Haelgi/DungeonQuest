@@ -48,6 +48,18 @@ function healingPotion(){
     +250 золота*/
 }
 
+function healingPotionFn(){
+    ew.removeAllEW();
+
+    let healing = 3;
+
+    game.changeHealth(healing);
+    ew.drawEW(`Ви отримали ${healing} лікування.`)
+    setTimeout(() => ew.removeLastEW(), 1200);
+    game.removeCurrentCardNameFromPack(player.abilitieCardContainer, search_cards[24].name)
+    game.drawAbilitiePackCards()
+}
+
 function descentToCatacombs(){
     game.drawCatacombToken(player.position[0], player.position[1])
     game.drawIcon(player.position[0], player.position[1], 'fa-solid fa-person-through-window', 'catacomb');
@@ -216,11 +228,11 @@ const search_cards = [
     /*6*/new Card(1, 'Секретный проход', false, false, ()=>{secretPass()}),
     /*7*/new Card(1, 'Секретный проход', false, false, ()=>{secretPass()}),
     
-    /*8*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}),
-    /*9*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}),
-    /*10*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}),
-    /*11*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}),
-    /*12*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}),
+    /*8*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}, healingPotionFn),
+    /*9*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}, healingPotionFn),
+    /*10*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}, healingPotionFn),
+    /*11*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}, healingPotionFn),
+    /*12*/new Card(2, 'Зелье Лечения', 'treasure', 250, ()=>{healingPotion()}, healingPotionFn),
         
     /*13*/new Card(3, 'Спуск в Катакомбы', false, false, ()=>{descentToCatacombs()}),
     /*14*/new Card(3, 'Спуск в Катакомбы', false, false, ()=>{descentToCatacombs()}),
