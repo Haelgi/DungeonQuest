@@ -161,7 +161,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        // ew.drawCardEW(card);
+        ew.drawCardEW(card);
         // ew.drawCardEW(catacomb_cards[20]);
         // TODO
     }
@@ -181,7 +181,7 @@ class Game {
             }
             
             ew.drawCardEW(card);
-            // ew.drawCardEW(catacomb_cards[38]);
+            // ew.drawCardEW(catacomb_cards[29]);
             
             if(game.checkCardNameInPack(player.catacombCardContainer, catacomb_cards[20].name)) {
                 ew.addBtnInEW(`btn_holeInCeiling`, `Спробувати ${catacomb_cards[20].name}`, ()=>{

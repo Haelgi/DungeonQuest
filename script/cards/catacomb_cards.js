@@ -415,7 +415,9 @@ function trap(){
             ew.removeAllEW()
         })
 
-        ew.addEmptyFeldForCard(1)
+        if (player.treasureCardContainer.length > 0){
+            ew.addEmptyFeldForCard(1)
+        }
 
         ew.addBtnInEW('next', 'Віддавати трофеї', ()=>{
             player.skipMove = 0
@@ -484,7 +486,7 @@ function trap(){
     }
 
     ew.clear()
-    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, true, true)
+    ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, true, false)
 
     /*Выполните проверку Удачи. 
     В случае успеха Вас защитили доспехи и Вы получаете 1 ранение. 
