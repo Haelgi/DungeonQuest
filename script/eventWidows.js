@@ -359,13 +359,13 @@ class EventWidows{
             this.drawBtnInEW('add_resolve','Додати Рішучості', ()=>{
                 const diff = game.diceRollResultGlobal - valueIn;
                 game.changeResolve(-diff) ;
-                this.removeLastEW()
+                // this.removeLastEW()
                 if (closeEW) this.removeLastEW()
                 if (trueFn) trueFn();  
             });
 
             this.drawBtnInEW('next','Далі', ()=>{
-                this.removeLastEW()
+                // this.removeLastEW()
                 if (closeEW) this.removeLastEW()
                 if (falseFn) falseFn();
                 game.changeResolve(+1);

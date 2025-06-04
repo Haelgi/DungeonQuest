@@ -162,7 +162,7 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         // ew.drawCardEW(card);
-        ew.drawCardEW(trap_cards[1]);
+        // ew.drawCardEW(trap_cards[1]);
         // TODO
     }
 
@@ -180,8 +180,8 @@ class Game {
                 card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
             }
             
-            ew.drawCardEW(card);
-            // ew.drawCardEW(catacomb_cards[31]);
+            // ew.drawCardEW(card);
+            ew.drawCardEW(catacomb_cards[39]);
             
             if(game.checkCardNameInPack(player.catacombCardContainer, catacomb_cards[20].name)) {
                 ew.addBtnInEW(`btn_holeInCeiling`, `Спробувати ${catacomb_cards[20].name}`, ()=>{

@@ -958,17 +958,18 @@ function poisonousSnake(){
     let reroll
 
     function checkCount(){
-        if (count > 0) return count-=1
-        ew.removeAllEW()
+        count -= 1;
+        if (count > 0) return true;
+        ew.removeAllEW();
+        return false;
     }
 
     const trueFn = ()=> {
         ew.drawEW(`Ви не отримали поранення`)
         setTimeout(() => {
             ew.removeLastEW()
-            checkCount()
-            reroll()
-        }, 2000);
+            if (checkCount()) reroll();
+        }, 1200);
     }
 
     const falseFn = ()=> {
@@ -976,9 +977,8 @@ function poisonousSnake(){
         game.changeHealth(-1)
         setTimeout(() => {
             ew.removeLastEW()
-            checkCount()
-            reroll()
-        }, 2000);
+            if (checkCount()) reroll();
+        }, 1200);
     }
 
     function strengthFn(){
@@ -1003,7 +1003,7 @@ function poisonousSnake(){
 
     ew.drawBtnInEwIfSomeCardInTreasure(treasure_cards[7], 'уникнути поранень', ()=>ew.removeAllEW(), ()=>{
         ew.clear()
-        ew.drawBtnInEW('btn_dx',`Ваша Сила: ${strength}`, ()=>{ count = dexterity; reroll = strengthFn; strengthFn()})
+        ew.drawBtnInEW('btn_str',`Ваша Сила: ${strength}`, ()=>{ count = strength; reroll = strengthFn; strengthFn()})
         ew.drawBtnInEW('btn_dx',`Ваша Спритність: ${dexterity}`,()=>{ count = dexterity; reroll = dexterityFn; dexterityFn()})
         ew.drawBtnInEW('btn_df',`Ваш Захист: ${defense}`,()=>{ count = defense; reroll = defenseFn; defenseFn()})
         ew.drawBtnInEW('btn_luk',`Ваша Удача: ${luck}`,()=>{ count = luck; reroll = luckFn; luckFn()})

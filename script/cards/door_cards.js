@@ -119,7 +119,7 @@ function jetOfFire(){
 
     function battle() {
         ew.clear()
-        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
+        ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, false)
     }
 
     ew.clear();
