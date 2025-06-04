@@ -517,14 +517,14 @@ function scorpion(){
 
 function stickyWeb(){
 
-    if(!player.eventCardContainer.some((card) => (card.id === 14 && card.pack === 'catacomb'))) {
+    if(!game.checkCardNameInPack(player.eventCardContainer, catacomb_cards[31].name)) {
         player.eventCardContainer.push(catacomb_cards[31])
         game.drawEventPackCards()
-        ew.removeAllEW()
-        return 
     }
 
     const trueFn = ()=> {
+        game.removeCurrentCardNameFromPack(player.eventCardContainer, catacomb_cards[31].name)
+        game.drawEventPackCards()
         ew.removeLastEW()
         ew.drawEW(`Ви змогли втекти`)
         setTimeout(() => {
@@ -545,10 +545,12 @@ function stickyWeb(){
 
     function luck(){
         ew.clear()
-        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, true, true)
+        ew.addDiceRollSection(`Ваша Удача: ${heroes[player.hero].luck}`, heroes[player.hero].luck, false, false, 2, trueFn, falseFn, true, false)
     }
 
     function wake(){
+        game.removeCurrentCardNameFromPack(player.eventCardContainer, catacomb_cards[31].name)
+        game.drawEventPackCards()
         game.changeHealth(-4)
         ew.drawEW(`Ви змогли втекти, але отримали 4 поранення`)
         setTimeout(() => {
