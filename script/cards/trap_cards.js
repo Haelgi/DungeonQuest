@@ -114,7 +114,7 @@ function burningRay() {
     };
 
     function checkParameters(txt, param) {
-        ew.addDiceRollSection(`Ваша ${txt}: ${param}`, param, false, true, 2, trueFn, falseFn, true, true);
+        ew.addDiceRollSection(`Ваша ${txt}: ${param}`, param, false, false, 2, trueFn, falseFn, true, true);
     }
 
     function nextCheck() {
@@ -128,12 +128,15 @@ function burningRay() {
             checkParameters('Удача', heroes[player.hero].luck);
             count++;
         } else if (count === 3) {
-            checkParameters('Сила', heroes[player.hero].strength);
+            checkParameters('Удача', heroes[player.hero].luck);
             count++;
         } else if (count === 4) {
-            checkParameters('Захист', heroes[player.hero].defense);
+            checkParameters('Сила', heroes[player.hero].strength);
             count++;
         } else if (count === 5) {
+            checkParameters('Захист', heroes[player.hero].defense);
+            count++;
+        } else if (count === 6) {
             ew.removeAllEW();
         }
     }
