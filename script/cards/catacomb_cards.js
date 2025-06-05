@@ -311,7 +311,7 @@ function risingDead(){
 
 function shadowKiller(){
 
-    if(!player.endMoveEventCardContainer.some((card) => (card.id === 10 && card.pack === 'catacomb'))) {
+    if(!game.checkCardNameInPack(player.endMoveEventCardContainer, catacomb_cards[27].name)) {
         player.endMoveEventCardContainer.push(catacomb_cards[27])
         game.drawEventPackCards()
         ew.removeAllEW()
@@ -343,7 +343,8 @@ function shadowKiller(){
 
         if (5<=result) {
             damage = 0
-            player.endMoveEventCardContainer.splice(0,1)
+            game.removeCurrentCardNameFromPack(player.endMoveEventCardContainer, catacomb_cards[27].name)
+            game.drawEventPackCards()
             ew.drawEW(`Ви вбили Тіньового Вбивцю`)
             setTimeout(() => {ew.removeAllEW()}, 2000);
         }

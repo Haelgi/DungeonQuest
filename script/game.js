@@ -181,7 +181,7 @@ class Game {
             }
             
             // ew.drawCardEW(card);
-            ew.drawCardEW(catacomb_cards[39]);
+            ew.drawCardEW(catacomb_cards[43]);
             
             if(game.checkCardNameInPack(player.catacombCardContainer, catacomb_cards[20].name)) {
                 ew.addBtnInEW(`btn_holeInCeiling`, `Спробувати ${catacomb_cards[20].name}`, ()=>{
