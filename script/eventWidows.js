@@ -880,7 +880,7 @@ class EventWidows{
                 player.fightWithMonsters = false;
                 player.combatMagic = false
                 player.mageFirstThrow = true
-                game.endGame()
+                game.gameOver()
             }, 2000);
             return
         }

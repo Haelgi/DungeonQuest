@@ -28,6 +28,7 @@ player.authentication = true;
 // heroes[player.hero].resolve = 5
 
 game.gameIdx = 0;
+game.day = 38;
 game.playerList = [player];
 game.authentication = true; 
 

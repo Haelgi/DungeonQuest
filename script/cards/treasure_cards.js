@@ -453,7 +453,7 @@ function enchantedBook() {
                 ew.drawEW('Ви загинули')
                 setTimeout(() => {
                     ew.removeAllEW()
-                    game.endGame()
+                    game.gameOver()
                 }, 1200);
             }
 
@@ -570,7 +570,7 @@ function enchantedBook() {
         ew.drawBtnInEW('next', 'Далі', ()=>{
             emptyFelds = []
             ew.removeAllEW()
-            game.endGame()
+            game.gameOver()
         })
     }
 

@@ -48,9 +48,6 @@ function dragonSleep(){
 }
 
 function dragonsFury(){
-
-    // TODO для многопользовательской игры добавить код ключ для действия на всех игроков
-    
     
     ew.clear()
 

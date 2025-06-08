@@ -257,7 +257,7 @@ function giantRat(){
             defense()
             if(heroes[player.hero].health<1){
                 ew.removeAllEW()
-                game.endGame()
+                game.gameOver()
             }
         }, 1200);
     }
@@ -1317,9 +1317,6 @@ function boxOfGold(){
     ew.clear()
     ew.addDiceRollSection(false, 6, false, true, 1, result, false, true, true)
 
-    /* "трофей" 
-    //TODO Когда Вы покинули Подземелье Дракона, бросьте 1d6. 
-    Вы находите в шкатулке количество золота, эквивалентное результату броска, умноженному на 100.*/
 }
 
 function hammerOfPower(){

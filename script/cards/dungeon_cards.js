@@ -109,7 +109,7 @@ function wallCollapse(){
     ew.clear()
 
     const trueFn = ()=>{
-        if (game.nextCoordinates.length === 0) game.endGame()
+        if (game.nextCoordinates.length === 0) game.gameOver()
         player.extraMove += 1
         game.removePreviousTileField = true
         game.removeAllIcon()
@@ -117,7 +117,7 @@ function wallCollapse(){
     }
 
     const falseFn = ()=>{
-        if (game.nextCoordinates.length === 0) game.endGame()
+        if (game.nextCoordinates.length === 0) game.gameOver()
         game.changeHealth(-2)
         player.extraMove += 1
         game.removePreviousTileField = true
@@ -1206,7 +1206,7 @@ function fierceCutthroat(){
                     endBattle(`Ви загинули(`)
                     setTimeout(() => {
                         ew.removeAllEW()
-                        game.endGame()
+                        game.gameOver()
                     }, 2000);
                 }
             }

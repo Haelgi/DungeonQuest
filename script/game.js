@@ -38,8 +38,7 @@ class Game {
         this.day = 0; 
         this.dayMax = 38; 
         this.gameFields; 
-        this.startFields=[[0,0], [14,0], [0,11], [14,11], [7,6]]; 
-        // TODO убрать потом
+        this.startFields=[[0,0], [14,0], [0,11], [14,11]]; 
         this.treasuryFields=[[7,5], [7,6]]; 
         this.knowledgeTheCatacombCards = []
         this.foresightSearchCard = []
@@ -122,7 +121,7 @@ class Game {
             if (heroHealth < 1) damage = 1 - heroes[player.hero].health
         }
 
-        if (heroes[player.hero].health < 1) return this.endGame()
+        if (heroes[player.hero].health < 1) return this.gameOver()
 
         heroes[player.hero].health += damage
         this.addCharacterTablet(player.hero);
@@ -417,7 +416,7 @@ class Game {
                 this.dayMax +=4
                 return
             }
-            this.endGame()
+            this.gameOver()
             return 
         };
         const token_sun = document.querySelector(`.token_sun`);
@@ -783,9 +782,32 @@ class Game {
         this.queueEW()
     }
 
-    endGame(){
-        console.log(`[LOG] End Game`)
+    gameOver(){
+        console.log(`[LOG] Game Over`)
         ew.removeAllEW()
+        // TODO 
+        let txt = `Ви можете завершити цю партію, та почати все спочатку, натиснувши кнопку "Завершити". </br> </br>`
+        if (this.day < this.dayMax) txt += `Ви можете продовжити цю партію іншим персонажем, натиснувши кнопку "Продовжити". </br></br> `
+        ew.drawEW(`Гра закінчена! Ви загинули!`);
+        ew.addTxt(txt);
+        ew.addBtnInEW('restart', 'Завершити', ()=>this.endGame())
+        if (this.day < this.dayMax) ew.addBtnInEW('continue', 'Продовжити', ()=>{})
+
+    }
+
+    endGame() {
+        console.log(`[LOG] End Game`)
+        // TODO нужно вернуться к стартовому экрану
+        // TODO сбросить все переменные
+        // TODO удалить эту игру из списка игр
+        // TODO удалить из localStorage
+    }
+
+    continueGame() {
+        console.log(`[LOG] Continue Game`)
+        // TODO сохранить игровое проле
+        // TODO вернуться к стартовому экрану
+        // TODO загрузить сохраненное игровое поле
     }
 
     rotateRoomTile(angl) {
