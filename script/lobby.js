@@ -1,6 +1,8 @@
 import  {game}  from './game.js';
 import  {player}  from './player.js';
 import  {heroes}  from './cards/heroes.js';
+import  {addScrolCardsEffect}  from './function/addScrolCardsEffect.js';
+
 
 
 export function lobby() {
@@ -21,27 +23,34 @@ export function lobby() {
         })  
     }
 
-    cards.forEach(card => {
-        card.addEventListener('click', () => {
-            removeActiveClasses();
-            card.classList.add('active');
-            const heroIdx = card.getAttribute('id');
-            player.hero = heroes[heroIdx].name;
+    addScrolCardsEffect('.character-selection-container', (card)=>{
+        const heroIdx = card.target.getAttribute('id');
+        player.hero = heroes[heroIdx].name;
+        changePlayerListTable(player)
+    });
 
-            changePlayerListTable(player)
-            //TODO отправить на сервер выбор игрока, вернуть выбор другим игрокам, заблокировать выбранные варианты
+    // cards.forEach(card => {
+    //     card.addEventListener('click', () => {
+    //         removeActiveClasses();
+    //         card.classList.add('active');
+    //         const heroIdx = card.getAttribute('id');
+    //         player.hero = heroes[heroIdx].name;
 
-        })
-    })
+    //         changePlayerListTable(player)
+    //         //TODO отправить на сервер выбор игрока, вернуть выбор другим игрокам, заблокировать выбранные варианты
 
-    function removeActiveClasses() {
-        cards.forEach(card => {
-            card.classList.remove('active');
-        })
-    }
+    //     })
+    // })
+
+    // function removeActiveClasses() {
+    //     cards.forEach(card => {
+    //         card.classList.remove('active');
+    //     })
+    // }
 
 
     function changePlayerListTable(player){
+
         const currentPlayerTr = document.querySelector(`.player_${player.idx}`)
         currentPlayerTr.querySelector(`.hero`).textContent=`${heroes[player.hero].heroName}`
         currentPlayerTr.querySelector(`.ready`).innerHTML = `<button>Підтвердити</button>`

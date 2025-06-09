@@ -36,7 +36,8 @@ class Game {
         this.darkRoomCoordinates = {};
 
         this.day = 0; 
-        this.dayMax = 38; 
+        this.dayMax = 38;
+        this.game_Over = false; 
         this.gameFields; 
         this.startFields=[[0,0], [14,0], [0,11], [14,11]]; 
         this.treasuryFields=[[7,5], [7,6]]; 
@@ -783,6 +784,8 @@ class Game {
     }
 
     gameOver(){
+        if (this.game_Over) return
+        this.game_Over = true
         console.log(`[LOG] Game Over`)
         ew.removeAllEW()
         // TODO 
@@ -796,7 +799,9 @@ class Game {
     }
 
     endGame() {
-        console.log(`[LOG] End Game`)
+        console.log(`[LOG] Return to Authentication`)
+        const event = new Event('returnToAuthentication');
+        document.dispatchEvent(event);  
         // TODO нужно вернуться к стартовому экрану
         // TODO сбросить все переменные
         // TODO удалить эту игру из списка игр
@@ -809,6 +814,7 @@ class Game {
         // TODO вернуться к стартовому экрану
         // TODO загрузить сохраненное игровое поле
     }
+
 
     rotateRoomTile(angl) {
         const [x, y] = player.position;
@@ -875,6 +881,7 @@ class Game {
 
     highlightFields(array){
         if (!array) return
+        if (this.game_Over) return
         const fields = this.getElementsByData(array);
         fields.forEach(field => {
             field.classList.add('available')

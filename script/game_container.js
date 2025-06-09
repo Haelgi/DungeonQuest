@@ -13,10 +13,10 @@ import { monster_cards } from './cards/monster_cards.js';
 
 ///////////////////////////// TODO удалить потом //////////////////////////////////////
 
-player.idx = 0; 
-player.name = 'Олег'; 
-player.hero = 'dwarf'; 
-player.authentication = true;
+// player.idx = 0; 
+// player.name = 'Олег'; 
+// player.hero = 'dwarf'; 
+// player.authentication = true;
 // player.eventCardContainer = [monster_cards[9],monster_cards[10],monster_cards[11]];
 // player.checkEventCards = true
 // player.surroundedMonsters = true;
@@ -27,16 +27,16 @@ player.authentication = true;
 
 // heroes[player.hero].resolve = 5
 
-game.gameIdx = 0;
-game.day = 38;
-game.playerList = [player];
-game.authentication = true; 
+// game.gameIdx = 0;
+// game.day = 38;
+// game.playerList = [player];
+// game.authentication = true; 
 
 //////////////////////////////////////////////////////////////////////////////////////
 
 
 export function game_container() {
-    game.drawFieldTileTests(6, 90, 1,  0);
+    // game.drawFieldTileTests(6, 90, 1,  0);
     // game.drawFieldTileTests(58, 0, 1,  1);
     // game.drawFieldTileTests(11, '90', 2,  0);
     // game.drawFieldTileTests(11, '180', 1,  1);
