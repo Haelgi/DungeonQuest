@@ -59,6 +59,66 @@ class Game {
 
     }
 
+    getGameObj(){
+        return {
+            gameIdx: this.gameIdx,
+            currentPlayerIndex: this.currentPlayerIndex,
+            playerList:this.playerList,
+            authentication:this.authentication,
+
+            body:this.body,
+
+            nextCoordinates: this.nextCoordinates,
+
+            day:this.day, 
+            dayMax:this.dayMax,
+
+            gameFields:this.gameFields,
+
+            room_tiles:this.room_tiles, 
+            dungeon_cards:this.dungeon_cards, 
+            catacomb_cards:this.catacomb_cards, 
+            deadman_cards:this.deadman_cards, 
+            trap_cards:this.trap_cards, 
+            сrypt_cards:this.сrypt_cards, 
+            door_cards:this.door_cards, 
+            search_cards:this.search_cards, 
+            treasure_cards:this.treasure_cards, 
+            monster_cards:this.monster_cards,
+            dragon_cards:this.dragon_cards
+        }
+   
+    }
+
+    setGameObj(obj){
+        this.gameIdx = obj.gameIdx
+        this.currentPlayerIndex = obj.currentPlayerIndex
+        this.playerList = obj.playerList
+        this.authentication = obj.authentication
+
+        this.body = obj.body
+
+        this.nextCoordinates = obj.nextCoordinates,
+
+        this.day = obj. day
+        this.dayMax = obj.dayMax
+
+        this.gameFields = obj.gameFields
+
+        this.room_tiles = obj.room_tiles
+        this.dungeon_cards = obj.dungeon_cards
+        this.catacomb_cards = obj.catacomb_cards
+        this.deadman_cards = obj.deadman_cards
+        this.trap_cards = obj.trap_cards
+        this.сrypt_cards = obj.сrypt_cards
+        this.door_cards = obj.door_cards
+        this.search_cards = obj.search_cards
+        this.treasure_cards = obj.treasure_cards
+        this.monster_cards = obj.monster_cards
+        this.dragon_cards = obj.dragon_cards
+    }
+    
+
     fillGamePacks(){
         this.createGameFields()
 
@@ -73,6 +133,11 @@ class Game {
         this.refreshTreasureCards()
         this.refreshMonsterCards()
         this.refreshDragonCards()
+
+        if(this.getLocalData('savedGame')) {
+            this.setGameObj(this.getLocalData('savedGame'));
+            Object.assign(player, this.getLocalData('savedPlayer'))
+        }
     }
 
     getCurrentPlayer(){return this.playerList[this.currentPlayerIndex]}
@@ -107,6 +172,20 @@ class Game {
         this.clickWebIcon()
         this.clickBridgeIcon()
         this.clickArrowIcon()
+
+        if(this.getLocalData('savedGame')) {
+            this.gameFields.forEach((line, y) => {
+                line.forEach((cell, x) => {
+                    if (cell.id !== undefined) this.drawFieldTileTests(cell.id+1, cell.r, x, y);
+                })
+            })
+            this.drawHeroMitl(player.position[0], player.position[1]); 
+
+            if (!player.catacomb) this.nextCoordinates = this.newCoordinate();
+            if (player.catacomb) {this.nextCoordinates = this.newCoordinateInCatacomb()};
+
+            this.highlightFields(this.nextCoordinates);
+        }
     };
 
     createAbilitieCardContainer(){
@@ -180,8 +259,8 @@ class Game {
                 card = this.getRundomElement(this.catacomb_cards, catacomb_cards)   
             }
             
-            // ew.drawCardEW(card);
-            ew.drawCardEW(catacomb_cards[43]);
+            ew.drawCardEW(card);
+            // ew.drawCardEW(catacomb_cards[43]);
             
             if(game.checkCardNameInPack(player.catacombCardContainer, catacomb_cards[20].name)) {
                 ew.addBtnInEW(`btn_holeInCeiling`, `Спробувати ${catacomb_cards[20].name}`, ()=>{
@@ -412,6 +491,7 @@ class Game {
     }
 
     sunTokenPosition(day){
+        if (this.game_Over) return
         if (day > this.dayMax) {
             if (game.checkCardNameInPack(player.treasureCardContainer, treasure_cards[24].name)){
                 this.dayMax +=4
@@ -597,6 +677,16 @@ class Game {
         ew.drawCardEW(card)
     }
 
+    saveGame(){
+        localStorage.setItem('savedGame', JSON.stringify(this.getGameObj()));
+        localStorage.setItem('savedPlayer', JSON.stringify(player));
+        console.log('[LOG] Save game');
+    }
+
+    getLocalData(txt){
+        return JSON.parse(localStorage.getItem(txt));
+    }
+
     makeMove() {
         let array;
 
@@ -621,8 +711,13 @@ class Game {
         }
     
         this.playingField.removeEventListener('click', this.moveEventHandler); 
-    
+
+
         this.moveEventHandler = (e) => {
+            this.saveGame()
+            
+            // this.changeHealth(-10)
+            // TODO убрать потом
             player.ambushRoom = false
             player.surroundedMonsters = false
             player.positionPrevious = player.position;
@@ -695,6 +790,8 @@ class Game {
     
         this.playingField.addEventListener('click', this.moveEventHandler, { once: true });
     }
+
+    
 
     checkRoomEvents(){
         const x = player.position[0]
@@ -794,7 +891,7 @@ class Game {
         ew.drawEW(`Гра закінчена! Ви загинули!`);
         ew.addTxt(txt);
         ew.addBtnInEW('restart', 'Завершити', ()=>this.endGame())
-        if (this.day < this.dayMax) ew.addBtnInEW('continue', 'Продовжити', ()=>{})
+        if (this.day < this.dayMax) ew.addBtnInEW('continue', 'Продовжити', ()=>this.continueGame())
 
     }
 
@@ -802,7 +899,6 @@ class Game {
         console.log(`[LOG] Return to Authentication`)
         const event = new Event('returnToAuthentication');
         document.dispatchEvent(event);  
-        // TODO нужно вернуться к стартовому экрану
         // TODO сбросить все переменные
         // TODO удалить эту игру из списка игр
         // TODO удалить из localStorage
@@ -810,8 +906,11 @@ class Game {
 
     continueGame() {
         console.log(`[LOG] Continue Game`)
+        const data = {game, player}
         // TODO сохранить игровое проле
-        // TODO вернуться к стартовому экрану
+        const event = new Event('returnToLobby');
+        document.dispatchEvent(event);  
+        this.game_Over = false;
         // TODO загрузить сохраненное игровое поле
     }
 

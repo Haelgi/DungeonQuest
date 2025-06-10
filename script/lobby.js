@@ -25,6 +25,7 @@ export function lobby() {
 
     addScrolCardsEffect('.character-selection-container', (card)=>{
         const heroIdx = card.target.getAttribute('id');
+        if (heroIdx === null) return;
         player.hero = heroes[heroIdx].name;
         changePlayerListTable(player)
     });
