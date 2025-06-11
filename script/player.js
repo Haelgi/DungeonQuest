@@ -45,6 +45,8 @@ class Player {
         this.unbrokenSpirit = 0
         this.combatMagic = false
         this.mageFirstThrow = true
+
+        this.continue_game = false;
     }
 }
 

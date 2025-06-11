@@ -179,12 +179,17 @@ class Game {
                     if (cell.id !== undefined) this.drawFieldTileTests(cell.id+1, cell.r, x, y);
                 })
             })
-            this.drawHeroMitl(player.position[0], player.position[1]); 
+            if (!player.continue_game) this.drawHeroMitl(player.position[0], player.position[1]); 
 
             if (!player.catacomb) this.nextCoordinates = this.newCoordinate();
-            if (player.catacomb) {this.nextCoordinates = this.newCoordinateInCatacomb()};
+            if (player.catacomb) this.nextCoordinates = this.newCoordinateInCatacomb();
+            if (player.continue_game) {
+                this.nextCoordinates = game.startFields
+                this.removeAllIcon();
+            }
 
             this.highlightFields(this.nextCoordinates);
+            player.continue_game = false;
         }
     };
 
@@ -716,7 +721,7 @@ class Game {
         this.moveEventHandler = (e) => {
             this.saveGame()
             
-            // this.changeHealth(-10)
+            this.changeHealth(-10)
             // TODO убрать потом
             player.ambushRoom = false
             player.surroundedMonsters = false
@@ -895,23 +900,29 @@ class Game {
 
     }
 
+    removeLocalStorage() {
+        if (localStorage.getItem("savedGame") !== null) {
+            localStorage.removeItem("savedGame");
+            localStorage.removeItem("savedPlayer");
+        }
+    }
+
     endGame() {
         console.log(`[LOG] Return to Authentication`)
+        this.removeLocalStorage();
+        this.playerList = [];
+
         const event = new Event('returnToAuthentication');
         document.dispatchEvent(event);  
-        // TODO сбросить все переменные
-        // TODO удалить эту игру из списка игр
-        // TODO удалить из localStorage
     }
 
     continueGame() {
         console.log(`[LOG] Continue Game`)
-        const data = {game, player}
-        // TODO сохранить игровое проле
+        this.game_Over = false;
+        player.continue_game = true;
+        this.saveGame()
         const event = new Event('returnToLobby');
         document.dispatchEvent(event);  
-        this.game_Over = false;
-        // TODO загрузить сохраненное игровое поле
     }
 
 
