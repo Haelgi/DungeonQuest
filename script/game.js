@@ -352,6 +352,7 @@ class Game {
     }
 
     newCoordinate(withoutDoors) {
+        if (!player.position) return this.startFields;
         const [x, y] = player.position;
         const coordinates = [];
 
@@ -1015,7 +1016,7 @@ class Game {
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         const hero_mitl = this.playingField.querySelector(`.hero_mitl.${player.hero}`);
         const hero_token_catacomb = this.playingField.querySelector(`.hero_token_catacomb.${player.hero}`);
-
+        if (!field) return
         if (hero_mitl) {hero_mitl.remove()};
         if (hero_token_catacomb) {hero_token_catacomb.remove()};
         if (player.catacomb) {
