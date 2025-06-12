@@ -165,6 +165,7 @@ class Game {
         this.drawEventPackCards();
         this.drawTreasurePackCards()
     
+        this.clickCloseBtn()
         this.clickDoorIcon()
         this.clickGrilleIcon()
         this.clickCollapseIcon()
@@ -509,6 +510,7 @@ class Game {
         const token_sun = document.querySelector(`.token_sun`);
         if (token_sun) token_sun.remove();
         const dayContainer = document.querySelector(`[day="${day}"]`);
+        if (!dayContainer) return
         dayContainer.innerHTML=`
             <div class="token_sun"></div>
         `;
@@ -995,6 +997,7 @@ class Game {
         if (this.game_Over) return
         const fields = this.getElementsByData(array);
         fields.forEach(field => {
+            if (!field) return
             field.classList.add('available')
             field.insertAdjacentHTML('afterbegin', `
                 <div class="available-field"></div>
@@ -1273,6 +1276,14 @@ class Game {
                     })
                 }  
             }
+        });
+    };
+
+    clickCloseBtn(){
+        const btn = document.querySelector('.btn-close-game');
+            btn.addEventListener('click', () => {
+            ew.drawEW(`Ви впевнені що хочете завершити гру?`);
+            ew.addBtnInEW('btn_end_game', 'Завершити', ()=>this.endGame())
         });
     };
 
