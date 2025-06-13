@@ -1,11 +1,9 @@
 import  {addScrolCardsEffect}  from '../function/addScrolCardsEffect.js';
-
 import { ew } from '../eventWidows.js';
 import { player } from '../player.js';
 import { game } from '../game.js';
 import { room_tiles } from './room_tiles.js';
 import { search_cards } from './search_cards.js';
-import { heroes } from './heroes.js';
 
 
 class Card {

@@ -2,7 +2,6 @@ import  {addScrolCardsEffect}  from '../function/addScrolCardsEffect.js';
 import  {ew}  from '../eventWidows.js';
 import  {player}  from '../player.js';
 import  {game}  from '../game.js';
-import  {heroes}  from '../cards/heroes.js';
 import  {catacomb_cards}  from '../cards/catacomb_cards.js';
 
 class Card {

@@ -29,6 +29,4 @@ document.addEventListener('returnToLobby', () => {
     loadTemplate('body', `lobby`).then(()=>{lobby()});
 });
 
-//TODO добавить подсказки к ходу игры
-// показать где старт
 

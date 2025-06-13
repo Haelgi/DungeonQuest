@@ -1,5 +1,4 @@
 import  {addScrolCardsEffect}  from './function/addScrolCardsEffect.js';
-
 import  {game}  from './game.js';
 import  {heroes}  from './cards/heroes.js';
 import  {сrypt_cards}  from './cards/сrypt_cards.js';

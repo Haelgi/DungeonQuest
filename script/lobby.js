@@ -4,7 +4,6 @@ import  {heroes}  from './cards/heroes.js';
 import  {addScrolCardsEffect}  from './function/addScrolCardsEffect.js';
 
 
-
 export function lobby() {
     const cards = document.querySelectorAll('.card')
     const table = document.querySelector('.player-list')

@@ -1,4 +1,3 @@
-import  {loadTemplate}  from './function/loadTemplate.js';
 import  {ew}  from './eventWidows.js';
 import  {addScrolCardsEffect}  from './function/addScrolCardsEffect.js';
 import  {heroes}  from './cards/heroes.js';
