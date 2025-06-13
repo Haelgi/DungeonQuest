@@ -630,7 +630,10 @@ class EventWidows{
     drawBtnInEW(id, name, fn, bg){
         const element = document.querySelector('.event-main');
         element.insertAdjacentHTML('beforeend', `<button id=${id} style="background:${bg}">${name}</button>`);
-        document.getElementById(id).addEventListener('click', () => fn(), {once: true});
+        document.getElementById(id).addEventListener('click', () => {
+            console.log(`[LOG] click ${name}`)
+            fn()
+        }, {once: true});
     }
 
     addBtnInEW(id, name, fn, bg){
