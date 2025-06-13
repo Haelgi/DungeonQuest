@@ -34,7 +34,8 @@ class EventWidows{
 
     clear(){
         this.removeTxt()
-        document.querySelectorAll('button')?.forEach((item)=>{item.remove()})
+        const container = document.querySelector('.event-container')
+        container.querySelectorAll('button')?.forEach((item)=>{item.remove()})
         document.querySelectorAll('.dice-section')?.forEach((item)=>{item.remove()})
     }
 
