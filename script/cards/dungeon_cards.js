@@ -606,7 +606,7 @@ function armyOfGhosts(){
 
         if (5<=result) {
             damage = 3
-            if (heroes[player.hero].resolve !== 0 ) changeResolve(-1)
+            if (player.resolve !== 0 ) changeResolve(-1)
             
 
             ew.drawEW(`Ви отримали ${damage} поранення`)
@@ -964,7 +964,7 @@ function stoneBall(){
 function curseOfTheSorcerer(){
     ew.clear()
 
-    const resolve = heroes[player.hero].resolve
+    const resolve = player.resolve
     player.oldResolve = resolve
     player.curseResolve = true
     ew.drawBtnInEW('next', 'Далі', ()=>{
@@ -1156,7 +1156,7 @@ function fierceCutthroat(){
         
         ew.addTxt(`
             ${player.hero.toUpperCase()}<br>
-            <i id="pl_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px; margin: 10px auto;">${heroes[player.hero].health}</i><br>
+            <i id="pl_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px; margin: 10px auto;">${player.health}</i><br>
         `)
 
         ew.addTxt(`
@@ -1190,7 +1190,7 @@ function fierceCutthroat(){
 
                 if(game.diceRollResultGlobal>3){
                     game.changeHealth(-1)
-                    pl_hp.innerHTML = heroes[player.hero].health
+                    pl_hp.innerHTML = player.health
                     ew.drawEW(`Ви отримали поранення`)
                     setTimeout(() => {
                         ew.removeLastEW()
@@ -1202,7 +1202,7 @@ function fierceCutthroat(){
 
                 if (new_em_hp <= 0) return endBattle(`Ви перемогли Головоріза`)
 
-                if (heroes[player.hero].health === 0) {
+                if (player.health === 0) {
                     endBattle(`Ви загинули(`)
                     setTimeout(() => {
                         ew.removeAllEW()

@@ -267,7 +267,7 @@ function demonOfFear() {
     player.fightWithDemon = true
 
     ew.clear()
-    heroes[player.hero].resolve = 0
+    player.resolve = 0
     game.addCharacterTablet(player.hero)
 
     function endBattleFn(){

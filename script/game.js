@@ -69,6 +69,7 @@ class Game {
             body:this.body,
 
             nextCoordinates: this.nextCoordinates,
+            darkRoomCoordinates: this.darkRoomCoordinates,
 
             day:this.day, 
             dayMax:this.dayMax,
@@ -201,19 +202,19 @@ class Game {
         let damage = value
 
         if (player.unbrokenSpirit !== 0 && value < 0){
-            const heroHealth = heroes[player.hero].health + damage
+            const heroHealth = player.health + damage
 
-            if (heroHealth < 1) damage = 1 - heroes[player.hero].health
+            if (heroHealth < 1) damage = 1 - player.health
         }
 
-        if (heroes[player.hero].health < 1) return this.gameOver()
+        if (player.health < 1) return this.gameOver()
 
-        heroes[player.hero].health += damage
+        player.health += damage
         this.addCharacterTablet(player.hero);
     }
 
     changeResolve(value){
-        heroes[player.hero].resolve += value
+        heroes.resolve += value
         this.addCharacterTablet(player.hero);
     }
 
@@ -518,12 +519,12 @@ class Game {
         const characterTablet = document.querySelector(`.character-tablet-container`);
         characterTablet.innerHTML=`
             <div class="hero-tablet shadow" style="background-image: url('img/hero_tiles/tablet/${heroName}.jpg')">
-                <div class="hero-value resolve-value">${heroes[heroName].resolve}</div>
+                <div class="hero-value resolve-value">${player.resolve}</div>
                 <div class="hero-value strength-value">${heroes[heroName].strength}</div>
                 <div class="hero-value dexterity-value">${heroes[heroName].dexterity}</div>
                 <div class="hero-value defense-value">${heroes[heroName].defense}</div>
                 <div class="hero-value luck-value">${heroes[heroName].luck}</div>
-                <div class="hero-value health-value">${heroes[heroName].health}</div>             
+                <div class="hero-value health-value">${player.health}</div>             
                 <div class="hero-value gold-value"><i class="fa-solid fa-coins"></i>   ${player.gold}</div>             
             </div>
         `;
@@ -638,10 +639,10 @@ class Game {
     };
 
     checkCurseOfTheSorcerer(){
-        if(player.curseResolve && heroes[player.hero].resolve > player.oldResolve) {
-            const diff = heroes[player.hero].resolve - player.oldResolve  
+        if(player.curseResolve && player.resolve > player.oldResolve) {
+            const diff = player.resolve - player.oldResolve  
             this.changeHealth(-diff) 
-            player.oldResolve = heroes[player.hero].resolve
+            player.oldResolve = player.resolve
         }
     }
 
@@ -916,6 +917,7 @@ class Game {
         console.log(`[LOG] Return to Authentication`)
         this.removeLocalStorage();
         this.playerList = [];
+        this.nextCoordinates = this.startFields
 
         const event = new Event('returnToAuthentication');
         document.dispatchEvent(event);  

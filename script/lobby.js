@@ -27,6 +27,9 @@ export function lobby() {
         const heroIdx = card.target.getAttribute('id');
         if (heroIdx === null) return;
         player.hero = heroes[heroIdx].name;
+        player.resolve = heroes[heroIdx].resolve;
+        player.health = heroes[heroIdx].health;
+        player.healthMax = heroes[heroIdx].health;
         changePlayerListTable(player)
     });
 

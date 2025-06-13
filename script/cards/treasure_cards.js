@@ -328,7 +328,7 @@ function phoenixBelt() {
 function phoenixBeltFn(){
     ew.removeAllEW();
     
-    if(heroes[player.hero].health > 3) {
+    if(player.health > 3) {
         ew.drawEW('Ви не можете використати цей пояс зараз')
         ew.drawBtnInEW('btn_next', 'Далі', ew.removeAllEW)
         return
@@ -413,7 +413,7 @@ function genieLampFn(){
     ew.drawEW('Ви втратили всі трофеї і у вас залишилось 1 очко життя')
     setTimeout(() => {
         ew.removeAllEW();
-        game.changeHealth(-heroes[player.hero].health + 1)
+        game.changeHealth(-player.health + 1)
         player.treasureCardContainer = []
         game.drawTreasurePackCards()
         

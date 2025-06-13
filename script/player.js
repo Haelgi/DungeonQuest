@@ -2,8 +2,13 @@ class Player {
     
     constructor(userName, idx) {
         this.idx = idx; 
-        this.name = userName; 
+        this.name = userName;
+         
         this.hero; 
+        this.resolve;
+        this.health; 
+        this.healthMax; 
+        
         this.authentication = false;
         this.positionPrevious = false;
         this.positionTreasury = false;

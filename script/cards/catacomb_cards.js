@@ -255,7 +255,7 @@ function giantRat(){
         setTimeout(() => {
             ew.removeLastEW()
             defense()
-            if(heroes[player.hero].health<1){
+            if(player.health<1){
                 ew.removeAllEW()
                 game.gameOver()
             }
@@ -281,7 +281,7 @@ function giantRat(){
 }
 
 function risingDead(){
-    const damage = Math.floor(heroes[player.hero].health / 2)
+    const damage = Math.floor(player.health / 2)
 
     const trueFn = ()=> {
         ew.removeLastEW()
@@ -1276,7 +1276,7 @@ function alchemist(){
         }
     }
 
-    if (heroes[player.hero].health > 4) ew.drawBtnInEW('btn_hpForTr',`Життя за скарби`, hpForTr)
+    if (player.health > 4) ew.drawBtnInEW('btn_hpForTr',`Життя за скарби`, hpForTr)
     if (player.treasureCardContainer.length > 0) ew.drawBtnInEW('btn_trForHp',`Скарби за життя`, trForHp)
     ew.drawBtnInEW('btn_close',`Пропустити`, ()=>{ew.removeAllEW()})
     /*Вы набрели на лабораторию Алхимика. 

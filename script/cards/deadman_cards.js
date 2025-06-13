@@ -163,8 +163,8 @@ function deadmanCurse(){
     let txt = `Ви отримали ${damage} поранень`
 
     game.changeHealth(-damage)
-    if (heroes[player.hero].resolve > 0) {
-        heroes[player.hero].resolve -= 1
+    if (player.resolve > 0) {
+        player.resolve -= 1
         txt += ` і втратили 1 жетон рішучості`
     }
 

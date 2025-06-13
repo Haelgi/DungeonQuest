@@ -101,8 +101,8 @@ function livingDead(){
             if (falseCount < 3) ew.removeAllEW();
             if (falseCount === 3) {
                 let txt = 'Ви не пройшли перевірку. ';
-                if (heroes[player.hero].resolve > 0) {
-                    heroes[player.hero].resolve -= 1;
+                if (player.resolve > 0) {
+                    player.resolve -= 1;
                     txt += `</br> Ви втрачаєте 1 жетон рішучості`
                 }
                 ew.drawEW(txt)
@@ -163,8 +163,8 @@ function volatilePotionFn(){
             setTimeout(() => ew.removeAllEW(), 1200);
         }
         if (game.diceRollResultGlobal >= 11 && game.diceRollResultGlobal <= 12) {
-            if (heroes[player.hero].healthMax < heroes[player.hero].health){
-                heroes[player.hero].health = heroes[player.hero].healthMax;
+            if (player.healthMax < player.health){
+                player.health = player.healthMax;
                 game.addCharacterTablet(player.hero)
             }
             ew.drawEW(`Ви повністю зцілилися`);

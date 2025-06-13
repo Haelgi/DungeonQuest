@@ -653,8 +653,8 @@ function burningRoom(){
     let count = 0;
     let damage = 6;
 
-    if (heroes[player.hero].resolve < 2) heroes[player.hero].resolve = 0;
-    if (heroes[player.hero].resolve >= 2) heroes[player.hero].resolve -= 2;
+    if (player.resolve < 2) player.resolve = 0;
+    if (player.resolve >= 2) player.resolve -= 2;
     game.addCharacterTablet(player.hero);
 
 

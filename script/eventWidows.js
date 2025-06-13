@@ -214,7 +214,7 @@ class EventWidows{
         let newValue = value;
         let texts = txt;
         let resolve = false;
-        const resolvePlayer = heroes[player.hero].resolve;
+        const resolvePlayer = player.resolve;
         const treasure = player.treasureCardContainer.length;
     
         if (resolvePlayer > 0) {
@@ -241,7 +241,7 @@ class EventWidows{
     addDiceRollSection( txt, value, dexterity, resolve, diceCount, trueFn, falseFn, rolResult, closeEW) {
         let newValue = value;
         let texts = txt;
-        const resolvePlayer = heroes[player.hero].resolve;
+        const resolvePlayer = player.resolve;
         const treasure = player.treasureCardContainer.length;
     
         if (resolvePlayer > 0 && resolve) {
@@ -312,7 +312,7 @@ class EventWidows{
     
     addBattleDiceRollSection(trueValue, resolve, diceCount, trueFn, falseFn) {
         let newValue = trueValue;
-        const resolvePlayer = heroes[player.hero].resolve;
+        const resolvePlayer = player.resolve;
     
         if (resolvePlayer > 0 && resolve) {
             texts += `<br> + ${resolvePlayer} Рішучості`;
@@ -337,7 +337,7 @@ class EventWidows{
 
         let value = valueIn
 
-        if (resolve) value += heroes[player.hero].resolve
+        if (resolve) value += player.resolve
 
         if (game.diceRollResultGlobal <= valueIn) {
             if (rolResult){
@@ -766,7 +766,7 @@ class EventWidows{
         this.clear()
         this.addTxt(`
             ${player.hero.toUpperCase()}<br>
-            <i id="pl_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px; margin: 10px auto;">${heroes[player.hero].health}</i><br>
+            <i id="pl_hp" class="fa-solid fa-heart" style="color:red; font-size: 25px; margin: 10px auto;">${player.health}</i><br>
         `)
 
         this.addTxt(`
@@ -873,7 +873,7 @@ class EventWidows{
             return
         }
 
-        if (heroes[player.hero].health === 0) {
+        if (player.health === 0) {
             this.drawEW(`Ви загинули(`)
             setTimeout(() => {
                 this.removeAllEW()
