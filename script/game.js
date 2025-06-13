@@ -121,7 +121,6 @@ class Game {
 
     fillGamePacks(){
         this.createGameFields()
-
         this.refreshRoomTiles()
         this.refreshDungeonCards()
         this.refreshCatacombCards()
@@ -133,6 +132,7 @@ class Game {
         this.refreshTreasureCards()
         this.refreshMonsterCards()
         this.refreshDragonCards()
+        player.reset();
 
         if(this.getLocalData('savedGame')) {
             this.setGameObj(this.getLocalData('savedGame'));
@@ -639,6 +639,7 @@ class Game {
 
     checkCurseOfTheSorcerer(){
         if(player.curseResolve && player.resolve > player.oldResolve) {
+            console.log(`[LOG] check Curse Of The Sorcerer`)
             const diff = player.resolve - player.oldResolve  
             this.changeHealth(-diff) 
             player.oldResolve = player.resolve
@@ -647,7 +648,7 @@ class Game {
 
     checkEventCards(){
         if (player.eventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
-        console.log(`checkEventCards`)
+        console.log(`[LOG] check Event Cards`)
         this.activeEvent = true
         player.checkEventCards = true
         const [card] = player.eventCardContainer.splice(0, 1);
@@ -657,6 +658,7 @@ class Game {
 
     checkEndMoveEventCardContainer(){
         if (player.endMoveEventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
+        console.log(`[LOG] check End Move Event Card Container`)
         this.activeEvent = true
         player.checkEventCards = true
         const [card] = player.endMoveEventCardContainer.splice(0, 1);
@@ -665,6 +667,7 @@ class Game {
 
     checkCatacombCards(){
         if (player.catacombCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
+        console.log(`[LOG] check Catacomb Cards`)
         this.activeEvent = true
         player.checkEventCards = true
         const [card] = player.catacombCardContainer.splice(0, 1);
@@ -678,6 +681,7 @@ class Game {
             delete this.gameFields[player.position[1]][player.position[0]]['m']
             return
         }
+        console.log(`[LOG] check Monster Cards`)
 
         const [card] = this.gameFields[player.position[1]][player.position[0]]['m'].splice(0, 1);
         ew.drawCardEW(card)
@@ -863,8 +867,7 @@ class Game {
     }
 
     endMove(){
-        this.removeAllIcon();
-
+        
         if (player.extraMove !== 0) {
             console.log(`[LOG] Extra Move`)
             player.extraMove -= 1
@@ -872,17 +875,18 @@ class Game {
             this.makeMove()
             return
         }
-
+        
         if (player.unbrokenSpirit !== 0){
             this.unbrokenSpirit -= 1
         }
         console.log(`[LOG] End Move`)
-
+        
         player.extraMove = 0
-
+        
         this.checkEndMoveEventCardContainer()
         this.toggleCurrentPlayer()
         this.queueEW()
+        this.removeAllIcon();
     }
 
     gameOver(){
