@@ -76,6 +76,14 @@
     z-index: 20;
 }
 
+.tile-field i.out-from-tower-icon{
+    top: -30px;
+    left: -30px;
+    padding: 7px;
+    color: #00fa478e;
+    z-index: 20;
+}
+
 .tile-field i.search-icon,
 .tile-field i.treasure-icon{
     top: -40px;

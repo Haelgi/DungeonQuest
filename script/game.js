@@ -186,7 +186,6 @@ class Game {
             if (player.catacomb) this.nextCoordinates = this.newCoordinateInCatacomb();
             if (player.continue_game) {
                 this.nextCoordinates = game.startFields
-                this.removeAllIcon();
             }
 
             this.highlightFields(this.nextCoordinates);
@@ -246,9 +245,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        // ew.drawCardEW(card);
-        // ew.drawCardEW(trap_cards[1]);
-        // TODO
+        ew.drawCardEW(card);
     }
 
     playCatacombEvent(){
@@ -266,7 +263,6 @@ class Game {
             }
             
             ew.drawCardEW(card);
-            // ew.drawCardEW(catacomb_cards[43]);
             
             if(game.checkCardNameInPack(player.catacombCardContainer, catacomb_cards[20].name)) {
                 ew.addBtnInEW(`btn_holeInCeiling`, `Спробувати ${catacomb_cards[20].name}`, ()=>{
@@ -328,10 +324,12 @@ class Game {
         this.removeIcon('.abyss-icon');
         this.removeIcon('.end-icon');
         this.removeIcon('.catacomb-icon');
+        this.removeIcon('.out-from-tower-icon');
     }
 
     isPlayerInTower() {
         if (!player.position) return false
+        console.log(`[LOG] player in tower`)
         const [x, y] = player.position;
         return this.startFields.some(coord => coord[0] === x && coord[1] === y);
     }
@@ -724,8 +722,6 @@ class Game {
         this.moveEventHandler = (e) => {
             this.saveGame()
             
-            this.changeHealth(-10)
-            // TODO убрать потом
             player.ambushRoom = false
             player.surroundedMonsters = false
             player.positionPrevious = player.position;
@@ -739,7 +735,6 @@ class Game {
             if (e.target.closest('.bridge-icon')) return; 
     
             if (e.target.closest('.available')) {
-                this.removeAllIcon();
 
                 if(this.removePreviousTileField) {
                     game.removePreviousTileField = false
@@ -747,6 +742,7 @@ class Game {
                 }
 
                 const field = e.target.parentElement;
+                if (!field) return;
                 const x = Number(field.getAttribute('data-x'));
                 const y = Number(field.getAttribute('data-y'));
                 
@@ -867,6 +863,7 @@ class Game {
     }
 
     endMove(){
+        this.removeAllIcon();
 
         if (player.extraMove !== 0) {
             console.log(`[LOG] Extra Move`)
@@ -891,14 +888,19 @@ class Game {
     gameOver(){
         if (this.game_Over) return
         this.game_Over = true
+
         console.log(`[LOG] Game Over`)
+
         ew.removeAllEW()
-        // TODO 
+
         let txt = `Ви можете завершити цю партію, та почати все спочатку, натиснувши кнопку "Завершити". </br> </br>`
+
         if (this.day < this.dayMax) txt += `Ви можете продовжити цю партію іншим персонажем, натиснувши кнопку "Продовжити". </br></br> `
+        
         ew.drawEW(`Гра закінчена! Ви загинули!`);
         ew.addTxt(txt);
         ew.addBtnInEW('restart', 'Завершити', ()=>this.endGame())
+        
         if (this.day < this.dayMax) ew.addBtnInEW('continue', 'Продовжити', ()=>this.continueGame())
 
     }
@@ -917,6 +919,16 @@ class Game {
 
         const event = new Event('returnToAuthentication');
         document.dispatchEvent(event);  
+    }
+
+    endGameInTower(){
+        ew.removeAllEW()
+        const gold = player.gold
+        let txt = `Гра закінчена! </br> </br> `
+        if (gold == 0) txt = `Ви не змогли винести з підземелля бодай чогось цінного, але ви вижили!`
+        if (gold > 0) txt = `Вітаю!</br> Ви відкорили підземелля і змогли винести з нього ${gold} золотих монет, та зберегти своє житя!`
+        ew.drawEW(txt);
+        ew.addBtnInEW('continue', 'Продовжити', ()=>{this.endGame()})
     }
 
     continueGame() {
@@ -1016,6 +1028,7 @@ class Game {
     };
 
     drawHeroMitl(x, y){
+        player.position = [x, y];
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         const hero_mitl = this.playingField.querySelector(`.hero_mitl.${player.hero}`);
         const hero_token_catacomb = this.playingField.querySelector(`.hero_token_catacomb.${player.hero}`);
@@ -1033,9 +1046,12 @@ class Game {
 
             this.drawIcon(x, y, 'fa-regular fa-circle-xmark', 'end');
             this.clickEndIcon(x, y);
+
+            if (this.isPlayerInTower()) {
+                this.drawIcon(x, y, 'fa-solid fa-arrow-right-from-bracket', 'out-from-tower');
+                this.clickTowerIcon(x, y);
+            }
         }
-                    
-        player.position = [x, y];
 
         if (this.gameFields[y][x]['id'] === undefined 
             && !field.classList.contains(`start-field`) 
@@ -1259,6 +1275,17 @@ class Game {
         });
     };
 
+    clickTowerIcon(){
+        const icon = document.querySelector('.out-from-tower-icon');    
+
+        icon.addEventListener('click', () => {
+            ew.drawEW(`Ви впевнені що хочете завершити гру?`);
+            ew.addBtnInEW('btn_end_game', 'Так', ()=>this.endGameInTower())
+            ew.addBtnInEW('btn_clouse', 'Ні', ()=>ew.removeAllEW())
+        });
+    };
+
+
     clickDoorIcon(){
         this.playingField.addEventListener('click', (e) => {
             if(e.target.closest('.door-icon')) {
@@ -1283,7 +1310,8 @@ class Game {
         const btn = document.querySelector('.btn-close-game');
             btn.addEventListener('click', () => {
             ew.drawEW(`Ви впевнені що хочете завершити гру?`);
-            ew.addBtnInEW('btn_end_game', 'Завершити', ()=>this.endGame())
+            ew.addBtnInEW('btn_end_game', 'Так', ()=>this.endGame())
+            ew.addBtnInEW('btn_clouse', 'Ні', ()=>ew.removeAllEW())
         });
     };
 
