@@ -213,7 +213,7 @@ class Game {
     }
 
     changeResolve(value){
-        heroes.resolve += value
+        player.resolve += value
         this.addCharacterTablet(player.hero);
     }
 
@@ -724,6 +724,7 @@ class Game {
 
 
         this.moveEventHandler = (e) => {
+            this.removeAllIcon();
             this.saveGame()
             
             player.ambushRoom = false
@@ -867,7 +868,6 @@ class Game {
     }
 
     endMove(){
-        
         if (player.extraMove !== 0) {
             console.log(`[LOG] Extra Move`)
             player.extraMove -= 1
@@ -886,7 +886,6 @@ class Game {
         this.checkEndMoveEventCardContainer()
         this.toggleCurrentPlayer()
         this.queueEW()
-        this.removeAllIcon();
     }
 
     gameOver(){
