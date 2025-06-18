@@ -284,7 +284,8 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        // ew.drawCardEW(card);
+        ew.drawCardEW(card);
+        // ew.drawCardEW(dungeon_cards[48]);
     }
 
     playCatacombEvent(){
@@ -686,7 +687,7 @@ class Game {
     }
 
     checkEventCards(){
-        if (player.eventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
+        if (player.eventCardContainer.length === 0 || this.activeEvent || !player.checkEventCards) return
         console.log(`[LOG] check Event Cards`)
         this.activeEvent = true
         player.checkEventCards = true
@@ -696,7 +697,7 @@ class Game {
     }
 
     checkEndMoveEventCardContainer(){
-        if (player.endMoveEventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
+        if (player.endMoveEventCardContainer.length === 0 || this.activeEvent || !player.checkEventCards) return
         console.log(`[LOG] check End Move Event Card Container`)
         this.activeEvent = true
         player.checkEventCards = true
@@ -705,7 +706,7 @@ class Game {
     }
 
     checkCatacombCards(){
-        if (player.catacombCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
+        if (player.catacombCardContainer.length === 0 || this.activeEvent || !player.checkEventCards) return
         console.log(`[LOG] check Catacomb Cards`)
         this.activeEvent = true
         player.checkEventCards = true

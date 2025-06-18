@@ -399,6 +399,7 @@ function magicRoom(){
         game.removeHighlightFields(game.nextCoordinates)
         game.removeAllIcon()
         game.nextCoordinates = game.newCoordinate()
+        ew.removeLastEW()
     }
     
     ew.addDiceRollSection( false, 6, false, false,1, trueFn, false, true, true)
