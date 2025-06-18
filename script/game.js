@@ -58,6 +58,44 @@ class Game {
 
     }
 
+    reset() {
+        this.gameIdx = undefined;
+        this.currentPlayerIndex = 0;
+        this.playerList = [];
+        this.authentication = false;
+
+        this.body = undefined;
+        this.playingField = undefined;
+        this.activeEvent = false;
+        this.removePreviousTileField = false;
+        this.next = false;
+        this.diceRollResultGlobal = 0;
+        this.nextCoordinates = undefined;
+        this.darkRoomCoordinates = {};
+
+        this.day = 0;
+        this.dayMax = 38;
+        this.game_Over = false;
+        this.gameFields = undefined;
+        this.startFields = [[0,0], [14,0], [0,11], [14,11]];
+        this.treasuryFields = [[7,5], [7,6]];
+        this.knowledgeTheCatacombCards = [];
+        this.foresightSearchCard = [];
+        this.room_tiles = undefined;
+        this.dungeon_cards = undefined;
+        this.catacomb_cards = undefined;
+        this.deadman_cards = undefined;
+        this.trap_cards = undefined;
+        this.сrypt_cards = undefined;
+        this.door_cards = undefined;
+        this.search_cards = undefined;
+        this.treasure_cards = undefined;
+        this.monster_cards = undefined;
+        this.dragon_cards = undefined;
+
+        this.fillGamePacks();
+    }
+
     getGameObj(){
         return {
             gameIdx: this.gameIdx,
@@ -120,6 +158,7 @@ class Game {
     
 
     fillGamePacks(){
+        console.log(`[LOG] Fill game packs`)
         this.createGameFields()
         this.refreshRoomTiles()
         this.refreshDungeonCards()
@@ -132,7 +171,6 @@ class Game {
         this.refreshTreasureCards()
         this.refreshMonsterCards()
         this.refreshDragonCards()
-        player.reset();
 
         if(this.getLocalData('savedGame')) {
             this.setGameObj(this.getLocalData('savedGame'));
@@ -157,6 +195,7 @@ class Game {
     refreshDragonCards(){this.dragon_cards=Array.from({ length: 8 }, (_, index) => index + 1)}
 
     startPosition(){
+        console.log(`[LOG] Start position`)
         this.body = document.querySelector(`body`);
         this.playingField = document.querySelector(`.playing-field`);    
         this.addCharacterTablet(player.hero);  
@@ -245,7 +284,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        ew.drawCardEW(card);
+        // ew.drawCardEW(card);
     }
 
     playCatacombEvent(){
@@ -698,6 +737,8 @@ class Game {
     }
 
     makeMove() {
+        if (this.game_Over) return
+        if (!this.playingField) return
         let array;
 
         if(player.idx !== this.currentPlayerIndex) return
@@ -708,8 +749,8 @@ class Game {
             return
         }
 
+        if (player.position) array = this.nextCoordinates;
         if (!player.position) array = this.startFields;
-        if (player.position ) array = this.nextCoordinates;
 
         this.checkCurseOfTheSorcerer()
         this.checkEventCards()
@@ -725,7 +766,6 @@ class Game {
 
         this.moveEventHandler = (e) => {
             this.removeAllIcon();
-            this.saveGame()
             
             player.ambushRoom = false
             player.surroundedMonsters = false
@@ -795,6 +835,7 @@ class Game {
             }
     
             this.diceRollResultGlobal = 0;
+            this.saveGame();
         };
     
         this.playingField.addEventListener('click', this.moveEventHandler, { once: true });
@@ -918,9 +959,7 @@ class Game {
     endGame() {
         console.log(`[LOG] Return to Authentication`)
         this.removeLocalStorage();
-        this.playerList = [];
-        this.nextCoordinates = this.startFields
-
+        this.game_Over = true
         const event = new Event('returnToAuthentication');
         document.dispatchEvent(event);  
     }
@@ -939,7 +978,6 @@ class Game {
         console.log(`[LOG] Continue Game`)
         this.game_Over = false;
         player.continue_game = true;
-        this.saveGame()
         const event = new Event('returnToLobby');
         document.dispatchEvent(event);  
     }
@@ -1061,8 +1099,10 @@ class Game {
             && !field.classList.contains(`start-field`) 
             && !field.classList.contains(`treasury`)
             && !player.catacomb) {
-            this.drawTileField(x, y);
+            this.drawTileField(x, y, 6);
+            // TODO убрать потом
         }
+        this.saveGame();
     }
 
     drawMonsterToken(x, y, card){

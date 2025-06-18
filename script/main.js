@@ -3,6 +3,7 @@ import  {authentication}  from './authentication.js';
 import  {lobby}  from './lobby.js';
 import  {game_container}  from './game_container.js';
 import  {game}  from './game.js';
+import  {player}  from './player.js';
 
 if(game.getLocalData('savedGame')) {
     console.log('[Log] Saved game found, loading...')
@@ -23,6 +24,8 @@ document.addEventListener('confirm', () => {
 
 document.addEventListener('returnToAuthentication', () => {
     loadTemplate('body', `authentication`).then(()=>{authentication()});
+    game.reset();
+    player.reset();
 });
 
 document.addEventListener('returnToLobby', () => {

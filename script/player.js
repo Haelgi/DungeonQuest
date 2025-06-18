@@ -82,7 +82,7 @@ class Player {
         this.checkEventCards = false;
         this.checkEndMoveEventCardContainer = true;
 
-        this.choiceNumber= [];
+        this.choiceNumber = [];
         this.ambushRoom = false;
         this.surroundedMonsters = false;
         this.fightWithMonsters = false;
@@ -91,7 +91,16 @@ class Player {
         this.fightWithSorcerer = false;
         this.fightWithSkeleton = false;
         this.fightWithTroll = false;
-
+        this.gold = 0;
+        this.willToWin = 2;
+        this.unbrokenSpirit = 0;
+        this.combatMagic = false;
+        this.mageFirstThrow = true;
+        this.continue_game = false;
+        this.hero = undefined;
+        this.resolve = undefined;
+        this.health = undefined;
+        this.healthMax = undefined;
     }
 }
 

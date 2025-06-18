@@ -495,6 +495,7 @@ class EventWidows{
             element.remove()
             EventWidows.zIndex = 100;
         });
+        game.saveGame()
     }
 
     removeLastEW(){
