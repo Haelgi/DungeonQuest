@@ -1100,7 +1100,7 @@ class Game {
             && !field.classList.contains(`start-field`) 
             && !field.classList.contains(`treasury`)
             && !player.catacomb) {
-            this.drawTileField(x, y, 6);
+            this.drawTileField(x, y);
             // TODO убрать потом
         }
         this.saveGame();

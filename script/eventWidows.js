@@ -500,6 +500,7 @@ class EventWidows{
 
     removeLastEW(){
         const element = document.getElementById(`ew_${EventWidows.zIndex}`)
+        if (!element) return;
         element.remove()
         EventWidows.zIndex -= 1;
     }
