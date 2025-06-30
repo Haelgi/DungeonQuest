@@ -29,7 +29,7 @@ function sandTrap(){
         const damage = 6 - success
         game.changeHealth(-damage)
         ew.drawEW(`Ви отримали ${damage} поранень!`)
-        game.removeAllIcon()
+        game.removeBarrierIcon()
         player.extraMove += 1
         player.skipMove = 1
 

@@ -488,7 +488,7 @@ class EventWidows{
 
     removeAllEW(){
         game.activeEvent = false
-        player.checkEventCards = true
+        player.checkEventCards = false
 
         const elements = document.querySelectorAll('.event-container')
         elements.forEach(element => {
@@ -871,7 +871,7 @@ class EventWidows{
             }
 
             setTimeout(() => {
-                this.removeAllEW()
+                this.removeLastEW()
                 player.fightWithMonsters = false;
                 endBattleFn()
             }, 2000);
@@ -881,7 +881,8 @@ class EventWidows{
         if (player.health === 0) {
             this.drawEW(`Ви загинули(`)
             setTimeout(() => {
-                this.removeAllEW()
+                this.removeLastEW()
+                this.removeLastEW()
                 player.fightWithMonsters = false;
                 player.combatMagic = false
                 player.mageFirstThrow = true

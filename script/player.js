@@ -1,3 +1,7 @@
+
+import  {monster_cards}  from './cards/monster_cards.js';
+import  {trap_cards}  from './cards/trap_cards.js';
+
 class Player {
     
     constructor(userName, idx) {
@@ -21,8 +25,9 @@ class Player {
         this.treasureCardContainer = [];
         this.positionTreasuryCards = [];
         this.catacombCardContainer = [];
+        // this.eventCardContainer = [monster_cards[0], monster_cards[1]];
         this.eventCardContainer = [];
-        this.endMoveEventCardContainer = [];
+        this.endMoveEventCardContainer = [trap_cards[0], trap_cards[1]];
         this.doorEventTarget;
         
         this.attack = 1;

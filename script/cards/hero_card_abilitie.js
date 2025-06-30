@@ -41,7 +41,7 @@ const dwarf = [
         game.removeHighlightFields(game.nextCoordinates)
         game.nextCoordinates = game.getCoordinatesWithoutRoom()
         game.drawHeroMitl(player.position[0], player.position[1]);
-        game.removeAllIcon()
+        game.removeBarrierIcon()
         
         /*  Сбросьте перед перемещением. Переместитесь в любую соседнюю область, игнорируя любые
             преграды, в том числе и стены. Если область неисследована, разместите в ней тайл Комнаты
@@ -346,7 +346,7 @@ const mage = [
         function rotateRoom(angle){
             game.rotateRoomTile(angle)
             game.removeHighlightFields(game.nextCoordinates)
-            game.removeAllIcon()
+            game.removeBarrierIcon()
             game.nextCoordinates = game.newCoordinate()
             ew.removeAllEW()
             game.removeCurrentCardNameFromPack(player.abilitieCardContainer, 'Вращение')

@@ -39,7 +39,6 @@ function ironGolem() {
     function endBattleFn(){
         player.fightWithMonsters = false
         player.fightWithGolem = false
-        ew.drawCardEW(monster_cards[0])
         ew.clear()
         ew.drawBtnInEW('next', 'Витягнути 3 Карти Склепу', ()=>{
             ew.removeAllEW()
@@ -760,7 +759,6 @@ function madTroll() {
         }
 
         player.extraMove += 1
-        game.removeAllIcon()
         ew.removeAllEW()
     }
 

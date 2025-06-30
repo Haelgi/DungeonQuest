@@ -22,7 +22,7 @@ function secretPass(){
     game.removeHighlightFields(game.nextCoordinates)
     game.nextCoordinates = game.getCoordinatesWithoutRoom()
     game.drawHeroMitl(player.position[0], player.position[1]);
-    game.removeAllIcon()
+    game.removeBarrierIcon()
     ew.removeAllEW()
     
     if (player.hero == 'dwarf') game.changeResolve(1)
@@ -96,7 +96,7 @@ function secretLever(){
     function rotateRoom(angle){
         game.rotateRoomTile(angle)
         game.removeHighlightFields(game.nextCoordinates)
-        game.removeAllIcon()
+        game.removeBarrierIcon()
         game.nextCoordinates = game.newCoordinate()
         ew.removeAllEW()
     }
@@ -156,7 +156,7 @@ function scrollOfPassageFn(){
             setTimeout(ew.removeAllEW, 1200);
             return
     }
-    game.removeAllIcon()
+    game.removeBarrierIcon()
     game.removeHighlightFields(game.nextCoordinates)
     game.nextCoordinates = game.getCoordinatesWithoutRoom()
     game.removeCurrentCardNameFromPack(player.treasureCardContainer, search_cards[25].name)

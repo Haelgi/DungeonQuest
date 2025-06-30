@@ -75,7 +75,7 @@ function collapse(){
     ew.removeAllEW();
     game.rotateRoomTile(90)
     game.removeHighlightFields(game.nextCoordinates)
-    game.removeAllIcon()
+    game.removeBarrierIcon()
     game.nextCoordinates = game.newCoordinate()
     /*Случился обвал! Хотя часть пути и завалило обломками, другая часть пути освободилась. 
     Поверните тайл комнаты, где Вы находитесь, на 90° по часовой стрелке.*/
@@ -397,7 +397,7 @@ function magicRoom(){
         
         game.rotateRoomTile(angl)
         game.removeHighlightFields(game.nextCoordinates)
-        game.removeAllIcon()
+        game.removeBarrierIcon()
         game.nextCoordinates = game.newCoordinate()
         ew.removeLastEW()
     }

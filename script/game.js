@@ -267,7 +267,6 @@ class Game {
             this.changeHealth(-6)       
             this.getDirectionCatacomb()
             this.drawHeroMitl(player.position[0], player.position[1]);
-            this.endMove()
         } 
 
         ew.diceRollEW('Зайшовши в кімнату у вас під ногами виявилася дуже крихка підлога, щоб не провалитися в катакомби перевірте свою Удачу.',`Ваша Удача:  ${heroes[player.hero].luck} `, heroes[player.hero].luck, false, 2, trueFn, falseFn, true, true)
@@ -285,7 +284,7 @@ class Game {
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
         ew.drawCardEW(card);
-        // ew.drawCardEW(dungeon_cards[48]);
+        // ew.drawCardEW(monster_cards[17]);
     }
 
     playCatacombEvent(){
@@ -354,17 +353,23 @@ class Game {
     };
     
     removeAllIcon(){
+        console.log(`[LOG] remove all icon`)
         this.removeIcon('.search-icon');
         this.removeIcon('.treasure-icon');
+        this.removeIcon('.end-icon');
+        this.removeIcon('.out-from-tower-icon');
+        this.removeBarrierIcon()
+    }
+    
+    removeBarrierIcon(){
+        console.log(`[LOG] remove barrier icon`)
         this.removeIcon('.door-icon');
         this.removeIcon('.grille-icon');
         this.removeIcon('.collapse-icon');
         this.removeIcon('.web-icon');
         this.removeIcon('.bridge-icon');
         this.removeIcon('.abyss-icon');
-        this.removeIcon('.end-icon');
         this.removeIcon('.catacomb-icon');
-        this.removeIcon('.out-from-tower-icon');
     }
 
     isPlayerInTower() {
@@ -687,17 +692,24 @@ class Game {
     }
 
     checkEventCards(){
-        if (player.eventCardContainer.length === 0 || this.activeEvent || !player.checkEventCards) return
+        if (player.eventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
         console.log(`[LOG] check Event Cards`)
         this.activeEvent = true
         player.checkEventCards = true
+
+        if (this.checkCardNameInPack(player.eventCardContainer, catacomb_cards[38].name) && !player.catacomb) {
+            this.removeCurrentCardNameFromPack(player.eventCardContainer, catacomb_cards[38].name)
+            this.drawEventPackCards()
+        }
+
         const [card] = player.eventCardContainer.splice(0, 1);
+        console.log(player.eventCardContainer)
         this.drawEventPackCards()
         ew.drawCardEW(card)
     }
 
     checkEndMoveEventCardContainer(){
-        if (player.endMoveEventCardContainer.length === 0 || this.activeEvent || !player.checkEventCards) return
+        if (player.endMoveEventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
         console.log(`[LOG] check End Move Event Card Container`)
         this.activeEvent = true
         player.checkEventCards = true
@@ -706,7 +718,7 @@ class Game {
     }
 
     checkCatacombCards(){
-        if (player.catacombCardContainer.length === 0 || this.activeEvent || !player.checkEventCards) return
+        if (player.catacombCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
         console.log(`[LOG] check Catacomb Cards`)
         this.activeEvent = true
         player.checkEventCards = true
@@ -738,11 +750,7 @@ class Game {
     }
 
     makeMove() {
-        if (this.game_Over) return
-        if (!this.playingField) return
         let array;
-
-        if(player.idx !== this.currentPlayerIndex) return
 
         if (player.skipMove !== 0) {
             player.skipMove -= 1
@@ -759,14 +767,28 @@ class Game {
         this.checkMonsterCards()
     
         if (!document.querySelector(`.available-field`)) {
-            this.highlightFields(array);    
+            this.highlightFields(array); 
+                    // TODO
+            this.drawCatacombIcon()
+            this.drawSearchIcon()   
+            this.drawTowerIcon()  
+            this.drawEndMoveIcon() 
         }
     
         this.playingField.removeEventListener('click', this.moveEventHandler); 
 
 
         this.moveEventHandler = (e) => {
+            if (
+                e.target.closest('.search-icon') ||
+                e.target.closest('.end-icon') ||
+                e.target.closest('.catacomb-icon') ||
+                e.target.closest('.out-from-tower-icon') ||
+                e.target.closest('.treasure-icon')
+            ) return;
+            
             this.removeAllIcon();
+            
             
             player.ambushRoom = false
             player.surroundedMonsters = false
@@ -794,7 +816,6 @@ class Game {
                 
                 if (player.catacomb && !this.activeEvent) {
                     this.playCatacombEvent()
-                    this.endMove()
                 }
     
                 if (field.classList.contains(`treasury`) && !player.positionTreasury && !player.catacomb) {
@@ -816,23 +837,18 @@ class Game {
                 
                 if (player.catacomb) {this.nextCoordinates = this.newCoordinateInCatacomb()};
     
-                if (!room_tiles[this.gameFields[y][x]['id']]) return;
-                this.isPlayerLeftTreasury()
+                if (!room_tiles[this.gameFields[y][x]['id']]) {
+                    this.makeMove();
+                    return
+                };
 
-                this.checkRoomEvents()
-
-                if(room_tiles[this.gameFields[y][x]['id']]?.special !== 'bridge' 
-                   && room_tiles[this.gameFields[y][x]['id']]?.special !== 'corridor' 
-                   && room_tiles[this.gameFields[y][x]['id']]?.special !== 'pit' 
-                   && !player.positionTreasury
-                   && !player.catacomb) {
-                    if (this.checkCardNameInPack(player.eventCardContainer, catacomb_cards[38].name)) {
-                        this.removeCurrentCardNameFromPack(player.eventCardContainer, catacomb_cards[38].name)
-                        this.drawEventPackCards()
-                    }
-                    player.positionTreasury = false
-                    this.endMove()      
+                if(room_tiles[this.gameFields[y][x]['id']]?.special == 'corridor') {
+                    this.makeMove()  
+                    return    
                 }
+                
+                this.isPlayerLeftTreasury()
+                this.checkRoomEvents()
             }
     
             this.diceRollResultGlobal = 0;
@@ -856,29 +872,64 @@ class Game {
         if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate' && !player.catacomb) {
             this.rotateRoomTile(180)
             this.nextCoordinates = this.newCoordinate();
-            this.endMove()
         };
 
         if (room_tiles[this.gameFields[y][x]['id']].special === 'dark' && !player.catacomb) {
             ew.diceRollDarkRoomEW()  
         }
 
+        if(room_tiles[this.gameFields[y][x]['id']]?.special === 'bridge' && !player.catacomb) {
+            this.removeCoordinateFromArray([player.positionPrevious[0],player.positionPrevious[1]], this.nextCoordinates)
+        }
+    }
+
+    
+
+    drawTowerIcon(){
+        const x = player.position[0]
+        const y = player.position[1]
+
+        if (this.isPlayerInTower()) {
+            this.drawIcon(x, y, 'fa-solid fa-arrow-right-from-bracket', 'out-from-tower');
+            this.clickTowerIcon(x, y);
+        }
+    }
+
+    drawCatacombIcon(){
+        if (!player.position) return
+        const x = player.position[0]
+        const y = player.position[1]
+        
+        if(this.gameFields[y][x]['id']== undefined)return
+        if (room_tiles[this.gameFields[y][x]['id']].catacomb || this.gameFields[y][x]['c']) {
+            this.drawIcon(x, y, 'fa-solid fa-person-through-window', 'catacomb');
+            this.clickCatacombIcon();
+        }
+    }
+
+    drawEndMoveIcon(){
+        if (!player.position) return
+        console.log(`[LOG] draw End Move Icon`)
+        const x = player.position[0]
+        const y = player.position[1]
+        this.drawIcon(x, y, 'fa-regular fa-circle-xmark', 'end');
+        this.clickEndIcon(x, y);
+    }
+
+
+    drawSearchIcon(){
+        if (!player.position) return
+        const x = player.position[0]
+        const y = player.position[1]
+
+        if(this.gameFields[y][x]['id']== undefined)return
         if (room_tiles[this.gameFields[y][x]['id']].search 
             && (this.gameFields[y][x]['s'] === undefined || this.gameFields[y][x]['s'] < 2)
             && !player.catacomb
             && this.gameFields[y][x]['m'] === undefined) {
             this.drawIcon(x, y, 'fa-solid fa-magnifying-glass', 'search');
             this.clickSerchIcon();
-        }
-        
-        if (room_tiles[this.gameFields[y][x]['id']].catacomb|| this.gameFields[y][x]['c']) {
-            this.drawIcon(x, y, 'fa-solid fa-person-through-window', 'catacomb');
-            this.clickCatacombIcon();
-        }
-
-        if(room_tiles[this.gameFields[y][x]['id']]?.special === 'bridge' && !player.catacomb) {
-            this.removeCoordinateFromArray([player.positionPrevious[0],player.positionPrevious[1]], this.nextCoordinates)
-        }
+        }        
     }
 
     removeCoordinateFromArray(elem, arr){
@@ -902,15 +953,22 @@ class Game {
 
     queueEW(){
         const name = player.name;
-        if(player.idx === this.currentPlayerIndex && this.playerList.length > 1){
-            ew.drawEW(`${name}, ваш крок!`);
-            ew.drawBtnInEW('close', 'Розпочати!', ()=> ew.removeAllEW())
+        let txt = `${name}, ваш крок!`;
+        if (this.playerList.length == 1) txt  = `Новий день!`;
+
+
+        if(player.idx === this.currentPlayerIndex){
+            ew.drawEW(txt);
+            ew.drawBtnInEW('close', 'Далі', ()=> {
+                ew.removeAllEW()
+                this.makeMove();
+            })
         } 
         if(player.idx !== this.currentPlayerIndex) ew.drawEW(`Очівання гравця ${name}!`)
     }
 
     endMove(){
-        if (player.extraMove !== 0) {
+        if (player.extraMove > 0) {
             console.log(`[LOG] Extra Move`)
             player.extraMove -= 1
             player.checkEventCards = true
@@ -921,11 +979,14 @@ class Game {
         if (player.unbrokenSpirit !== 0){
             this.unbrokenSpirit -= 1
         }
+        
+        if (player.skipMove == 0){
+            this.checkEndMoveEventCardContainer()
+        }
         console.log(`[LOG] End Move`)
-        
-        player.extraMove = 0
-        
-        this.checkEndMoveEventCardContainer()
+
+        this.sunTokenPosition(game.day)
+
         this.toggleCurrentPlayer()
         this.queueEW()
     }
@@ -1016,6 +1077,7 @@ class Game {
 
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
         if (!roomNumber) roomNumber = this.getRundomElement(this.room_tiles, room_tiles).number;
+        if (room_tiles[this.gameFields[y][x]['id']]?.special == 'corridor') player.extraMove += 1;
 
         let rotate;
         
@@ -1035,6 +1097,7 @@ class Game {
         delete this.gameFields[player.position[1]][player.position[0]]['p'];
 
         console.log(`[LOG] room`, roomNumber, `rotate:`, rotate)
+        
         
         return roomNumber
     };
@@ -1058,6 +1121,8 @@ class Game {
                 <div class="available-field"></div>
             `);
         });
+
+
     };
 
     removeHighlightFields(array){
@@ -1066,6 +1131,7 @@ class Game {
         fields.forEach(field => {
             field.classList.remove('available')
             const highlight = field.querySelector(`.available-field`);
+            if (!highlight) return
             highlight.remove();
         });
     };
@@ -1087,13 +1153,7 @@ class Game {
                 <img class="hero_mitl ${player.hero}" src="img/hero_tiles/mitle/${player.hero}.png" alt="">
             `); 
 
-            this.drawIcon(x, y, 'fa-regular fa-circle-xmark', 'end');
-            this.clickEndIcon(x, y);
-
-            if (this.isPlayerInTower()) {
-                this.drawIcon(x, y, 'fa-solid fa-arrow-right-from-bracket', 'out-from-tower');
-                this.clickTowerIcon(x, y);
-            }
+            this.drawEndMoveIcon()
         }
 
         if (this.gameFields[y][x]['id'] === undefined 
@@ -1101,10 +1161,11 @@ class Game {
             && !field.classList.contains(`treasury`)
             && !player.catacomb) {
             this.drawTileField(x, y);
-            // TODO убрать потом
         }
         this.saveGame();
     }
+
+
 
     drawMonsterToken(x, y, card){
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
@@ -1189,7 +1250,9 @@ class Game {
     clickSerchIcon(){
         const [x,y] = player.position
         const serchIcon = document.querySelector('.search-icon');
-        serchIcon.addEventListener('click', () => {
+        serchIcon.addEventListener('click', (e) => {
+            e.target.remove();
+            this.removeHighlightFields(this.nextCoordinates)
             let card
             if (this.foresightSearchCard.length !== 0) {
                 [card] = this.foresightSearchCard.splice(0, 1);
@@ -1198,14 +1261,14 @@ class Game {
             }            
 
             ew.drawCardEW(card)
-            this.removeIcon('.search-icon');
 
             if (this.gameFields[y][x]['s']===undefined) {
                 this.gameFields[y][x]['s'] = 1
             } else {
                 this.gameFields[y][x]['s'] += 1
             }
-            this.endMove()
+
+
         });
     };
 
@@ -1220,7 +1283,6 @@ class Game {
         const catacombIcon = document.querySelector('.catacomb-icon');
         catacombIcon.addEventListener('click', () => {
             this.getDirectionCatacomb()
-            this.endMove()
         });
     };
 
@@ -1248,7 +1310,6 @@ class Game {
             ew.drawEW('Ви вийщли з катакомб.')
             ew.drawBtnInEW('close', 'Далі', ()=>{
                 ew.removeAllEW()
-                this.endMove()
             })
 
             return
@@ -1398,7 +1459,7 @@ class Game {
                 }
                 const falseFn = ()=>  {
                     ew.removeAllEW()
-                    this.endMove()
+                    // this.endMove()
                 }
                 ew.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, 2, trueFn, falseFn, true, true)
 
@@ -1420,7 +1481,7 @@ class Game {
                 }
                 const falseFn = ()=>  {
                     ew.removeAllEW()
-                    this.endMove()
+                    // this.endMove()
                 }
                 ew.diceRollEW('Перед вами кімната заповнена уламками стелі що впала, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, trueFn, falseFn, true, true)   
                 
@@ -1445,7 +1506,7 @@ class Game {
                 }
                 const falseFn = ()=>  {
                     ew.removeAllEW()
-                    this.endMove()
+                    // this.endMove()
                 }
                 ew.diceRollEW('Кімнату оплутала павутиння заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, 2, trueFn, falseFn, true, true)
                 
@@ -1480,7 +1541,7 @@ class Game {
                         setTimeout(() => {
                             ew.removeLastEW()
                         }, 2000);
-                        this.endMove()
+                        // this.endMove()
                     };
                     
                     this.getDirectionCatacomb()
@@ -1514,7 +1575,7 @@ class Game {
                     this.changeHealth(-5);
                     this.getDirectionCatacomb();
                     this.drawHeroMitl(player.position[0], player.position[1]);
-                    this.endMove();
+                    // this.endMove();
                 } 
                 ew.diceRollEW('Кімнату розділило навпіл глибоким прірвою, щоб вийти з кімнати по той бік прірви перевірте Спритність.', `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, trueFn, falseFn, true, true)   
                 

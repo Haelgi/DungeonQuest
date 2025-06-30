@@ -155,7 +155,7 @@ function foresightPotionFn() {
         if (showBtn) {
             showBtn = false
             ew.addBtnInEW('btn_next', `Вибрати`, () => {
-                game.removeAllIcon()
+                game.removeBarrierIcon()
                 game.removeTileField(x, y)
                 game.drawTileField(x, y, correctRoomId)
                 game.nextCoordinates = game.newCoordinate()

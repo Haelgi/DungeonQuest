@@ -4,13 +4,16 @@ import  {game}  from './game.js';
 export function game_container() {
     
     game.startPosition();
+
+    game.sunTokenPosition(game.day);
+    game.makeMove();
     
-    function gameLoop() {
-        game.sunTokenPosition(game.day);
-        game.makeMove();
+    // function gameLoop() {
+    //     game.sunTokenPosition(game.day);
+    //     game.makeMove();
 
-        requestAnimationFrame(gameLoop);
-    };
+    //     requestAnimationFrame(gameLoop);
+    // };
 
-    requestAnimationFrame(gameLoop);
+    // requestAnimationFrame(gameLoop);
 }
