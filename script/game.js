@@ -227,7 +227,6 @@ class Game {
                 this.nextCoordinates = game.startFields
             }
 
-            this.highlightFields(this.nextCoordinates);
             player.continue_game = false;
         }
     };
@@ -749,7 +748,12 @@ class Game {
     }
 
     makeMove() {
-        let array;
+        let new_coords;
+
+        player.ambushRoom = false
+        player.surroundedMonsters = false
+        player.positionPrevious = player.position;
+        player.escapeBattle = true
 
         if (player.skipMove !== 0) {
             player.skipMove -= 1
@@ -757,23 +761,25 @@ class Game {
             return
         }
 
-        if (player.position) array = this.nextCoordinates;
-        if (!player.position) array = this.startFields;
+        
+        if (!player.catacomb) this.nextCoordinates = this.newCoordinate();
+        if (player.catacomb) this.nextCoordinates = this.newCoordinateInCatacomb();
+        if (!player.position) new_coords = this.startFields;
+        if (player.position) new_coords = this.nextCoordinates;
+        
+        this.highlightFields(new_coords); 
+        
+        this.drawCatacombIcon()
+        this.drawSearchIcon()   
+        this.drawTowerIcon()  
+        this.drawEndMoveIcon() 
 
         this.checkCurseOfTheSorcerer()
         this.checkEventCards()
         this.checkCatacombCards()
         this.checkMonsterCards()
     
-        if (!document.querySelector(`.available-field`)) {
-            this.highlightFields(array); 
-                    // TODO
-            this.drawCatacombIcon()
-            this.drawSearchIcon()   
-            this.drawTowerIcon()  
-            this.drawEndMoveIcon() 
-        }
-    
+
         this.playingField.removeEventListener('click', this.moveEventHandler); 
 
 
@@ -792,21 +798,16 @@ class Game {
                 e.target.closest('.bridge-icon')
             ) return;
             
-            this.removeAllIcon();
             
-            
-            player.ambushRoom = false
-            player.surroundedMonsters = false
-            player.positionPrevious = player.position;
-            player.escapeBattle = true
-    
             if (e.target.closest('.available')) {
-
+                
+                this.removeAllIcon();
+                
                 if(this.removePreviousTileField) {
                     game.removePreviousTileField = false
                     this.removeTileField(player.positionPrevious[0], player.positionPrevious[1])
                 }
-
+                
                 const field = e.target.parentElement;
                 if (!field) return;
                 const x = Number(field.getAttribute('data-x'));
@@ -815,26 +816,22 @@ class Game {
                 if (player.catacomb && !this.activeEvent) {
                     this.playCatacombEvent()
                 }
-    
+                
                 if (field.classList.contains(`treasury`) && !player.positionTreasury && !player.catacomb) {
                     player.positionTreasury = true;
                     this.playTreasuryEvent();
                 };
-    
+                
                 if (field.classList.contains(`treasury`) 
                     && player.positionTreasury
-                    && !player.catacomb) {
+                && !player.catacomb) {
                     this.drawIcon(x, y, 'fa-regular fa-gem', 'treasure');
                     this.clickTreasureIcon(x, y);
                 }
-
-                this.removeHighlightFields(array);
-                this.drawHeroMitl(x, y);
-
-                if (!player.catacomb) this.nextCoordinates = this.newCoordinate();
                 
-                if (player.catacomb) {this.nextCoordinates = this.newCoordinateInCatacomb()};
-    
+                this.drawHeroMitl(x, y);
+                this.removeHighlightFields();
+                
                 if (!room_tiles[this.gameFields[y][x]['id']]) {
                     this.makeMove();
                     return
@@ -853,7 +850,7 @@ class Game {
             this.saveGame();
         };
     
-        this.playingField.addEventListener('click', this.moveEventHandler, { once: true });
+        this.playingField.addEventListener('click', this.moveEventHandler);
     }
 
     
@@ -880,7 +877,6 @@ class Game {
             this.removeCoordinateFromArray([player.positionPrevious[0],player.positionPrevious[1]], this.nextCoordinates)
         }
     }
-
     
 
     drawTowerIcon(){
@@ -1110,6 +1106,7 @@ class Game {
     highlightFields(array){
         if (!array) return
         if (this.game_Over) return
+        console.log(`[LOG] Highlight Fields`)
         const fields = this.getElementsByData(array);
         fields.forEach(field => {
             if (!field) return
@@ -1121,7 +1118,9 @@ class Game {
     };
 
     removeHighlightFields(array){
-        const fields = this.getElementsByData(array);
+        let fields;
+        if (!array) fields = this.playingField.querySelectorAll(`.available`)
+        if (array) fields = this.getElementsByData(array);
         if (fields === undefined) return
         console.log(`[LOG] Remove Highlight Fields`)
         this.removeBarrierIcon()
