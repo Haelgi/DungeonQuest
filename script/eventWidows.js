@@ -949,7 +949,7 @@ class EventWidows{
                 game.drawMonsterToken(player.position[0], player.position[1], card)
                 player.extraMove = true
                 player.fightWithMonsters = false
-                game.removeAllIcon()
+                game.removeBarrierIcon()
                 this.removeAllEW()
             }, 2000);
 

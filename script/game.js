@@ -374,7 +374,6 @@ class Game {
 
     isPlayerInTower() {
         if (!player.position) return false
-        console.log(`[LOG] player in tower`)
         const [x, y] = player.position;
         return this.startFields.some(coord => coord[0] === x && coord[1] === y);
     }
@@ -784,7 +783,13 @@ class Game {
                 e.target.closest('.end-icon') ||
                 e.target.closest('.catacomb-icon') ||
                 e.target.closest('.out-from-tower-icon') ||
-                e.target.closest('.treasure-icon')
+                e.target.closest('.treasure-icon') ||
+                e.target.closest('.door-icon') ||
+                e.target.closest('.grille-icon') ||
+                e.target.closest('.collapse-icon') ||
+                e.target.closest('.web-icon') ||
+                e.target.closest('.abyss-icon') ||
+                e.target.closest('.bridge-icon')
             ) return;
             
             this.removeAllIcon();
@@ -794,13 +799,6 @@ class Game {
             player.surroundedMonsters = false
             player.positionPrevious = player.position;
             player.escapeBattle = true
-
-            if (e.target.closest('.door-icon')) return;
-            if (e.target.closest('.grille-icon')) return;
-            if (e.target.closest('.collapse-icon')) return;
-            if (e.target.closest('.web-icon')) return;
-            if (e.target.closest('.abyss-icon')) return;
-            if (e.target.closest('.bridge-icon')) return; 
     
             if (e.target.closest('.available')) {
 
@@ -1098,7 +1096,6 @@ class Game {
 
         console.log(`[LOG] room`, roomNumber, `rotate:`, rotate)
         
-        
         return roomNumber
     };
     
@@ -1121,13 +1118,13 @@ class Game {
                 <div class="available-field"></div>
             `);
         });
-
-
     };
 
     removeHighlightFields(array){
         const fields = this.getElementsByData(array);
         if (fields === undefined) return
+        console.log(`[LOG] Remove Highlight Fields`)
+        this.removeBarrierIcon()
         fields.forEach(field => {
             field.classList.remove('available')
             const highlight = field.querySelector(`.available-field`);
@@ -1162,6 +1159,7 @@ class Game {
             && !player.catacomb) {
             this.drawTileField(x, y);
         }
+        
         this.saveGame();
     }
 
@@ -1267,8 +1265,6 @@ class Game {
             } else {
                 this.gameFields[y][x]['s'] += 1
             }
-
-
         });
     };
 
