@@ -743,9 +743,11 @@ class EventWidows{
         const x = player.position[0]
         const y = player.position[1]
         player.catacomb = false
+        player.escapeCatacomb = true
         game.gameFields[y][x]['c'] = true
         game.drawHeroMitl(x, y);
         game.drawCatacombToken(x, y)
+        game.removeHighlightFields(game.nextCoordinates)
         game.removeHighlightFields(game.nextCoordinates)
         game.nextCoordinates = game.newCoordinate()
         game.checkRoomEvents()

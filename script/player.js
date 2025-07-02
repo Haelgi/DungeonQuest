@@ -106,6 +106,7 @@ class Player {
         this.resolve = undefined;
         this.health = undefined;
         this.healthMax = undefined;
+        player.escapeCatacomb = false;
     }
 }
 

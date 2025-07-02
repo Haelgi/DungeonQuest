@@ -760,10 +760,10 @@ class Game {
             this.endMove()
             return
         }
-
         
         if (!player.catacomb) this.nextCoordinates = this.newCoordinate();
         if (player.catacomb) this.nextCoordinates = this.newCoordinateInCatacomb();
+
         if (!player.position) new_coords = this.startFields;
         if (player.position) new_coords = this.nextCoordinates;
         
@@ -772,8 +772,15 @@ class Game {
         this.drawCatacombIcon()
         this.drawSearchIcon()   
         this.drawTowerIcon()  
+        
+        if (player.escapeCatacomb) {
+            player.escapeCatacomb = false
+            this.removeHighlightFields();
+            this.removeAllIcon();
+        }
+        
         this.drawEndMoveIcon() 
-
+        
         this.checkCurseOfTheSorcerer()
         this.checkEventCards()
         this.checkCatacombCards()
@@ -831,11 +838,6 @@ class Game {
                 
                 this.drawHeroMitl(x, y);
                 this.removeHighlightFields();
-                
-                if (!room_tiles[this.gameFields[y][x]['id']]) {
-                    this.makeMove();
-                    return
-                };
 
                 if(room_tiles[this.gameFields[y][x]['id']]?.special == 'corridor') {
                     this.makeMove()  
@@ -858,6 +860,8 @@ class Game {
     checkRoomEvents(){
         const x = player.position[0]
         const y = player.position[1]
+
+        if (this.gameFields[y][x]['id'] === undefined) return
 
         if (room_tiles[this.gameFields[y][x]['id']].dungeon && this.gameFields[y][x]['m'] === undefined && !this.activeEvent) this.playDungeonEvent();
 
@@ -1144,6 +1148,7 @@ class Game {
             field.insertAdjacentHTML('afterbegin', `
                 <img class="hero_token_catacomb ${player.hero}" src="img/hero_tiles/token/${player.hero}.png" alt="" style="rotate: ${player.catacombDirection}deg;">
             `);
+            this.drawEndMoveIcon()
         } else {
             field.insertAdjacentHTML('afterbegin', `
                 <img class="hero_mitl ${player.hero}" src="img/hero_tiles/mitle/${player.hero}.png" alt="">
@@ -1156,7 +1161,7 @@ class Game {
             && !field.classList.contains(`start-field`) 
             && !field.classList.contains(`treasury`)
             && !player.catacomb) {
-            this.drawTileField(x, y);
+            this.drawTileField(x, y, 6);
         }
         
         this.saveGame();
