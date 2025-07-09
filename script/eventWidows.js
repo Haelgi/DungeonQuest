@@ -949,9 +949,9 @@ class EventWidows{
             player.mageFirstThrow = true            
             setTimeout(() => {
                 game.drawMonsterToken(player.position[0], player.position[1], card)
-                player.extraMove = true
+                game.makeMove()
                 player.fightWithMonsters = false
-                game.removeBarrierIcon()
+                game.removeAllIcon()
                 this.removeAllEW()
             }, 2000);
 
@@ -969,6 +969,9 @@ class EventWidows{
 
         this.drawBtnInEwIfSomeCardInTreasure(treasure_cards[8], 
             'Гарантована втеча та 4 поранення', ()=>{
+                game.makeMove()
+                player.fightWithMonsters = false
+                game.removeAllIcon()
                 this.removeAllEW()
                 game.changeHealth(-4)
             }, ()=>{   
@@ -979,6 +982,9 @@ class EventWidows{
 
         this.drawBtnInEwIfSomeCardInTreasure(сrypt_cards[10], 
             `Гарантована втеча`, ()=>{
+                game.makeMove()
+                player.fightWithMonsters = false
+                game.removeAllIcon()
                 this.removeAllEW()
                 game.removeCurrentCardNameFromPack(player.treasureCardContainer, сrypt_cards[10].name)
                 game.drawTreasurePackCards()
