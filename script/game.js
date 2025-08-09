@@ -282,8 +282,7 @@ class Game {
 
     playDungeonEvent(){
         const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        // ew.drawCardEW(card);
-        ew.drawCardEW(monster_cards[17]);
+        ew.drawCardEW(card);
     }
 
     playCatacombEvent(){
@@ -907,7 +906,6 @@ class Game {
 
     drawEndMoveIcon(){
         if (!player.position) return
-        console.log(`[LOG] draw End Move Icon`)
         const x = player.position[0]
         const y = player.position[1]
         this.drawIcon(x, y, 'fa-regular fa-circle-xmark', 'end');
@@ -958,7 +956,7 @@ class Game {
         if(player.idx === this.currentPlayerIndex){
             ew.drawEW(txt);
             ew.drawBtnInEW('close', 'Далі', ()=> {
-                ew.removeAllEW()
+                ew.removeLastEW()
                 this.makeMove();
             })
         } 
@@ -966,6 +964,11 @@ class Game {
     }
 
     endMove(){
+        if (player.endMoveEventCardContainer.length !== 0) {
+            this.checkEndMoveEventCardContainer()
+            return 
+        }
+        
         if (player.extraMove > 0) {
             console.log(`[LOG] Extra Move`)
             player.extraMove -= 1
@@ -1161,7 +1164,7 @@ class Game {
             && !field.classList.contains(`start-field`) 
             && !field.classList.contains(`treasury`)
             && !player.catacomb) {
-            this.drawTileField(x, y, 6);
+            this.drawTileField(x, y);
         }
         
         this.saveGame();
@@ -1224,6 +1227,7 @@ class Game {
         }
 
         const field = document.querySelector(`[data-y="${y}"][data-x="${x}"]`)
+        if (field.querySelector(`.${selectorName}-icon`)) return
         field.insertAdjacentHTML('afterbegin', `
             <i class="${icon} ${selectorName}-icon"></i>
         `);
@@ -1275,7 +1279,12 @@ class Game {
     clickEndIcon(){
         const endIcon = document.querySelector('.end-icon');
         endIcon.addEventListener('click', () => {
-            ew.endMoveEW()
+            ew.drawEW(`Ви впевнені що хочете завершити хід?`);
+            ew.addBtnInEW('btn_end_move', 'Так', ()=>{
+                ew.removeLastEW()
+                this.endMove()
+            })
+            ew.addBtnInEW('btn_clouse', 'Ні', ()=>ew.removeLastEW())
         });
     };
 
@@ -1459,7 +1468,6 @@ class Game {
                 }
                 const falseFn = ()=>  {
                     ew.removeAllEW()
-                    // this.endMove()
                 }
                 ew.diceRollEW('На виході з кімнати перед вами впала решітка, заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, 2, trueFn, falseFn, true, true)
 
@@ -1481,7 +1489,6 @@ class Game {
                 }
                 const falseFn = ()=>  {
                     ew.removeAllEW()
-                    // this.endMove()
                 }
                 ew.diceRollEW('Перед вами кімната заповнена уламками стелі що впала, щоб пройти на інший бік кімнати перевірте свою Спритність.', `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, trueFn, falseFn, true, true)   
                 
@@ -1506,7 +1513,6 @@ class Game {
                 }
                 const falseFn = ()=>  {
                     ew.removeAllEW()
-                    // this.endMove()
                 }
                 ew.diceRollEW('Кімнату оплутала павутиння заблокувавши вам шлях. Перевірте свою Силу.', `Ваша сила: ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, 2, trueFn, falseFn, true, true)
                 
@@ -1541,7 +1547,6 @@ class Game {
                         setTimeout(() => {
                             ew.removeLastEW()
                         }, 2000);
-                        // this.endMove()
                     };
                     
                     this.getDirectionCatacomb()
@@ -1575,7 +1580,6 @@ class Game {
                     this.changeHealth(-5);
                     this.getDirectionCatacomb();
                     this.drawHeroMitl(player.position[0], player.position[1]);
-                    // this.endMove();
                 } 
                 ew.diceRollEW('Кімнату розділило навпіл глибоким прірвою, щоб вийти з кімнати по той бік прірви перевірте Спритність.', `Ваша cпритність: ${heroes[player.hero].dexterity}`, heroes[player.hero].dexterity, true, 2, trueFn, falseFn, true, true)   
                 

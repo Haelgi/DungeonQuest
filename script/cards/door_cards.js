@@ -53,7 +53,10 @@ function greedyGoblin(){
         player.treasureCardContainer.splice(randomId, 1);
         
         ew.drawEW(`Гоблін вкрав один із скарбів та втік, але залишив двері відкритими`);
-        setTimeout(() => {ew.removeAllEW()}, 2000);
+        setTimeout(() => {
+            player.doorEventTarget.remove()
+            ew.removeAllEW()
+        }, 2000);
     };
 
     if(player.treasureCardContainer.length > 0){
@@ -84,6 +87,7 @@ function enchantedDoor(){
 
     ew.drawEW(`Ви отримали ${damage} поранення`)
     setTimeout(() => {
+        player.doorEventTarget.remove()
         ew.removeAllEW()
     }, 1200);
 
@@ -110,6 +114,7 @@ function jetOfFire(){
         } else {
             ew.drawEW(`Ви змогли ухилитись!`)
             setTimeout(() => {
+                player.doorEventTarget.remove()
                 ew.removeAllEW();
                 game.endMove();
             }, 1200);
@@ -138,10 +143,6 @@ function jetOfFire(){
         btnChoice.style.display = 'none'
     })
 
-  
-
-    
-
     /*Когда Вы попытались открыть дверь, с отверстия в стене вылетела струя огня. 
     Загадайте два числа от 1 до 6. 
     Бросайте 116 до тех пор, пока не выпадет одно из загаданных чисел. 
@@ -158,6 +159,7 @@ function thornsFromTheFloor(){
         ew.removeLastEW()
         ew.drawEW(`Ви змогли ухилитись!`)
         setTimeout(() => {
+            player.doorEventTarget.remove()
             ew.removeAllEW();
             game.endMove();
         }, 2000);
@@ -168,6 +170,7 @@ function thornsFromTheFloor(){
         game.changeHealth(-damage)
         ew.drawEW(`Ви отримали ${damage} поранення!`)
             setTimeout(() => {
+                player.doorEventTarget.remove()
                 ew.removeAllEW();
                 game.endMove();
             }, 2000);  
@@ -203,7 +206,10 @@ function deadlyArrows(){
         const damage = game.diceRollResultGlobal
         game.changeHealth(-damage) 
         ew.drawEW(`Ви отримали ${damage} поранення`);
-        ew.drawBtnInEW('btn_next', 'Далі', ()=>{ew.removeAllEW()});
+        ew.drawBtnInEW('btn_next', 'Далі', ()=>{
+            player.doorEventTarget.remove()
+            ew.removeAllEW()
+        });
     }
     
     ew.addDiceRollSection( false, 6, false, false,1, trueFn, false, true, true)
@@ -225,13 +231,18 @@ function cardShuffling(){
     Вытяните еще одну карту из этой колоды и продолжайте свой ход в обычном порядке.*/
 }
 
+function openDoor(){
+    player.doorEventTarget.remove()
+    ew.removeAllEW()
+}
+
 const door_cards = [
-    /*0*/new Card(1, 'Дверь Открылась', ()=>{ew.removeAllEW()}),
-    /*1*/new Card(1, 'Дверь Открылась', ()=>{ew.removeAllEW()}),
-    /*2*/new Card(1, 'Дверь Открылась', ()=>{ew.removeAllEW()}),
-    /*3*/new Card(1, 'Дверь Открылась', ()=>{ew.removeAllEW()}),
-    /*4*/new Card(1, 'Дверь Открылась', ()=>{ew.removeAllEW()}),
-    /*5*/new Card(1, 'Дверь Открылась', ()=>{ew.removeAllEW()}),
+    /*0*/new Card(1, 'Дверь Открылась', ()=>{openDoor()}),
+    /*1*/new Card(1, 'Дверь Открылась', ()=>{openDoor()}),
+    /*2*/new Card(1, 'Дверь Открылась', ()=>{openDoor()}),
+    /*3*/new Card(1, 'Дверь Открылась', ()=>{openDoor()}),
+    /*4*/new Card(1, 'Дверь Открылась', ()=>{openDoor()}),
+    /*5*/new Card(1, 'Дверь Открылась', ()=>{openDoor()}),
     
     /*6*/new Card(2, 'Дверь Заблокирована', ()=>{lockedDoor()}),
     /*7*/new Card(2, 'Дверь Заблокирована', ()=>{lockedDoor()}),

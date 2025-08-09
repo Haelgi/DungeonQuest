@@ -25,9 +25,8 @@ class Player {
         this.treasureCardContainer = [];
         this.positionTreasuryCards = [];
         this.catacombCardContainer = [];
-        // this.eventCardContainer = [monster_cards[0], monster_cards[1]];
         this.eventCardContainer = [];
-        this.endMoveEventCardContainer = [trap_cards[0], trap_cards[1]];
+        this.endMoveEventCardContainer = [];
         this.doorEventTarget;
         
         this.attack = 1;
