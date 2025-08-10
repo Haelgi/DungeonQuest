@@ -311,13 +311,6 @@ function risingDead(){
 
 function shadowKiller(){
 
-    if(!game.checkCardNameInPack(player.endMoveEventCardContainer, catacomb_cards[27].name)) {
-        player.endMoveEventCardContainer.push(catacomb_cards[27])
-        game.drawEventPackCards()
-        ew.removeAllEW()
-        return 
-    }
-
     const result = ()=>{ 
         ew.removeLastEW()
         const result = game.diceRollResultGlobal
@@ -329,6 +322,8 @@ function shadowKiller(){
             ew.drawEW(`Ви отримали ${damage} поранення`)
             setTimeout(() => {
                 ew.removeAllEW()
+                player.endMoveEventCardContainer.push(catacomb_cards[27])
+                game.drawEventPackCards()
             }, 2000);
         }
 
@@ -338,12 +333,13 @@ function shadowKiller(){
             ew.drawEW(`Ви отримали ${damage} поранення`)
             setTimeout(() => {
                 ew.removeAllEW()
+                player.endMoveEventCardContainer.push(catacomb_cards[27])
+                game.drawEventPackCards()
             }, 2000);
         }
 
         if (5<=result) {
             damage = 0
-            game.removeCurrentCardNameFromPack(player.endMoveEventCardContainer, catacomb_cards[27].name)
             game.drawEventPackCards()
             ew.drawEW(`Ви вбили Тіньового Вбивцю`)
             setTimeout(() => {ew.removeAllEW()}, 2000);
@@ -518,14 +514,7 @@ function scorpion(){
 
 function stickyWeb(){
 
-    if(!game.checkCardNameInPack(player.eventCardContainer, catacomb_cards[31].name)) {
-        player.eventCardContainer.push(catacomb_cards[31])
-        game.drawEventPackCards()
-    }
-
     const trueFn = ()=> {
-        game.removeCurrentCardNameFromPack(player.eventCardContainer, catacomb_cards[31].name)
-        game.drawEventPackCards()
         ew.removeLastEW()
         ew.drawEW(`Ви змогли втекти`)
         setTimeout(() => {
@@ -539,9 +528,10 @@ function stickyWeb(){
         ew.drawEW(`Ви застрягли, та отримали 1 поранення`)
         setTimeout(() => {
             ew.removeAllEW()
+            player.eventCardContainer.push(catacomb_cards[31])
+            game.drawEventPackCards()
             game.endMove()
         }, 2000);
-
     }
 
     function luck(){
@@ -550,15 +540,12 @@ function stickyWeb(){
     }
 
     function wake(){
-        game.removeCurrentCardNameFromPack(player.eventCardContainer, catacomb_cards[31].name)
-        game.drawEventPackCards()
         game.changeHealth(-4)
         ew.drawEW(`Ви змогли втекти, але отримали 4 поранення`)
         setTimeout(() => {
             ew.removeAllEW()
         }, 2000);
     }
-
 
     ew.clear()
 
@@ -915,6 +902,18 @@ function horribleSpider(){
 }
 
 function vampire(){
+    if (!player.catacomb){
+        ew.removeAllEW()
+        return
+    }
+    
+    if (this.checkCardNameInPack(player.eventCardContainer, catacomb_cards[38].name)){
+        ew.drawEW(`Ви отримали 1 поранення`)
+        game.changeHealth(-1)
+        setTimeout(() => {ew.removeAllEW()}, 2000);
+        return
+    }
+
     const dexterity = heroes[player.hero].dexterity
     const defense = heroes[player.hero].defense
 
@@ -1143,20 +1142,9 @@ function naga(){
 }
 
 function torchGoesOut(){ 
-    if (!player.eventCardContainer.some((card) => (card.id === 27 && card.pack === 'catacomb'))) {
-        player.eventCardContainer.push(catacomb_cards[44])
-        game.drawEventPackCards()
-    }
 
     const trueFn = ()=> {
         ew.removeLastEW()
-
-        player.eventCardContainer.forEach((card, idx) => {
-            if (card.id === 27 && card.pack === 'catacomb') {
-                player.eventCardContainer.splice(idx, 1)
-                game.drawEventPackCards()
-            }
-        })
         ew.drawEW(`Ви змогли запалити Смолоскип`)
         setTimeout(() => {
             ew.removeAllEW()
@@ -1168,6 +1156,8 @@ function torchGoesOut(){
 
         ew.drawEW(`Ви не змогли запалити Смолоскип`)
         setTimeout(() => {
+            player.eventCardContainer.push(catacomb_cards[44])
+            game.drawEventPackCards()
             ew.removeAllEW()
             game.endMove()
         }, 2000);

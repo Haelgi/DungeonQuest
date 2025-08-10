@@ -388,6 +388,8 @@ function ironCage(){
 
     const trueFn = ()=>{
         ew.drawEW(`Ви змогли вибратися з клітки`)
+        game.removeCurrentCardNameFromPack(player.eventCardContainer, trap_cards[8].name)
+        game.drawEventPackCards()
         setTimeout(() => {ew.removeAllEW()}, 2000);
     }
 
@@ -400,7 +402,7 @@ function ironCage(){
 
     ew.addDiceRollSection(`Ваша Сила : ${heroes[player.hero].strength}`, heroes[player.hero].strength, false, true, 2, trueFn, falseFn, true, true)
 
-    if (!player.eventCardContainer.some(item => item['name'] === trap_cards[8]['name'])){
+    if (!game.checkCardNameInPack(player.eventCardContainer, trap_cards[8].name)){
         game.drawEventPackCards()
         game.changeHealth(-2)
         ew.drawEW(`Ви отримаєте 2 поранення`)
@@ -451,12 +453,14 @@ function pitOfTheDead(){
     if (player.eventCardContainer.some(item => item['name'] === trap_cards[9]['name'])) {
         const trueFn = ()=> {
             ew.drawEW(`Ви змогли вибратися з ями`)
-            setTimeout(() => {ew.removeAllEW()}, 1200);
+            setTimeout(() => {
+                game.removeCurrentCardNameFromPack(player.eventCardContainer, trap_cards[9].name)
+                game.drawEventPackCards()
+                ew.removeAllEW()
+            }, 1200);
         }
 
         const falseFn = ()=> {
-            player.eventCardContainer.push(trap_cards[9])
-            game.drawEventPackCards()
             ew.drawEW(`Ви НЕ змогли вибратися з ями`)
             setTimeout(() => {
                 ew.removeAllEW();

@@ -424,7 +424,7 @@ function deadCrowd(){
         const falseFn1 = ()=>{
             player.eventCardContainer.push(dungeon_cards[40])
             game.drawEventPackCards()
-            ew.removeAllEW()
+            ew.removeLastEW()
             game.endMove()
         }
 

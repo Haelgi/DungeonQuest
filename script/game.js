@@ -36,6 +36,7 @@ class Game {
 
         this.day = 0; 
         this.dayMax = 38;
+        this.end_Move = false;
         this.game_Over = false; 
         this.gameFields; 
         this.startFields=[[0,0], [14,0], [0,11], [14,11]]; 
@@ -689,29 +690,102 @@ class Game {
     }
 
     checkEventCards(){
-        if (player.eventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
+        if (!player.eventCardContainer.length) return;
+        
         console.log(`[LOG] check Event Cards`)
-        this.activeEvent = true
-        player.checkEventCards = true
+        
 
-        if (this.checkCardNameInPack(player.eventCardContainer, catacomb_cards[38].name) && !player.catacomb) {
-            this.removeCurrentCardNameFromPack(player.eventCardContainer, catacomb_cards[38].name)
+        
+        let i = player.eventCardContainer.length
+
+        const processNext = () => {
+            if (i === 0) return;
+            i -= 1;
+
+            const card = player.eventCardContainer.shift();
+
+            if (this.checkCardNameInPack(player.eventCardContainer, catacomb_cards[38].name)) {
+                if (!player.catacomb) return
+                player.eventCardContainer.push(catacomb_cards[38])
+                this.drawEventPackCards()
+            }
+            
+            if (!game.checkCardNameInPack(player.eventCardContainer, trap_cards[8].name)){
+                player.eventCardContainer.push(trap_cards[8])
+                this.drawEventPackCards()
+            }
+            
+            if (!game.checkCardNameInPack(player.eventCardContainer, trap_cards[9].name)){
+                player.eventCardContainer.push(trap_cards[9])
+                this.drawEventPackCards()
+            }
+
             this.drawEventPackCards()
-        }
 
-        const [card] = player.eventCardContainer.splice(0, 1);
-        console.log(player.eventCardContainer)
-        this.drawEventPackCards()
-        ew.drawCardEW(card)
+            this.activeEvent = true;
+            player.checkEventCards = true;
+            ew.drawCardEW(card)
+
+            const waitUntilReady = () => {
+                if (this.end_Move) {
+                    this.end_Move = false;
+                    return
+                }
+
+                if (!this.activeEvent && !player.checkEventCards) {
+                    processNext();
+                } else {
+                    setTimeout(waitUntilReady, 100);
+                }
+            };
+
+            waitUntilReady();
+        };
+
+        processNext();
+        
     }
 
     checkEndMoveEventCardContainer(){
-        if (player.endMoveEventCardContainer.length === 0 || this.activeEvent || player.checkEventCards) return
-        console.log(`[LOG] check End Move Event Card Container`)
-        this.activeEvent = true
-        player.checkEventCards = true
-        const [card] = player.endMoveEventCardContainer.splice(0, 1);
-        ew.drawCardEW(card)
+        if (!player.endMoveEventCardContainer.length) return;
+        
+        console.log(`[LOG] check Event Cards`)
+        
+        if (this.checkCardNameInPack(player.endMoveEventCardContainer, catacomb_cards[38].name) && !player.catacomb) {
+            this.removeCurrentCardNameFromPack(player.endMoveEventCardContainer, catacomb_cards[38].name)
+            this.drawEventPackCards()
+        }
+        
+        let i = player.endMoveEventCardContainer.length
+
+        const processNext = () => {
+            if (i === 0) return;
+            i -= 1;
+
+            const card = player.endMoveEventCardContainer.shift();
+            this.drawEventPackCards()
+
+            this.activeEvent = true;
+            player.checkEventCards = true;
+            ew.drawCardEW(card)
+
+            const waitUntilReady = () => {
+                if (this.end_Move) {
+                    this.end_Move = false;
+                    return
+                }
+                
+                if (!this.activeEvent && !player.checkEventCards) {
+                    processNext();
+                } else {
+                    setTimeout(waitUntilReady, 100);
+                }
+            };
+
+            waitUntilReady();
+        };
+
+        processNext();
     }
 
     checkCatacombCards(){
@@ -964,6 +1038,7 @@ class Game {
     }
 
     endMove(){
+        this.end_Move = true
         if (player.endMoveEventCardContainer.length !== 0) {
             this.checkEndMoveEventCardContainer()
             return 
