@@ -282,8 +282,8 @@ class Game {
     }
 
     playDungeonEvent(){
-        const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)   
-        ew.drawCardEW(сrypt_cards[0]);
+        const card = this.getRundomElement(this.dungeon_cards, dungeon_cards)  
+        ew.drawCardEW(сrypt_cards[3]); 
         // ew.drawCardEW(card);
     }
 
@@ -678,7 +678,7 @@ class Game {
         });
         catacombCardContainer.innerHTML=inner;
 
-        addScrolCardsEffect('.treasure-card-container');
+        addScrolCardsEffect('.catacomb-card-container');
     };
 
     checkCurseOfTheSorcerer(){
@@ -932,15 +932,16 @@ class Game {
     
 
     checkRoomEvents(){
+        console.log(`[LOG] check Room Events`)
         const x = player.position[0]
         const y = player.position[1]
 
         if (this.gameFields[y][x]['id'] === undefined) return
 
-        if (room_tiles[this.gameFields[y][x]['id']].dungeon && this.gameFields[y][x]['m'] === undefined && !this.activeEvent) this.playDungeonEvent();
+        if (room_tiles[this.gameFields[y][x]['id']].dungeon && this.gameFields[y][x]['m'] === undefined ) this.playDungeonEvent();
 
-        if (room_tiles[this.gameFields[y][x]['id']].trap && !this.activeEvent) this.playTrapEvent();
-        if (room_tiles[this.gameFields[y][x]['id']].special === 'pit' && !this.activeEvent && !player.catacomb) this.playPitEvent();
+        if (room_tiles[this.gameFields[y][x]['id']].trap) this.playTrapEvent();
+        if (room_tiles[this.gameFields[y][x]['id']].special === 'pit' && !player.catacomb) this.playPitEvent();
 
         if (room_tiles[this.gameFields[y][x]['id']]?.special === 'rotate' && !player.catacomb) {
             this.rotateRoomTile(180)
@@ -1240,7 +1241,7 @@ class Game {
             && !field.classList.contains(`start-field`) 
             && !field.classList.contains(`treasury`)
             && !player.catacomb) {
-            this.drawTileField(x, y);
+            this.drawTileField(x, y, 6);
         }
         
         this.saveGame();
@@ -1796,6 +1797,7 @@ class Game {
             emptyFelds.push(card)
             drawCardToFeld(length)
         });
+        
         function removeCardFromPack(e) {
             const id = e.target.getAttribute('id')
             const card = cardsForChoice.splice(id, 1)

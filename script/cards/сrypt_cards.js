@@ -30,13 +30,13 @@ function smallHealingPotion(){
 }
 
 function smallHealingPotionFn(){
+    game.removeCurrentCardNameFromPack(player.treasureCardContainer, сrypt_cards[3].name);
+    game.drawTreasurePackCards()
     ew.removeAllEW()
     const healing = 2;
     game.changeHealth(healing);
     ew.drawEW(`Ви зцілили ${healing} поранення`);
     setTimeout(() => ew.removeLastEW(), 1200);
-    game.removeCurrentCardNameFromPack(player.treasureCardContainer, сrypt_cards[3].name);
-    game.drawTreasurePackCards()
 }
 
 function vesselWithGold(){

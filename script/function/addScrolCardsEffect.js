@@ -6,6 +6,7 @@ import  {game}  from '../game.js';
 const handlersMap = new Map(); // Храним обработчики для каждого контейнера
 
 export function addScrolCardsEffect(container, fn) {
+    console.log(`[LOG] add Scrol Cards Effect to ${container}`);
     let startX = 0;
     let endX = 0;
 
@@ -32,13 +33,15 @@ export function addScrolCardsEffect(container, fn) {
                 e.target.classList.add('active');
                 return
             }
+            console.log(`[LOG] Click on card: ${e.target.getAttribute('id')}`);
             const sours = e.target.getAttribute('sours');
             const cardId = parseInt(e.target.getAttribute('id'));
             const cardPack = e.target.getAttribute('pack');
-
+            
             if (sours === 'player') activeCard = player[cardPack][cardId] 
             if (sours === 'heroes') activeCard = heroes[player.hero][cardPack][cardId]
-
+            
+            console.log(`[LOG] activeCard: ${sours, cardPack, cardId}`, activeCard);
             if(fn) fn(e)
                 
             if (activeCard?.clickFn) {
